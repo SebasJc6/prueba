@@ -1,0 +1,667 @@
+<!--CONTENEDOR TOTAL COMPONENTE PROPIEDADES DEL REQUERIMIENTO-->
+<div class="container center-h center-v">
+
+    <!--MIGA PAN-->
+    <div class="mgp">
+        Plan Anual de Adquisiciones
+        <a class="href "  [routerLink]="['/PAA/Adquisiciones']">
+          &nbsp;>&nbsp;
+          -&nbsp;
+        </a>
+        <a class="href selected" >
+          &nbsp;>&nbsp;Requerimientos 
+        </a>
+        <a class="href selected" >
+            &nbsp;>&nbsp;Requerimiento {{dataRequirementID}} 
+          </a>
+      </div>
+
+    <!--BOTON QUE CARGA VERSION ACTUAL-->
+    <div>
+        <div class="btnAction" style="margin-bottom: 1.5%;">
+                <span>Versión Actual</span>
+                    <mat-icon style="margin-bottom: -0.7%;" mat-icon-button matTooltip="Version Actual">
+                        insert_drive_file</mat-icon>
+        </div>
+    </div>
+
+    <!-- SECCIONES DESPLEGABLES -->
+    <mat-accordion multi>
+
+        <!-- SECCION INFORMACION BASICA DEL PROYECTO -->
+        <mat-expansion-panel class="menu-panel">
+            <mat-expansion-panel-header>
+
+                <!-- TITULO DE LA SECCION -->
+                <mat-panel-title>
+                    <span class="title">Información Básica del Proyecto</span>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-card class="colorCard1">
+
+                <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
+                <form class="formCont">
+                    <div class="tablaCont">
+                        <div class="contTxt label1">
+                            <p class="tltData">Código del proyecto</p>
+                            <input class="contData contDataDisabled" value="7791" disabled>
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">Dependencia origen de los recursos</p>
+                            <input class="contData contDataDisabled" value="020000" disabled>
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">Número de requerimiento</p>
+                            <input class="contData" value="001">
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">Dependencia destino de los recursos</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">022100</option>
+                                <option value="saab">011000</option>
+                                <option value="opel">108009</option>
+                                <option value="audi">260034</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tablaCont">
+                        <div class="contTxt label1">
+                            <p class="tltData">Mes estimado inicio de proceso de seleccion</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">01</option>
+                                <option value="saab">Saab</option>
+                                <option value="opel">Opel</option>
+                                <option value="audi">Audi</option>
+                            </select>
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">Mes estimado presentacion de ofertas</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">01</option>
+                                <option value="saab">Saab</option>
+                                <option value="opel">Opel</option>
+                                <option value="audi">Audi</option>
+                            </select>
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">Mes de incio de ejecucion del contrato</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">01</option>
+                                <option value="saab">Saab</option>
+                                <option value="opel">Opel</option>
+                                <option value="audi">Audi</option>
+                            </select>
+                        </div>
+                        <div class="contTxt label3 ">
+                            <p class="tltData">Duracion estimada del contrato</p>
+                            <input class="contData" style="width: 20%;" value="0">
+                            meses&nbsp;&nbsp;
+                            <input class="contData" style="width: 20%;" value="0">
+                            Dias
+                        </div>
+                    </div>
+
+                    <div class="tablaCont">
+                        <div class="contTxt label2">
+                            <p class="tltData">Modalidad de selección</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">CCE-99 - Seleccion abreviada - </option>
+                                <option value="saab">Saab</option>
+                                <option value="opel">Opel</option>
+                                <option value="audi">Audi</option>
+                            </select>
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">Actuacion Contractual</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">Inicial</option>
+                                <option value="saab">Saab</option>
+                                <option value="opel">Opel</option>
+                                <option value="audi">Audi</option>
+                            </select>
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">Número de contrato</p>
+                            <input class="contData" value="123456789">
+                        </div>
+                    </div>
+
+                    <div class="tablaCont">
+                        <div class="contTxt label1">
+                            <p class="tltData">Tipo de contrato</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">Prestación de servicios</option>
+                                <option value="saab">Saab</option>
+                                <option value="opel">Opel</option>
+                                <option value="audi">Audi</option>
+                            </select>
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">Perfil</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">Profesional Universitario</option>
+                                <option value="saab">Saab</option>
+                                <option value="opel">Opel</option>
+                                <option value="audi">Audi</option>
+                            </select>
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">Valor Honorarios / mes</p>
+                            <input class="contData" value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}">
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">Cantidad de contratos</p>
+                            <input class="contData" value="1">
+                        </div>
+                    </div>
+
+                    <div class="tablaCont">
+                        <div class="contTxt label1">
+                            <p class="tltData">Descripción (Objeto)</p>
+                            <textarea class="contDataArea" rows="4">001-022100-7791. Prestar el servicio de transporte...</textarea>
+                        </div>
+                    </div>
+                </form>
+            </mat-card>
+        </mat-expansion-panel>
+
+
+        <!-- SECCION CLASIFICACION PRESUPUESTAL Y FINANCIERA -->
+        <mat-expansion-panel class="menu-panel">
+            <mat-expansion-panel-header>
+
+                <!-- TITULO DE LA SECCION -->
+                <mat-panel-title>
+                    <span class="title">Clasificación Presupuestal y Financiera</span>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-card class="colorCard1">
+
+                <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
+                <form class="formCont">
+                    <div class="tablaCont">
+                        <div class="contTxt label1">
+                            <p class="tltData">Número de modificacion</p>
+                            <input class="contData contDataDisabled" value="06" disabled>
+                        </div>
+
+                        <div class="contTxt label1">
+                            <p class="tltData">Mes</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">01</option>
+                                <option value="saab">02</option>
+                                <option value="opel">03</option>
+                                <option value="audi">04</option>
+                            </select>
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">Vigencia de los recursos</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">2022</option>
+                                <option value="saab">2023</option>
+                                <option value="opel">2021</option>
+                                <option value="audi">2020</option>
+                            </select>
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">Auxiliar</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">0161</option>
+                                <option value="saab">0160</option>
+                                <option value="opel">0159</option>
+                                <option value="audi">0158</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="tablaCont">
+                        <div class="contTxt label4">
+                            <p class="tltData">Detalle fuente</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">01 - Aporte Ordinario[Vigencias futuras]</option>
+                                <option value="saab">02 - Saab</option>
+                                <option value="opel">03 - Opel</option>
+                                <option value="audi">04 - Audi</option>
+                            </select>
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">Actividad</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo"></option>
+                                <option value="saab">Saab</option>
+                                <option value="opel">Opel</option>
+                                <option value="audi">Audi</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="tablaCont">
+                        <div class="contTxt label1">
+                            <p class="tltData">Meta</p>
+                            <input class="contData contDataDisabled" value="01" disabled>
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">Fuente MSPS</p>
+                            <input class="contData contDataDisabled" value="07" disabled>
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">MGA</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">1903023</option>
+                                <option value="saab">2010345</option>
+                                <option value="opel">2365223</option>
+                                <option value="audi">3500029</option>
+                            </select>
+                        </div>
+                        <div class="contTxt label1">
+                            <p class="tltData">POSPRE</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">002254578</option>
+                                <option value="saab">0266789006</option>
+                                <option value="opel">1089667877</option>
+                                <option value="audi">2300067896</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <!-- BOTON AÑADIR REGISTRO A LA TABLA CLASIFICACION PRESUPUESTAL -->
+                    <mat-card-actions class="btnCard">
+                        <button class="buton2 btn" mat-button mat-icon-button>
+                            AÑADIR
+                        </button>
+                    </mat-card-actions>
+
+                </form>
+
+                <!-- TABLA CLASIFICACION PRESUPUESTAL -->
+                <div style="overflow: auto; margin-top: -4%;">
+                    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+                        <ng-container matColumnDef="mes">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="mes">
+                                Mes
+                            <td mat-cell *matCellDef="let element">{{ element.mes}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="vigenciaRecursos">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="vig">
+                                Vigencia de los Recursos
+                            <td mat-cell *matCellDef="let element">{{ element.vigenciaRecursos}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="auxiliar">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="aux">
+                                Auxiliar
+                            <td mat-cell *matCellDef="let element">{{ element.auxiliar}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="detalleFuente">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="det">
+                                Detalle Fuente
+                            <td mat-cell *matCellDef="let element">{{ element.detalleFuente}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="actividad">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="act">
+                                Actividad
+                            <td mat-cell *matCellDef="let element">{{ element.actividad}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="meta">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="met">
+                                Meta
+                            <td mat-cell *matCellDef="let element">{{ element.meta}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="fuente">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="fue">
+                                Fuente
+                            <td mat-cell *matCellDef="let element">{{ element.fuente}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="fuenteMSPS">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="msp">
+                                Fuente MSPS
+                            <td mat-cell *matCellDef="let element">{{ element.fuenteMSPS}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="MGA">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="mga">
+                                MGA
+                            <td mat-cell *matCellDef="let element">{{ element.MGA}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="pospre">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="pos">
+                                POSPRE
+                            <td mat-cell *matCellDef="let element">{{ element.pospre}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="apropiacionDisponible">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="apr">
+                                Apropiación Disponible
+                            <td mat-cell *matCellDef="let element">{{ element.apropiacionDisponible | currency: 'USD' : 'symbol' : '1.0-0'}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="aumento">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="aum">
+                                Aumento
+                            <td mat-cell *matCellDef="let element">{{ element.aumento | currency: 'USD' : 'symbol' : '1.0-0'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="disminucion">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="dis">
+                                Disminución
+                            <td mat-cell *matCellDef="let element">{{ element.disminucion | currency: 'USD' : 'symbol' : '1.0-0'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="apropiacionDefinitiva">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="dis">
+                                Apropiación Definitiva
+                            <td mat-cell *matCellDef="let element">{{ element.apropiacionDefinitiva | currency: 'USD' : 'symbol' : '1.0-0'}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="compromisos">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="dis">
+                                Compromisos
+                            <td mat-cell *matCellDef="let element">{{ element.compromisos}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="giros">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="dis">
+                                Giros
+                            <td mat-cell *matCellDef="let element">{{ element.giros | currency: 'USD' : 'symbol' : '1.0-0'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="acciones">
+                            <tr>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="acc"> Acciones </th>
+                            </tr>
+                            <tr>
+                                <td mat-cell *matCellDef="let element">
+                                    <div class="Actions">
+                                        <mat-icon mat-icon-button class="btnActions" matTooltip="Editar">edit</mat-icon>
+                                        <mat-icon mat-icon-button style="margin-left: 5px;" class="btnActions"
+                                            matTooltip="Eliminar">delete</mat-icon>
+                                    </div>
+                                </td>
+                            <tr>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    </table>
+                </div>
+                <!-- FIN TABLA -->
+            </mat-card>
+
+            <!-- SUB SECCION CODIGOS UNSPSC -->
+            <mat-accordion multi>
+                <mat-expansion-panel class="menu-panel colorCard1">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <span class="title">Códigos UNSPSC</span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-card class="colorCard2">
+                        <form class="formCont">
+
+                            <div class="tablaCont">
+                                <div class="contTxt label1">
+                                    <p class="tltData">Códigos UNSPSC</p>
+                                    <select name="cars" class="contDataSelect">
+                                        <option value="volvo">78111800</option>
+                                        <option value="saab">80111623</option>
+                                        <option value="opel">86771114</option>
+                                        <option value="audi">90111000</option>
+                                    </select>
+                                </div>
+                                <div class="contTxt label4">
+                                    <p class="tltData">Descripción de categoría</p>
+                                    <input class="contData contDataDisabled" value="Transporte de pasajeros por la carretera" disabled>
+                                </div>
+
+                            </div>
+
+                            <!-- BOTON AÑADIR REGISTRO A LA TABLA CODIGOS UNSPSC -->
+                            <mat-card-actions class="btnCard">
+                                <button class="buton2 btn" mat-button mat-icon-button>
+                                    AÑADIR
+                                </button>
+                            </mat-card-actions>
+
+                            <!-- TABLA CLASIFICACION CODIGOS UNSPSC -->
+                            <div style="overflow: auto;  margin-top: -4%;">
+                                <table mat-table [dataSource]="dataCodigos" class="mat-elevation-z8" matSort>
+
+                                    <ng-container matColumnDef="codigoUNSPSC">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="Cod">
+                                            Código UNSPSC
+                                        <td mat-cell *matCellDef="let element">{{ element.codigo}}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="descripcion">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="Des">
+                                            Descripción de categoría
+                                        <td mat-cell *matCellDef="let element">{{ element.descripcion}}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="eliminar">
+                                        <tr>
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="Acc"> Eliminar
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td mat-cell *matCellDef="let element">
+                                                <div style="text-align: center;">
+                                                    <mat-icon mat-icon-button class="btnActions" matTooltip="Eliminar">
+                                                        delete</mat-icon>
+                                                </div>
+                                            </td>
+                                        <tr>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="codigosColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: codigosColumns"></tr>
+                                </table>
+                            </div>
+                            <!-- FIN TABLA -->
+                        </form>
+                    </mat-card>
+                </mat-expansion-panel>
+
+                <!-- SUBSECCION APROPIOACION INICIAL -->
+                <mat-expansion-panel class="menu-panel colorCard1">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <span class="title">Apropiación Inicial</span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    
+                    <!-- FORMULARIO APROPIACION INICIAL -->
+                    <mat-card class="colorCard2">
+
+                        <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
+                        <form class="formCont">
+                            <div class="tablaCont">
+                                <div class="contTxt label1">
+                                    <p class="tltData">Año vigencia 0</p>
+                                    <select name="cars" class="contDataSelect" disabled>
+                                        <option value="volvo">2020</option>
+                                        <option value="saab">2021</option>
+                                    </select>
+                                </div>
+        
+                                <div class="contTxt label1">
+                                    <p class="tltData">Valor</p>
+                                    <input class="contData contDataDisabled" value="{{20000000 | currency: 'USD' : 'symbol' : '1.0-0'}}" disabled>
+                                </div>
+
+                                <div class="contTxt label1">
+                                    <p class="tltData">Año vigencia 1</p>
+                                    <select name="cars" class="contDataSelect" disabled>
+                                        <option value="volvo">2021</option>
+                                        <option value="saab">2020</option>
+                                        <option value="opel">2022</option>
+                                        <option value="audi">2023</option>
+                                    </select>
+                                </div>
+                                <div class="contTxt label1">
+                                    <p class="tltData">Valor</p>
+                                    <input class="contData contDataDisabled" value="{{40000000 | currency: 'USD' : 'symbol' : '1.0-0'}}" disabled>
+                                </div>
+                            </div>
+
+                            <div class="tablaCont">
+                                <div class="contTxt label1">
+                                    <p class="tltData">Año vigencia 2</p>
+                                    <select name="cars" class="contDataSelect" disabled>
+                                        <option value="volvo">2022</option>
+                                        <option value="saab">2020</option>
+                                        <option value="opel">2021</option>
+                                        <option value="audi">2023</option>
+                                    </select>
+                                </div>
+                                <div class="contTxt label1">
+                                    <p class="tltData">Valor</p>
+                                    <input class="contData contDataDisabled" value="{{40000000 | currency: 'USD' : 'symbol' : '1.0-0'}}" disabled>
+                                </div>
+                                <div class="contTxt label2">
+                                    <p class="tltData">Valor total</p>
+                                    <input class="contData contDataDisabled" value="{{120000000 | currency: 'USD' : 'symbol' : '1.0-0'}}" disabled>
+                                </div>
+                            </div>
+                        </form>
+                    </mat-card>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </mat-expansion-panel>
+
+        <!-- SECCION REVISIONES -->
+        <mat-expansion-panel class="menu-panel">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <span class="title">Revisiones</span>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <!-- FORMULARIO REVISIONES -->
+            <mat-card class="colorCard1">
+
+                <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
+                <form class="formCont">
+                    <div class="tablaCont">
+                        <div class="contTxt label2">
+                            <p class="tltData">Área</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">Contrataciones</option>
+                                <option value="saab">Servicios</option>
+                                <option value="opel">Gestion</option>
+                                <option value="audi">Proyectos</option>
+                            </select>
+                        </div>
+                        <div class="contTxt label2">
+                            <p class="tltData">Concepto</p>
+                            <select name="cars" class="contDataSelect">
+                                <option value="volvo">Cantidad de Contratos</option>
+                                <option value="saab">Tipos de Contratos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tablaCont">
+                        <div style="width: 96.5%;" class="contTxt">
+                            <p class="tltData">Observaciones</p>
+                            <input class="contData" value="Se devuelve para ajuste de la cantidad de contratos solicitados">
+                        </div>
+                    </div>
+
+                    <!-- BOTON AÑADIR REGISTRO A LA TABLA REVISIONES -->
+                    <mat-card-actions class="btnCard">
+                        <button class="buton2 btn" mat-button mat-icon-button>
+                            AÑADIR
+                        </button>
+                    </mat-card-actions>
+
+                    <!-- TABLA REVISIONES -->
+                    <div style="overflow: auto;  margin-top: -4%;">
+                        <table mat-table [dataSource]="dataRevisiones" class="mat-elevation-z8" matSort>
+
+                            <ng-container matColumnDef="fecha">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                    Fecha
+                                <td mat-cell *matCellDef="let element">{{ element.fecha}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="usuario">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                    Usuario
+                                <td mat-cell *matCellDef="let element">{{ element.usuario}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="area">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                    Área
+                                <td mat-cell *matCellDef="let element">{{ element.area}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="concepto">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                    Concepto
+                                <td mat-cell *matCellDef="let element">{{ element.concepto}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="observacion">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                    Observación
+                                <td mat-cell *matCellDef="let element">{{ element.observacion}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="revision">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                    Revisión
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-checkbox [checked]="element.revision"></mat-checkbox>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="eliminar">
+                                <tr>
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="Acc"> Eliminar
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div style="text-align: center;">
+                                            <mat-icon mat-icon-button class="btnActions" matTooltip="Eliminar">
+                                                delete</mat-icon>
+                                        </div>
+                                    </td>
+                                <tr>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="revisionesColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: revisionesColumns"></tr>
+                        </table>
+                    </div>
+                    <!-- FIN TABLA -->
+                </form>
+            </mat-card>
+        </mat-expansion-panel>
+    </mat-accordion>
+
+    <!-- SECCION DE BOTONES DE ACCION -->
+    <mat-card-actions>
+        <button class="buton btn" mat-button mat-icon-button>
+            GUARDAR
+        </button>
+        <button class="buton btn" style="margin-left: 4%;"  mat-button mat-icon-button>
+            REVISADO
+        </button>
+        <button class="buton btn" mat-button mat-icon-button (click)="cancelar()">
+            CANCELAR
+        </button>
+    </mat-card-actions>
+</div>

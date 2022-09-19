@@ -1,0 +1,93 @@
+<div class="navbar">
+    <div class="top">
+        <!-- <mat-icon class="iconRol" matTooltip="Cambiar rol">group</mat-icon> -->
+        <mat-icon [inline]='true' matTooltip="Cerrar Sesion">exit_to_app</mat-icon>
+    </div>
+    
+    <div class="user">
+        <mat-icon style="color: white;" >person</mat-icon>        
+
+        <h3 class="name"><strong>Pepito Perez </strong> </h3>
+
+        <!-- <h4 class="mail"> <strong>admin</strong> </h4> -->
+       
+    </div>
+    <div class="menu">
+        <div class="menu-head">
+            <span></span>
+        </div>
+        <div class="menu-item">
+            <mat-accordion multi>
+                <mat-expansion-panel class="menu-panel">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <img src="assets/img/PDD.png" alt="PDD">
+                            <span class="title">Plan de desarrollo (PDD)</span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <button mat-button class="menu-button" [routerLink]="['']">
+                        <span>Empy</span>
+                    </button>
+                </mat-expansion-panel>
+                
+                <mat-expansion-panel class="menu-panel">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <img src="assets/img/PROYECTO.png" alt="PROYECTO">
+                            <span class="title">Proyecto</span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <button mat-button class="menu-button" [routerLink]="['']">
+                        <span>Empy</span>
+                    </button>
+                </mat-expansion-panel>
+                
+
+                <mat-expansion-panel class="menu-panel">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <img src="assets/img/PAA.png" alt="PAA">
+                            <span class="title">Plan anual de adquisisiones (PAA)</span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <button mat-button class="menu-button" [routerLink]="['/PAA/Adquisiciones']" (click)="onToggleSidenav()">
+                        <span>PAA</span>
+                    </button>
+                    <button mat-button class="menu-button" [routerLink]="['/PAA/BandejaDeTareas']">
+                        <span>Bandeja de tareas</span>
+                    </button>
+                    <button mat-button class="menu-button" [routerLink]="['/PAA/BandejaDeSolicitudes']">
+                        <span>Modificaciones solicitadas</span>
+                    </button>
+                </mat-expansion-panel>
+                
+
+                <mat-expansion-panel class="menu-panel">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <img src="assets/img/POAI.png" alt="POAI">
+                            <span class="title">Plan operativo de inversiones (POAI)</span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <button mat-button class="menu-button" [routerLink]="['']">
+                        <span>Empy</span>
+                    </button>
+                </mat-expansion-panel>
+                
+
+                <mat-expansion-panel class="menu-panel">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <img src="assets/img/SEGAPLAN.png" alt="SEGAPLAN">
+                            <span class="title">Seguimiento plan de desarrolo (SEGAPLAN)</span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <button mat-button class="menu-button" [routerLink]="['']">
+                        <span>Empy</span>
+                    </button>
+                </mat-expansion-panel>
+            </mat-accordion>
+
+        </div>
+    </div>
+</div>

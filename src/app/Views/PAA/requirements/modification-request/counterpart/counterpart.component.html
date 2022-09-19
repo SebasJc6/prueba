@@ -1,0 +1,83 @@
+
+
+
+<div class="container center-h center-v">
+
+
+    <div class="center-h center-v" style= "width: 100%; margin-left:-3%;">
+
+
+      <!--TITULO CONTRAPARTIDA-->
+    <mat-card-title class="subTitle">
+    <h1><strong style="margin-top:5;">Contrapartida</strong></h1>
+    </mat-card-title>
+
+      <!--ENTRADA FUENTE DE LOS RECURSOS-->
+    <div>
+        <h2 style="font-size: 100%;">Fuente de los recursos</h2>
+        <mat-form-field class="inputFuente">
+          <mat-select>
+            <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+    </div>
+
+    <!--ENTRADA TEXTO DESCRIPCION-->
+    <div class="center-h center-v"  style="width: 100%;">
+      <h2 style="font-size: 100%;">Descripción</h2>
+      <mat-form-field hintLabel="Maximo 400 caracteres" class="marcoDescripcion">
+      <input class="inputDescripcion" matInput #input maxlength="400" placeholder="Se requiere modificar">
+      <mat-hint align="end">{{input.value.length || 0}}/400</mat-hint>
+      </mat-form-field>
+    </div>
+
+
+       <!--ENTRADA VALOR QUE AUMENTA Y DISMINUYE-->
+    <table style="margin-top: 5%;">
+
+      <tr>
+      <td>
+        <h2  style="font-size: 100%;">Valor que aumenta</h2>
+        <mat-form-field class="inputValorqueAumenta">
+        <input style="color: black;" matInput>
+        </mat-form-field>
+      </td>
+
+      <td>
+        <h2 style="margin-left:9% ;font-size: 100%;">Valor que disminuye</h2>
+        <mat-form-field style="margin-left:9%;" class="inputValorqueAumenta">
+        <input style="color: black;"matInput>
+        </mat-form-field>
+      </td>
+
+      </tr>
+
+    </table>
+
+
+    <!--BOTONES CANCELAR AÑADIR-->
+    <div class="center-h center-v">
+      <mat-card-actions>
+        <button  style="margin-left: -22%" class="buton button" mat-button (click)="regresar()">Cancelar</button>
+        <button  style="margin-left: 8%;"  class="buton button" mat-button >Añadir</button>
+      </mat-card-actions>
+    </div>
+
+
+
+
+    <br><br><br><br>
+
+
+
+
+
+
+    </div>
+
+</div>
+
+
+
+
+<br>

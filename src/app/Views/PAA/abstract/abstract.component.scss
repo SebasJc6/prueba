@@ -1,0 +1,118 @@
+.container {
+  margin-left: 3%;
+  position: block;
+  margin-right: 3%;
+  text-align: center;
+
+}
+
+.center-h {
+  justify-content: center;
+}
+
+.center-v {
+  align-items: center;
+}
+
+.tablaCont {
+  margin-left: 4%;
+  margin-right: 4%;
+  margin-top: 2%;
+  color: black;
+  text-align: left;
+
+}
+
+.export {
+  margin: 2%;
+  display: flex;
+}
+
+.btnExcel {
+  margin-right: 6%;
+  color: #35867c;
+  text-align: end;
+  margin-bottom: 1%;
+}
+
+.imgExcel {
+  margin-left: 2%;
+  color: #35867c;
+  width: 30px;
+}
+
+.contData {
+  border-color: #185564;
+  border: 2px solid  #3ebee3;
+  border-radius: 0.5rem;
+  height: 35px;
+}
+
+.tltData {
+  font-size: 16px;
+}
+
+.txtData1 {
+  font-size: 100%;
+  margin: 2%;
+}
+
+.txtData2 {
+  font-size: 100%;
+  margin: 1%;
+}
+
+.sltData {
+  font-size: 100%;
+  margin: 3%;
+  width: 90%;
+}
+
+.txtData3 {
+  font-size: 100%;
+  margin: 0.5%;
+}
+
+.contTxt {
+  padding-left: 1%;
+  padding-right: 1%;
+}
+
+.label1 {
+  width: 24%;
+}
+
+.label2 {
+  width: 50%;
+
+}
+
+.label3 {
+  width: 100%;
+
+}
+
+mat-card-actions {
+  display: block;
+  margin-top: 5%;
+  margin-bottom: 5%;
+
+  .buton {
+    border-color: #185564;
+    margin: 2%;
+    border: 2px solid #185564;
+    color: #185564;
+    width: 15%;
+    border-radius: 1.5rem;
+    font-weight: bold;
+    font-size: 100%;
+    align-items: center;
+    line-height: 0px;
+  }
+  .btn:hover{
+    cursor: pointer;
+    transition-duration: 0.3s;
+    color: white;
+    background-color:#185564;
+  }
+}

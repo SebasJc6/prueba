@@ -1,0 +1,402 @@
+<div class="container center-h center-v">
+    <div class="mgp">
+        Plan Anual de Adquisiciones
+        <a class="href " [routerLink]="['/PAA/Adquisiciones']">
+            &nbsp;>&nbsp;{{codProject}}
+            -&nbsp;{{nomProject}}
+        </a>
+        <a class="href" [routerLink]="['/PAA/Requerimientos/',dataProjectID]">
+            &nbsp;>&nbsp;Requerimiemtos
+        </a>
+        <a class="href selected">
+            &nbsp;>&nbsp;Solicitud modificación
+        </a>
+    </div>
+
+    <div class="tltPrin">
+        <mat-card-title>
+            <h1><strong>Solicitud modificación</strong></h1>
+        </mat-card-title>
+    </div>
+
+    <div class="ActionsUp">
+        <div class="btnUpAction">
+            <button class="buton btn" mat-button mat-icon-button>
+                Nuevo
+            </button>
+            <button class="buton btn" mat-button mat-icon-button (click)="Addrequirement()">
+                Modificar
+            </button>
+            <button class="buton btn" mat-button mat-icon-button>
+                Contrapartida
+            </button>
+            <button class="buton btn" mat-button mat-icon-button>
+                Resumen
+            </button>
+            <span class="btnExcel">
+                <button mat-button>Exportar<img class="imgExcel" src="../../../../assets/img/excel.jpg"></button>
+            </span>
+            <span class="btngImport">
+                <button mat-button>Importar<img class="imgImport" src="../../../../assets/img/import.png"></button>
+            </span>
+        </div>
+    </div>
+
+    <div class="top">
+        <form action="">
+            <div class="tablaCont">
+                <div class="contTxt label1">
+                    <p class="tltData">Código del proyecto</p>
+                    <input class="contData" value="{{codProject}}" disabled>
+                </div>
+                <div class="contTxt label1">
+                    <p class="tltData">Número Modificación</p>
+                    <input class="contData" value="{{numModification}}" disabled>
+                </div>
+            </div>
+        </form>
+        <!-- <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">
+            Filtrar
+        </button>
+        <mat-card *ngIf="!viewFilter">
+            <div class="close">
+                <button mat-icon-button (click)="closeFilter()" color="warn">
+                    <mat-icon [inline]='true'>close</mat-icon>
+                </button>
+            </div>
+            <div [formGroup]="filterForm">
+                <mat-accordion multi>
+                    <mat-expansion-panel class="menu-panel">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <span class="title">Ordernar Por:</span>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="filter">
+                            <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
+                                <mat-radio-button value="NumeroRequerimiento">Número de requerimiento</mat-radio-button>
+                                <mat-radio-button value="DependenciaDestino">Dependencia destino de recursos
+                                </mat-radio-button>
+                                <mat-radio-button value="Descripcion">Descripción</mat-radio-button>
+                                <mat-radio-button value="Estado">Estado</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                        <mat-divider></mat-divider>
+                        <div class="Order" *ngIf="viewOrder">                    
+                            Decendente<mat-slide-toggle formControlName="ascending"> Acendente</mat-slide-toggle>
+                        </div>
+
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel class="menu-panel">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <span class="title">Buscar Por:</span>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="form">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Número de requerimiento</mat-label>
+                                <input matInput formControlName="NumeroRequerimiento" type="number">
+                            </mat-form-field>
+                            <mat-form-field style="width: 15%;" appearance="outline">
+                                <mat-label>Dependencia destino de recursos</mat-label>
+                                <input matInput formControlName="DependenciaDestino" type="number">
+                            </mat-form-field>
+                            <mat-form-field style="width: 30%;" appearance="outline">
+                                <mat-label>Descripción</mat-label>
+                                <input matInput formControlName="Descripcion">
+                            </mat-form-field>
+                          
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+                <button class="FilSear" mat-button (click)="getFilter()">
+                    Filtrar
+                </button>
+            </div>
+
+
+        </mat-card> -->
+
+
+    </div>
+
+    <table class="tablePrin mat-elevation-z8" mat-table [dataSource]="dataSourcePrin">
+
+        <ng-container matColumnDef="numeroRequerimiento">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="numReq">Número requerimiento</th>
+            <td mat-cell *matCellDef="let element">{{element.numeroRequerimiento}}</td>
+            <td class="footerTable" mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="dependenciaDestino">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="depRec">
+                Dependencia destino de los recursos
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.dependenciaDestino}}
+            </td>
+            <td class="footerTable" mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="descripcion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="desc">
+                Descripción (objeto del contrato)
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.descripcion}}
+            </td>
+            <td class="footerTable" mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="modalidadSeleccion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="modSel">
+                Modalidad de selección
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.modalidadSeleccion}}
+            </td>
+            <td class="footerTable" mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="actuacionContractual">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="actCon">
+                Actuación contractual
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.actuacionContractual}}
+            </td>
+            <td class="footerTable" mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroContrato">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="numCon">
+                Número de contrato
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.numeroContrato}}
+            </td>
+            <td class="footerTable" mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoContrato">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="tipCon">
+                Tipo de contrato
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.tipoContrato}}
+            </td>
+            <td class="footerTable" mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="perfil">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="perf">
+                Perfil
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.perfil}}
+            </td>
+            <td class="footerTable" mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="honorarios">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="valHonM">
+                Valor honorarios mes
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.honorarios | currency:"COP":'symbol-narrow'}}
+            </td>
+            <td class="footerTable" mat-footer-cell *matFooterCellDef>TOTAL</td>
+        </ng-container>
+
+        <ng-container matColumnDef="saldoRequerimiento">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="salReq">
+                Saldo requerimiento
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.saldoRequerimiento | currency:"COP":'symbol-narrow'}}
+            </td>
+            <td class="footerTable" mat-footer-cell *matFooterCellDef>
+                {{viewsCalReq | currency:"COP":'symbol-narrow'}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valorAumenta">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="valAum">
+                Valor que Aumenta
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.valorAumenta | currency:"COP":'symbol-narrow'}}
+            </td>
+            <td class="footerTable" mat-footer-cell *matFooterCellDef>
+                {{viewsCalAum | currency:"COP":'symbol-narrow'}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valorDisminuye">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="valDis">
+                Valor que disminuye
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.valorDisminuye | currency:"COP":'symbol-narrow'}}
+            </td>
+            <td class="footerTable" mat-footer-cell *matFooterCellDef>
+                {{viewsCalDis | currency:"COP":'symbol-narrow'}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nuevoSaldoApropiacion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="nueSal">
+                Nuevo saldo de apropiación
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.nuevoSaldoApropiacion | currency:"COP":'symbol-narrow'}}
+            </td>
+            <td class="footerTable" mat-footer-cell *matFooterCellDef>
+                {{viewsCalApr| currency:"COP":'symbol-narrow'}}
+            </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="iconos">
+            <tr>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="acc"> Acción </th>
+            </tr>
+            <tr>
+                <td mat-cell *matCellDef="let element">
+                    <div>
+                        <mat-icon mat-icon-button class="btnActions" matTooltip="Requerimiemtos">edit</mat-icon>
+                        &nbsp;
+                        <mat-icon mat-icon-button class="btnActions" matTooltip="Resumen Ejecución">delete</mat-icon>
+                    </div>
+                </td>
+            <tr>
+                <td class="footerTable" mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+    </table>
+
+    <div class="pagination " [formGroup]="paginationForm">
+        <!-- <mat-form-field class="take" appearance="legacy" matTooltip="Items por pagina">
+          <mat-select formControlName="take" (selectionChange)="getPagination()">
+            <mat-option [value]="Item" *ngFor="let Item of pageSizeOptions">{{Item}}</mat-option>
+          </mat-select>
+        </mat-form-field> -->
+        <a (click)="firstPage()">
+            <mat-icon matTooltip="Primer pagina">first_page</mat-icon>
+        </a>
+        <a (click)="prevPage()">
+            <mat-icon matTooltip="Anterior">chevron_left</mat-icon>
+        </a>
+        <mat-form-field class="page" appearance="legacy">
+            <mat-label>pagina</mat-label>
+            <input matInput value="{{numberPage}}" formControlName="page">
+            <button matSuffix (click)="getPagination()" mat-icon-button>
+                <mat-icon matTooltip="Buscar Pagina">youtube_searched_for</mat-icon>
+            </button>
+            <mat-hint> {{numberPage}} de {{numberPages}}</mat-hint>
+        </mat-form-field>
+        <a (click)="nextPage()">
+            <mat-icon matTooltip="Siguiente">chevron_right</mat-icon>
+        </a>
+        <a (click)="latestPage()">
+            <mat-icon matTooltip="Ultima pagina">last_page</mat-icon>
+        </a>
+    </div>
+
+
+    <div class="justification ">
+        <p matTooltip="Campo para justificar el motivo de la modificación">Justificación de la modificación</p>
+
+        <mat-form-field hintLabel="Maximo 400 caracteres" appearance="outline">
+            <textarea matInput #input maxlength="400" rows="4" placeholder="Se requiere modificar"></textarea>
+            <mat-hint align="end">{{input.value.length || 0}}/400</mat-hint>
+        </mat-form-field>
+
+    </div>
+
+    <div class="attachedFiles">
+        <p>Archivos adjuntos</p>
+
+        <div class="btnAttachedFiles">
+            <!-- <mat-card-actions>
+                <button class="button colo1" mat-raised-button (click)="fileUpload.click()">
+                    Adjuntar
+                </button>
+                <strong>{{ blockSave }}</strong>
+                <input type="file" accept="application/pdf,application/xlsx,application/docx,application/*" class="file-input" (change)="onFileSelected($event)"
+                    #fileUpload />
+                <button class="button color2" mat-raised-button (click)="onFileUpload()">
+                    Guardar
+                </button>
+            </mat-card-actions> -->
+            <mat-icon mat-icon-button class="btnActions" matTooltip="Adjunta los archivos">attach_file</mat-icon>
+            &nbsp;&nbsp;
+            <mat-icon mat-icon-button class="btnActions" matTooltip="Elimina el archivo adjunto">delete</mat-icon>
+            &nbsp;&nbsp;
+            <mat-icon mat-icon-button class="btnActions" matTooltip="Descarga el archivo adjunto">download</mat-icon>
+        </div>
+
+
+    </div>
+    <table class="tableAttachedFiles mat-elevation-z8" mat-table [dataSource]="dataSourceAttachedFiles">
+
+        <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef class="selc">
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let element">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(element) : null"
+                    [checked]="selection.isSelected(element)">
+                </mat-checkbox>
+            </td>
+        </ng-container>
+        <!-- <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef class="selectFile">
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                    [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+            </td>
+        </ng-container> -->
+
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="nameFile">
+                Documentos
+            <td mat-cell *matCellDef="let element">{{ element.fileName }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnAttachedFiles"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnAttachedFiles  " (click)="selection.toggle(row)"></tr>
+    </table>
+
+
+    <mat-card-actions>
+        <button class="buton btn" mat-button mat-icon-button>
+            Guardar
+        </button>
+        <button class="buton btn" mat-button mat-icon-button>
+            Enviar
+        </button>
+        <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
+            Cancelar
+        </button>
+    </mat-card-actions>
+
+</div>

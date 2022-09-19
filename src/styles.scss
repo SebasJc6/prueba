@@ -1,0 +1,180 @@
+/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  font-family: Montserrat, "Montserrat", sans-serif;
+}
+
+@import '~@angular/material/theming';
+
+$custom-typography: mat-typography-config($font-family: '"Montserrat", sans-serif;');
+
+@include mat-core($custom-typography);
+
+
+
+
+
+
+
+//color checkbox
+.mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+  opacity: 0.03 !important;
+  background-color: #3ebee3 !important;
+}
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: #3ebee3;
+}
+
+
+//color radio-button 
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #3ebee3;
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+  color: #185564;
+  background-color: #185564;
+}
+
+.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+  background-color: rgb(255, 37, 37, .26);
+}
+
+
+//color Scroll
+::-webkit-scrollbar {
+  background-color: #fff;
+  width: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #3ebee3;
+  border-radius: 16px;
+  border: 1px solid #ffffff;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+//color input appearance outline
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #185564;
+}
+
+/** Overrides underline color **/
+.mat-form-field-appearance-outline .mat-form-field-underline,
+.mat-form-field-appearance-outline .mat-form-field-ripple,
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-underline,
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-ripple {
+  background-color: #185564;
+
+}
+
+/** Overrides label color **/
+.mat-form-field-appearance-outline .mat-form-field-label,
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-label {
+  color: black;
+
+}
+
+/** Overrides caret & text color **/
+.mat-form-field-appearance-outline .mat-input-element {
+  caret-color: #185564;
+  color: black;
+}
+
+//camabiar color de slide-toogle
+.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: #49c5b6;
+}
+
+.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+  background-color: #185564;
+}
+
+.mat-slide-toggle.mat-checked.mat-disabled {
+  background-color: #185564;
+}
+
+/**COLOR CHIPS**/
+.mat-passedChips {
+  color: #F3561F !important;
+}
+
+.mat-passedChips[disabled] {
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.mat-actionChips {
+  color: #069169 !important;
+}
+
+.mat-actionChips[disabled] {
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.mat-closeChips {
+  color: #A80521 !important;
+}
+
+.matcloseChips[disabled] {
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.mat-beforeChips {
+  color: #FFAB00 !important;
+}
+
+.mat-beforeChips[disabled] {
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.mat-modificationChips {
+  color: #F3561F !important;
+}
+
+.mat-modificationChips[disabled] {
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.mat-approvedChips {
+  color: #069169 !important;
+}
+
+.mat-approvedChips[disabled] {
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.mat-reviewChips {
+  color: #F3561F !important;
+}
+
+.mat-reviewChips[disabled] {
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.mat-fitChips {
+  color: #FFAB00 !important;
+}
+
+.mat-fitChips[disabled] {
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+
+
+
+

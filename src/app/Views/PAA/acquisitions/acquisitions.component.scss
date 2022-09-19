@@ -1,0 +1,251 @@
+.container {
+  margin-left: 3%;
+  position: block;
+  margin-right: 3%;
+  text-align: center;
+
+  .mgp {
+    float: start;
+    display: flex;
+    color: #185564;
+    align-items: center;
+
+    button {
+      margin-left: -0.5%;
+
+      mat-icon {
+        margin-top: -2%;
+      }
+    }
+
+    .href {
+      text-decoration: none;
+      color: #185564;
+    }
+
+    .selected {
+      font-weight: bold;
+    }
+  }
+}
+
+.center-h {
+  justify-content: center;
+}
+
+.center-v {
+  align-items: center;
+}
+
+.export {
+  margin-left: 2%;
+  margin-top: 3%;
+  display: flex;
+}
+
+.btnExcel {
+  color: #35867c;
+
+  text-align: end;
+  margin-bottom: 1%;
+  margin-right: 6%;
+
+}
+
+.imgExcel {
+  margin-left: 2%;
+  color: #35867c;
+
+  width: 30px;
+
+}
+
+
+
+.title {
+  color: #185564;
+  margin: 0px auto;
+}
+
+
+table {
+  width: 90%;
+  text-align: center;
+  margin-left: 4%;
+  margin-right: 4%;
+
+  mat-table {
+    overflow: auto;
+    max-height: 500px;
+  }
+
+
+  .selc {
+    width: 5%;
+
+  }
+
+  .enti {
+    width: 15%;
+  }
+
+
+  .codi {
+    width: 8%;
+
+  }
+
+  .nom {
+    width: 30%;
+  }
+
+
+  .valA {
+    width: 8%;
+  }
+
+
+  .valT {
+    width: 8%;
+  }
+
+  .estd {
+    width: 11%;
+  }
+
+  .acc {
+    width: 17%;
+  }
+
+  th {
+    background-color: #185564;
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+
+  }
+
+  td {
+    text-align: center;
+    font-size: 11px;
+
+    button {
+      margin-right: 35%;
+      font-size: 11px;
+    }
+
+    div {
+      display: inline-flex;
+      .btnActions {
+        border-color: #185564;
+        border: 2px solid #185564;
+        color: #185564;
+        border-radius: 0.5rem;
+      }
+      .btnExecution{
+        border-color: #185564;
+        border: 2px solid #185564;
+        background-color: #185564;
+        border-radius: 0.5rem;
+        margin: 1%;
+        color: white;
+      }
+      .btnStatus{
+        border-color: red;
+        border: 2px solid red;
+        background-color: red;
+        border-radius: 0.5rem;
+        margin: 1%;
+        color: white;
+      }
+    }  }
+
+
+
+
+
+
+
+}
+
+.formSearch {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.btnOrder {
+  width: 50px;
+  color: antiquewhite;
+}
+
+.encaOrden {
+  margin-top: 5%;
+  display: flex;
+}
+
+.btnOrder {
+  width: 20%;
+}
+
+
+
+
+.actionsCont {
+  width: 20%;
+}
+
+
+.pagination {
+  display: inline-table;
+  margin-top: 2%;
+
+
+  .take {
+    width: 40px;
+    float: left;
+  }
+
+  .page {
+    width: 53px;
+    text-align: center;
+    float: left;
+
+  }
+
+}
+
+mat-chip {
+  max-width: 5px;
+  max-height: 5px;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #185564;
+}
+
+.pagination a.active {
+  background-color: white;
+  color: #185564;
+  border-radius: 0.5rem;
+  border: 2px solid #185564;
+
+}
+
+.pagination a:hover:not(.active) {
+  background-color: #ddd;
+}
+
+.aprobado {
+  color: #fc5000 !important;
+}

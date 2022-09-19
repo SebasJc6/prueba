@@ -1,0 +1,279 @@
+<div class="container center-h center-v">
+
+
+  <p style="color: #185564; text-align:left;"> Plan Anual de Adquisiciones (PAA) > 7791-IVC > <strong>RESUMEN EJECUCION
+      PRESUPUESTAL -
+      FFDS</strong> </p>
+
+  <div class="export">
+    <mat-card-title style="color: #185564;">
+      <strong> RESUMEN EJECUCION PRESUPUESTAL - FFDS</strong>
+    </mat-card-title>
+  </div>
+
+
+  <div class="contForm ">
+    <div class="btnExcel">
+      <button align="right" mat-button>Exportar<img class="imgExcel" src="../../../../assets/img/excel.jpg"></button>
+    </div>
+
+
+
+    <form>
+
+      <div class="tablaCont">
+        <div style="display: flex;">
+
+          <div class="contTxt label1">
+
+            <p class="tltData">Código del proyecto</p>
+
+            <div class="contData ">
+              <p class="txtData1">{{viewProjectById.codigoProyecto}}</p>
+            </div>
+          </div>
+
+          <div class="contTxt label2">
+
+            <p class="tltData">Subsecretaria</p>
+
+            <div class="contData ">
+              <p class="txtData2">{{viewProjectById.dependenciaOrigen}}</p>
+            </div>
+          </div>
+
+          <div class="contTxt label1">
+
+            <p class="tltData ">Dependencia origen de los recursos</p>
+
+            <div class="contData ">
+              <p class="txtData1">{{viewProjectById.codDependencia}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="tablaCont">
+
+        <div style="display: flex;">
+
+          <div class="contTxt label2">
+
+            <p class="tltData">Nombre del responsable</p>
+
+            <div class="contData ">
+              <p class="txtData2">{{viewResponsable.descripcion}}</p>
+            </div>
+          </div>
+
+          <div class="contTxt label1">
+
+            <p class="tltData">Teléfono del responsable</p>
+
+            <div class="contData ">
+              <p class="txtData1">{{viewResponsable.telefono}}</p>
+            </div>
+          </div>
+
+          <div class="contTxt label1">
+
+            <p class="tltData ">Correo electrónico del responsable</p>
+
+            <div class="contData ">
+              <p class="txtData1">{{viewResponsable.correo}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tablaCont">
+        <div style="display: flex;">
+
+          <div class="contTxt label2">
+
+            <p class="tltData">Unidad de contratación</p>
+
+            <div class="contData ">
+              <p class="txtData2">{{viewProjectById.entidadNombre}}</p>
+            </div>
+          </div>
+
+
+
+          <div class="contTxt label1">
+
+            <p class="tltData">Año</p>
+
+            <div class="contData">
+              <mat-select disableRipple class="sltData">
+                <mat-option value="1">2020</mat-option>
+                <mat-option value="2">2021</mat-option>
+                <mat-option value="3">2022</mat-option>
+              </mat-select>
+
+            </div>
+          </div>
+
+
+          <div class="contTxt label1">
+            <p class="tltData"></p>
+          </div>
+
+
+        </div>
+      </div>
+
+
+      <div class="tablaCont">
+        <div style="display: flex;">
+
+          <div class="contTxt label3">
+
+            <p class="tltData">Nombre del Proyecto de Inversión</p>
+
+            <div class="contData ">
+              <p class="txtData3">{{viewProjectById.nombre}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="tablaCont">
+
+        <div style="display: flex;">
+
+          <div class="contTxt label1">
+
+            <p class="tltData">Apropiación Inicial</p>
+
+            <div class="contData ">
+              <p class="txtData1"></p>
+            </div>
+          </div>
+
+          <div class="contTxt label1">
+
+            <p class="tltData">Apropiación Definitiva</p>
+
+            <div class="contData ">
+              <p class="txtData2"></p>
+            </div>
+          </div>
+
+          <div class="contTxt label1">
+
+            <p class="tltData ">Ejecución Acumulada</p>
+
+            <div class="contData ">
+              <p class="txtData1"></p>
+            </div>
+          </div>
+
+          <div class="contTxt label1">
+
+            <p class="tltData ">% Ejecución</p>
+
+            <div class="contData ">
+              <p class="txtData1"></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="tablaCont">
+
+        <div style="display: flex;">
+
+          <div class="contTxt label1">
+
+            <p class="tltData">Por Ejecutar</p>
+
+            <div class="contData ">
+              <p class="txtData1"></p>
+            </div>
+          </div>
+
+          <div class="contTxt label1">
+
+            <p class="tltData">Giro Acumulado</p>
+
+            <div class="contData ">
+              <p class="txtData2"></p>
+            </div>
+          </div>
+
+          <div class="contTxt label1">
+
+            <p class="tltData ">% Ejecución</p>
+
+            <div class="contData ">
+              <p class="txtData1"></p>
+            </div>
+          </div>
+
+          <div class="contTxt label1">
+
+            <p class="tltData ">Reserva Constituida</p>
+
+            <div class="contData ">
+              <p class="txtData1"></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="tablaCont">
+
+        <div style="display: flex;">
+
+          <div class="contTxt label1">
+
+            <p class="tltData">Giros de Reserva</p>
+
+            <div class="contData ">
+              <p class="txtData1"></p>
+            </div>
+          </div>
+
+          <div class="contTxt label1">
+
+            <p class="tltData">% Ejecución</p>
+
+            <div class="contData ">
+              <p class="txtData2"></p>
+            </div>
+          </div>
+
+
+          <div class="contTxt label1">
+            <p class="tltData"></p>
+          </div>
+
+          <div class="contTxt label1">
+            <p class="tltData"></p>
+          </div>
+        </div>
+      </div>
+
+
+    </form>
+  </div>
+
+  <mat-card-actions>
+    <button class="buton btn" mat-button mat-icon-button (click)="regresar()">
+      REGRESAR
+    </button>
+  </mat-card-actions>
+
+  <br><br> <br><br>
+
+</div>

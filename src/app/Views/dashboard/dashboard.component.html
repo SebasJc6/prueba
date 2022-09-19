@@ -1,0 +1,19 @@
+<mat-sidenav-container class="container">
+    <mat-sidenav #sidebar mode='side' >
+        <app-sidenav-list ></app-sidenav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div class="content">
+            <div class="toolbar">
+                <mat-toolbar>
+                    <app-header (click)="sidebar.toggle()"></app-header>
+                </mat-toolbar>
+            </div>
+            <div class="main">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    <app-footer></app-footer>
+
+    </mat-sidenav-content>
+</mat-sidenav-container>

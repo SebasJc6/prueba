@@ -1,0 +1,32 @@
+
+.container{
+    scrollbar-color: rgba(214, 17, 17, 0.5) rgba(224, 36, 36, 0);
+    scrollbar-width: thin;
+}
+mat-sidenav{
+    background:  #3ebee3;
+    width: 230px;
+    height: 100%;
+    
+}
+mat-sidenav-content{
+    height: 100vh;
+
+    .main{
+        margin-left: 30px;
+        margin-top: 1%;
+    }
+}
+mat-toolbar{
+    mat-icon{
+        margin-left: 15px;
+        color: #6D8299;
+
+    }
+    justify-content: space-between;
+    .box{
+        margin-top: 15px;
+    }
+    box-sizing: border-box;
+    padding: 0;
+}
