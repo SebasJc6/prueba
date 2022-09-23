@@ -1,83 +1,83 @@
-
-
-
 <div class="container center-h center-v">
 
+  <div class="center-h center-v" style="width: 100%; margin-left:-3%;">
 
-    <div class="center-h center-v" style= "width: 100%; margin-left:-3%;">
+    <!--TITULO CONTRAPARTIDA-->
+    <div class="title">
+      <mat-card-title>
+          <h1><strong>Contrapartida</strong></h1>
+      </mat-card-title>
+    </div>
 
+    <!--ENTRADA FUENTE DE LOS RECURSOS-->
+    <!-- <div>
+      <h2 style="font-size: 100%;">Fuente de los recursos</h2>
+      <mat-form-field class="inputFuente">
+        <mat-select>
+          <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div> -->
 
-      <!--TITULO CONTRAPARTIDA-->
-    <mat-card-title class="subTitle">
-    <h1><strong style="margin-top:5;">Contrapartida</strong></h1>
-    </mat-card-title>
-
-      <!--ENTRADA FUENTE DE LOS RECURSOS-->
-    <div>
-        <h2 style="font-size: 100%;">Fuente de los recursos</h2>
-        <mat-form-field class="inputFuente">
-          <mat-select>
-            <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
-          </mat-select>
-        </mat-form-field>
+    <div class="contTxt">
+      <p class="tltData">Fuente de los recursos</p>
+      <select class="contDataSelect">
+          <option *ngFor="let state of states" [value]="state">{{state}}</option>
+      </select>
     </div>
 
     <!--ENTRADA TEXTO DESCRIPCION-->
-    <div class="center-h center-v"  style="width: 100%;">
+    <!-- <div class="center-h center-v" style="width: 100%;">
       <h2 style="font-size: 100%;">Descripción</h2>
       <mat-form-field hintLabel="Maximo 400 caracteres" class="marcoDescripcion">
-      <input class="inputDescripcion" matInput #input maxlength="400" placeholder="Se requiere modificar">
-      <mat-hint align="end">{{input.value.length || 0}}/400</mat-hint>
+        <input class="inputDescripcion" matInput #input maxlength="400" placeholder="Se requiere modificar">
+        <mat-hint align="end">{{input.value.length || 0}}/400</mat-hint>
       </mat-form-field>
-    </div>
+    </div> -->
+
+      <div class="contTxt">
+          <p class="tltData">Descripción</p>
+          <textarea #input maxlength="400" placeholder="Se requiere modificar" class="contDataArea" rows="4"></textarea>
+          <mat-hint align="end">{{input.value.length || 0}}/400</mat-hint>
+      </div>
 
 
-       <!--ENTRADA VALOR QUE AUMENTA Y DISMINUYE-->
-    <table style="margin-top: 5%;">
+    <!--ENTRADA VALOR QUE AUMENTA Y DISMINUYE-->
 
-      <tr>
-      <td>
-        <h2  style="font-size: 100%;">Valor que aumenta</h2>
-        <mat-form-field class="inputValorqueAumenta">
-        <input style="color: black;" matInput>
-        </mat-form-field>
-      </td>
+      <div style="display: flex; margin-top: -2%;" >
+        <div class="contTxt input">
+            <p class="tltData">Valor que aumenta</p>
+            <input class="contData">
+        </div>
+        <div class="contTxt input2">
+            <p class="tltData">Valor que disminuye</p>
+            <input class="contData">
+        </div>
+      </div>
 
-      <td>
-        <h2 style="margin-left:9% ;font-size: 100%;">Valor que disminuye</h2>
-        <mat-form-field style="margin-left:9%;" class="inputValorqueAumenta">
-        <input style="color: black;"matInput>
-        </mat-form-field>
-      </td>
+      <!-- <tr>
+        <td>
+          <h2 style="font-size: 100%;">Valor que aumenta</h2>
+          <mat-form-field class="inputValorqueAumenta">
+            <input style="color: black;" matInput>
+          </mat-form-field>
+        </td>
 
-      </tr>
+        <td>
+          <h2 style="margin-left:9% ;font-size: 100%;">Valor que disminuye</h2>
+          <mat-form-field style="margin-left:9%;" class="inputValorqueAumenta">
+            <input style="color: black;" matInput>
+          </mat-form-field>
+        </td>
 
-    </table>
-
+      </tr> -->
 
     <!--BOTONES CANCELAR AÑADIR-->
-    <div class="center-h center-v">
-      <mat-card-actions>
-        <button  style="margin-left: -22%" class="buton button" mat-button (click)="regresar()">Cancelar</button>
-        <button  style="margin-left: 8%;"  class="buton button" mat-button >Añadir</button>
-      </mat-card-actions>
+    <div class="buttons">
+        <button class="buton btn" mat-button mat-dialog-close>Cancelar</button>
+        <button class="buton btn" mat-button>Añadir</button>
     </div>
 
-
-
-
-    <br><br><br><br>
-
-
-
-
-
-
-    </div>
+  </div>
 
 </div>
-
-
-
-
-<br>

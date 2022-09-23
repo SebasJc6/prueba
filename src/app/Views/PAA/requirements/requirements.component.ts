@@ -77,7 +77,7 @@ export class RequirementsComponent implements OnInit {
 
   ngOnInit(): void {
     this.filterRequertiments.page = "1";
-    this.filterRequertiments.take = 5;
+    this.filterRequertiments.take = 20;
     // this.getPagination();
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('data') || '';
 
@@ -184,7 +184,7 @@ export class RequirementsComponent implements OnInit {
     this.router.navigate(['/PAA/Adquisiciones'])
   }
   propertiesRequirement(requirementId: number) {
-    this.router.navigate(['/PAA/PropiedadesRequerimiento/' + requirementId])
+    this.router.navigate(['/PAA/PropiedadesRequerimiento/' + this.dataProjectID + '/' + requirementId])
   }
 
   modificatioRecuest(){

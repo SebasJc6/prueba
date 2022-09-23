@@ -28,7 +28,7 @@ const routes: Routes = [
       { path: 'BandejaDeTareas', component: TaskTrayComponent },
       { path: 'BandejaDeSolicitudes', component: RequestTrayComponent },
       { path: 'Requerimientos/:data', component: RequirementsComponent },
-      { path: 'PropiedadesRequerimiento/:data', component: PropertiesRequirementComponent },
+      { path: 'PropiedadesRequerimiento/:idPro/:idReq', component: PropertiesRequirementComponent },
       { path: 'Resumen/:data', component: AbstractComponent },
       { path: 'SolicitudModificacion/:data', component: ModificationRequestComponent },
       { path: 'ResumenModificacion',   component: ModificationSummaryComponent }

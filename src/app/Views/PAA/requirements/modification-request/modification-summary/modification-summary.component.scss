@@ -1,91 +1,127 @@
+.container {
+  margin-left: 3%;
+  position: block;
+  margin-right: 3%;
+  text-align: center;
 
-  .container{
-    margin-left: 3%;
-    position: block;
-    margin-right: 8%;
-  }
-
-  @media(max-width: 500px) {
-    table,
-    .container {
-      width: 80%;
-    }
-  }
-
-  .center-h {
-    justify-content: center;
-  }
-  .center-v {
-    align-items: center;
-  }
-
-  .migaPan{
-    color: #6D8299;
-    margin-top:
-    2%;margin-left: -4%;
-    font-size: 150%;
-  }
-  .Title{
-    color: #35867c;
-    margin-left: -4%;
-    font-size: 35px;
-    margin-top: 2%;
-  }
-  .subTitle{
-    font-size: 120%;
-    color: black;
-    margin-left: -4%;
-  }
-
-  .inputFuente{
+  .mgp {
+    float: start;
+    display: flex;
     color: #185564;
-    border: 2.5px solid #555;
-    height:39px;
-    display:block;
-    margin-top:-1%;
-    width:40%;
-    margin-left:-4%;
-  }
+    align-items: center;
 
-  table {
-    width: 100%;
-    margin-top:5%;
-    width: 90%;
-    margin-left:5%;
+    button {
+      margin-left: -0.5%;
+
+      mat-icon {
+        margin-top: -2%;
+      }
     }
 
-    .encabesado {
-      padding-right: 24px;
-      background-color: #185564 !important;;
+    .href {
+      text-decoration: none;
+      color: #185564;
+    }
+
+    .selected {
+      font-weight: bold;
+    }
+  }
+
+  .export {
+    margin-left: 2%;
+    margin-top: 1.5%;
+    display: flex;
+    color: #185564;
+  }
+}
+
+.contTxt {
+  text-align: left;
+  margin: 1%;
+  margin-top: 0.8%;
+  margin-bottom: 0.8%;
+  margin-top: 0.5%;
+
+  .tltData {
+    font-size: 14px;
+    margin-bottom: -1%;
+    font-weight: bold;
+
+    mat-select {
+        margin-top: 2%;
+    }
+  }
+
+  .contDataSelect{
+    border: 2px solid #185564;
+    border-radius: 0.3rem;
+    height: 36px;
+    width: 100%;
+    margin-top: 1.5%;
+  }
+}
+.input {
+  width: 40%;
+  margin-left: 3%;
+}
+
+
+.tablePrin {
+  width: 90%;
+  text-align: center;
+  margin-left: 4%;
+  margin-right: 4%;
+  margin-top: 2.5%;
+
+  .footerTable,
+  .mat-header-cell,
+  .encabesado,
+  th {
+      background-color: #185564;
       color: white;
       text-align: center;
-    }
+      font-size: 11px;
+      font-weight: bold;
+      text-align: center;
 
-  .buton{
-    color:#185564 ;
-    right: 5%;
-    margin-top: 4%;
+      div {
+          align-items: center;
+
+          mat-icon {
+              font-size: 20px;
+              color: white;
+          }
+      }
+  }
+
+  td {
+      text-align: center;
+      font-size: 11px;
+  }
+}
+
+mat-card-actions {
+  display: block;
+  margin-bottom: 5%;
+
+  .buton {
     border-color: #185564;
-    border: 3px solid #185564;
-    width:   20%;
-    border-radius: 2.5rem;
-    margin-left: 45%;
-   }
+    margin: 1%;
+    margin: 2%;
+    border: 2px solid #185564;
+    color: #185564;
+    width: 15rem;
+    border-radius: 1.5rem;
+    font-weight: bold;
+    align-items: center;
+    line-height: 0px;
+  }
 
-  .button:hover{
+  .btn:hover {
     cursor: pointer;
     transition-duration: 0.3s;
     color: white;
-    background-color:#185564;
+    background-color: #185564;
   }
-
-  .btnActions{
-    position: block;
-    border-color: #185564;
-    border: 2px solid #185564;
-    color: #185564;
-    border-radius: 0.5rem;
-    margin: 1%;
-  }
-
-
+}

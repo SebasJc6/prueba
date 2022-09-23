@@ -18,6 +18,8 @@
     </mat-card-title>
   </div>
 
+  <div style="overflow: auto;">
+
   <div class="top">
     <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">
       Filtrar
@@ -160,6 +162,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
+</div>
 
   <div class="pagination " [formGroup]="paginationForm">
     <mat-form-field class="take" appearance="legacy" matTooltip="Items por pagina">

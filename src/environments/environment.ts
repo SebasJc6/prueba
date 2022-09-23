@@ -5,7 +5,10 @@
 export const environment = {
   production: false,
 
-  baseUrl: "https://w-logic-back.azurewebsites.net/api/v1/"
+  baseUrl:{
+    logic:"https://w-logic-back.azurewebsites.net/api/v1/",
+    generic:"https://w-generic-back.azurewebsites.net/api/v1/"
+  } 
   };
 
 

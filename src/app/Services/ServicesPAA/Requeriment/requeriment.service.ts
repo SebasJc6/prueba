@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class RequerimentService {
-  url: string = environment.baseUrl + 'Proyecto/';
+  url: string = environment.baseUrl.logic + 'Proyecto/';
 
   constructor(private http: HttpClient) { }
 

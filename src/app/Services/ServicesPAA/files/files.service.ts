@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 export class FilesService {
 
-  url: string = environment.baseUrl + 'Files/';
+  url: string = environment.baseUrl.logic + 'Files/';
 
   constructor(private http: HttpClient) { }
 

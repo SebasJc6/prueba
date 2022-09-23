@@ -1,13 +1,9 @@
-
-table {
-  width: 100%;
-}
-
 .container{
   margin-left: 3%;
   position: block;
   margin-right: 8%;
 }
+
 .center-h {
   justify-content: center;
 }
@@ -15,132 +11,86 @@ table {
   align-items: center;
 }
 
-.subTitle{
-  margin-top: 5rem;
-  color: #35867c;
-  margin-left: 5%;
-  font-size: 35px;
-  // margin-left: 5%;
-}
-
-.mat-table {
-  overflow: auto;
-  margin-left: 2%;
-  max-height: 500px;
-}
-
-
-.encabesado {
-  padding-right: 24px;
-  background-color: #185564;
-  color: white;
-  text-align: center;
-}
-
-
-mat-card-actions{
-  padding-left: 40%;
-}
-
-.buton {
-  // right: 10%;
-  margin-top: 7%;
-  border-color: #185564;
-  border: 2px solid #185564;
-  color: #185564;
-  width: 35%;
-  border-radius: 1.5rem;
-}
-
-.button:hover{
-  cursor: pointer;
-  transition-duration: 0.3s;
-  color: white;
-  background-color:#185564;
-}
-
-
-.space{
- margin-right: 5%;
-}
-
-.formSearch {
-  min-width: 150px;
-  max-width: 500px;
-  width: 100%;
-}
-
-.fullWidth {
-  width: 100%;
-}
-mat-form-field,mat-label,input{
-  color: whitesmoke;
-}
-
-.btnOrder{
-  width: 50px;
-  color: antiquewhite;
-}
-
-.encaOrden {
-  margin-top: 5%;
-}
-
-.btnOrder{
-  width: 20%;
-}
-
-.btnActions{
-  border-color: #185564;
-  border: 2px solid #185564;
-  color: #185564;
-  border-radius: 0.5rem;
-  margin: 1%;
-}
-
-.inputFuente{
-  color: #185564;
-  border: 2.5px solid #555;
-  height:39px;
-  display:block;
-  margin-top:2%;
-  width:110%;
-  margin-left:1%;
-}
-
-.marcoDescripcion{
-  display:block;
-  color: #185564;
-  border: 3.5px solid #555;
-  width: 110%;
-  margin-top:-2%;
-  margin-left: 1%;
-  height:98px;
-
-}
-.inputDescripcion{
-  display: block;
-  font-size: 220%;
-  height:28px;
-  color: black;
-  height:79px;
-}
-
-.inputValorqueAumenta{
-  color: #185564;
-  border: 2.5px solid #555;
-  height:39px;
-  display:block;
-  margin-top:1%;
-  width:90%;
-  margin-left:-1%;
-  color: black;
-  font-size: 100%;
-}
-
-h2{
+.title {
+  font-size: 20px;
   font-weight: bold;
-  color:black;
+  color: #185564;
 }
 
+.buttons {
+  text-align: center;
+  margin-left: 10%;
+  margin-top: 2%;
 
+  .buton {
+    border-color: #185564;
+    margin: 2%;
+    margin-top: 7%;
+    border: 2px solid #185564;
+    color: #185564;
+    width: 15rem;
+    border-radius: 1.5rem;
+    font-weight: bold;
+    align-items: center;
+    text-transform: uppercase;
+  
+  }
+  
+  .btn:hover {
+    cursor: pointer;
+    transition-duration: 0.3s;
+    color: white;
+    background-color: #185564;
+  }
+}
+
+.contTxt {
+    text-align: left;
+    margin: 1%;
+    margin-top: 0.8%;
+    margin-bottom: 0.8%;
+    margin-top: 2%;
+
+    .tltData {
+      font-size: 14px;
+      margin-bottom: -1%;
+      font-weight: bold;
+
+      mat-select {
+          margin-top: 2%;
+      }
+    }
+
+    .contDataSelect{
+      border: 2px solid #185564;
+      border-radius: 0.3rem;
+      height: 36px;
+      width: 100%;
+      margin-top: 1.5%;
+    }
+
+    .contDataArea{
+      border: 2px solid #185564;
+      border-radius: 0.3rem;
+      margin-top: 2%;
+      width: 109.2%;
+      font-family: "Montserrat", sans-serif;
+    }
+
+    .contData {
+      border: 2px solid #185564;
+      border-radius: 0.3rem;
+      height: 30px;
+      width: 125%;
+      margin-top: 3%;
+  }
+}
+
+.input {
+  width: 50%;
+}
+
+.input2 {
+  width: 50%;
+  margin-left: 25%;
+}

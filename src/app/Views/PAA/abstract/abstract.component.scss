@@ -17,7 +17,7 @@
 .tablaCont {
   margin-left: 4%;
   margin-right: 4%;
-  margin-top: 2%;
+  margin-top: 1%;
   color: black;
   text-align: left;
 
@@ -43,35 +43,24 @@
 
 .contData {
   border-color: #185564;
-  border: 2px solid  #3ebee3;
+  border: 2px solid  #185564;
   border-radius: 0.5rem;
-  height: 35px;
+  height: 36px;
+  margin-top: -5%;
+  padding: 0px 0px 0px 5px;
+  width: 100%;
 }
 
 .tltData {
   font-size: 16px;
 }
 
-.txtData1 {
-  font-size: 100%;
-  margin: 2%;
-}
-
-.txtData2 {
-  font-size: 100%;
-  margin: 1%;
-}
-
 .sltData {
   font-size: 100%;
   margin: 3%;
-  width: 90%;
+  width: 95%;
 }
 
-.txtData3 {
-  font-size: 100%;
-  margin: 0.5%;
-}
 
 .contTxt {
   padding-left: 1%;
@@ -84,12 +73,20 @@
 
 .label2 {
   width: 50%;
-
 }
 
 .label3 {
   width: 100%;
+}
 
+input {
+  width: 100%;
+}
+
+.contDataDisabled {
+  border-color: gray;
+  background-color: white;
+  color:  gray;
 }
 
 mat-card-actions {
@@ -99,7 +96,7 @@ mat-card-actions {
 
   .buton {
     border-color: #185564;
-    margin: 2%;
+    // margin: 2%;
     border: 2px solid #185564;
     color: #185564;
     width: 15%;
@@ -108,7 +105,9 @@ mat-card-actions {
     font-size: 100%;
     align-items: center;
     line-height: 0px;
+    margin-bottom: 8%;
   }
+  
   .btn:hover{
     cursor: pointer;
     transition-duration: 0.3s;

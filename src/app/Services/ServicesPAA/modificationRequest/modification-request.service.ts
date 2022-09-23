@@ -10,7 +10,7 @@ import { filterModificationRequestI, getModificationRequestByRequesI, getModific
 export class ModificationRequestService {
 
 
-  readonly Url: string= environment.baseUrl ;
+  readonly Url: string= environment.baseUrl.logic ;
 
   constructor(private http: HttpClient) {}
 

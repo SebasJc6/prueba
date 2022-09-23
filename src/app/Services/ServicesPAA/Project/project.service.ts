@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 export class ProjectService {
 
 
- readonly    url: string = environment.baseUrl + 'Proyecto';
+ readonly    url: string = environment.baseUrl.logic + 'Proyecto';
 
   constructor(private http: HttpClient) { }
 

@@ -32,7 +32,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDatepickerModule} from '@angular/material/datepicker';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 //Componentes
 import { AppRoutingModule } from './app-routing.module';
@@ -54,7 +55,8 @@ import { ModificationSummaryComponent } from './Views/PAA/requirements/modificat
 import { ModificationRequestComponent } from './Views/PAA/requirements/modification-request/modification-request.component';
 import { TaskTrayComponent } from './Views/PAA/task-tray/task-tray.component';
 import { RequestTrayComponent } from './Views/PAA/request-tray/request-tray.component';
-
+import { AlertsComponent } from './Templates/alerts/alerts.component';
+import { AlertsPopUpComponent } from './Templates/alerts-pop-up/alerts-pop-up.component';
 
 
 const materialModules = [
@@ -84,6 +86,8 @@ const materialModules = [
   MatDatepickerModule,
   MatDividerModule,
   MatSlideToggleModule,
+  MatSnackBarModule,
+  MatAutocompleteModule,
 ]
 
 
@@ -107,7 +111,9 @@ const materialModules = [
     ModificationSummaryComponent,
     ModificationRequestComponent,
     TaskTrayComponent,
-    RequestTrayComponent
+    RequestTrayComponent,
+    AlertsComponent,
+    AlertsPopUpComponent
 
   ],
   imports: [
@@ -123,6 +129,7 @@ const materialModules = [
   ],
   providers:
     [
+      AlertsPopUpComponent
     ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

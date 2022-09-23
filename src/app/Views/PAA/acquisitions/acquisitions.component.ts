@@ -12,6 +12,8 @@ import { Data } from 'src/models/paa-data';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 export interface ChipColor {
   name: string;
   color: ThemePalette;
@@ -59,7 +61,9 @@ export class AcquisitionsComponent implements OnInit {
   numberPage: number = 0;
   numberTake: number = 0;
 
-  constructor(private serviceProject: ProjectService, public router: Router) {
+  constructor(
+    private serviceProject: ProjectService, 
+    public router: Router) {
 
   }
   filterProjects = {} as filterProjectI;
@@ -89,7 +93,7 @@ export class AcquisitionsComponent implements OnInit {
     this.ngAfterViewInit();
 
     this.filterProjects.page = "1";
-    this.filterProjects.take = 5;
+    this.filterProjects.take = 20;
     this.getAllProjects(this.filterProjects);
   }
 
@@ -185,7 +189,5 @@ export class AcquisitionsComponent implements OnInit {
       console.log(data)
     })
   }
-
-
 
 }

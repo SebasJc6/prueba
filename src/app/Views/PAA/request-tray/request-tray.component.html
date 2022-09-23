@@ -1,1 +1,239 @@
-<p>Bandeja de solicitudes</p>
+<!--CONTENEDOR TOTAL COMPONENTE MODIFICACIONES SOLICITADAS-->
+<div class="container center-h center-v">
+
+    <!--MIGA PAN-->
+    <div class="mgp">
+        Plan Anual de Adquisiciones
+        <a class="href selected" [routerLink]="['/PAA/BandejaDeSolicitudes']">
+          &nbsp;>&nbsp;Modificaciones solicitadas
+        </a>
+      </div>
+
+      <!-- TITULO -->
+      <div class="export">
+        <mat-card-title style="color: #185564;">
+          <strong>Modificaciones solicitadas</strong>
+        </mat-card-title>
+      </div>
+
+      <!-- DIV  FILTRO Y TABLA MODIFICACIONES SOLICITADAS-->
+      <div style="overflow: auto;">
+
+              <!-- FILTRO -->
+      <div class="top">
+        <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">
+          Filtrar
+        </button>
+        <mat-card *ngIf="!viewFilter">
+          <div class="close">
+            <button mat-icon-button (click)="closeFilter()" color="warn">
+              <mat-icon [inline]='true'>close</mat-icon>
+            </button>
+          </div>
+          <div [formGroup]="filterForm">
+            <mat-accordion multi>
+              <mat-expansion-panel class="menu-panel">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span class="title">Ordernar Por:</span>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="filter">
+                  <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
+                    <mat-radio-button value="NumeroSolicitud">N° de Solicitud</mat-radio-button>
+                    <mat-radio-button value="Vigencia">Dependencia destino de recursos</mat-radio-button>
+                    <mat-radio-button value="FechaPresentacion">Fecha de Presentación</mat-radio-button>
+                    <mat-radio-button value="CodigoProyecto">Código del Proyecto</mat-radio-button>
+                    <mat-radio-button value="Proyecto">Proyecto</mat-radio-button>
+                    <mat-radio-button value="Version">Versión</mat-radio-button>
+                    <mat-radio-button value="Solicitante">Solicitante</mat-radio-button>
+                    <mat-radio-button value="Estado">Estado</mat-radio-button>
+                    <mat-radio-button value="FechaAprobacion">Fecha de aprobación / rechazo</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="Order" *ngIf="viewOrder">
+                  Decendente<mat-slide-toggle formControlName="ascending"> Acendente</mat-slide-toggle>
+                </div>
+    
+              </mat-expansion-panel>
+    
+              <mat-expansion-panel class="menu-panel">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span class="title">Buscar Por:</span>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="form">
+                  <mat-form-field appearance="outline">
+                    <mat-label>N° de Solicitud</mat-label>
+                    <input matInput formControlName="NumeroSolicitud" type="text">
+                  </mat-form-field>
+                  <mat-form-field style="width: 15%;" appearance="outline">
+                    <mat-label>Vigencia</mat-label>
+                    <input matInput formControlName="Vigencia" type="text">
+                  </mat-form-field>
+                  <mat-form-field style="width: 30%;" appearance="outline">
+                    <mat-label>Fecha de Presentación</mat-label>
+                    <input matInput formControlName="FechaPresentacion">
+                  </mat-form-field>
+                  <mat-form-field style="width: 30%;" appearance="outline">
+                    <mat-label>Código del Proyecto</mat-label>
+                    <input matInput formControlName="CodigoProyecto">
+                  </mat-form-field>
+                  <mat-form-field style="width: 30%;" appearance="outline">
+                    <mat-label>Proyecto</mat-label>
+                    <input matInput formControlName="Proyecto">
+                  </mat-form-field>
+                  <mat-form-field style="width: 30%;" appearance="outline">
+                    <mat-label>Versión</mat-label>
+                    <input matInput formControlName="Version">
+                  </mat-form-field>
+                  <mat-form-field style="width: 30%;" appearance="outline">
+                    <mat-label>Solicitante</mat-label>
+                    <input matInput formControlName="Solicitante">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Estado </mat-label>
+                    <mat-select formControlName="Estado">
+                      <mat-option [value]="Item" *ngFor="let Item of estadoFilter">{{Item}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field style="width: 30%;" appearance="outline">
+                    <mat-label>Fecha de aprobación / rechazo</mat-label>
+                    <input matInput formControlName="FechaAprobacion">
+                  </mat-form-field>
+                  
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+    
+            <button class="FilSear" mat-button (click)="getFilter()">
+              Filtrar
+            </button>
+          </div>
+        </mat-card>
+      </div>
+
+      <!-- TABLLA MODIFICACIONES SOLICITADAS -->
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+            <ng-container matColumnDef="solicitud">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sol">
+                    N° de Solicitud
+                <td mat-cell *matCellDef="let element">{{ element.nSolicitud}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="vigencia">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="vig">
+                    Vigencia
+                <td mat-cell *matCellDef="let element">{{ element.vigencia}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="fPresentacion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sol">
+                    Fecha de Presentación
+                <td mat-cell *matCellDef="let element">{{ element.fechaPresentacion}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="codigoP">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="cod">
+                    Código del Proyecto
+                <td mat-cell *matCellDef="let element">{{ element.codProyecto}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="proyecto">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="pro">
+                    Proyecto
+                <td mat-cell *matCellDef="let element">{{ element.proyecto}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="version">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="ver">
+                    Versión
+                <td mat-cell *matCellDef="let element">{{ element.version}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="solicitante">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="solici">
+                    Solicitante
+                <td mat-cell *matCellDef="let element">{{ element.solicitante}}</td>
+            </ng-container>
+
+            <!-- BOTON DE ESTADO -->
+            <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="est">
+                    Estado
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button style="color: black; font-size: 11px; width: auto; margin-right: 35%;" disabled>
+                        <mat-icon [ngClass]="{
+                          'mat-approvedChips' : element.estado == 'Aprobado',
+                          'mat-reviewChips' : element.estado == 'En Revisión',
+                          'mat-fitChips' : element.estado == 'En Ajuste',
+                          'mat-modificationChips' : element.estado == 'En Modificación'}">
+                          fiber_manual_record</mat-icon>
+                        {{ element.estado }}
+                      </button>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fAprobacion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="fap">
+                    Fecha de aprobación / rechazo
+                <td mat-cell *matCellDef="let element">{{ element.fechaAprobacion}}</td>
+            </ng-container>
+
+            <!-- ICONO DE ACCIÓN -->
+            <ng-container matColumnDef="accion">
+                <tr>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="acc"> Acción
+                    </th>
+                </tr>
+                <tr>
+                    <td mat-cell *matCellDef="let element">
+                        <div style="text-align: center;">
+                            <mat-icon mat-icon-button class="btnActions" matTooltip="Propiedades">
+                                insert_drive_file</mat-icon>
+                        </div>
+                    </td>
+                <tr>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+    </div>
+    <!-- FIN TABLA -->
+
+    <!-- PAGINACION -->
+    <div class="pagination " [formGroup]="paginationForm">
+
+        <mat-form-field class="take" appearance="legacy" matTooltip="Items por pagina">
+          <mat-select formControlName="take" (selectionChange)="getPagination()">
+            <mat-option [value]="Item" *ngFor="let Item of pageSizeOptions">{{Item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <a (click)="firstPage()">
+          <mat-icon matTooltip="Primer pagina">first_page</mat-icon>
+        </a>
+        <a (click)="prevPage()">
+          <mat-icon matTooltip="Anterior">chevron_left</mat-icon>
+        </a>
+        <mat-form-field class="page" appearance="legacy">
+          <mat-label>pagina</mat-label>
+          <input matInput value="{{numberPage}}" formControlName="page">
+          <button matSuffix (click)="getPagination()" mat-icon-button>
+            <mat-icon matTooltip="Buscar Pagina">youtube_searched_for</mat-icon>
+          </button>
+          <mat-hint> {{numberPage}} de {{numberPages}}</mat-hint>
+        </mat-form-field>
+        <a (click)="nextPage()">
+          <mat-icon matTooltip="Siguiente">chevron_right</mat-icon>
+        </a>
+        <a (click)="latestPage()">
+          <mat-icon matTooltip="Ultima pagina">last_page</mat-icon>
+        </a>
+
+      </div>
+
+</div>

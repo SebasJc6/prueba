@@ -110,7 +110,7 @@ export class ModificationRequestComponent implements OnInit {
 
   ngOnInit(): void {
     this.filterModificationRequest.page = "1";
-    this.filterModificationRequest.take = 5;
+    this.filterModificationRequest.take = 20;
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('data') || '';
     this.getModificationRequet(+this.dataProjectID);
     this.requestID = '5';
@@ -185,14 +185,19 @@ export class ModificationRequestComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       //this.ngOnInit();
-      // console.log(`Dialog result: ${result}`);
+     // console.log(`Dialog result: ${result}`);
     });
   }
 
   Addcounterpart() {
-    const dialogRef = this.dialog.open(CounterpartComponent);
+    const dialogRef = this.dialog.open(CounterpartComponent, {
+      width: '1000px',
+      height: '580px',
+      data: this.dataProjectID,
+    });
+
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      // console.log(`Dialog result: ${result}`);
     });
 
   }

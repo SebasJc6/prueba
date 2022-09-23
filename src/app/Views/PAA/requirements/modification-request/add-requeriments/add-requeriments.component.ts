@@ -63,7 +63,7 @@ export class AddrequirementsComponent implements OnInit {
   ngOnInit(): void {
     this.dataProjectID = this.data;
     this.filterDataRequertiments.page = "1";
-    this.filterDataRequertiments.take = 3;
+    this.filterDataRequertiments.take = 6;
     this.getDataRequeriment(+this.dataProjectID, this.filterDataRequertiments);
   }
 

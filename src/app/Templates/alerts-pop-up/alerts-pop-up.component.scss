@@ -1,0 +1,69 @@
+.flex-container {
+    display: flex;
+    align-items: center;
+    margin-left: 95.5%;
+    margin-top: -2.3%;
+   }
+   
+   .title {
+     font-weight: 700;
+   }
+ 
+   .card{
+     background-color: white;
+     text-align: center;
+     
+     .logo {
+       margin-top: 2%;
+       max-width: 65px;
+     }
+   }
+ 
+   .buttons {
+     display: block;
+ 
+     .buton {
+       border-color: #185564;
+       margin: 1%;
+       border: 2px solid #185564;
+       color: #185564;
+       width: 12rem;
+       border-radius: 1.5rem;
+       font-weight: bold;
+       align-items: center;
+       text-transform: uppercase;
+   }
+ 
+   .btn:hover {
+       cursor: pointer;
+       transition-duration: 0.3s;
+       color: white;
+       background-color: #185564;
+   }
+ 
+   .butonWarningInput {
+     border-color: #185564;
+     margin: 1%;
+     border: 2px solid #185564;
+     color: #185564;
+     width: 12rem;
+     border-radius: 1.5rem;
+     font-weight: bold;
+     align-items: center;
+     text-transform: uppercase;
+ }
+ }
+ 
+ .warningInput {
+   text-align: initial;
+   padding-left: 20%;
+ }
+ 
+ .contDataArea{
+   border: 2px solid #185564;
+   border-radius: 0.3rem;
+   margin-top: -15.5%;
+   margin-bottom: -10%;
+   width: 310%;
+   font-family: "Montserrat", sans-serif;
+ }

@@ -1,7 +1,10 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { RequerimentService } from 'src/app/Services/ServicesPAA/Requeriment/requeriment.service';
+import { AddrequirementsComponent } from '../add-requeriments/add-requeriments.component';
 
 @Component({
   selector: 'app-counterpart',
@@ -10,7 +13,11 @@ import { Router } from '@angular/router';
 })
 export class CounterpartComponent implements OnInit {
 
-  constructor(public router: Router) { }
+  constructor(public router: Router,
+    public serviceRequeriment: RequerimentService,
+    public dialogRef: MatDialogRef<AddrequirementsComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: string,) 
+    { dialogRef.disableClose = true;}
 
   states: string[] = [
     '570-SGP-Participaciones para Salud',
@@ -26,10 +33,7 @@ export class CounterpartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  regresar(){
-    this.router.navigate(['/PAA/SolicitudModificacion'])
+    console.log('idProject',this.data)
   }
 
 }

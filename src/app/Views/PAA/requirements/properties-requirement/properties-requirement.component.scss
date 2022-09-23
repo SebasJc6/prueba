@@ -81,6 +81,17 @@
                     width: 100%;
                     margin-top: 1.5%;
                 }
+                .contDataAutocomplete{
+                    border: 2px solid #185564;
+                    border-radius: 0.3rem;
+                    height: 30px;
+                    width: 100%;
+                    margin-top: 1.5%;
+                    background-color: white;
+                    ::ng-deep .mat-select-trigger {
+                        margin-top: 2%;
+                    }
+                }
 
                 .contDataDisabled {
                     border-color: gray;
@@ -104,10 +115,10 @@
             }
 
             .label2 {
-                width: 54%;
+                width: 52%;
             }
             .label3 {
-                width: 24.5%;
+                width: 25%;
             }
             .label4 {
                 width: 82%;
@@ -310,3 +321,14 @@ table {
         display: flex;
         margin-left: 10px;
     }
+
+
+//quitar felchas input tipo number
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}

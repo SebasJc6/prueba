@@ -1,0 +1,55 @@
+
+<!-- VE 1: ALERT PARA ERRORES -->
+  <div *ngIf="data.type == 'error'" style="border: 2px solid #185564;">
+    <div mat-dialog-title class="flex-container">
+        <button mat-button class="close-icon" (click)="dismissSnackbar()"> 
+            <mat-icon style="font-weight: bold;">close</mat-icon> 
+        </button> 
+    </div>
+    <div class="card">
+        <img class="logo" src="assets/img/error.png">
+        <h1 class="title" style="color: #fd1212e7;"  mat-dialog-title>{{data.title}}</h1>
+        <div mat-dialog-content>
+          <p class="message">{{data.message}}</p>
+        </div>
+    </div>
+</div>
+
+<!-- VE 2: ALERT  NOTIFI. EXITOSAS -->
+<div *ngIf="data.type == 'success'" style="border: 2px solid #185564;">
+    <div mat-dialog-title class="flex-container">
+        <button mat-button class="close-icon" (click)="dismissSnackbar()"> 
+            <mat-icon style="font-weight: bold;">close</mat-icon> 
+        </button> 
+    </div>
+    <div class="card">
+        <img class="logo" src="assets/img/success.png">
+        <h1 class="title" style="color: #00aa2b;"  mat-dialog-title>{{data.title}}</h1>
+        <div mat-dialog-content>
+          <p class="message">{{data.message}}</p>
+        </div>
+        <div class="buttons" mat-dialog-actions>
+            <button mat-button class="buton btn" (click)="dismissSnackbar()" cdkFocusInitial>ACEPTAR</button>
+          </div>
+    </div>
+</div>
+
+
+<!-- VE 4: ALERT  ADVERTENCIA  -->
+<div *ngIf="data.type === 'warning'" style="border: 2px solid #185564;">
+    <div mat-dialog-title class="flex-container">
+        <button mat-button class="close-icon" (click)="dismissSnackbar()"> 
+            <mat-icon style="font-weight: bold;">close</mat-icon> 
+        </button> 
+    </div>
+    <div class="card">
+        <img class="logo" src="assets/img/danger.png">
+        <h1 class="title" style="color: #fad506" mat-dialog-title>{{data.title}}</h1>
+        <div mat-dialog-content>
+          <p class="message">{{data.message}}</p>
+        </div>
+        <div class="buttons" mat-dialog-actions>
+          <button mat-button class="buton btn" (click)="dismissSnackbar()" cdkFocusInitial>IR A PANTALLA</button>
+        </div>
+    </div>
+</div>

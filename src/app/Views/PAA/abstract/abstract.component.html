@@ -17,242 +17,127 @@
       <button align="right" mat-button>Exportar<img class="imgExcel" src="../../../../assets/img/excel.jpg"></button>
     </div>
 
-
-
+<!-- FORMULARIO -->
     <form>
+      <div class="tablaCont" style="display: flex;">
+        <div class="contTxt label1">
+          <p class="tltData">Código del proyecto</p>
+          <input class="contData contDataDisabled" value="{{viewProjectById.codigoProyecto}}" disabled>
+        </div>
 
-      <div class="tablaCont">
-        <div style="display: flex;">
+        <div class="contTxt label2">
+          <p class="tltData">Subsecretaria</p>
+          <input class="contData contDataDisabled" value="{{viewProjectById.dependenciaOrigen}}" disabled>
+        </div>
 
-          <div class="contTxt label1">
-
-            <p class="tltData">Código del proyecto</p>
-
-            <div class="contData ">
-              <p class="txtData1">{{viewProjectById.codigoProyecto}}</p>
-            </div>
-          </div>
-
-          <div class="contTxt label2">
-
-            <p class="tltData">Subsecretaria</p>
-
-            <div class="contData ">
-              <p class="txtData2">{{viewProjectById.dependenciaOrigen}}</p>
-            </div>
-          </div>
-
-          <div class="contTxt label1">
-
-            <p class="tltData ">Dependencia origen de los recursos</p>
-
-            <div class="contData ">
-              <p class="txtData1">{{viewProjectById.codDependencia}}</p>
-            </div>
-          </div>
+        <div class="contTxt label1">
+          <p class="tltData ">Dependencia origen de los recursos</p>
+          <input class="contData contDataDisabled" value="{{viewProjectById.codDependencia}}" disabled>
         </div>
       </div>
 
+      <div class="tablaCont" style="display: flex;">
+        <div class="contTxt label2">
+          <p class="tltData">Nombre del responsable</p>
+          <input class="contData contDataDisabled" value="{{viewResponsable.descripcion}}" disabled>
+        </div>
 
+        <div class="contTxt label1">
+          <p class="tltData">Teléfono del responsable</p>
+          <input class="contData contDataDisabled" value="{{viewResponsable.telefono}}" disabled>
+        </div>
 
-      <div class="tablaCont">
-
-        <div style="display: flex;">
-
-          <div class="contTxt label2">
-
-            <p class="tltData">Nombre del responsable</p>
-
-            <div class="contData ">
-              <p class="txtData2">{{viewResponsable.descripcion}}</p>
-            </div>
-          </div>
-
-          <div class="contTxt label1">
-
-            <p class="tltData">Teléfono del responsable</p>
-
-            <div class="contData ">
-              <p class="txtData1">{{viewResponsable.telefono}}</p>
-            </div>
-          </div>
-
-          <div class="contTxt label1">
-
-            <p class="tltData ">Correo electrónico del responsable</p>
-
-            <div class="contData ">
-              <p class="txtData1">{{viewResponsable.correo}}</p>
-            </div>
-          </div>
+        <div class="contTxt label1">
+          <p class="tltData ">Correo electrónico del responsable</p>
+          <input class="contData contDataDisabled" value="{{viewResponsable.correo}}" disabled>
         </div>
       </div>
 
-      <div class="tablaCont">
-        <div style="display: flex;">
+      <div class="tablaCont" style="display: flex;">
+        <div class="contTxt label2">
+          <p class="tltData">Unidad de contratación</p>
+          <input class="contData contDataDisabled" value="{{viewProjectById.entidadNombre}}" disabled>
+        </div>
 
-          <div class="contTxt label2">
-
-            <p class="tltData">Unidad de contratación</p>
-
-            <div class="contData ">
-              <p class="txtData2">{{viewProjectById.entidadNombre}}</p>
-            </div>
+        <div class="contTxt label1" style="margin-top: 0.3%;">
+          <p class="tltData">Año*</p>
+          <div class="contData">
+            <mat-select disableRipple class="sltData">
+              <mat-option value="1">2020</mat-option>
+              <mat-option value="2">2021</mat-option>
+              <mat-option value="3">2022</mat-option>
+            </mat-select>
           </div>
+        </div>
 
-
-
-          <div class="contTxt label1">
-
-            <p class="tltData">Año</p>
-
-            <div class="contData">
-              <mat-select disableRipple class="sltData">
-                <mat-option value="1">2020</mat-option>
-                <mat-option value="2">2021</mat-option>
-                <mat-option value="3">2022</mat-option>
-              </mat-select>
-
-            </div>
-          </div>
-
-
-          <div class="contTxt label1">
-            <p class="tltData"></p>
-          </div>
-
-
+        <div class="contTxt label1">
+          <p class="tltData"></p>
         </div>
       </div>
 
-
-      <div class="tablaCont">
-        <div style="display: flex;">
-
+      <div class="tablaCont" style="display: flex;">
           <div class="contTxt label3">
-
             <p class="tltData">Nombre del Proyecto de Inversión</p>
-
-            <div class="contData ">
-              <p class="txtData3">{{viewProjectById.nombre}}</p>
-            </div>
+            <input class="contData contDataDisabled" value="{{viewProjectById.nombre}}" disabled>
           </div>
-        </div>
       </div>
 
-
-
-
-      <div class="tablaCont">
-
-        <div style="display: flex;">
-
+      <div class="tablaCont" style="display: flex;">
           <div class="contTxt label1">
-
             <p class="tltData">Apropiación Inicial</p>
-
-            <div class="contData ">
-              <p class="txtData1"></p>
-            </div>
+            <input class="contData contDataDisabled" value="" disabled>
           </div>
 
           <div class="contTxt label1">
-
             <p class="tltData">Apropiación Definitiva</p>
-
-            <div class="contData ">
-              <p class="txtData2"></p>
-            </div>
+            <input class="contData contDataDisabled" value="" disabled>
           </div>
 
           <div class="contTxt label1">
-
             <p class="tltData ">Ejecución Acumulada</p>
-
-            <div class="contData ">
-              <p class="txtData1"></p>
-            </div>
+            <input class="contData contDataDisabled" value="" disabled>
           </div>
 
           <div class="contTxt label1">
-
             <p class="tltData ">% Ejecución</p>
-
-            <div class="contData ">
-              <p class="txtData1"></p>
-            </div>
+            <input class="contData contDataDisabled" value="" disabled>
           </div>
-
-        </div>
       </div>
 
 
-      <div class="tablaCont">
-
-        <div style="display: flex;">
-
+      <div class="tablaCont" style="display: flex;">
           <div class="contTxt label1">
-
             <p class="tltData">Por Ejecutar</p>
-
-            <div class="contData ">
-              <p class="txtData1"></p>
-            </div>
+            <input class="contData contDataDisabled" value="" disabled>
           </div>
 
           <div class="contTxt label1">
-
             <p class="tltData">Giro Acumulado</p>
-
-            <div class="contData ">
-              <p class="txtData2"></p>
-            </div>
+            <input class="contData contDataDisabled" value="" disabled>
           </div>
 
           <div class="contTxt label1">
-
             <p class="tltData ">% Ejecución</p>
-
-            <div class="contData ">
-              <p class="txtData1"></p>
-            </div>
+            <input class="contData contDataDisabled" value="" disabled>
           </div>
 
           <div class="contTxt label1">
-
             <p class="tltData ">Reserva Constituida</p>
-
-            <div class="contData ">
-              <p class="txtData1"></p>
-            </div>
+            <input class="contData contDataDisabled" value="" disabled>
           </div>
-
-        </div>
       </div>
 
 
-      <div class="tablaCont">
-
-        <div style="display: flex;">
-
+      <div class="tablaCont" style="display: flex;">
           <div class="contTxt label1">
-
             <p class="tltData">Giros de Reserva</p>
-
-            <div class="contData ">
-              <p class="txtData1"></p>
-            </div>
+            <input class="contData contDataDisabled" value="" disabled>
           </div>
 
           <div class="contTxt label1">
-
             <p class="tltData">% Ejecución</p>
-
-            <div class="contData ">
-              <p class="txtData2"></p>
-            </div>
+            <input class="contData contDataDisabled" value="" disabled>
           </div>
-
 
           <div class="contTxt label1">
             <p class="tltData"></p>
@@ -261,7 +146,6 @@
           <div class="contTxt label1">
             <p class="tltData"></p>
           </div>
-        </div>
       </div>
 
 
@@ -273,7 +157,5 @@
       REGRESAR
     </button>
   </mat-card-actions>
-
-  <br><br> <br><br>
 
 </div>
