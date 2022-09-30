@@ -1,32 +1,30 @@
-name: Azure Static Web Apps CI/CD
+# Node.js with Angular
+# Build a Node.js project that uses Angular.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-pr:
-  branches:
-    include:
-      - dev
 trigger:
-  branches:
-    include:
-      - dev
+- dev
 
-jobs:
-- job: build_and_deploy_job
-  displayName: Build and Deploy Job
-  condition: or(eq(variables['Build.Reason'], 'Manual'),or(eq(variables['Build.Reason'], 'PullRequest'),eq(variables['Build.Reason'], 'IndividualCI')))
-  pool:
-    vmImage: ubuntu-latest
-  variables:
-  - group: Azure-Static-Web-Apps-nice-ocean-05bfcc10f-variable-group
-  steps:
-  - checkout: self
-    submodules: true
-  - task: AzureStaticWebApp@0
-    inputs:
-      azure_static_web_apps_api_token: $(AZURE_STATIC_WEB_APPS_API_TOKEN_NICE_OCEAN_05BFCC10F)
-###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-# For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-      app_location: "/" # App source code path
-      api_location: "" # Api source code path - optional
-      output_location: "" # Built app content directory - optional
-###### End of Repository/Build Configurations ######
+pool:
+  vmImage: ubuntu-latest
 
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '16.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install -g @angular/cli
+    npm install
+    npm run build --prod
+  displayName: 'npm install and build'
+
+- task: AzureStaticWebApp@0
+  inputs:
+    app_location: '/'
+    output_location: 'dist/front-wapi'
+    deployment_environment: Dev
+    #production_branch: Dev
+    azure_static_web_apps_api_token: '9fe89123883f79a43d88e2829be412b81bc615202788b6e430a9eb5f06e9f54b2-95747407-445c-408a-8f18-97666b4b31ef00f49084'
