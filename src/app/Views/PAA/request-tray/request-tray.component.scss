@@ -7,6 +7,23 @@
     text-align: center;
 }
 
+//MIGA PAN
+.mgp {
+  float: start;
+  display: flex;
+  color: #185564;
+  align-items: center;
+
+  .href {
+    text-decoration: none;
+    color: #185564;
+  }
+
+  .selected {
+    font-weight: bold;
+  }
+}
+
 //POSICIONAMIENTO DEL CONTENIDO DEL COMPONENTE
 .center-h {
     justify-content: center;
@@ -16,46 +33,37 @@
     align-items: center;
 }
 
-
-.export {
+//TITULO Y BOTON FILTRAR
+.opciones {
+  margin-right: 6%;
+  margin-bottom: 2%;
+  
+  .export {
     margin-left: 2%;
     margin-top: 3%;
     display: flex;
-}
-
-//MIGA PAN
-.mgp {
-    float: start;
-    display: flex;
     color: #185564;
-    align-items: center;
+  }
 
-    .href {
-      text-decoration: none;
-      color: #185564;
-    }
-
-    .selected {
-      font-weight: bold;
-    }
+  .Fil {
+    margin-bottom: 1%;
+    float: right;
+    border: 2px solid #185564;
+    border-radius: 0.5rem;
+    border-color: #185564;
+    width: 6%;
+    color: #185564;
+    margin-top: -2%;
+  }
 }
 
 //FILTRO
 .top {
-    margin-left: 3.5%;
-    margin-right: 6.4%;
-
-    .Fil {
-      margin-bottom: 1%;
-      float: right;
-      border: 2px solid #185564;
-      border-radius: 0.5rem;
-      border-color: #185564;
-      width: 6%;
-      color: #185564;
-    }
+  margin-left: 4%;
+  margin-right: 6%;
   
     mat-card {
+      
       .close {
         font-size: 30px;
         text-align: right;
@@ -83,10 +91,10 @@
 
 //ESTILOS PARA LA TABLA
 table {
-    width: 90%;
-    margin-left: 3.5%;
-    margin-right: 3.5%;
-    margin-top: 3%;
+  width: 90%;
+  margin-left: 4%;
+  margin-right: 4%;
+  margin-top: 0.5%;
     
     th {
         background-color: #185564;
@@ -101,15 +109,17 @@ table {
         font-size: 11px;
     }
     mat-table {
+      overflow: auto;
+      margin-left: 2%;
       max-height: 500px;
     }
 
     .sol {
-        width: 5%;
+        width: 8%;
     }
 
     .vig {
-        width: 8%;
+        width: 7%;
     }
 
     .cod {
@@ -117,27 +127,27 @@ table {
     }
 
     .pro {
-        width: 30%;
+        width: 26%;
     }
 
     .ver {
-        width: 4%;
+        width: 6%;
     }
 
     .solici {
-        width: 10%;
+        width: 20%;
     }
 
     .est {
-        width: 7.5%;
+        width: 8%;
     }
 
     .fap {
-        width: 10%;
+        width: 8%;
     }
 
     .acc {
-        width: 3%;
+        width: 2%;
     }
 }
 
@@ -154,7 +164,7 @@ table {
 .pagination {
     display: inline-table;
     margin-top: 2%;
-  
+    margin-bottom: 8%;
   
     .take {
       width: 40px;
@@ -165,7 +175,6 @@ table {
       width: 53px;
       text-align: center;
       float: left;
-  
     }
   
   }

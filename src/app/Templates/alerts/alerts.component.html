@@ -1,6 +1,6 @@
 
 <!-- VE 1: ALERT PARA ERRORES -->
-  <div *ngIf="data.type == 'error'" style="border: 2px solid #185564;">
+  <div *ngIf="data.type == 'error'">
     <div mat-dialog-title class="flex-container">
         <button mat-button class="close-icon" (click)="dismissSnackbar()"> 
             <mat-icon style="font-weight: bold;">close</mat-icon> 
@@ -16,7 +16,7 @@
 </div>
 
 <!-- VE 2: ALERT  NOTIFI. EXITOSAS -->
-<div *ngIf="data.type == 'success'" style="border: 2px solid #185564;">
+<div *ngIf="data.type == 'success'">
     <div mat-dialog-title class="flex-container">
         <button mat-button class="close-icon" (click)="dismissSnackbar()"> 
             <mat-icon style="font-weight: bold;">close</mat-icon> 
@@ -36,7 +36,7 @@
 
 
 <!-- VE 4: ALERT  ADVERTENCIA  -->
-<div *ngIf="data.type === 'warning'" style="border: 2px solid #185564;">
+<div *ngIf="data.type === 'warning'">
     <div mat-dialog-title class="flex-container">
         <button mat-button class="close-icon" (click)="dismissSnackbar()"> 
             <mat-icon style="font-weight: bold;">close</mat-icon> 

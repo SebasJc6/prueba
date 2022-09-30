@@ -1,9 +1,11 @@
+//CONTAINER
 .container {
   margin-left: 3%;
   position: block;
   margin-right: 3%;
   text-align: center;
 
+  //MIGA PAN
   .mgp {
     float: start;
     display: flex;
@@ -29,6 +31,7 @@
   }
 }
 
+//POSICIONAMIENTO DEL CONTENIDO DEL COMPONENTE
 .center-h {
   justify-content: center;
 }
@@ -37,16 +40,15 @@
   align-items: center;
 }
 
-.export {
-  margin-left: 2%;
-  margin-top: 3%;
-  display: flex;
-  color: #185564;
-}
-
-.top {
-  margin-left: 4%;
+.opciones {
   margin-right: 6%;
+  margin-bottom: 2%;
+  .export {
+    margin-left: 2%;
+    margin-top: 3%;
+    display: flex;
+    color: #185564;
+  }
 
   .Fil {
     margin-bottom: 1%;
@@ -56,9 +58,16 @@
     border-color: #185564;
     width: 6%;
     color: #185564;
+    margin-top: -2%;
   }
+}
+
+.top {
+  margin-left: 4%;
+  margin-right: 6%;
 
   mat-card {
+
     .close {
       font-size: 30px;
       text-align: right;
@@ -80,7 +89,7 @@
   }
 
   mat-radio-button {
-    margin: 1%;
+    margin: 2%;
   }
 }
 
@@ -104,9 +113,6 @@
       margin-left: 1%;
     }
   }
-
-
-
 }
 
 
@@ -115,7 +121,6 @@
   margin: 0px auto;
   text-align: left;
   margin-left: 2%;
-
 }
 
 mat-panel-title {
@@ -125,11 +130,11 @@ mat-panel-title {
 }
 
 table {
-  width: 100%;
   width: 90%;
   text-align: center;
   margin-left: 4%;
   margin-right: 4%;
+  margin-top: 0.5%;
 
   mat-table {
     overflow: auto;

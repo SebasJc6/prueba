@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { dataAbstractI, responsibleAbstractI } from 'src/app/Models/ModelsPAA/Abstract/abstract';
 import { ProjectByIdI, responsableI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
+import { AbstractService } from 'src/app/Services/ServicesPAA/Abstract/abstract.service';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
 
 
@@ -12,17 +14,17 @@ import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.ser
   styleUrls: ['./abstract.component.scss']
 })
 export class AbstractComponent implements OnInit {
-  dataProjectID = '';
-  viewProjectById = {} as ProjectByIdI;
-  viewResponsable = {} as responsableI;
 
   constructor(
-    public serviceRequeriment: ProjectService,
+    public serviceAbsctract: AbstractService,
     public router: Router,
     private activeRoute: ActivatedRoute,
   ) { }
 
+  dataProjectID = '';
 
+  abstractData = {} as dataAbstractI;
+  responsibleAbstractData = {} as responsibleAbstractI;
 
   Modelo = 'Interpolacion';
 
@@ -32,19 +34,27 @@ export class AbstractComponent implements OnInit {
   ngOnInit(): void {
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('data') || '';
      //console.log(+this.dataProjectID)
-     this.getProjectByID(+this.dataProjectID);
+    //  this.getProjectByID(+this.dataProjectID);
+
+    this.getAbstract(this.dataProjectID);
   }
 
-
-  getProjectByID(projectId : number){
-    this.serviceRequeriment.getProjectById(projectId).subscribe((data)=> {
-      this.viewProjectById = data.data;
-      this.viewResponsable = this.viewProjectById.responsable;
-      console.log(this.viewProjectById)
-      console.log(this.viewResponsable)
-
-    })
+  getAbstract(projectId: string) {
+    this.serviceAbsctract.getAbstract(projectId).subscribe(request => {
+      this.abstractData = request.data;
+      this.responsibleAbstractData = request.data.responsable;
+    });
   }
+
+  // getProjectByID(projectId : number){
+  //   this.serviceRequeriment.getProjectById(projectId).subscribe((data)=> {
+  //     this.viewProjectById = data.data;
+  //     this.viewResponsable = this.viewProjectById.responsable;
+  //     console.log(this.viewProjectById)
+  //     console.log(this.viewResponsable)
+
+  //   })
+  // }
 
   regresar(){
     this.router.navigate(['/PAA/Adquisiciones'])

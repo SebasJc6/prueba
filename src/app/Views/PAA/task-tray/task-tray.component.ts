@@ -1,22 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { filterTaskTrayI, itemsTaskTrayI } from 'src/app/Models/ModelsPAA/task-tray/task-tray';
+import { TaskTrayService } from 'src/app/Services/ServicesPAA/task-tray/task-tray.service';
 import { AlertsPopUpComponent } from 'src/app/Templates/alerts-pop-up/alerts-pop-up.component';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
-
-export interface BTareas {
-  date: string;
-  codProject: string;
-  numRequeriment: string;
-  cantAjust: number;
-}
-
-const INFO_TAREAS: BTareas[] = [
-  {date: '21-02-2022', codProject: '7750', numRequeriment: '001', cantAjust: 30},
-  {date: '23-02-2022', codProject: '7750', numRequeriment: '002', cantAjust: 10},
-  {date: '07-08-2022', codProject: '7824', numRequeriment: '001', cantAjust: 12},
-];
 
 export interface AlertData {
   type: string;
@@ -32,88 +22,139 @@ export interface AlertData {
   styleUrls: ['./task-tray.component.scss']
 })
 export class TaskTrayComponent implements OnInit {
+  
+  constructor(private snackBar: MatSnackBar, public dialog: MatDialog, private taskTrayService: TaskTrayService) { }
 
   //INFORMACION PARA LA TABLA CLASIFICACION PRESUPUESTAL
   displayedColumns: string[] = ['fecha', 'codProject', 'numRequeriment', 'cantAjust', 'requeriment'];
-  dataSource = INFO_TAREAS;
+  dataSource: itemsTaskTrayI[] = [];
 
-  pageSizeOptions: number[] = [5, 10, 15, 20];
-  numberPages: number = 0;
-  numberPage: number = 0;
+  //CAMPOS PARA FILTRO
+  filterTaskTray = {} as filterTaskTrayI;
 
-  constructor(private snackBar: MatSnackBar, public dialog: MatDialog) { }
+  filterForm = new FormGroup({
+    Fecha: new FormControl(),
+    CodigoProyecto: new FormControl(),
+    NumeroRequerimiento: new FormControl(),
+    CantidadAjustes: new FormControl(),
+    columna: new FormControl(''),
+    ascending: new FormControl(false)
+  });
 
+  //Paginacion
   paginationForm = new FormGroup({
     page: new FormControl(),
     take: new FormControl()
   });
 
-  //CAMPOS PARA FILTRO
-  filterForm = new FormGroup({
-    Fecha: new FormControl(),
-    CodProyecto: new FormControl(''),
-    NumRequerimiento: new FormControl(''),
-    CantAjustes: new FormControl(''),
-    columna: new FormControl(''),
-    ascending: new FormControl(false)
-  });
+  pageSizeOptions: number[] = [5, 10, 15, 20];
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  numberPages: number = 0;
+  numberPage: number = 0;
 
+  //Variables para abir y cerrar la opción de filtro
   viewFilter: boolean = true;
   viewOrder = false;
 
-  //AlertData
-  type!: string;
-  title!: string;
-  message!: string;
-  message2!: string;
-  value!: string;
-
   ngOnInit(): void {
+    this.filterTaskTray.page = "1";
+    this.filterTaskTray.take = 20;
 
+    this.getTaskTray(this.filterTaskTray);
   }
 
-  //PAGINACIÓN
-  getPagination() {
+  //Funcion para ontener la información del endpoint BandejaTareas
+  getTaskTray(filterTaskTray: filterTaskTrayI) {
+    this.filterTaskTray.Fecha = this.filterForm.get('Fecha')?.value || '';
+    this.filterTaskTray.CodigoProyecto = this.filterForm.value.CodigoProyecto || '';
+    this.filterTaskTray.NumeroRequerimiento = this.filterForm.value.NumeroRequerimiento || '';
+    this.filterTaskTray.CantidadAjustes = this.filterForm.value.CantidadAjustes || '';
+    this.filterTaskTray.columna = this.filterForm.get('columna')?.value || '';
+    this.filterTaskTray.ascending = this.filterForm.get('ascending')?.value || false;
 
+    this.taskTrayService.getTaskTray(filterTaskTray).subscribe(request => {      
+      this.dataSource = request.data.items;
+      this.numberPage = request.data.page;
+      this.numberPages = request.data.pages;
+      this.paginationForm.setValue({
+        take: filterTaskTray.take,
+        page: filterTaskTray.page
+      });
+    });
   }
 
-  nextPage() {
-
-  }
-
-
-  prevPage() {
-
-  }
-
-  firstPage() {
-
-  }
-
-  latestPage() {
-
+  //Funcionalidad del botón Requerimiento
+  chargeRequeriment(idRequeriment: number) {
+    console.log(idRequeriment);
+    
   }
 
   //FILTRO
   openFilter() {
-    this.viewFilter = false
+    this.viewFilter = false;
   }
   closeFilter() {
-    this.viewFilter = true
+    this.viewFilter = true;
   }
 
   getFilter() {
+    this.filterTaskTray.Fecha = this.filterForm.get('Fecha')?.value || '';
+    this.filterTaskTray.CodigoProyecto = this.filterForm.value.CodigoProyecto || '';
+    this.filterTaskTray.NumeroRequerimiento = this.filterForm.value.NumeroRequerimiento || '';
+    this.filterTaskTray.CantidadAjustes = this.filterForm.value.CantidadAjustes || '';
+    this.filterTaskTray.columna = this.filterForm.get('columna')?.value || '';
+    this.filterTaskTray.ascending = this.filterForm.get('ascending')?.value || false;
 
+    this.getTaskTray(this.filterTaskTray);
+
+    this.closeFilter();
   }
 
-   openSnackBar(title:string, message: string, type:string) {
-     this.snackBar.openFromComponent(AlertsComponent, {
-       data:{title,message,type},
-       horizontalPosition: 'center',
-       verticalPosition: 'top',
-       panelClass: [type],
-     });
-   }
+  //PAGINACIÓN
+  getPagination() {
+    this.filterTaskTray.page = this.paginationForm.get('page')?.value;
+    this.filterTaskTray.take = this.paginationForm.get('take')?.value;
+    this.getTaskTray(this.filterTaskTray);
+  }
+
+  nextPage() {
+    if (this.numberPage < this.numberPages) {
+      this.numberPage++;
+      this.filterTaskTray.page = this.numberPage.toString();
+      this.getTaskTray(this.filterTaskTray);
+    }
+  }
+
+
+  prevPage() {
+    if (this.numberPage > 1) {
+      this.numberPage--;
+      this.filterTaskTray.page = this.numberPage.toString();
+      this.getTaskTray(this.filterTaskTray);
+    }
+  }
+
+  firstPage() {
+    this.numberPage = 1;
+    this.filterTaskTray.page = this.numberPage.toString();
+    this.getTaskTray(this.filterTaskTray);
+  }
+
+  latestPage() {
+    this.numberPage = this.numberPages;
+    this.filterTaskTray.page = this.numberPage.toString();
+    this.getTaskTray(this.filterTaskTray);
+  }
+
+  //Metodo para llamar alertas
+  //  openSnackBar(title:string, message: string, type:string) {
+  //    this.snackBar.openFromComponent(AlertsComponent, {
+  //      data:{title,message,type},
+  //      horizontalPosition: 'center',
+  //      verticalPosition: 'top',
+  //      panelClass: [type],
+  //    });
+  //  }
 
   cargaAlert(){
     // this.openDialog('Advertencia', 'Ingrese los comentarios de su revisión', 'warningInput', 'Seleccione el estado de la modificación con su revisión.')

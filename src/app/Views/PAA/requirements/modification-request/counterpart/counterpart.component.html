@@ -10,34 +10,17 @@
     </div>
 
     <!--ENTRADA FUENTE DE LOS RECURSOS-->
-    <!-- <div>
-      <h2 style="font-size: 100%;">Fuente de los recursos</h2>
-      <mat-form-field class="inputFuente">
-        <mat-select>
-          <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div> -->
-
     <div class="contTxt">
       <p class="tltData">Fuente de los recursos</p>
-      <select class="contDataSelect">
-          <option *ngFor="let state of states" [value]="state">{{state}}</option>
-      </select>
+      <mat-select class="contDataSelect">
+          <mat-option *ngFor="let state of states" [value]="state">{{state.descripcion}}</mat-option>
+      </mat-select>
     </div>
 
     <!--ENTRADA TEXTO DESCRIPCION-->
-    <!-- <div class="center-h center-v" style="width: 100%;">
-      <h2 style="font-size: 100%;">Descripción</h2>
-      <mat-form-field hintLabel="Maximo 400 caracteres" class="marcoDescripcion">
-        <input class="inputDescripcion" matInput #input maxlength="400" placeholder="Se requiere modificar">
-        <mat-hint align="end">{{input.value.length || 0}}/400</mat-hint>
-      </mat-form-field>
-    </div> -->
-
       <div class="contTxt">
           <p class="tltData">Descripción</p>
-          <textarea #input maxlength="400" placeholder="Se requiere modificar" class="contDataArea" rows="4"></textarea>
+          <textarea #input maxlength="400" placeholder="Se requiere modificar" class="contDataArea" rows="8"></textarea>
           <mat-hint align="end">{{input.value.length || 0}}/400</mat-hint>
       </div>
 
@@ -54,23 +37,6 @@
             <input class="contData">
         </div>
       </div>
-
-      <!-- <tr>
-        <td>
-          <h2 style="font-size: 100%;">Valor que aumenta</h2>
-          <mat-form-field class="inputValorqueAumenta">
-            <input style="color: black;" matInput>
-          </mat-form-field>
-        </td>
-
-        <td>
-          <h2 style="margin-left:9% ;font-size: 100%;">Valor que disminuye</h2>
-          <mat-form-field style="margin-left:9%;" class="inputValorqueAumenta">
-            <input style="color: black;" matInput>
-          </mat-form-field>
-        </td>
-
-      </tr> -->
 
     <!--BOTONES CANCELAR AÑADIR-->
     <div class="buttons">

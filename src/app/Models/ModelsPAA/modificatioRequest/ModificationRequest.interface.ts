@@ -81,3 +81,23 @@ export interface filterModificationRequestI {
   columna: string,
   ascending: boolean
 }
+
+
+//Interfaz para obtener las fuentes
+export interface getSourcesI {
+  status: number,
+  messag: any,
+  title: any,
+  data: Sources[],
+}
+
+//Interfaz con la información de una Fuente
+export interface Sources {
+  fuente_ID: number,
+  codigoFuente: string,
+  descripcion: string,
+  codPresupuestoRenta: string,
+  codFondoBogota: string,
+  fuenteMSPS: string,
+  codSEGPLANFuente: string
+}

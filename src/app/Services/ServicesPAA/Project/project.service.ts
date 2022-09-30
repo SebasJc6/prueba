@@ -20,14 +20,15 @@ export class ProjectService {
   }
   getAllProjectsFilter(formFilter: filterProjectI):Observable<getProjectI>{
     let dir = this.url+
-    // '?DependenciaOrigen=' + formFilter.DependenciaOrigen +
-    //  '&CodigoProyecto=' + formFilter.CodigoProyecto +
-    //  '&Nombre=' + formFilter.Nombre +
-    //  '&EstadoDesc=' + formFilter.EstadoDesc +
-     '?page='+formFilter.page +
-     '&take='+formFilter.take 
-    //  '&columna=' + formFilter.columna +
-    //  '&ascending='+ formFilter.ascending;
+    '?DependenciaOrigen=' + formFilter.DependenciaOrigen +
+    '&CodigoProyecto=' + formFilter.CodigoProyecto +
+    '&Nombre=' + formFilter.Nombre +
+    '&EstadoDesc=' + formFilter.EstadoDesc +
+    '&page='+formFilter.page +
+    '&take='+formFilter.take +
+    '&columna=' + formFilter.columna +
+    '&ascending='+ formFilter.ascending;
+    
     return this.http.get<getProjectI>(dir);
   }
   getProjectById(projectId: number): Observable<getProjectByIdI>{

@@ -113,7 +113,7 @@ export class ModificationRequestComponent implements OnInit {
     this.filterModificationRequest.take = 20;
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('data') || '';
     this.getModificationRequet(+this.dataProjectID);
-    this.requestID = '5';
+    this.requestID = '31';
     this.getModificationRequestByRequestId(+this.requestID, this.filterModificationRequest);
     this.getAllFiles(+this.dataProjectID, +this.requestID);
   }
@@ -202,7 +202,7 @@ export class ModificationRequestComponent implements OnInit {
 
   }
   ResumenModificacion() {
-    this.router.navigate(['/PAA/ResumenModificacion'])
+    this.router.navigate([`/PAA/ResumenModificacion/${this.dataProjectID}`])
   }
 
 

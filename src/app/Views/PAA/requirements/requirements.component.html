@@ -11,89 +11,88 @@
     </a>
   </div>
 
-  
-  <div class="export">
-    <mat-card-title>
-      <h1><strong>REQUERIMIENTOS</strong></h1>
-    </mat-card-title>
-  </div>
-
+  <!-- DIV FILTRO Y TABLA REQUERIMIENTO -->
   <div style="overflow: auto;">
 
-  <div class="top">
-    <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">
-      Filtrar
-    </button>
-    <mat-card *ngIf="!viewFilter">
-      <div class="close">
-        <button mat-icon-button (click)="closeFilter()" color="warn">
-          <mat-icon [inline]='true'>close</mat-icon>
-        </button>
+    <div class="opciones">
+      <mat-card-title class="export">
+        <strong>REQUERIMIENTOS</strong>
+      </mat-card-title>
+
+      <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">Filtrar</button>
+    </div>
+
+    <div>
+      <div class="top">
+        <mat-card *ngIf="!viewFilter">
+          <div class="close">
+            <button mat-icon-button (click)="closeFilter()" color="warn">
+              <mat-icon [inline]='true'>close</mat-icon>
+            </button>
+          </div>
+          <div [formGroup]="filterForm">
+            <mat-accordion multi>
+              <mat-expansion-panel class="menu-panel">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span class="title">Ordernar Por:</span>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="filter">
+                  <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
+                    <mat-radio-button value="NumeroRequerimiento">Número de requerimiento</mat-radio-button>
+                    <mat-radio-button value="DependenciaDestino">Dependencia destino de recursos</mat-radio-button>
+                    <mat-radio-button value="Descripcion">Descripción</mat-radio-button>
+                    <mat-radio-button value="Estado">Estado</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="Order" *ngIf="viewOrder">
+                  <!-- <mat-radio-group color="warn" formControlName="ascending">
+                    <mat-radio-button value=true>Acendente</mat-radio-button>
+                    <mat-radio-button value=false>Decendente</mat-radio-button>
+                  </mat-radio-group> -->
+                  Decendente<mat-slide-toggle formControlName="ascending"> Acendente</mat-slide-toggle>
+                </div>
+    
+              </mat-expansion-panel>
+    
+              <mat-expansion-panel class="menu-panel">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span class="title">Buscar Por:</span>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="form">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Número de requerimiento</mat-label>
+                    <input matInput formControlName="NumeroRequerimiento" type="number">
+                  </mat-form-field>
+                  <mat-form-field style="width: 15%;" appearance="outline">
+                    <mat-label>Dependencia destino de recursos</mat-label>
+                    <input matInput formControlName="DependenciaDestino" type="number">
+                  </mat-form-field>
+                  <mat-form-field style="width: 30%;" appearance="outline">
+                    <mat-label>Descripción</mat-label>
+                    <input matInput formControlName="Descripcion">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Estado</mat-label>
+                    <mat-select formControlName="Estado">
+                      <mat-option [value]="Item" *ngFor="let Item of estadoFilter">{{Item}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+    
+            <button class="FilSear" mat-button (click)="getFilter()">
+              Filtrar
+            </button>
+          </div>
+        </mat-card>
       </div>
-      <div [formGroup]="filterForm">
-        <mat-accordion multi>
-          <mat-expansion-panel class="menu-panel">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <span class="title">Ordernar Por:</span>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="filter">
-              <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
-                <mat-radio-button value="NumeroRequerimiento">Número de requerimiento</mat-radio-button>
-                <mat-radio-button value="DependenciaDestino">Dependencia destino de recursos</mat-radio-button>
-                <mat-radio-button value="Descripcion">Descripción</mat-radio-button>
-                <mat-radio-button value="Estado">Estado</mat-radio-button>
-              </mat-radio-group>
-            </div>
-            <mat-divider></mat-divider>
-            <div class="Order" *ngIf="viewOrder">
-              <!-- <mat-radio-group color="warn" formControlName="ascending">
-                <mat-radio-button value=true>Acendente</mat-radio-button>
-                <mat-radio-button value=false>Decendente</mat-radio-button>
-              </mat-radio-group> -->
-              Decendente<mat-slide-toggle formControlName="ascending"> Acendente</mat-slide-toggle>
-            </div>
-
-          </mat-expansion-panel>
-
-          <mat-expansion-panel class="menu-panel">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <span class="title">Buscar Por:</span>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="form">
-              <mat-form-field appearance="outline">
-                <mat-label>Número de requerimiento</mat-label>
-                <input matInput formControlName="NumeroRequerimiento" type="number">
-              </mat-form-field>
-              <mat-form-field style="width: 15%;" appearance="outline">
-                <mat-label>Dependencia destino de recursos</mat-label>
-                <input matInput formControlName="DependenciaDestino" type="number">
-              </mat-form-field>
-              <mat-form-field style="width: 30%;" appearance="outline">
-                <mat-label>Descripción</mat-label>
-                <input matInput formControlName="Descripcion">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>Estado</mat-label>
-                <mat-select formControlName="Estado">
-                  <mat-option [value]="Item" *ngFor="let Item of estadoFilter">{{Item}}</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
-
-        <button class="FilSear" mat-button (click)="getFilter()">
-          Filtrar
-        </button>
-      </div>
-
-
-    </mat-card>
-  </div>
+    </div>
 
   <!-- <table mat-table *ngFor="let element of requeriments | paginate:{itemsPerPage: numberTake, currentPage: numberPage}" class="mat-elevation-z8" matSort> -->
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>

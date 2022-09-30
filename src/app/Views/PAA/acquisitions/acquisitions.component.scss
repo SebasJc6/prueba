@@ -37,27 +37,77 @@
   align-items: center;
 }
 
-.export {
-  margin-left: 2%;
-  margin-top: 3%;
-  display: flex;
-}
 
-.btnExcel {
-  color: #35867c;
 
-  text-align: end;
-  margin-bottom: 1%;
+.opciones {
   margin-right: 6%;
+  margin-bottom: 2%;
 
+  .export {
+    margin-left: 2%;
+    margin-top: 3%;
+    display: flex;
+    color: #185564
+  }
+
+  .Fil {
+    margin-bottom: 1%;
+    float: right;
+    border: 2px solid #185564;
+    border-radius: 0.5rem;
+    border-color: #185564;
+    width: 6%;
+    color: #185564;
+    margin-top: -2%;
+  }
+
+  .btnExcel {
+    color: #35867c;
+    margin-top: -1.8%;
+    float: right;
+  }
+
+  .imgExcel {
+    margin-left: 2%;
+    color: #35867c;
+    width: 30px;
+  }
 }
 
-.imgExcel {
-  margin-left: 2%;
-  color: #35867c;
+//Filtro
+.top {
+  margin-left: 4%;
+  margin-right: 6%;
+  
+  mat-card {
 
-  width: 30px;
+    .close {
+      font-size: 30px;
+      text-align: right;
+      margin-top: -1%;
+    }
 
+    .FilSear {
+      margin-top: 1%;
+      border: 2px solid #185564;
+      border-radius: 0.5rem;
+      border-color: #185564;
+      width: 6%;
+      color: #185564;
+    }
+  }
+
+  .filter {
+    font-size: 14px;
+  }
+
+  mat-radio-button {
+    margin: 2%;
+  }
+
+  .form {
+    margin: 1%;
+  }
 }
 
 
@@ -73,6 +123,7 @@ table {
   text-align: center;
   margin-left: 4%;
   margin-right: 4%;
+  margin-top: 0.5%;
 
   mat-table {
     overflow: auto;
@@ -159,14 +210,8 @@ table {
         margin: 1%;
         color: white;
       }
-    }  }
-
-
-
-
-
-
-
+    }  
+  }
 }
 
 .formSearch {

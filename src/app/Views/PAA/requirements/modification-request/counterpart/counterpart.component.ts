@@ -2,9 +2,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { RequerimentService } from 'src/app/Services/ServicesPAA/Requeriment/requeriment.service';
-import { AddrequirementsComponent } from '../add-requeriments/add-requeriments.component';
+import { Subscription } from 'rxjs';
+import { CounterpartInterface } from 'src/app/Models/ModelsPAA/modificatioRequest/counterpart/counterpart-interface';
+import { CounterpartService } from 'src/app/Services/ServicesPAA/modificationRequest/counterpart/counterpart.service';
 
 @Component({
   selector: 'app-counterpart',
@@ -13,27 +13,28 @@ import { AddrequirementsComponent } from '../add-requeriments/add-requeriments.c
 })
 export class CounterpartComponent implements OnInit {
 
-  constructor(public router: Router,
-    public serviceRequeriment: RequerimentService,
-    public dialogRef: MatDialogRef<AddrequirementsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string,) 
+  constructor( public serviceCounterpar: CounterpartService,
+    public dialogRef: MatDialogRef<CounterpartComponent>,
+    @Inject(MAT_DIALOG_DATA) public idProject: string,) 
     { dialogRef.disableClose = true;}
 
-  states: string[] = [
-    '570-SGP-Participaciones para Salud',
-    '574-SGP-Participaciones para Salud',
-    '550-SGP-Participaciones para Salud',
-    '540-SGP-Participaciones para Salud',
-  ];
+  //Arreglo que guarda la información del proyecto para mostrar en la lista desplegable
+  states: CounterpartInterface[] = [];
 
-  events: string[] = [];
-
-  addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
-    this.events.push(`${type}: ${event.value}`);
-  }
+  private counterpartSubscription!: Subscription;
 
   ngOnInit(): void {
-    console.log('idProject',this.data)
+    this.getCounterpartF(this.idProject);
   }
 
+  //Función que trae la información del proyecto de la Api
+  getCounterpartF(idProject: string) {
+    this.counterpartSubscription = this.serviceCounterpar.getCounterpartFRequest(idProject).subscribe(request => {
+      this.states = request.data;
+    });
+  }
+
+  ngOnDestroy() {
+    this.counterpartSubscription.unsubscribe();
+  }
 }

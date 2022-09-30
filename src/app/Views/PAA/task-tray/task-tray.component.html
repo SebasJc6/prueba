@@ -1,29 +1,29 @@
 <!--CONTENEDOR TOTAL COMPONENTE BANDEJA DE TAREAS-->
 <div class="container center-h center-v">
 
-    <!--MIGA PAN-->
-    <div class="mgp">
-        Plan Anual de Adquisiciones
-        <a class="href selected" [routerLink]="['/PAA/BandejaDeTareas']">
-          &nbsp;>&nbsp;Bandeja de tareas
-        </a>
-      </div>
+  <!--MIGA PAN-->
+  <div class="mgp">
+    Plan Anual de Adquisiciones
+    <a class="href selected" [routerLink]="['/PAA/BandejaDeTareas']">
+      &nbsp;>&nbsp;Bandeja de tareas
+    </a>
+  </div>
 
-      <!-- TITULO -->
-      <div class="export">
-        <mat-card-title style="color: #185564;">
-          <strong> Bandeja de tareas </strong>
-        </mat-card-title>
-      </div>
+  <!-- DIV FILTRO Y TABLA BANDEJA DE TAREAS -->
+  <div style="overflow: auto;">
 
-      <!-- DIV FILTRO Y TABLA BANDEJA DE TAREAS -->
-      <div style="overflow: auto;">
+    <!-- TITULO -->
+    <div class="opciones">
+      <mat-card-title class="export">
+        <strong>BANDEJA DE TAREAS</strong>
+      </mat-card-title>
 
-        <!-- FILTRO -->
+      <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">Filtrar</button>
+    </div>
+
+    <!-- FILTRO -->
+    <div>
       <div class="top">
-        <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">
-          Filtrar
-        </button>
         <mat-card *ngIf="!viewFilter">
           <div class="close">
             <button mat-icon-button (click)="closeFilter()" color="warn">
@@ -40,19 +40,18 @@
                 </mat-expansion-panel-header>
                 <div class="filter">
                   <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
-                    <mat-radio-button value="Fecha">Fecha</mat-radio-button>
-                    <mat-radio-button value="CodProyecto">Código proyecto</mat-radio-button>
-                    <mat-radio-button value="NumRequerimiento">Número Requerimiento</mat-radio-button>
-                    <mat-radio-button value="CantAjustes">Cantidad de ajustes</mat-radio-button>
+                    <mat-radio-button value="CodigoProyecto">Código proyecto</mat-radio-button>
+                    <mat-radio-button value="NumeroRequerimiento">Número Requerimiento</mat-radio-button>
+                    <mat-radio-button value="CantidadAjustes">Cantidad de ajustes</mat-radio-button>
                   </mat-radio-group>
                 </div>
                 <mat-divider></mat-divider>
                 <div class="Order" *ngIf="viewOrder">
                   Decendente<mat-slide-toggle formControlName="ascending"> Acendente</mat-slide-toggle>
                 </div>
-    
+
               </mat-expansion-panel>
-    
+
               <mat-expansion-panel class="menu-panel">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
@@ -62,110 +61,112 @@
                 <div class="form">
                   <mat-form-field appearance="outline">
                     <mat-label>Fecha</mat-label>
-                    <input matInput formControlName="Fecha" type="text">
+                    <input matInput formControlName="Fecha" type="date">
                   </mat-form-field>
                   <mat-form-field style="width: 15%;" appearance="outline">
                     <mat-label>Código proyecto</mat-label>
-                    <input matInput formControlName="CodProyecto" type="text">
+                    <input matInput formControlName="CodigoProyecto" type="text">
                   </mat-form-field>
                   <mat-form-field style="width: 30%;" appearance="outline">
                     <mat-label>Número Requerimiento</mat-label>
-                    <input matInput formControlName="NumRequerimiento">
+                    <input matInput formControlName="NumeroRequerimiento">
                   </mat-form-field>
                   <mat-form-field style="width: 30%;" appearance="outline">
                     <mat-label>Cantidad de ajustes</mat-label>
-                    <input matInput formControlName="CantAjustes">
+                    <input matInput formControlName="CantidadAjustes">
                   </mat-form-field>
-                  
+
                 </div>
               </mat-expansion-panel>
             </mat-accordion>
-    
+
             <button class="FilSear" mat-button (click)="getFilter()">
               Filtrar
             </button>
           </div>
         </mat-card>
       </div>
-
-      <!-- TABLA BANDEJA DE TAREAS -->
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
-
-            <ng-container matColumnDef="fecha">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="fech">
-                    Fecha
-                <td mat-cell *matCellDef="let element">{{ element.date}}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="codProject">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="fech">
-                    Código proyecto
-                <td mat-cell *matCellDef="let element">{{ element.codProject}}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="numRequeriment">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="num">
-                    Número Requerimiento
-                <td mat-cell *matCellDef="let element">{{ element.numRequeriment}}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="cantAjust">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="num">
-                    Cantidad de ajustes
-                <td mat-cell *matCellDef="let element">{{ element.cantAjust}}</td>
-            </ng-container>
-
-            <!-- ICONO DE ACCIÓN -->
-            <ng-container matColumnDef="requeriment">
-                <tr>
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="req"> Requerimiento
-                    </th>
-                </tr>
-                <tr>
-                    <td mat-cell *matCellDef="let element">
-                        <div style="text-align: center;">
-                            <mat-icon mat-icon-button (click)="cargaAlert()" class="btnActions" matTooltip="Propiedades">
-                                insert_drive_file</mat-icon>
-                        </div>
-                    </td>
-                <tr>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
     </div>
-    <!-- FIN TABLA -->
 
-    <!-- PAGINACION -->
-    <div class="pagination " [formGroup]="paginationForm">
+    <!-- TABLA BANDEJA DE TAREAS -->
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
-        <mat-form-field class="take" appearance="legacy" matTooltip="Items por pagina">
-          <mat-select formControlName="take" (selectionChange)="getPagination()">
-            <mat-option [value]="Item" *ngFor="let Item of pageSizeOptions">{{Item}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <a (click)="firstPage()">
-          <mat-icon matTooltip="Primer pagina">first_page</mat-icon>
-        </a>
-        <a (click)="prevPage()">
-          <mat-icon matTooltip="Anterior">chevron_left</mat-icon>
-        </a>
-        <mat-form-field class="page" appearance="legacy">
-          <mat-label>pagina</mat-label>
-          <input matInput value="{{numberPage}}" formControlName="page">
-          <button matSuffix (click)="getPagination()" mat-icon-button>
-            <mat-icon matTooltip="Buscar Pagina">youtube_searched_for</mat-icon>
-          </button>
-          <mat-hint> {{numberPage}} de {{numberPages}}</mat-hint>
-        </mat-form-field>
-        <a (click)="nextPage()">
-          <mat-icon matTooltip="Siguiente">chevron_right</mat-icon>
-        </a>
-        <a (click)="latestPage()">
-          <mat-icon matTooltip="Ultima pagina">last_page</mat-icon>
-        </a>
-    
-      </div>
+      <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="fech">
+          Fecha
+        <td mat-cell *matCellDef="let element">{{ element.fecha}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="codProject">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="fech">
+          Código proyecto
+        <td mat-cell *matCellDef="let element">{{ element.codigoProyecto}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="numRequeriment">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="num">
+          Número Requerimiento
+        <td mat-cell *matCellDef="let element">{{ element.numeroRequerimiento}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="cantAjust">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="num">
+          Cantidad de ajustes
+        <td mat-cell *matCellDef="let element">{{ element.cantidadAjustes}}</td>
+      </ng-container>
+
+      <!-- ICONO DE ACCIÓN -->
+      <ng-container matColumnDef="requeriment">
+        <tr>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="req"> Requerimiento
+          </th>
+        </tr>
+        <tr>
+          <td mat-cell *matCellDef="let element">
+            <div style="text-align: center;">
+              <mat-icon mat-icon-button (click)="chargeRequeriment(element.requerimiento_Temp_ID)" class="btnActions"
+                matTooltip="Propiedades">
+                insert_drive_file</mat-icon>
+            </div>
+          </td>
+        <tr>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+  <!-- FIN TABLA -->
+
+  <!-- PAGINACION -->
+  <div class="pagination " [formGroup]="paginationForm">
+
+    <mat-form-field class="take" appearance="legacy" matTooltip="Items por pagina">
+      <mat-select formControlName="take" (selectionChange)="getPagination()">
+        <mat-option [value]="Item" *ngFor="let Item of pageSizeOptions">{{Item}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <a (click)="firstPage()">
+      <mat-icon matTooltip="Primer pagina">first_page</mat-icon>
+    </a>
+    <a (click)="prevPage()">
+      <mat-icon matTooltip="Anterior">chevron_left</mat-icon>
+    </a>
+    <mat-form-field class="page" appearance="legacy">
+      <mat-label>pagina</mat-label>
+      <input matInput value="{{numberPage}}" formControlName="page">
+      <button matSuffix (click)="getPagination()" mat-icon-button>
+        <mat-icon matTooltip="Buscar Pagina">youtube_searched_for</mat-icon>
+      </button>
+      <mat-hint> {{numberPage}} de {{numberPages}}</mat-hint>
+    </mat-form-field>
+    <a (click)="nextPage()">
+      <mat-icon matTooltip="Siguiente">chevron_right</mat-icon>
+    </a>
+    <a (click)="latestPage()">
+      <mat-icon matTooltip="Ultima pagina">last_page</mat-icon>
+    </a>
+
+  </div>
 
 </div>

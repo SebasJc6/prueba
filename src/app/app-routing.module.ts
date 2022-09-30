@@ -31,7 +31,7 @@ const routes: Routes = [
       { path: 'PropiedadesRequerimiento/:idPro/:idReq', component: PropertiesRequirementComponent },
       { path: 'Resumen/:data', component: AbstractComponent },
       { path: 'SolicitudModificacion/:data', component: ModificationRequestComponent },
-      { path: 'ResumenModificacion',   component: ModificationSummaryComponent }
+      { path: 'ResumenModificacion/:id',   component: ModificationSummaryComponent }
     ]
   }
 

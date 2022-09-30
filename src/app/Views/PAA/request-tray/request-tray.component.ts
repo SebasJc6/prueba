@@ -1,24 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-
-export interface MSolicitadas {
-  nSolicitud: string;
-  vigencia: string;
-  fechaPresentacion: string;
-  codProyecto: string;
-  proyecto: string;
-  version: string;
-  solicitante: string;
-  estado: string;
-  fechaAprobacion: string
-}
-
-const MOD_SOLICITADAS: MSolicitadas[] = [
-  {nSolicitud: '00', vigencia: '2022', fechaPresentacion: '05-06-2022', codProyecto: '7791', proyecto: 'IVC', version: '01', solicitante: 'Johanna Reyes', estado: 'En Revisión', fechaAprobacion: '30-06-2022'},
-  {nSolicitud: '02', vigencia: '2022', fechaPresentacion: '07-06-2022', codProyecto: '7822', proyecto: 'Aseguramiento', version: '04', solicitante: 'Mario Albarracin', estado: 'En Ajuste', fechaAprobacion: ''},
-  {nSolicitud: '03', vigencia: '2023', fechaPresentacion: '07-06-2022', codProyecto: '7826', proyecto: 'Discapacidad', version: '02', solicitante: 'Luis Alejandro Diaz', estado: 'Aprobado', fechaAprobacion: ''},
-]
-
+import { MatPaginator } from '@angular/material/paginator';
+import { filterRequestTrayI, itemsRequestTrayI } from 'src/app/Models/ModelsPAA/request-tray/request-tray';
+import { RequestTrayService } from 'src/app/Services/ServicesPAA/request-tray/request-tray.service';
 
 @Component({
   selector: 'app-request-tray',
@@ -27,63 +11,79 @@ const MOD_SOLICITADAS: MSolicitadas[] = [
 })
 export class RequestTrayComponent implements OnInit {
 
+  constructor(private requestTrayService: RequestTrayService) { }
 
   //INFORMACION PARA LA TABLA CLASIFICACION PRESUPUESTAL
   displayedColumns: string[] = ['solicitud', 'vigencia', 'fPresentacion', 'codigoP', 'proyecto', 'version', 'solicitante', 'estado', 'fAprobacion', 'accion'];
-  dataSource = MOD_SOLICITADAS;
+  dataSource: itemsRequestTrayI[] = [];
 
-  pageSizeOptions: number[] = [5, 10, 15, 20];
-  numberPages: number = 0;
-  numberPage: number = 0;
+  //CAMPOS PARA EL FILTRO
+  filterRequestTray = {} as filterRequestTrayI;
 
-  constructor() { }
+  filterForm = new FormGroup({
+    NumeroSolicitud: new FormControl(),
+    Vigencia: new FormControl(),
+    FechaPresentacion: new FormControl(),
+    CodigoProyecto: new FormControl(),
+    NombreProyecto: new FormControl(''),
+    Version: new FormControl(),
+    Solicitante: new FormControl(''),
+    Estado: new FormControl(''),
+    FechaAprobacion_rechazo: new FormControl(),
+    columna: new FormControl(''),
+    ascending: new FormControl(false)
+  });
 
+  //Paginacion
   paginationForm = new FormGroup({
     page: new FormControl(),
     take: new FormControl()
   });
 
-  //CAMPOS PARA FILTRO
-  filterForm = new FormGroup({
-    NumeroSolicitud: new FormControl(),
-    Vigencia: new FormControl(''),
-    FechaPresentacion: new FormControl(''),
-    CodigoProyecto: new FormControl(''),
-    Proyecto: new FormControl(''),
-    Version: new FormControl(''),
-    Solicitante: new FormControl(''),
-    Estado: new FormControl(''),
-    FechaAprobacion: new FormControl(''),
-    columna: new FormControl(''),
-    ascending: new FormControl(false)
-  })
+  pageSizeOptions: number[] = [5, 10, 15, 20];
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  numberPages: number = 0;
+  numberPage: number = 0;
 
-  estadoFilter: string[] = ['Todos', 'En Ajuste', 'En Revisión', 'Aprobado', 'En Modificación']
+  estadoFilter: string[] = ['Todos', 'Aprobada', 'En Revisión', 'Rechazada', 'En Ajuste', 'En Modificación']
   viewFilter: boolean = true;
   viewOrder = false;
 
   ngOnInit(): void {
+    this.filterRequestTray.page = "1";
+    this.filterRequestTray.take = 20;
+
+    this.getRequestTray(this.filterRequestTray);
   }
 
-  //PAGINACIÓN
-  getPagination() {
+  //Funcion para ontener la información del endpoint BandejaModificacion
+  getRequestTray(filterRequestTray: filterRequestTrayI) {
+    if (this.filterForm.value.Estado == 'Todos') {
+      this.filterRequestTray.Estado =  ' ';
+    }else{
+    this.filterRequestTray.Estado = this.filterForm.get('Estado')?.value || '' ;
+    }
 
-  }
+    this.filterRequestTray.NumeroSolicitud = this.filterForm.value.NumeroSolicitud || '';
+    this.filterRequestTray.Vigencia = this.filterForm.value.Vigencia || '';
+    this.filterRequestTray.FechaPresentacion = this.filterForm.get('FechaPresentacion')?.value || '';
+    this.filterRequestTray.CodigoProyecto = this.filterForm.get('CodigoProyecto')?.value || '';
+    this.filterRequestTray.NombreProyecto = this.filterForm.get('NombreProyecto')?.value || '';
+    this.filterRequestTray.Version = this.filterForm.value.Version || '';
+    this.filterRequestTray.Solicitante = this.filterForm.get('Solicitante')?.value || '';
+    this.filterRequestTray.FechaAprobacion_rechazo = this.filterForm.get('FechaAprobacion_rechazo')?.value || '';
+    this.filterRequestTray.columna = this.filterForm.get('columna')?.value || '';
+    this.filterRequestTray.ascending = this.filterForm.get('ascending')?.value || false;
 
-  nextPage() {
-
-  }
-
-  prevPage() {
-
-  }
-
-  firstPage() {
-
-  }
-
-  latestPage() {
-
+    this.requestTrayService.getRequestTray(filterRequestTray).subscribe(request => {
+      this.dataSource = request.data.items;
+      this.numberPage = request.data.page;
+      this.numberPages = request.data.pages;
+      this.paginationForm.setValue({
+        take: filterRequestTray.take,
+        page: filterRequestTray.page
+      });
+    });
   }
 
   //FILTRO
@@ -95,7 +95,56 @@ export class RequestTrayComponent implements OnInit {
   }
 
   getFilter() {
+    this.filterRequestTray.NumeroSolicitud = this.filterForm.value.NumeroSolicitud || '';
+    this.filterRequestTray.Vigencia = this.filterForm.value.Vigencia || '';
+    this.filterRequestTray.FechaPresentacion = this.filterForm.get('FechaPresentacion')?.value || '';
+    this.filterRequestTray.CodigoProyecto = this.filterForm.get('CodigoProyecto')?.value || '';
+    this.filterRequestTray.NombreProyecto = this.filterForm.get('NombreProyecto')?.value || '';
+    this.filterRequestTray.Version = this.filterForm.value.Version || '';
+    this.filterRequestTray.Solicitante = this.filterForm.get('Solicitante')?.value || '';
+    // this.filterRequestTray.Estado = this.filterForm.get('Estado')?.value || '';
+    this.filterRequestTray.FechaAprobacion_rechazo = this.filterForm.get('FechaAprobacion_rechazo')?.value || '';
+    this.filterRequestTray.columna = this.filterForm.get('columna')?.value || '';
+    this.filterRequestTray.ascending = this.filterForm.get('ascending')?.value || false;
 
+    this.getRequestTray(this.filterRequestTray);
+
+    this.closeFilter();
   }
+
+    //PAGINACIÓN
+    getPagination() {
+      this.filterRequestTray.page = this.paginationForm.get('page')?.value;
+      this.filterRequestTray.take = this.paginationForm.get('take')?.value;
+      this.getRequestTray(this.filterRequestTray);
+    }
+  
+    nextPage() {
+      if (this.numberPage < this.numberPages) {
+        this.numberPage++;
+        this.filterRequestTray.page = this.numberPage.toString();
+        this.getRequestTray(this.filterRequestTray);
+      }
+    }
+  
+    prevPage() {
+      if (this.numberPage > 1) {
+        this.numberPage--;
+        this.filterRequestTray.page = this.numberPage.toString();
+        this.getRequestTray(this.filterRequestTray);
+      }
+    }
+  
+    firstPage() {
+      this.numberPage = 1;
+      this.filterRequestTray.page = this.numberPage.toString();
+      this.getRequestTray(this.filterRequestTray);
+    }
+  
+    latestPage() {
+      this.numberPage = this.numberPages;
+      this.filterRequestTray.page = this.numberPage.toString();
+      this.getRequestTray(this.filterRequestTray);
+    }
 
 }

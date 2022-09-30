@@ -24,7 +24,7 @@
                 insert_drive_file</mat-icon>
         </div>
     </div>
-    <form [formGroup]="proRequirementeForm" (ngSubmit)="saveForm()">
+    <form [formGroup]="proRequirementeForm" >
         <!-- SECCIONES DESPLEGABLES -->
         <mat-accordion multi>
 
@@ -126,44 +126,40 @@
                             </div>
                             <div class="contTxt label1">
                                 <p class="tltData">Número de contrato</p>
-                                <input class="contData" value="123456789">
+                                <input class="contData" formControlName="numeroCont">
                             </div>
                         </div>
 
                         <div class="tablaCont">
                             <div class="contTxt label1">
                                 <p class="tltData">Tipo de contrato</p>
-                                <select class="contDataSelect">
-                                    <option value="volvo">Prestación de servicios</option>
-                                    <option value="saab">Saab</option>
-                                    <option value="opel">Opel</option>
-                                    <option value="audi">Audi</option>
-                                </select>
+                                <mat-select formControlName="tipoCont" class="contDataAutocomplete">
+                                    <mat-option [value]="item.tipoContrato_ID" *ngFor="let item of listContacType">
+                                        {{item.nombre}}</mat-option>
+                                </mat-select>
                             </div>
                             <div class="contTxt label1">
                                 <p class="tltData">Perfil</p>
-                                <select class="contDataSelect">
-                                    <option value="volvo">Profesional Universitario</option>
-                                    <option value="saab">Saab</option>
-                                    <option value="opel">Opel</option>
-                                    <option value="audi">Audi</option>
-                                </select>
+                                <mat-select formControlName="perfil" class="contDataAutocomplete">
+                                    <mat-option [value]="item.perfil_ID" *ngFor="let item of allProfile">
+                                        {{item.nombre_Perfil}}</mat-option>
+                                </mat-select>
                             </div>
                             <div class="contTxt label1">
                                 <p class="tltData">Valor Honorarios / mes</p>
-                                <input class="contData" value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}">
+                                <input class="contData" formControlName="valorHonMes"
+                                    value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}">
                             </div>
                             <div class="contTxt label1">
                                 <p class="tltData">Cantidad de contratos</p>
-                                <input class="contData" value="1">
+                                <input class="contData" formControlName="cantidadCont">
                             </div>
                         </div>
 
                         <div class="tablaCont">
                             <div class="contTxt label1">
-                                <p class="tltData">Descripción (Objeto)</p>
-                                <textarea class="contDataArea"
-                                    rows="4">001-022100-7791. Prestar el servicio de transporte...</textarea>
+                                <p class="tltData">Descripción (Objeto del contrato)</p>
+                                <textarea class="contDataArea" rows="4" formcontrolName="descripcion"></textarea>
                             </div>
                         </div>
                     </div>
@@ -183,105 +179,113 @@
                 <mat-card class="colorCard1">
 
                     <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
-                    <form class="formCont">
+                    <div class="formCont" formGroupName="clasPresFinaForm">
                         <div class="tablaCont">
                             <div class="contTxt label1">
                                 <p class="tltData">Número de modificacion</p>
-                                <input class="contData contDataDisabled" value="06">
+                                <input class="contData contDataDisabled" value="06" formControlName="numModificacion">
                             </div>
 
                             <div class="contTxt label1">
                                 <p class="tltData">Mes</p>
-                                <select class="contDataSelect">
-                                    <option value="volvo">01</option>
-                                    <option value="saab">02</option>
-                                    <option value="opel">03</option>
-                                    <option value="audi">04</option>
-                                </select>
+                                <mat-select formControlName="mes" class="contDataSelect">
+                                    <mat-option [value]="item.idMes" *ngFor="let item of cantMeses">
+                                        {{item.idMes}}.{{item.nameMes}}</mat-option>
+                                </mat-select>
                             </div>
                             <div class="contTxt label1">
                                 <p class="tltData">Vigencia de los recursos</p>
-                                <select class="contDataSelect">
-                                    <option value="volvo">2022</option>
-                                    <option value="saab">2023</option>
-                                    <option value="opel">2021</option>
-                                    <option value="audi">2020</option>
-                                </select>
+                                <mat-select class="contDataSelect" formControlName="vigenciaRecu">
+                                    <mat-option value="2022">2022</mat-option>
+                                    <mat-option value="2023">2023</mat-option>
+                                    <mat-option value="2021">2021</mat-option>
+                                    <mat-option value="2020">2020</mat-option>
+                                </mat-select>
                             </div>
                             <div class="contTxt label1">
                                 <p class="tltData">Auxiliar</p>
-                                <select class="contDataSelect">
-                                    <option value="volvo">0161</option>
-                                    <option value="saab">0160</option>
-                                    <option value="opel">0159</option>
-                                    <option value="audi">0158</option>
-                                </select>
+                                <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoAux" required
+                                    formControlName="auxiliar">
+                                <mat-autocomplete #autoAux="matAutocomplete" [displayWith]="displayFnAux"
+                                    (optionSelected)="onSelectionChange($event, 'auxiliar')">
+                                    <mat-option [value]="option" *ngFor="let option of listAuxiliar">
+                                        {{option.codigoAuxiliar}}
+                                    </mat-option>
+                                </mat-autocomplete>
                             </div>
                         </div>
 
                         <div class="tablaCont">
                             <div class="contTxt label4">
                                 <p class="tltData">Detalle fuente</p>
-                                <select class="contDataSelect">
-                                    <option value="volvo">01 - Aporte Ordinario[Vigencias futuras]</option>
-                                    <option value="saab">02 - Saab</option>
-                                    <option value="opel">03 - Opel</option>
-                                    <option value="audi">04 - Audi</option>
-                                </select>
+                                <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoFte"
+                                    formControlName="dataFuente">
+                                <mat-autocomplete #autoFte="matAutocomplete" [displayWith]="displayFnFte"
+                                    (optionSelected)="onSelectionChange($event, 'dataFuente')">
+                                    <mat-option [value]="option" *ngFor="let option of listFuentes">
+                                        {{option.codigoFuente}} - {{option.descripcion}}
+                                    </mat-option>
+                                </mat-autocomplete>
                             </div>
                             <div class="contTxt label1">
-                                <p class="tltData">Actividad</p>
-                                <select class="contDataSelect">
-                                    <option value="volvo"></option>
-                                    <option value="saab">Saab</option>
-                                    <option value="opel">Opel</option>
-                                    <option value="audi">Audi</option>
-                                </select>
+                                <p class="tltData">fuente MSPS</p>
+                                <input class="contData contDataDisabled" formControlName="ftnMSPS">
                             </div>
                         </div>
 
                         <div class="tablaCont">
                             <div class="contTxt label1">
-                                <p class="tltData">Meta</p>
-                                <input class="contData contDataDisabled" value="01">
+                                <p class="tltData">Actividad</p>
+                                <mat-select formControlName="actividad" class="contDataAutocomplete"
+                                    (selectionChange)="onSelectionChange($event, 'actividad')"
+                                    [displayWith]="displayFnAct">
+                                    <mat-option [value]="item" *ngFor="let item of listActivities">
+                                        {{item.codigoAct}}
+                                    </mat-option>
+                                </mat-select>
                             </div>
                             <div class="contTxt label1">
-                                <p class="tltData">Fuente MSPS</p>
-                                <input class="contData contDataDisabled" value="07">
+                                <p class="tltData">Meta</p>
+                                <input class="contData contDataDisabled"  formControlName="meta">
                             </div>
+
                             <div class="contTxt label1">
                                 <p class="tltData">MGA</p>
-                                <select class="contDataSelect">
-                                    <option value="volvo">1903023</option>
-                                    <option value="saab">2010345</option>
-                                    <option value="opel">2365223</option>
-                                    <option value="audi">3500029</option>
-                                </select>
+                                <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoMGA"
+                                    formControlName="MGA">
+                                <mat-autocomplete #autoMGA="matAutocomplete" [displayWith]="displayFnMGA"
+                                    (optionSelected)="onSelectionChange($event, 'MGA')">
+                                    <mat-option [value]="option" *ngFor="let option of listMGA">
+                                        {{option.codigoMGA}}
+                                    </mat-option>
+                                </mat-autocomplete>
                             </div>
                             <div class="contTxt label1">
                                 <p class="tltData">POSPRE</p>
-                                <select class="contDataSelect">
-                                    <option value="volvo">002254578</option>
-                                    <option value="saab">0266789006</option>
-                                    <option value="opel">1089667877</option>
-                                    <option value="audi">2300067896</option>
-                                </select>
+                                <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoPOSPRE"
+                                    formControlName="POSPRE">
+                                <mat-autocomplete #autoPOSPRE="matAutocomplete" [displayWith]="displayFnPOSPRE"
+                                    (optionSelected)="onSelectionChange($event, 'POSPRE')">
+                                    <mat-option [value]="option" *ngFor="let option of listPOSPRE">
+                                        {{option.codPOSPRE}}
+                                    </mat-option>
+                                </mat-autocomplete>
                             </div>
 
                         </div>
 
                         <!-- BOTON AÑADIR REGISTRO A LA TABLA CLASIFICACION PRESUPUESTAL -->
                         <mat-card-actions class="btnCard">
-                            <button class="buton2 btn" mat-button mat-icon-button>
+                            <button class="buton2 btn" mat-button mat-icon-button (click)="addDataTbl('clasificaciones')">
                                 AÑADIR
                             </button>
                         </mat-card-actions>
 
-                    </form>
+                    </div>
 
                     <!-- TABLA CLASIFICACION PRESUPUESTAL -->
                     <div style="overflow: auto; margin-top: -4%;">
-                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+                        <table mat-table [dataSource]="dataSourceClasificaciones" class="mat-elevation-z8" matSort>
 
                             <ng-container matColumnDef="mes">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="mes">
@@ -292,98 +296,94 @@
                             <ng-container matColumnDef="vigenciaRecursos">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="vig">
                                     Vigencia de los Recursos
-                                <td mat-cell *matCellDef="let element">{{ element.vigenciaRecursos}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.vigenciaRecu}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="auxiliar">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="aux">
                                     Auxiliar
-                                <td mat-cell *matCellDef="let element">{{ element.auxiliar}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.auxiliar.codigoAuxiliar}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="detalleFuente">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="det">
                                     Detalle Fuente
-                                <td mat-cell *matCellDef="let element">{{ element.detalleFuente}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.dataFuente.descripcion}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="actividad">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="act">
                                     Actividad
-                                <td mat-cell *matCellDef="let element">{{ element.actividad}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.actividad.codigoAct}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="meta">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="met">
                                     Meta
-                                <td mat-cell *matCellDef="let element">{{ element.meta}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.actividad.metaODS}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="fuente">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="fue">
                                     Fuente
-                                <td mat-cell *matCellDef="let element">{{ element.fuente}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.dataFuente.codigoFuente}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="fuenteMSPS">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="msp">
                                     Fuente MSPS
-                                <td mat-cell *matCellDef="let element">{{ element.fuenteMSPS}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.dataFuente.fuenteMSPS}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="MGA">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="mga">
                                     MGA
-                                <td mat-cell *matCellDef="let element">{{ element.MGA}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.MGA.codigoMGA}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="pospre">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="pos">
                                     POSPRE
-                                <td mat-cell *matCellDef="let element">{{ element.pospre}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.POSPRE.codPOSPRE}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="apropiacionDisponible">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="apr">
                                     Apropiación Disponible
-                                <td mat-cell *matCellDef="let element">{{ element.apropiacionDisponible | currency:
-                                    'USD' : 'symbol' : '1.0-0'}}
+                                <td mat-cell *matCellDef="let element">
+                                    {{ 0 | currency:'USD' : 'symbol' : '1.0-0'}}
                                 </td>
                             </ng-container>
 
                             <ng-container matColumnDef="aumento">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="aum">
                                     Aumento
-                                <td mat-cell *matCellDef="let element">{{ element.aumento | currency: 'USD' : 'symbol' :
-                                    '1.0-0'}}</td>
+                                <td mat-cell *matCellDef="let element">{{ 0| currency: 'USD' : 'symbol' :'1.0-0'}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="disminucion">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="dis">
                                     Disminución
-                                <td mat-cell *matCellDef="let element">{{ element.disminucion | currency: 'USD' :
-                                    'symbol' : '1.0-0'}}</td>
+                                <td mat-cell *matCellDef="let element">{{ 0| currency: 'USD' :  'symbol' : '1.0-0'}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="apropiacionDefinitiva">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="dis">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="aproDef">
                                     Apropiación Definitiva
-                                <td mat-cell *matCellDef="let element">{{ element.apropiacionDefinitiva | currency:
-                                    'USD' : 'symbol' : '1.0-0'}}
+                                <td mat-cell *matCellDef="let element">{{ 0 | currency:'USD' : 'symbol' : '1.0-0'}}
                                 </td>
                             </ng-container>
 
                             <ng-container matColumnDef="compromisos">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="dis">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="Com">
                                     Compromisos
-                                <td mat-cell *matCellDef="let element">{{ element.compromisos}}</td>
+                                <td mat-cell *matCellDef="let element">{{ 0 | currency: 'USD' : 'symbol' : '1.0-0'}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="giros">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="dis">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="Gir">
                                     Giros
-                                <td mat-cell *matCellDef="let element">{{ element.giros | currency: 'USD' : 'symbol' :
-                                    '1.0-0'}}</td>
+                                <td mat-cell *matCellDef="let element">{{ 0 | currency: 'USD' : 'symbol' : '1.0-0'}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="acciones">
@@ -396,14 +396,14 @@
                                             <mat-icon mat-icon-button class="btnActions" matTooltip="Editar">edit
                                             </mat-icon>
                                             <mat-icon mat-icon-button style="margin-left: 5px;" class="btnActions"
-                                                matTooltip="Eliminar">delete</mat-icon>
+                                                matTooltip="Eliminar" (click)="removeDataTbl(element,'clasificaciones')" >delete</mat-icon>
                                         </div>
                                     </td>
                                 <tr>
                             </ng-container>
 
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>S
                         </table>
                     </div>
                     <!-- FIN TABLA -->
@@ -418,41 +418,44 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <mat-card class="colorCard2">
-                            <form class="formCont">
+                            <div class="formCont" formGroupName="codigosForm">
 
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Códigos UNSPSC</p>
-                                        <select class="contDataSelect">
-                                            <option value="volvo">78111800</option>
-                                            <option value="saab">80111623</option>
-                                            <option value="opel">86771114</option>
-                                            <option value="audi">90111000</option>
-                                        </select>
+                                        <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoCod"
+                                        formControlName="codCategoria">
+                                    <mat-autocomplete #autoCod="matAutocomplete" [displayWith]="displayFnCod"
+                                        (optionSelected)="onSelectionChange($event, 'codCategoria')">
+                                        <mat-option [value]="option" *ngFor="let option of listUNSPSC">
+                                            {{option.codigoUNSPSC}}
+                                        </mat-option>
+                                    </mat-autocomplete>
                                     </div>
                                     <div class="contTxt label4">
                                         <p class="tltData">Descripción de categoría</p>
-                                        <input class="contData contDataDisabled"
-                                            value="Transporte de pasajeros por la carretera">
+                                        <input class="contData contDataDisabled" formControlName="descCategoria">
                                     </div>
 
                                 </div>
 
                                 <!-- BOTON AÑADIR REGISTRO A LA TABLA CODIGOS UNSPSC -->
                                 <mat-card-actions class="btnCard">
-                                    <button class="buton2 btn" mat-button mat-icon-button>
+                                    <button class="buton2 btn" mat-button mat-icon-button (click)="addDataTbl('codigos')">
                                         AÑADIR
                                     </button>
                                 </mat-card-actions>
 
                                 <!-- TABLA CLASIFICACION CODIGOS UNSPSC -->
                                 <div style="overflow: auto;  margin-top: -4%;">
-                                    <table mat-table [dataSource]="dataCodigos" class="mat-elevation-z8" matSort>
+                                    <!-- <table mat-table [dataSource]="dataCodigos" class="mat-elevation-z8" matSort> -->
+                                    <table mat-table [dataSource]="dataSourceCodigos" class="mat-elevation-z8" matSort>
+
 
                                         <ng-container matColumnDef="codigoUNSPSC">
                                             <th mat-header-cell *matHeaderCellDef mat-sort-header class="Cod">
                                                 Código UNSPSC
-                                            <td mat-cell *matCellDef="let element">{{ element.codigo}}</td>
+                                            <td mat-cell *matCellDef="let element" >{{ element.codigoUNSPSC}}</td>
                                         </ng-container>
 
                                         <ng-container matColumnDef="descripcion">
@@ -471,7 +474,7 @@
                                                 <td mat-cell *matCellDef="let element">
                                                     <div style="text-align: center;">
                                                         <mat-icon mat-icon-button class="btnActions"
-                                                            matTooltip="Eliminar">
+                                                            matTooltip="Eliminar" (click)="removeDataTbl(element.unspsC_ID,'codigos')">
                                                             delete</mat-icon>
                                                     </div>
                                                 </td>
@@ -483,7 +486,7 @@
                                     </table>
                                 </div>
                                 <!-- FIN TABLA -->
-                            </form>
+                            </div>
                         </mat-card>
                     </mat-expansion-panel>
 
@@ -499,60 +502,43 @@
                         <mat-card class="colorCard2">
 
                             <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
-                            <form class="formCont">
+                            <div class="formCont" formGroupName="initialAppro">
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Año vigencia 0</p>
-                                        <select class="contDataSelect">
-                                            <option value="volvo">2020</option>
-                                            <option value="saab">2021</option>
-                                        </select>
+                                        <input class="contData contDataDisabled" formControlName="vigencia0">
                                     </div>
 
                                     <div class="contTxt label1">
                                         <p class="tltData">Valor</p>
-                                        <input class="contData contDataDisabled"
-                                            value="{{20000000 | currency: 'USD' : 'symbol' : '1.0-0'}}">
+                                        <input class="contData contDataDisabled" formControlName="valor0">
                                     </div>
 
                                     <div class="contTxt label1">
                                         <p class="tltData">Año vigencia 1</p>
-                                        <select class="contDataSelect">
-                                            <option value="volvo">2021</option>
-                                            <option value="saab">2020</option>
-                                            <option value="opel">2022</option>
-                                            <option value="audi">2023</option>
-                                        </select>
+                                        <input class="contData contDataDisabled" formControlName="vigencia1">
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Valor</p>
-                                        <input class="contData contDataDisabled"
-                                            value="{{40000000 | currency: 'USD' : 'symbol' : '1.0-0'}}">
+                                        <input class="contData contDataDisabled" formControlName="valor1">
                                     </div>
                                 </div>
 
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Año vigencia 2</p>
-                                        <select class="contDataSelect">
-                                            <option value="volvo">2022</option>
-                                            <option value="saab">2020</option>
-                                            <option value="opel">2021</option>
-                                            <option value="audi">2023</option>
-                                        </select>
+                                        <input class="contData contDataDisabled" formControlName="vigencia2">
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Valor</p>
-                                        <input class="contData contDataDisabled"
-                                            value="{{40000000 | currency: 'USD' : 'symbol' : '1.0-0'}}">
+                                        <input class="contData contDataDisabled" formControlName="valor2">
                                     </div>
                                     <div class="contTxt label2">
                                         <p class="tltData">Valor total</p>
-                                        <input class="contData contDataDisabled"
-                                            value="{{120000000 | currency: 'USD' : 'symbol' : '1.0-0'}}">
+                                        <input class="contData contDataDisabled" formControlName="valorTotal">
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </mat-card>
                     </mat-expansion-panel>
                 </mat-accordion>
@@ -570,43 +556,40 @@
                 <mat-card class="colorCard1">
 
                     <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
-                    <form class="formCont">
+                    <div class="formCont" [formGroup]="proRequirementeForm.controls.reviews">
                         <div class="tablaCont">
                             <div class="contTxt label2">
                                 <p class="tltData">Área</p>
-                                <select class="contDataSelect">
-                                    <option value="volvo">Contrataciones</option>
-                                    <option value="saab">Servicios</option>
-                                    <option value="opel">Gestion</option>
-                                    <option value="audi">Proyectos</option>
-                                </select>
+                                <mat-select formControlName="area" class="contDataSelect" [displayWith]="displayFnArea">
+                                    <mat-option [value]="item" *ngFor="let item of allReviewsArea">
+                                        {{item.nombre}}</mat-option>
+                                </mat-select>
                             </div>
                             <div class="contTxt label2">
                                 <p class="tltData">Concepto</p>
-                                <select class="contDataSelect">
-                                    <option value="volvo">Cantidad de Contratos</option>
-                                    <option value="saab">Tipos de Contratos</option>
-                                </select>
+                                <mat-select class="contDataSelect" formControlName="concepto" >
+                                    <mat-option value="Cantidad de Contratos">Cantidad de Contratos</mat-option>
+                                    <mat-option value="Tipos de Contratos">Tipos de Contratos</mat-option>
+                                </mat-select>
                             </div>
                         </div>
                         <div class="tablaCont">
                             <div style="width: 96.5%;" class="contTxt">
                                 <p class="tltData">Observaciones</p>
-                                <input class="contData"
-                                    value="Se devuelve para ajuste de la cantidad de contratos solicitados">
+                                <input class="contData" formControlName="observaciones"  >
                             </div>
                         </div>
 
                         <!-- BOTON AÑADIR REGISTRO A LA TABLA REVISIONES -->
                         <mat-card-actions class="btnCard">
-                            <button class="buton2 btn" mat-button mat-icon-button>
+                            <button class="buton2 btn" mat-button mat-icon-button (click)="addDataTbl('revisiones')">
                                 AÑADIR
                             </button>
                         </mat-card-actions>
 
                         <!-- TABLA REVISIONES -->
                         <div style="overflow: auto;  margin-top: -4%;">
-                            <table mat-table [dataSource]="dataRevisiones" class="mat-elevation-z8" matSort>
+                            <table mat-table [dataSource]="dataSourceRevisiones" class="mat-elevation-z8" matSort>
 
                                 <ng-container matColumnDef="fecha">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
@@ -623,7 +606,7 @@
                                 <ng-container matColumnDef="area">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
                                         Área
-                                    <td mat-cell *matCellDef="let element">{{ element.area}}</td>
+                                    <td mat-cell *matCellDef="let element">{{ element.area.nombre}}</td>
                                 </ng-container>
 
                                 <ng-container matColumnDef="concepto">
@@ -654,7 +637,7 @@
                                     <tr>
                                         <td mat-cell *matCellDef="let element">
                                             <div style="text-align: center;">
-                                                <mat-icon mat-icon-button class="btnActions" matTooltip="Eliminar">
+                                                <mat-icon mat-icon-button class="btnActions" matTooltip="Eliminar" (click)="removeDataTbl(element.revisionID,'revisiones')">
                                                     delete</mat-icon>
                                             </div>
                                         </td>
@@ -666,14 +649,14 @@
                             </table>
                         </div>
                         <!-- FIN TABLA -->
-                    </form>
+                    </div>
                 </mat-card>
             </mat-expansion-panel>
         </mat-accordion>
 
         <!-- SECCION DE BOTONES DE ACCION -->
         <mat-card-actions>
-            <button class="buton btn" mat-button mat-icon-button type="submit">
+            <button class="buton btn" mat-button mat-icon-button (click)="saveForm()">
                 GUARDAR
             </button>
             <button class="buton btn" style="margin-left: 4%;" mat-button mat-icon-button>

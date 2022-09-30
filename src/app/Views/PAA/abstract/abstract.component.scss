@@ -4,8 +4,33 @@
   margin-right: 3%;
   text-align: center;
 
+  //MIGA PAN
+  .mgp {
+    float: start;
+    display: flex;
+    color: #185564;
+    align-items: center;
+
+    button {
+      margin-left: -0.5%;
+
+      mat-icon {
+        margin-top: -2%;
+      }
+    }
+
+    .href {
+      text-decoration: none;
+      color: #185564;
+    }
+
+    .selected {
+      font-weight: bold;
+    }
+  }
 }
 
+//POSICIONAMIENTO DEL CONTENIDO DEL COMPONENTE
 .center-h {
   justify-content: center;
 }

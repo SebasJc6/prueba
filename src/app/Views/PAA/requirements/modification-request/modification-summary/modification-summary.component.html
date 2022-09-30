@@ -3,16 +3,16 @@
         <div class="mgp">
           Plan Anual de Adquisiciones
           <a class="href "  [routerLink]="['/PAA/Adquisiciones']">
-            &nbsp;>&nbsp;
-            -&nbsp;
+            &nbsp;>&nbsp;{{codProject}}
+            -&nbsp;{{nomProject}}
           </a>
-          <a class="href">
-            &nbsp;>&nbsp;Modificaciones solicitadas 
+          <a class="href" [routerLink]="['/PAA/Requerimientos/', dataProjectID]">
+            &nbsp;>&nbsp;Requerimientos
           </a>
-          <a class="href">
+          <a class="href" [routerLink]="['/PAA/SolicitudModificacion/', dataProjectID]">
           &nbsp;>&nbsp;Solicitud de modificación
           </a>
-          <a class="href selected">
+          <a class="href selected" [routerLink]="['/PAA/ResumenModificacion/', dataProjectID]">
             &nbsp;>&nbsp; Resumen
           </a>
         </div>
@@ -20,16 +20,16 @@
        <!--TITULO-->
        <div class="export">
           <mat-card-title>
-            <h1><strong>Resumen de modificación</strong></h1>
+            <h1><strong>RESUMEN DE MODIFICACIÓN</strong></h1>
           </mat-card-title>
         </div>
 
        <!--SELECT-->
        <div class="contTxt input">
         <p class="tltData">Fuente de los recursos</p>
-        <select class="contDataSelect">
-            <option *ngFor="let state of states" [value]="state">{{state}}</option>
-        </select>
+        <mat-select class="contDataSelect" [(ngModel)]="selectedValueSource" (selectionChange)="selectSource()">
+            <mat-option *ngFor="let state of states" [value]="state.fuente_ID">{{state.descripcion}}</mat-option>
+        </mat-select>
        </div>
 
         <!--TABLA GRANDE CON FOOTER-->
@@ -61,20 +61,20 @@
 
             <ng-container matColumnDef="sumaAumenta">
               <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>Suma valor que aumenta</p> </th>
-              <td mat-cell *matCellDef="let element"> <p>{{element.sumaAumenta | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
-              <td mat-footer-cell *matFooterCellDef class="encabesado"> <p style="margin-top: 5%;">{{getSumaAumenta() | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
+              <td mat-cell *matCellDef="let element"> <p>{{element.sumaValorAumenta | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
+              <td mat-footer-cell *matFooterCellDef class="encabesado"> <p style="margin-top: 5%;">{{Increases | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
             </ng-container>
 
             <ng-container matColumnDef="sumaDisminuye">
               <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p> Suma valor que disminuye</p> </th>
-              <td mat-cell *matCellDef="let element">  <p>{{element.sumaDisminuye | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
-              <td mat-footer-cell *matFooterCellDef class="encabesado"> <p style="margin-top: 5%;">{{getSumaDisminuye() | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
+              <td mat-cell *matCellDef="let element">  <p>{{element.sumaValorDisminuye | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
+              <td mat-footer-cell *matFooterCellDef class="encabesado"> <p style="margin-top: 5%;">{{Decreases | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
             </ng-container>
 
             <ng-container matColumnDef="diferencia">
               <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p> Diferencia</p> </th>
               <td mat-cell *matCellDef="let element"> <p>{{element.diferencia | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
-              <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 9.5%;">{{getValorDiferencia() | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
+              <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 9.5%;">{{Gap | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -83,9 +83,40 @@
           </table>
        </div>
 
+       <!-- PAGINACION -->
+    <div class="pagination " [formGroup]="paginationForm">
+
+      <mat-form-field class="take" appearance="legacy" matTooltip="Items por pagina">
+        <mat-select formControlName="take" (selectionChange)="getPagination()">
+          <mat-option [value]="Item" *ngFor="let Item of pageSizeOptions">{{Item}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <a (click)="firstPage()">
+        <mat-icon matTooltip="Primer pagina">first_page</mat-icon>
+      </a>
+      <a (click)="prevPage()">
+        <mat-icon matTooltip="Anterior">chevron_left</mat-icon>
+      </a>
+      <mat-form-field class="page" appearance="legacy">
+        <mat-label>pagina</mat-label>
+        <input matInput value="{{numberPage}}" formControlName="page">
+        <button matSuffix (click)="getPagination()" mat-icon-button>
+          <mat-icon matTooltip="Buscar Pagina">youtube_searched_for</mat-icon>
+        </button>
+        <mat-hint> {{numberPage}} de {{numberPages}}</mat-hint>
+      </mat-form-field>
+      <a (click)="nextPage()">
+        <mat-icon matTooltip="Siguiente">chevron_right</mat-icon>
+      </a>
+      <a (click)="latestPage()">
+        <mat-icon matTooltip="Ultima pagina">last_page</mat-icon>
+      </a>
+  
+    </div>
+
       <div style="margin-top: 3%;">
         <mat-card-actions>
-          <button class="buton btn" mat-button mat-icon-button (click)="regresar()">Regresar</button>
+          <button class="buton btn" mat-button mat-icon-button (click)="regresar()">REGRESAR</button>
         </mat-card-actions>
       </div>
 </div>

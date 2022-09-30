@@ -1,9 +1,16 @@
 <div class="container center-h center-v">
 
 
-  <p style="color: #185564; text-align:left;"> Plan Anual de Adquisiciones (PAA) > 7791-IVC > <strong>RESUMEN EJECUCION
-      PRESUPUESTAL -
-      FFDS</strong> </p>
+  <div class="mgp">
+    Plan Anual de Adquisiciones
+    <a class="href "  [routerLink]="['/PAA/Adquisiciones']">
+      &nbsp;>&nbsp;{{abstractData.codigoProyecto}}
+      -&nbsp;{{abstractData.nombreProyecto}}
+    </a>
+    <a class="href selected"  [routerLink]="['/PAA/Resumen', dataProjectID]">
+      &nbsp;>&nbsp;RESUMEN EJECUCION PRESUPUESTAL - FFDS 
+    </a>
+  </div>
 
   <div class="export">
     <mat-card-title style="color: #185564;">
@@ -11,64 +18,63 @@
     </mat-card-title>
   </div>
 
-
   <div class="contForm ">
-    <div class="btnExcel">
-      <button align="right" mat-button>Exportar<img class="imgExcel" src="../../../../assets/img/excel.jpg"></button>
-    </div>
-
 <!-- FORMULARIO -->
     <form>
       <div class="tablaCont" style="display: flex;">
         <div class="contTxt label1">
           <p class="tltData">Código del proyecto</p>
-          <input class="contData contDataDisabled" value="{{viewProjectById.codigoProyecto}}" disabled>
+          <input class="contData contDataDisabled" value="{{abstractData.codigoProyecto}}" disabled>
         </div>
 
         <div class="contTxt label2">
           <p class="tltData">Subsecretaria</p>
-          <input class="contData contDataDisabled" value="{{viewProjectById.dependenciaOrigen}}" disabled>
+          <input class="contData contDataDisabled" value="{{abstractData.dependenciaOrigen}}" disabled>
         </div>
 
         <div class="contTxt label1">
           <p class="tltData ">Dependencia origen de los recursos</p>
-          <input class="contData contDataDisabled" value="{{viewProjectById.codDependencia}}" disabled>
+          <input class="contData contDataDisabled" value="{{abstractData.dependenciaOrigen}}" disabled>
         </div>
       </div>
 
       <div class="tablaCont" style="display: flex;">
         <div class="contTxt label2">
           <p class="tltData">Nombre del responsable</p>
-          <input class="contData contDataDisabled" value="{{viewResponsable.descripcion}}" disabled>
+          <input class="contData contDataDisabled" value="{{responsibleAbstractData.nombre}}" disabled>
         </div>
 
         <div class="contTxt label1">
           <p class="tltData">Teléfono del responsable</p>
-          <input class="contData contDataDisabled" value="{{viewResponsable.telefono}}" disabled>
+          <input class="contData contDataDisabled" value="{{responsibleAbstractData.telefono}}" disabled>
         </div>
 
         <div class="contTxt label1">
           <p class="tltData ">Correo electrónico del responsable</p>
-          <input class="contData contDataDisabled" value="{{viewResponsable.correo}}" disabled>
+          <input class="contData contDataDisabled" value="{{responsibleAbstractData.correo}}" disabled>
         </div>
       </div>
 
       <div class="tablaCont" style="display: flex;">
         <div class="contTxt label2">
           <p class="tltData">Unidad de contratación</p>
-          <input class="contData contDataDisabled" value="{{viewProjectById.entidadNombre}}" disabled>
+          <input class="contData contDataDisabled" value="{{abstractData.unidadContratacion}}" disabled>
         </div>
 
-        <div class="contTxt label1" style="margin-top: 0.3%;">
-          <p class="tltData">Año*</p>
-          <div class="contData">
+        <!-- <div class="contTxt label1"> -->
+          <div class="contTxt label1">
+            <p class="tltData ">Año</p>
+            <input class="contData contDataDisabled" value="{{abstractData.anio}}" disabled>
+          </div>
+          <!-- <p class="tltData" style="margin-bottom: 5%;">Año*</p>
+          <div class="contData" style="margin-top: -3.7%;">
             <mat-select disableRipple class="sltData">
               <mat-option value="1">2020</mat-option>
               <mat-option value="2">2021</mat-option>
               <mat-option value="3">2022</mat-option>
             </mat-select>
-          </div>
-        </div>
+          </div> -->
+        <!-- </div> -->
 
         <div class="contTxt label1">
           <p class="tltData"></p>
@@ -78,29 +84,29 @@
       <div class="tablaCont" style="display: flex;">
           <div class="contTxt label3">
             <p class="tltData">Nombre del Proyecto de Inversión</p>
-            <input class="contData contDataDisabled" value="{{viewProjectById.nombre}}" disabled>
+            <input class="contData contDataDisabled" value="{{abstractData.nombreProyecto}}" disabled>
           </div>
       </div>
 
       <div class="tablaCont" style="display: flex;">
           <div class="contTxt label1">
             <p class="tltData">Apropiación Inicial</p>
-            <input class="contData contDataDisabled" value="" disabled>
+            <input class="contData contDataDisabled" value="{{abstractData.apropiacionInicial}}" disabled>
           </div>
 
           <div class="contTxt label1">
             <p class="tltData">Apropiación Definitiva</p>
-            <input class="contData contDataDisabled" value="" disabled>
+            <input class="contData contDataDisabled" value="{{abstractData.apropiacionDefinitiva}}" disabled>
           </div>
 
           <div class="contTxt label1">
             <p class="tltData ">Ejecución Acumulada</p>
-            <input class="contData contDataDisabled" value="" disabled>
+            <input class="contData contDataDisabled" value="{{abstractData.ejecucionAcumulada}}" disabled>
           </div>
 
           <div class="contTxt label1">
             <p class="tltData ">% Ejecución</p>
-            <input class="contData contDataDisabled" value="" disabled>
+            <input class="contData contDataDisabled" value="{{abstractData.ejecucionApropPCT}}" disabled>
           </div>
       </div>
 
@@ -108,22 +114,22 @@
       <div class="tablaCont" style="display: flex;">
           <div class="contTxt label1">
             <p class="tltData">Por Ejecutar</p>
-            <input class="contData contDataDisabled" value="" disabled>
+            <input class="contData contDataDisabled" value="{{abstractData.porEjecutar}}" disabled>
           </div>
 
           <div class="contTxt label1">
             <p class="tltData">Giro Acumulado</p>
-            <input class="contData contDataDisabled" value="" disabled>
+            <input class="contData contDataDisabled" value="{{abstractData.giroAcumulado}}" disabled>
           </div>
 
           <div class="contTxt label1">
             <p class="tltData ">% Ejecución</p>
-            <input class="contData contDataDisabled" value="" disabled>
+            <input class="contData contDataDisabled" value="{{abstractData.ejecucionGiroPCT}}" disabled>
           </div>
 
           <div class="contTxt label1">
             <p class="tltData ">Reserva Constituida</p>
-            <input class="contData contDataDisabled" value="" disabled>
+            <input class="contData contDataDisabled" value="{{abstractData.reservaConstituida}}" disabled>
           </div>
       </div>
 
@@ -131,12 +137,12 @@
       <div class="tablaCont" style="display: flex;">
           <div class="contTxt label1">
             <p class="tltData">Giros de Reserva</p>
-            <input class="contData contDataDisabled" value="" disabled>
+            <input class="contData contDataDisabled" value="{{abstractData.girosReserva}}" disabled>
           </div>
 
           <div class="contTxt label1">
             <p class="tltData">% Ejecución</p>
-            <input class="contData contDataDisabled" value="" disabled>
+            <input class="contData contDataDisabled" value="{{abstractData.ejecucionGirosPCT}}" disabled>
           </div>
 
           <div class="contTxt label1">

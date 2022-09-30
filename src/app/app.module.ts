@@ -57,6 +57,7 @@ import { TaskTrayComponent } from './Views/PAA/task-tray/task-tray.component';
 import { RequestTrayComponent } from './Views/PAA/request-tray/request-tray.component';
 import { AlertsComponent } from './Templates/alerts/alerts.component';
 import { AlertsPopUpComponent } from './Templates/alerts-pop-up/alerts-pop-up.component';
+import { CurrencyPipe } from '@angular/common';
 
 
 const materialModules = [
@@ -129,7 +130,8 @@ const materialModules = [
   ],
   providers:
     [
-      AlertsPopUpComponent
+      AlertsPopUpComponent,
+      CurrencyPipe
     ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

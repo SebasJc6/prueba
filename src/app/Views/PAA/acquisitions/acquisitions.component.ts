@@ -50,6 +50,11 @@ export class AcquisitionsComponent implements OnInit {
     'estadoDesc',
     'accion'
   ];
+
+  //Formulario de filtro
+  viewOrder = false;
+  estadoFilter: string[] = ['Todos', 'Aprobado', 'Cerrado', 'En Ejecución', 'Anteproyecto']
+
   // dataSource = new MatTableDataSource<dataTableProjectI>(ELEMENT_DATA);
   dataSource!: MatTableDataSource<dataTableProjectI>;
   selection = new SelectionModel<dataTableProjectI>(true, []);
@@ -57,6 +62,7 @@ export class AcquisitionsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatAccordion) accordion!: MatAccordion;
+  viewFilter: boolean = true;
   numberPages: number = 0;
   numberPage: number = 0;
   numberTake: number = 0;
@@ -73,8 +79,8 @@ export class AcquisitionsComponent implements OnInit {
   });
 
   filterForm = new FormGroup({
-    DependenciaOrigen: new FormControl(),
-    CodigoProyecto: new FormControl(''),
+    DependenciaOrigen: new FormControl(''),
+    CodigoProyecto: new FormControl(),
     Nombre: new FormControl(''),
     EstadoDesc: new FormControl(''),
     columna: new FormControl(''),
@@ -98,6 +104,19 @@ export class AcquisitionsComponent implements OnInit {
   }
 
   getAllProjects(filterProjects: filterProjectI) {
+    if (this.filterForm.value.EstadoDesc == 'Todos') {
+      this.filterProjects.EstadoDesc =  ' ';
+    }else{
+    this.filterProjects.EstadoDesc = this.filterForm.get('EstadoDesc')?.value || '' ;
+    }
+
+    this.filterProjects.DependenciaOrigen = this.filterForm.get('DependenciaOrigen')?.value || '';
+    this.filterProjects.CodigoProyecto = this.filterForm.value.CodigoProyecto || '';
+    this.filterProjects.Nombre = this.filterForm.get('Nombre')?.value || '';
+    // this.filterProjects.EstadoDesc = this.filterForm.get('EstadoDesc')?.value || '';
+    this.filterProjects.columna = this.filterForm.get('columna')?.value || '';
+    this.filterProjects.ascending = this.filterForm.get('ascending')?.value || false;
+
     //console.log(filterProjects)
     this.serviceProject.getAllProjectsFilter(filterProjects).subscribe(data => {
       this.viewProjects = data
@@ -168,6 +187,27 @@ export class AcquisitionsComponent implements OnInit {
     this.getAllProjects(this.filterProjects);
   }
 
+  //Filtro
+  openFilter() {
+    this.viewFilter = false
+  }
+  closeFilter() {
+    this.viewFilter = true
+  }
+
+  getFilter() {
+    console.log(this.filterForm.value)
+    this.filterProjects.DependenciaOrigen = this.filterForm.get('DependenciaOrigen')?.value || '';
+    this.filterProjects.CodigoProyecto = this.filterForm.value.CodigoProyecto || '';
+    this.filterProjects.Nombre = this.filterForm.get('Nombre')?.value || '';
+    // this.filterProjects.EstadoDesc = this.filterForm.get('EstadoDesc')?.value || '';
+    this.filterProjects.columna = this.filterForm.get('columna')?.value || '';
+    this.filterProjects.ascending = this.filterForm.get('ascending')?.value || false;
+
+    this.getAllProjects(this.filterProjects);
+
+    this.closeFilter();
+  }
 
   openRequeriment(proyectoID: number) {
     this.router.navigate(['/PAA/Requerimientos', proyectoID])
