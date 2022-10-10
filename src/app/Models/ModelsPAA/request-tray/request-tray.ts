@@ -16,6 +16,7 @@ export interface dataRequestTrayI {
 }
 
 export interface itemsRequestTrayI {
+    idProjecto: number,
     idSolicitud: number,
     numeroSolicitud: number,
     vigencia: number,

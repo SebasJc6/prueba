@@ -97,9 +97,9 @@ export class RequirementsComponent implements OnInit {
   getRequerimentsByProject(projectId: number, filterRequertiments: filterRequerimentI) {
     this.projectId = projectId;
     if (this.filterForm.value.Estado == 'Todos') {
-      this.filterRequertiments.Estado =  ' ';
-    }else{
-    this.filterRequertiments.Estado = this.filterForm.get('Estado')?.value || '' ;
+      this.filterRequertiments.Estado = ' ';
+    } else {
+      this.filterRequertiments.Estado = this.filterForm.get('Estado')?.value || '';
 
     }
     this.filterRequertiments.NumeroRequerimiento = this.filterForm.value.NumeroRequerimiento || '';
@@ -184,11 +184,11 @@ export class RequirementsComponent implements OnInit {
     this.router.navigate(['/PAA/Adquisiciones'])
   }
   propertiesRequirement(requirementId: number) {
-    this.router.navigate(['/PAA/PropiedadesRequerimiento/' + this.dataProjectID + '/' + requirementId])
+    this.router.navigate(['/PAA/PropiedadesRequerimiento/' + this.dataProjectID + '/0/' + requirementId])
   }
 
-  modificatioRecuest(){
-    this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID])
+  modificatioRecuest() {
+    this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/0'])
   }
 
 }

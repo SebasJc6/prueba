@@ -1,0 +1,83 @@
+
+
+.navbar a{    
+    width: 100%;
+    background-color:#3ebee3;
+  }
+
+  .logotipo img{
+    width: 10rem;    
+  }
+  @media(min-width: 650px){
+  
+    .header-content{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around  ;
+        align-items: center;
+    }
+    .nav-bar-content{
+        margin-top: 0;
+    }
+  }
+  
+  
+  
+  
+  .h1 {
+      margin: 0;
+      padding: 0;
+    }
+  .img{
+      display:block;
+      float : center;
+      justify-content: center;
+      align-items: center;
+      }
+  .login{
+          float:center;
+      }
+  
+    .mat-form-field {
+      min-width: 300px;
+      display: block;
+      margin: 2rem 0;
+      border-radius: 0.5rem;
+      border: none;
+      border: 0 none;
+      background: #ebf5fc;
+    }
+  
+    mat-card-title,
+    mat-card-content {
+      margin: 5rem ;
+      justify-content: center;
+      text-align: center;
+    }
+  
+  
+  
+    .button {
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      border: none;
+      font-size: 0.875rem;
+      color: #ffffff;
+      font-weight: bold;
+      background-color: #185564;
+      width: 100%;
+      padding: 0.5rem 1rem;
+      border-radius: 1.5rem;
+    }
+  
+    .container { 
+      display: flex;
+      /* align-items por defecto tiene el valor `stretch` */
+      align-items: start;
+    }
+    .center-h {
+      justify-content: center;
+    }
+    .center-v {
+      align-items: center;
+    }

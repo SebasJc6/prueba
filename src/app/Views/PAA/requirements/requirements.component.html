@@ -2,16 +2,17 @@
 
   <div class="mgp">
     Plan Anual de Adquisiciones
-    <a class="href "  [routerLink]="['/PAA/Adquisiciones']">
+    <a class="href " [routerLink]="['/PAA/Adquisiciones']">
       &nbsp;>&nbsp;{{codProject}}
       -&nbsp;{{nomProject}}
     </a>
-    <a class="href selected"  [routerLink]="['/PAA/Requerimientos', projectId]">
-      &nbsp;>&nbsp;Requerimientos 
+    <a class="href selected" [routerLink]="['/PAA/Requerimientos', projectId]">
+      &nbsp;>&nbsp;Requerimientos
     </a>
   </div>
 
-  <!-- DIV FILTRO Y TABLA REQUERIMIENTO -->
+
+
   <div style="overflow: auto;">
 
     <div class="opciones">
@@ -21,147 +22,151 @@
 
       <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">Filtrar</button>
     </div>
+    
+    
+    <div class="top">
+      <mat-card *ngIf="!viewFilter">
+        <div class="close">
+          <button mat-icon-button (click)="closeFilter()" color="warn">
+            <mat-icon [inline]='true'>close</mat-icon>
+          </button>
+        </div>
+        <div [formGroup]="filterForm">
+          <mat-accordion multi>
+            <mat-expansion-panel class="menu-panel">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <span class="title">Ordernar Por:</span>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="filter">
+                <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
+                  <mat-radio-button value="NumeroRequerimiento">Número de requerimiento</mat-radio-button>
+                  <mat-radio-button value="DependenciaDestino">Dependencia destino de recursos</mat-radio-button>
+                  <mat-radio-button value="Descripcion">Descripción</mat-radio-button>
+                  <mat-radio-button value="Estado">Estado</mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="Order" *ngIf="viewOrder">
+                <!-- <mat-radio-group color="warn" formControlName="ascending">
+                <mat-radio-button value=true>Acendente</mat-radio-button>
+                <mat-radio-button value=false>Decendente</mat-radio-button>
+              </mat-radio-group> -->
+                Decendente<mat-slide-toggle formControlName="ascending"> Acendente</mat-slide-toggle>
+              </div>
 
-    <div>
-      <div class="top">
-        <mat-card *ngIf="!viewFilter">
-          <div class="close">
-            <button mat-icon-button (click)="closeFilter()" color="warn">
-              <mat-icon [inline]='true'>close</mat-icon>
-            </button>
-          </div>
-          <div [formGroup]="filterForm">
-            <mat-accordion multi>
-              <mat-expansion-panel class="menu-panel">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    <span class="title">Ordernar Por:</span>
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <div class="filter">
-                  <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
-                    <mat-radio-button value="NumeroRequerimiento">Número de requerimiento</mat-radio-button>
-                    <mat-radio-button value="DependenciaDestino">Dependencia destino de recursos</mat-radio-button>
-                    <mat-radio-button value="Descripcion">Descripción</mat-radio-button>
-                    <mat-radio-button value="Estado">Estado</mat-radio-button>
-                  </mat-radio-group>
-                </div>
-                <mat-divider></mat-divider>
-                <div class="Order" *ngIf="viewOrder">
-                  <!-- <mat-radio-group color="warn" formControlName="ascending">
-                    <mat-radio-button value=true>Acendente</mat-radio-button>
-                    <mat-radio-button value=false>Decendente</mat-radio-button>
-                  </mat-radio-group> -->
-                  Decendente<mat-slide-toggle formControlName="ascending"> Acendente</mat-slide-toggle>
-                </div>
-    
-              </mat-expansion-panel>
-    
-              <mat-expansion-panel class="menu-panel">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    <span class="title">Buscar Por:</span>
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <div class="form">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Número de requerimiento</mat-label>
-                    <input matInput formControlName="NumeroRequerimiento" type="number">
-                  </mat-form-field>
-                  <mat-form-field style="width: 15%;" appearance="outline">
-                    <mat-label>Dependencia destino de recursos</mat-label>
-                    <input matInput formControlName="DependenciaDestino" type="number">
-                  </mat-form-field>
-                  <mat-form-field style="width: 30%;" appearance="outline">
-                    <mat-label>Descripción</mat-label>
-                    <input matInput formControlName="Descripcion">
-                  </mat-form-field>
-                  <mat-form-field appearance="outline">
-                    <mat-label>Estado</mat-label>
-                    <mat-select formControlName="Estado">
-                      <mat-option [value]="Item" *ngFor="let Item of estadoFilter">{{Item}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </mat-expansion-panel>
-            </mat-accordion>
-    
-            <button class="FilSear" mat-button (click)="getFilter()">
-              Filtrar
-            </button>
-          </div>
-        </mat-card>
-      </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="menu-panel">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <span class="title">Buscar Por:</span>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="form">
+                <mat-form-field appearance="outline">
+                  <mat-label>Número de requerimiento</mat-label>
+                  <input matInput formControlName="NumeroRequerimiento" type="number">
+                </mat-form-field>
+                &nbsp;
+                <mat-form-field style="width: 15%;" appearance="outline">
+                  <mat-label>Dependencia destino de recursos</mat-label>
+                  <input matInput formControlName="DependenciaDestino" type="number">
+                </mat-form-field>
+                &nbsp;
+                <mat-form-field style="width: 30%;" appearance="outline">
+                  <mat-label>Descripción</mat-label>
+                  <input matInput formControlName="Descripcion">
+                </mat-form-field>
+                &nbsp;
+                <mat-form-field appearance="outline">
+                  <mat-label>Estado</mat-label>
+                  <mat-select formControlName="Estado">
+                    <mat-option [value]="Item" *ngFor="let Item of estadoFilter">{{Item}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+
+          <button class="FilSear" mat-button (click)="getFilter()">
+            Filtrar
+          </button>
+        </div>
+
+
+      </mat-card>
     </div>
 
-  <!-- <table mat-table *ngFor="let element of requeriments | paginate:{itemsPerPage: numberTake, currentPage: numberPage}" class="mat-elevation-z8" matSort> -->
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+    <!-- <table mat-table *ngFor="let element of requeriments | paginate:{itemsPerPage: numberTake, currentPage: numberPage}" class="mat-elevation-z8" matSort> -->
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
 
 
 
-    <ng-container matColumnDef="numrequired">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header class="Num">
-        Número de requerimiento
-      <td mat-cell *matCellDef="let element">{{ element.numeroRequerimiento}}</td>
-    </ng-container>
+      <ng-container matColumnDef="numrequired">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="Num">
+          Número de requerimiento
+        <td mat-cell *matCellDef="let element">{{ element.numeroRequerimiento}}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="dependenci">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header class="Depe">
-        Dependencia destino de recursos
-      </th>
-      <td mat-cell *matCellDef="let element">{{ element.dependenciaDestino }}</td>
-    </ng-container>
+      <ng-container matColumnDef="dependenci">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="Depe">
+          Dependencia destino de recursos
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.dependenciaDestino }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header class="Desc">
-        Descripción
-      </th>
-      <td mat-cell *matCellDef="let element" style="margin-top:1%; margin-bottom:2%">
-        {{ element.descripcion }}
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="Desc">
+          Descripción
+        </th>
+        <td mat-cell *matCellDef="let element" style="margin-top:1%; margin-bottom:2%">
+          {{ element.descripcion }}
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="estado">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header class="Est">
-        Estado
-      </th>
-      <td mat-cell *matCellDef="let element">
-        <button mat-icon-button style="color: black;" disabled>
-          <mat-icon [ngClass]="{
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="Est">
+          Estado
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button style="color: black;" disabled>
+            <mat-icon [ngClass]="{
             'mat-approvedChips' : element.estado == 'Aprobado',
             'mat-reviewChips' : element.estado == 'En Revisión',
             'mat-fitChips' : element.estado == 'En Ajuste',
             'mat-modificationChips' : element.estado == 'En Modificación'}">
-            fiber_manual_record</mat-icon>
-          {{ element.estado }}
-        </button>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="accion">
-      <tr>
-
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="Acc"> Acción </th>
-      </tr>
-      <tr>
-        <td mat-cell *matCellDef="let element">
-          <div>
-            <mat-icon mat-icon-button class="btnActions" matTooltip="Propiedades requerimiento"
-              (click)="propertiesRequirement(element.requerimientoId)">
-              insert_drive_file</mat-icon>
-            <mat-icon mat-icon-button class="btnActions">attach_money</mat-icon>
-            <mat-icon mat-icon-button class="btnActions">autorenew</mat-icon>
-          </div>
+              fiber_manual_record</mat-icon>
+            {{ element.estado }}
+          </button>
         </td>
-      <tr>
-    </ng-container>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
+      <ng-container matColumnDef="accion">
+        <tr>
 
-</div>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="Acc"> Acción </th>
+        </tr>
+        <tr>
+          <td mat-cell *matCellDef="let element">
+            <div>
+              <mat-icon mat-icon-button class="btnActions" matTooltip="Propiedades requerimiento"
+                (click)="propertiesRequirement(element.numeroRequerimiento)">
+                insert_drive_file</mat-icon>
+              <mat-icon mat-icon-button class="btnActions">attach_money</mat-icon>
+              <mat-icon mat-icon-button class="btnActions">autorenew</mat-icon>
+            </div>
+          </td>
+        <tr>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+  </div>
 
   <div class="pagination " [formGroup]="paginationForm">
     <mat-form-field class="take" appearance="legacy" matTooltip="Items por pagina">

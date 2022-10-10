@@ -1,0 +1,50 @@
+
+  <div class="container center-h center-v">
+    <!-- <img class="img" src="assets/img/Slider_jornadas_Epid.png" width="25%"> -->
+  
+    <mat-card-content>
+      <h1><strong>INICIAR SESION</strong></h1>
+  
+      <form name="loginForm" (ngSubmit)="f.form.valid && onLogin()" #f="ngForm">
+        <mat-form-field>
+          <mat-label>Usuario</mat-label>
+          <input
+            type="text"
+            matInput
+            name="userName"
+            required="required"
+            [(ngModel)]="loginForm.email"
+            #email="ngModel"
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Contraseña</mat-label>
+          <input
+            type="password"
+            matInput
+            name="password"
+            required="required"
+            [(ngModel)]="loginForm.pwd"
+            #pwd="ngModel"
+          />
+        </mat-form-field>
+  
+        <button
+          (click)="(onLogin)"
+          class="button"
+          type="submit"
+          mat-raised-button
+        >
+          INICIAR SESION
+        </button>
+        <br />
+        <br />
+        <!-- <button class="" type="button" mat-raised-button (click)="Investigador()">
+          Investigador
+        </button> -->
+      </form>
+    </mat-card-content>
+  </div>
+  
+
+  

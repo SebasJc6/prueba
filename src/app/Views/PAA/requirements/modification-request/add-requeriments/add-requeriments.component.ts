@@ -5,12 +5,9 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { dataTableDataRequerimentI, filterDataRequerimentI } from 'src/app/Models/ModelsPAA/Requeriment/Requeriment.interface';
+import { dateTableModificationI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
+import { addRequirementEdit, dataTableDataRequerimentI, filterDataRequerimentI } from 'src/app/Models/ModelsPAA/Requeriment/Requeriment.interface';
 import { RequerimentService } from 'src/app/Services/ServicesPAA/Requeriment/requeriment.service';
-
-
-
-
 
 
 export interface Transaction {
@@ -28,7 +25,6 @@ const ELEMENT_DATA: Transaction[] = [
   templateUrl: './add-requeriments.component.html',
   styleUrls: ['./add-requeriments.component.scss']
 })
-
 
 export class AddrequirementsComponent implements OnInit {
 
@@ -59,6 +55,8 @@ export class AddrequirementsComponent implements OnInit {
   dataSource!: MatTableDataSource<dataTableDataRequerimentI>;
   selection = new SelectionModel<dataTableDataRequerimentI>(true, []);
 
+  //Elementos guardados
+  requerimentsAdd: dataTableDataRequerimentI[] = [];
 
   ngOnInit(): void {
     this.dataProjectID = this.data;
@@ -108,10 +106,12 @@ export class AddrequirementsComponent implements OnInit {
     this.closeFilter();
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
+  
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
+
+    this.requerimentsAdd = this.selection.selected;
     return numSelected === numRows;
   }
 
@@ -158,7 +158,8 @@ export class AddrequirementsComponent implements OnInit {
     this.getDataRequeriment(+this.dataProjectID, this.filterDataRequertiments);
   }
 
-
-
+  closeDialog(){
+    this.dialogRef.close(this.requerimentsAdd);
+  }
 
 }

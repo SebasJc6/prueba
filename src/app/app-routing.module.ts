@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './Views/dashboard/dashboard.component';
 
 import { HomeComponent } from './Views/home/home.component';
+import { LoginComponent } from './Views/login/login.component';
 import { AbstractComponent } from './Views/PAA/abstract/abstract.component';
 import { AcquisitionsComponent } from './Views/PAA/acquisitions/acquisitions.component';
 import { RequestTrayComponent } from './Views/PAA/request-tray/request-tray.component';
@@ -19,6 +20,7 @@ import { TaskTrayComponent } from './Views/PAA/task-tray/task-tray.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/Home', pathMatch: 'full' },
+  { path: 'Login', component: LoginComponent },
   { path: 'Home', component: HomeComponent },
   {
     path: 'PAA',
@@ -28,10 +30,10 @@ const routes: Routes = [
       { path: 'BandejaDeTareas', component: TaskTrayComponent },
       { path: 'BandejaDeSolicitudes', component: RequestTrayComponent },
       { path: 'Requerimientos/:data', component: RequirementsComponent },
-      { path: 'PropiedadesRequerimiento/:idPro/:idReq', component: PropertiesRequirementComponent },
+      { path: 'PropiedadesRequerimiento/:idPro/:idSol/:numReq', component: PropertiesRequirementComponent },
       { path: 'Resumen/:data', component: AbstractComponent },
-      { path: 'SolicitudModificacion/:data', component: ModificationRequestComponent },
-      { path: 'ResumenModificacion/:id',   component: ModificationSummaryComponent }
+      { path: 'SolicitudModificacion/:idPro/:idSol', component: ModificationRequestComponent },
+      { path: 'ResumenModificacion/:idPro/:idSol',   component: ModificationSummaryComponent }
     ]
   }
 

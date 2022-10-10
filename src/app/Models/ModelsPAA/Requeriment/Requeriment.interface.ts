@@ -39,6 +39,9 @@ export interface dataI{
     pages: number,
 }
 export interface dataTableDataRequerimentI {
+    fuenteId: number,
+    modificacion_ID: number,
+    isContrapartida: boolean,
     requerimientoID: number,
     numeroRequerimiento: number,
     dependenciaDestino: string,
@@ -60,4 +63,21 @@ export interface filterDataRequerimentI {
     take: number,
     NumeroRequerimiento: number,
     Descripcion: string
+}
+
+export interface addRequirementEdit {
+    actuacionContractual: string,
+    dependenciaDestino : string,
+    descripcion: string,
+    honorarios: number,
+    modalidadSeleccion: string,
+    nuevoSaldoApropiacion: number,
+    numeroContrato: string,
+    numeroRequerimiento: string,
+    perfil: string,
+    requerimientoID: number,
+    saldoRequerimiento: number,
+    tipoContrato: string,
+    valorAumenta: number,
+    valorDisminuye: number
 }

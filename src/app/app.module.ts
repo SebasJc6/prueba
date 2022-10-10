@@ -58,6 +58,7 @@ import { RequestTrayComponent } from './Views/PAA/request-tray/request-tray.comp
 import { AlertsComponent } from './Templates/alerts/alerts.component';
 import { AlertsPopUpComponent } from './Templates/alerts-pop-up/alerts-pop-up.component';
 import { CurrencyPipe } from '@angular/common';
+import { LoginComponent } from './Views/login/login.component';
 
 
 const materialModules = [
@@ -114,7 +115,8 @@ const materialModules = [
     TaskTrayComponent,
     RequestTrayComponent,
     AlertsComponent,
-    AlertsPopUpComponent
+    AlertsPopUpComponent,
+    LoginComponent
 
   ],
   imports: [

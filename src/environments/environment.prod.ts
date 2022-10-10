@@ -2,7 +2,7 @@ export const environment = {
   production: true,
   
   baseUrl:{
-    logic:"https://w-logic-back.azurewebsites.net/api/v1/",
-    generic:"https://w-generic-back.azurewebsites.net/api/v1/"
+    logic:"https://wa-aeu-sds-dev-wapi-back.azurewebsites.net/api/v1/",
+    generic:"https://wa-aeu-sds-dev-wapi-canonical.azurewebsites.net/api/v1/"
   } 
 };

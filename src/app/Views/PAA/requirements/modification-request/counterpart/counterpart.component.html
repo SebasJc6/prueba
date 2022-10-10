@@ -1,6 +1,6 @@
 <div class="container center-h center-v">
 
-  <div class="center-h center-v" style="width: 100%; margin-left:-3%;">
+  <div class="center-h center-v" style="width: 100%; margin-left:-3%;" [formGroup]="counterpartForm">
 
     <!--TITULO CONTRAPARTIDA-->
     <div class="title">
@@ -12,7 +12,7 @@
     <!--ENTRADA FUENTE DE LOS RECURSOS-->
     <div class="contTxt">
       <p class="tltData">Fuente de los recursos</p>
-      <mat-select class="contDataSelect">
+      <mat-select class="contDataSelect" formControlName="Fuente">
           <mat-option *ngFor="let state of states" [value]="state">{{state.descripcion}}</mat-option>
       </mat-select>
     </div>
@@ -20,28 +20,28 @@
     <!--ENTRADA TEXTO DESCRIPCION-->
       <div class="contTxt">
           <p class="tltData">Descripción</p>
-          <textarea #input maxlength="400" placeholder="Se requiere modificar" class="contDataArea" rows="8"></textarea>
+          <textarea #input maxlength="400" formControlName="Descripcion" placeholder="Se requiere modificar" class="contDataArea" rows="8"></textarea>
           <mat-hint align="end">{{input.value.length || 0}}/400</mat-hint>
       </div>
 
 
     <!--ENTRADA VALOR QUE AUMENTA Y DISMINUYE-->
 
-      <div style="display: flex; margin-top: -2%;" >
+      <div style="display: flex; margin-top: -2%;">
         <div class="contTxt input">
             <p class="tltData">Valor que aumenta</p>
-            <input class="contData">
+            <input class="contData" formControlName="ValorAumenta">
         </div>
         <div class="contTxt input2">
             <p class="tltData">Valor que disminuye</p>
-            <input class="contData">
+            <input class="contData" formControlName="ValorDisminuye">
         </div>
       </div>
 
     <!--BOTONES CANCELAR AÑADIR-->
     <div class="buttons">
         <button class="buton btn" mat-button mat-dialog-close>Cancelar</button>
-        <button class="buton btn" mat-button>Añadir</button>
+        <button class="buton btn" mat-button (click)="closedDialog()">Añadir</button>
     </div>
 
   </div>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, skipWhile, tap } from 'rxjs/operators'
 import { environment } from 'src/environments/environment';
-import { getAllActivitiesI, getAllAuxiliarI, getAllContacTypeI, getAllContractualActionI, getAllDependenciesI, getAllFuentesI, getAllMGAI, getAllPOSPREI, getAllProfileI, getAllReviewsAreaI, getAllSelectionModeDataI, getAllSelectionModeI, getAllUNSPSCI, getInfoToCreateReqI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
+import { getAllActivitiesI, getAllAuxiliarI, getAllContacTypeI, getAllContractualActionI, getAllDependenciesI, getAllFuentesI, getAllMGAI, getAllPOSPREI, getAllProfileI, getAllReviewsAreaI, getAllSelectionModeDataI, getAllSelectionModeI, getAllUNSPSCI, getConceptsI, getDataTemporalI, getInfoToCreateReqI, responseVerifyDataSaveI, verifyDataSaveI, verifyNumReqI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -60,8 +60,18 @@ export class PropertiesRequirementService {
     return this.http.get<getAllAuxiliarI>(dir)
   }
 
+  getAuxiliarByProject(projectId: number): Observable<getAllAuxiliarI> {
+    let dir = this.logicUrl + 'Proyecto/' + projectId +'/Auxiliares'
+    return this.http.get<getAllAuxiliarI>(dir)
+  }
+
   getFuentesElastic(value: string): Observable<getAllFuentesI> {
     let dir = this.genericUrl + 'Fuente/Elastic?cod=' + value
+    return this.http.get<getAllFuentesI>(dir)
+  }
+
+  getFuentesByProject(projectId: number): Observable<getAllFuentesI> {
+    let dir = this.logicUrl + 'Proyecto/' + projectId +'/FuentesComplete'
     return this.http.get<getAllFuentesI>(dir)
   }
 
@@ -89,14 +99,23 @@ export class PropertiesRequirementService {
     let dir = this.logicUrl + 'AreaRevision'
     return this.http.get<getAllReviewsAreaI>(dir)
   }
-  // getAllContractualAction(){
 
-  // }
+  getAllConcepts(): Observable<getConceptsI> {
+    let dir = this.logicUrl + 'AreaRevision/Conceptos'
+    return this.http.get<getConceptsI>(dir)
+  }
 
-  // getDataDependencies(){
-  //   return this.http.get('https://w-generic-back.azurewebsites.net/api/v1/Dependencia')
-  //   .pipe(
-  //     map((response:[]) => response.map(item => item['codigo']))
-  //   )
-  // }
+  getAllDataTemporal(projectId: number, requestId: number, reqTempId: number): Observable<getDataTemporalI> {
+    let dir = this.logicUrl + 'Solicitud/' + requestId + '/Proyecto/' + projectId + '/Temporal/' + reqTempId
+    return this.http.get<getDataTemporalI>(dir)
+  }
+
+  verifyNumReq(projectId: number, numReq: number): Observable<verifyNumReqI> {
+    let dir = this.logicUrl + 'Requerimiento/Verify/' + numReq + '?ProyectId=' + projectId
+    return this.http.get<verifyNumReqI>(dir)
+  }
+  postVerifyDataSaveI(form : verifyDataSaveI): Observable<responseVerifyDataSaveI> {  
+    let dir = this.logicUrl + 'Requerimiento/Verify'
+    return this.http.post<responseVerifyDataSaveI>(dir, form)
+  }
 }

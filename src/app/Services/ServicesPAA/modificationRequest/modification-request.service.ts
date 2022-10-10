@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
-import { filterModificationRequestI, getModificationRequestByRequesI, getModificationRequestI, modificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
+import { filterModificationRequestI, getModificationRequestByRequesI, getModificationRequestI, modificationRequestI, postModificationRequestI, postModificRequestCountersI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -50,5 +50,19 @@ export class ModificationRequestService {
     return this.http.get<getModificationRequestByRequesI>(dir);
   }
 
+  postModificationRequest(dataSave: postModificationRequestI): Observable<any> {
+    let dir = `${this.Url}SolicitudMod/Guardar`;
+    return this.http.post(dir, dataSave);
+  }
+
+  putModificationRequest(dataSave: postModificationRequestI): Observable<any> {
+    let dir = `${this.Url}SolicitudMod/Guardar`;
+    return this.http.put(dir, dataSave);
+  }
+
+  importFile(body: any, file: FormData): Observable<any> {
+    let dir = `${this.Url}/SolicitudMod/ImportFile?ProjectId=${body.ProjectId}&Observacion=${body.Observacion}`;
+    return this.http.post(dir, file);
+  }
 
 }

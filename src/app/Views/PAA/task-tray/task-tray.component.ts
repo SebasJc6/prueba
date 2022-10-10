@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { filterTaskTrayI, itemsTaskTrayI } from 'src/app/Models/ModelsPAA/task-tray/task-tray';
 import { TaskTrayService } from 'src/app/Services/ServicesPAA/task-tray/task-tray.service';
 import { AlertsPopUpComponent } from 'src/app/Templates/alerts-pop-up/alerts-pop-up.component';
@@ -23,7 +24,10 @@ export interface AlertData {
 })
 export class TaskTrayComponent implements OnInit {
   
-  constructor(private snackBar: MatSnackBar, public dialog: MatDialog, private taskTrayService: TaskTrayService) { }
+  constructor(private snackBar: MatSnackBar, 
+    public dialog: MatDialog, 
+    private taskTrayService: TaskTrayService,
+    public router: Router,) { }
 
   //INFORMACION PARA LA TABLA CLASIFICACION PRESUPUESTAL
   displayedColumns: string[] = ['fecha', 'codProject', 'numRequeriment', 'cantAjust', 'requeriment'];
@@ -73,6 +77,7 @@ export class TaskTrayComponent implements OnInit {
     this.filterTaskTray.ascending = this.filterForm.get('ascending')?.value || false;
 
     this.taskTrayService.getTaskTray(filterTaskTray).subscribe(request => {      
+      console.log('rrequest',request)
       this.dataSource = request.data.items;
       this.numberPage = request.data.page;
       this.numberPages = request.data.pages;
@@ -176,5 +181,9 @@ export class TaskTrayComponent implements OnInit {
   //      this.value = result;
   //    });
   // }
+
+  propertiesRequirement(numReq: number,projectId:number,solId:number) {
+    this.router.navigate(['/PAA/PropiedadesRequerimiento/' + projectId + '/'+solId+'/' + numReq])
+  }
 
 }

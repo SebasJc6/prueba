@@ -90,7 +90,7 @@ export interface getAllAuxiliarDataI {
 }
 
 //fuentes
-export interface getAllFuentesI{
+export interface getAllFuentesI {
     status: number,
     message: string,
     title: string,
@@ -107,7 +107,7 @@ export interface getAllFuentesDataI {
 }
 
 //Actividades
-export interface getAllActivitiesI{
+export interface getAllActivitiesI {
     status: number,
     message: string,
     title: string,
@@ -120,7 +120,7 @@ export interface getAllActivitiesDataI {
 }
 
 //MGA
-export interface getAllMGAI{
+export interface getAllMGAI {
     status: number,
     message: string,
     title: string,
@@ -133,7 +133,7 @@ export interface getAllMGADataI {
 }
 
 //POSPRE
-export interface getAllPOSPREI{
+export interface getAllPOSPREI {
     status: number,
     message: string,
     title: string,
@@ -146,7 +146,7 @@ export interface getAllPOSPREDataI {
 }
 
 //UNSPSC
-export interface getAllUNSPSCI{
+export interface getAllUNSPSCI {
     status: number,
     message: string,
     title: string,
@@ -159,7 +159,7 @@ export interface getAllUNSPSCDataI {
 }
 
 //AreaRevision
-export interface getAllReviewsAreaI{
+export interface getAllReviewsAreaI {
     status: number,
     message: string,
     title: string,
@@ -170,30 +170,39 @@ export interface getAllReviewsAreaDataI {
     nombre: string,
 }
 
+export interface getConceptsI {
+    status: number,
+    message: string,
+    title: string,
+    data: any
+}
+
 //datatables
-export interface dataSourceClasificacionesI{
-    MGA:getAllMGADataI,
-    POSPRE:getAllPOSPREDataI,
-    actividad:getAllActivitiesDataI,
-    auxiliar:getAllAuxiliarDataI,
-    dataFuente:getAllFuentesDataI,
+export interface dataSourceClasificacionesI {
+    MGA: getAllMGADataI,
+    POSPRE: getAllPOSPREDataI,
+    actividad: getAllActivitiesDataI,
+    auxiliar: getAllAuxiliarDataI,
+    dataFuente: getAllFuentesDataI,
     mes: string,
-    vigenciaRecu:number
+    vigenciaRecu: number
 }
-export interface dataSourceRevisionesI{
-    revisionID:number;
-    fecha:string,
-    usuario:string,
-    area:getAllReviewsAreaDataI,
-    concepto:string,
-    observacion:string,
-    revision:boolean
+export interface dataSourceRevisionesI {
+    revisionID: number;
+    fecha: string,
+    usuario: string,
+    area: getAllReviewsAreaDataI,
+    concepto: string,
+    observacion: string,
+    revision: boolean
 }
 
 
 
-//varify
-export interface budgetStringsI{
+
+
+//verify
+export interface budgetStringsI {
     proj_ID: number,
     requerimiento_ID: number,
     mes: number,
@@ -216,4 +225,150 @@ export interface budgetStringsI{
     compromisos: number,
     apropiacionDefinitiva: number,
     giros: number
+}
+export interface verifyNumReqI {
+    status: number,
+    message: string,
+    title: string,
+    data: boolean
+}
+
+export interface verifyDataSaveI {
+    proj_ID: number,
+    requerimiento: requerimientoI,
+    cadenasPresupuestales: any[],
+    codsUNSPSC: any[],
+    apropiacionInicial: {}
+}
+export interface verifyDatacompleteI {
+    infoBasica: any
+    clasificaciones: any
+    codigos: any
+}
+export interface requerimientoI {
+    req_ID: number,
+    numeroRequerimiento: number,
+    numeroModificacion: number,
+    dependenciaDestino_Id: number,
+    mesEstimadoInicioSeleccion: number,
+    mesEstimadoPresentacion: number,
+    mesEstmadoInicioEjecucion: number,
+    duracionDias: number,
+    duracionMes: number,
+    modalidadSeleccion_Id: number,
+    actuacion_Id: number,
+    numeroDeContrato: string,
+    tipoContrato_Id: number,
+    perfil_Id: number,
+    honorarios: number,
+    cantidadDeContratos: number,
+    descripcion: string,
+    version: number
+}
+export interface responseVerifyDataSaveI {
+    status: number,
+    message: string,
+    title: string,
+    data: {
+        Proj_ID: string[]
+    }
+}
+
+//data temporal
+export interface getDataTemporalI {
+    proyecto: getInfoToCreateReqDataI,
+    requerimiento: {
+        project_ID: number,
+        req_ID: number,
+        requerimiento_ID: number,
+        solicitud_Mod_ID: number,
+        numeroRequerimiento: number,
+        numeroModificacion: number,
+        dependenciaDestin: {
+            depDest_ID: number,
+            codigo: string
+        },
+        mesEstimadoInicioSeleccion: number,
+        mesEstimadoPresentacion: number,
+        mesEstmadoInicioEjecucion: number,
+        duracionDias: number,
+        duracionMes: number,
+        modalidadSeleccion: {
+            modSel_ID: number,
+            codigo: string
+        },
+        actuacion: {
+            actuacion_ID: number,
+            tipo: string
+        },
+        numeroDeContrato: string,
+        tipoContrato: {
+            tipoCont_ID: number,
+            nombre: string
+        },
+        perfil: {
+            perfil_ID: number,
+            nombre: string
+        },
+        honorarios: number,
+        cantidadDeContratos: number,
+        descripcion: string,
+        version: number,
+        estado: string,
+    },
+    cadenasPresupuestalesTemporal: [
+        {
+            project_ID: number,
+            requerimiento_ID: number,
+            mes: number,
+            anioVigRecursos: number,
+            auxiliar: {
+                aux_ID: number,
+                codigo: number
+            },
+            fuente: {
+                fuente_ID: number,
+                codigoFuente: number,
+                detalleFuente: string,
+                f_MSPS: number
+            },
+            actividad: {
+                activ_ID: number,
+                codigo: number,
+                meta: string
+            },
+            mga: {
+                mgA_ID: number,
+                codigo: number
+            },
+            pospre: {
+                pospre_ID: number,
+                codigo: number
+            },
+            apropiacionDisponible: number,
+            aumento: number,
+            disminucion: number,
+            compromisos: number,
+            apropiacionDefinitiva: number,
+            giros: number
+        },
+    ],
+    apropiacionInicial: {
+        apropIni_ID: number,
+        añoV0: number,
+        valor0: number,
+        añoV1: number,
+        valor1: number,
+        añoV2: number,
+        valor2: number,
+        valorTotal: number
+    },
+    codsUNSPSC: [
+        {
+            unspsC_ID: number,
+            codigoUNSPSC: number,
+            descripcion: string
+        },
+    ]
+
 }

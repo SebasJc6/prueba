@@ -21,6 +21,7 @@ export class ModificationSummaryComponent implements OnInit {
     private serviceModRequest: ModificationRequestService) { }
   
     dataProjectID: string = '';
+    dataSolicitudModID: string = '';
 
     //Valores para guardar la informacion del proyecto para mostrar en la miga de pan
     codProject: number = 0;
@@ -69,7 +70,8 @@ export class ModificationSummaryComponent implements OnInit {
     this.pageSummary.page = "1";
     this.pageSummary.take = 20;
 
-    this.dataProjectID = this.activeRoute.snapshot.paramMap.get('id') || '';
+    this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
+    this.dataSolicitudModID = this.activeRoute.snapshot.paramMap.get('idSol') || '';
     this.getSources(this.dataProjectID);
     this.getSummary(31,this.selectedValueSource, this.pageSummary);
     this.getModificationRequet(+this.dataProjectID);
@@ -147,7 +149,7 @@ export class ModificationSummaryComponent implements OnInit {
   }
 
   regresar(){
-    this.router.navigate([`/PAA/SolicitudModificacion/${this.dataProjectID}`])
+    this.router.navigate([`/PAA/SolicitudModificacion/${this.dataProjectID}/${this.dataSolicitudModID}`])
   }
 
 }

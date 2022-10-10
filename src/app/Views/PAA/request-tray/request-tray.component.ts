@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 import { filterRequestTrayI, itemsRequestTrayI } from 'src/app/Models/ModelsPAA/request-tray/request-tray';
 import { RequestTrayService } from 'src/app/Services/ServicesPAA/request-tray/request-tray.service';
 
@@ -11,7 +12,8 @@ import { RequestTrayService } from 'src/app/Services/ServicesPAA/request-tray/re
 })
 export class RequestTrayComponent implements OnInit {
 
-  constructor(private requestTrayService: RequestTrayService) { }
+  constructor(private requestTrayService: RequestTrayService,
+    public router: Router,) { }
 
   //INFORMACION PARA LA TABLA CLASIFICACION PRESUPUESTAL
   displayedColumns: string[] = ['solicitud', 'vigencia', 'fPresentacion', 'codigoP', 'proyecto', 'version', 'solicitante', 'estado', 'fAprobacion', 'accion'];
@@ -44,6 +46,7 @@ export class RequestTrayComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   numberPages: number = 0;
   numberPage: number = 0;
+  dataProjectID: number = 0;
 
   estadoFilter: string[] = ['Todos', 'Aprobada', 'En Revisión', 'Rechazada', 'En Ajuste', 'En Modificación']
   viewFilter: boolean = true;
@@ -75,15 +78,24 @@ export class RequestTrayComponent implements OnInit {
     this.filterRequestTray.columna = this.filterForm.get('columna')?.value || '';
     this.filterRequestTray.ascending = this.filterForm.get('ascending')?.value || false;
 
+    //console.log(filterRequestTray);
+    
     this.requestTrayService.getRequestTray(filterRequestTray).subscribe(request => {
+      //console.log('solicitud',request)
       this.dataSource = request.data.items;
       this.numberPage = request.data.page;
       this.numberPages = request.data.pages;
+      
       this.paginationForm.setValue({
         take: filterRequestTray.take,
         page: filterRequestTray.page
       });
     });
+  }
+
+  modificatioRequest(ProjectId : number, requestId: number){
+    this.dataProjectID = ProjectId;
+    this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + requestId ])
   }
 
   //FILTRO
