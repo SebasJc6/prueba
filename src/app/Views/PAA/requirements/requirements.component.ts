@@ -184,11 +184,11 @@ export class RequirementsComponent implements OnInit {
     this.router.navigate(['/PAA/Adquisiciones'])
   }
   propertiesRequirement(requirementId: number) {
-    this.router.navigate(['/PAA/PropiedadesRequerimiento/' + this.dataProjectID + '/0/' + requirementId])
+    this.router.navigate(['/PAA/PropiedadesRequerimiento/' + this.dataProjectID + '/0/' + requirementId+ '/Vista'])
   }
 
-  modificatioRecuest() {
-    this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/0'])
+  modificatioRequest() {
+    this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/0' ])
   }
 
 }

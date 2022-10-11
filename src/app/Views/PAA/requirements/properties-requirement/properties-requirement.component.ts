@@ -28,6 +28,7 @@ export class PropertiesRequirementComponent implements OnInit {
   codProject: number = 0;
   nomProject: string = '';
   dependenciaRec: string = '';
+  typePage: string = '';
   getInfoToProject = {} as getInfoToCreateReqDataI;
   allDependencies: any
   allSelectionMode: any
@@ -78,6 +79,7 @@ export class PropertiesRequirementComponent implements OnInit {
   errorTipContrato: boolean = false;
   errorPerfil: boolean = false;
   errorValorMes: boolean = false;
+  errorRangeSararial: boolean = false;
   errorCantContrato: boolean = false;
   errorDescripcionCont: boolean = false;
   errorMes: boolean = false;
@@ -91,30 +93,33 @@ export class PropertiesRequirementComponent implements OnInit {
   errorArea: boolean = false;
   errorConcepto: boolean = false;
   errorObservaciones: boolean = false;
-
+  msjVerifyRangeSararial: string = '';
+  formEditRequirement: boolean = false;
   //variables localstorage
   dataTableCodigos = new Array();
   dataTableCodigo: any;
   dataTableClasificaciones = new Array();
+  cadenasPresupuestalesTemporal = new Array();
+  codigosTemporal = new Array();
   dataTableClasificacion: any;
   dataTableRevisiones = new Array();
-  dataTableRevision : any;
+  dataTableRevision: any;
   dataClasificacion = new Array()
-  dataCodigos= new Array()
+  dataCodigos = new Array()
   dependencieDes = new FormControl('');
-
+  idPerfil = 0
   formVerify = {} as verifyDataSaveI;
   formVerifyComplete = {} as verifyDatacompleteI;
   cantMeses: any[] = [
-    { idMes: '01', nameMes: 'Enero' },
-    { idMes: '02', nameMes: 'Febrero' },
-    { idMes: '03', nameMes: 'Marzo' },
-    { idMes: '04', nameMes: 'Abril' },
-    { idMes: '05', nameMes: 'Mayo' },
-    { idMes: '06', nameMes: 'Junio' },
-    { idMes: '07', nameMes: 'Julio' },
-    { idMes: '08', nameMes: 'Agosto' },
-    { idMes: '09', nameMes: 'Septiembre' },
+    { idMes: '1', nameMes: 'Enero' },
+    { idMes: '2', nameMes: 'Febrero' },
+    { idMes: '3', nameMes: 'Marzo' },
+    { idMes: '4', nameMes: 'Abril' },
+    { idMes: '5', nameMes: 'Mayo' },
+    { idMes: '6', nameMes: 'Junio' },
+    { idMes: '7', nameMes: 'Julio' },
+    { idMes: '8', nameMes: 'Agosto' },
+    { idMes: '9', nameMes: 'Septiembre' },
     { idMes: '10', nameMes: 'Octubre' },
     { idMes: '11', nameMes: 'Noviembre' },
     { idMes: '12', nameMes: 'Diciembre' },
@@ -200,12 +205,15 @@ export class PropertiesRequirementComponent implements OnInit {
 
   ngAfterViewInit() {
     this.dataSolicitudID = this.activeRoute.snapshot.paramMap.get('idSol') || '';
-    this.dataRequirementNum = this.activeRoute.snapshot.paramMap.get('numReq') || '';
+    this.dataRequirementID = this.activeRoute.snapshot.paramMap.get('idReq') || '';
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
+    this.typePage = this.activeRoute.snapshot.paramMap.get('type') || '';
     ////console.log(+this.dataProjectID, +this.dataRequirementID)
     this.getInfoToCreateReq(+this.dataProjectID);
-    if (this.dataSolicitudID != '0' && this.dataRequirementNum != '0') {
-      this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementNum);
+    if (this.typePage != 'Nuevo') {
+      this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
+    } else {
+      this.dataRequirementNum = this.dataRequirementID;
     }
   }
   uploadDropdownLists() {
@@ -223,6 +231,7 @@ export class PropertiesRequirementComponent implements OnInit {
     this.getAllReviewsArea();
     this.getAllConcepts();
     this.verifyNumReq();
+    this.verifyRangeSararial();
   }
 
   ngOnInit(): void {
@@ -401,21 +410,6 @@ export class PropertiesRequirementComponent implements OnInit {
         ftnMSPS: ''
       })
     }
-
-    // this.proRequirementeForm.controls.clasPresFinaForm.controls.dataFuente.valueChanges.pipe(
-    //   // this.clasPresFinaForm.controls.dataFuente.valueChanges.pipe(
-    //   distinctUntilChanged()
-    // ).subscribe(val => {
-    //   this.serviceProRequirement.getFuentesElastic(val || '').subscribe((dataFuentes) => {
-    //     this.listFuentes = dataFuentes.data
-    //     // //console.log(' this.listFuentes', this.listFuentes)
-    //   }, (err) => {
-    //     //console.log('err', err)
-    //     this.proRequirementeForm.controls.clasPresFinaForm.patchValue({
-    //       ftnMSPS: ''
-    //     })
-    //   })
-    // }) || '';
   }
   getAllActivities() {
     this.serviceProRequirement.getAllActivities(+this.dataProjectID).subscribe((dataActi) => {
@@ -482,33 +476,107 @@ export class PropertiesRequirementComponent implements OnInit {
       })
     })
   }
+  verifyRangeSararial() {
+    this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].valueChanges.pipe(
+      distinctUntilChanged()
+    ).subscribe(val => {
+      this.idPerfil = val;
+      console.log('idPerfil', this.idPerfil);
+    }
+    )
+    this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].valueChanges.pipe(
+      distinctUntilChanged()
+    ).subscribe(val => {
+      this.serviceProRequirement.verifyRangeSararial(this.idPerfil, val).subscribe(data => {
+        if (data.data == false) {
+          this.errorRangeSararial = true;
+          this.msjVerifyRangeSararial = data.message
+        } else {
+          this.errorRangeSararial = false;
+          this.msjVerifyRangeSararial = data.message
+        }
+      })
+    })
+  }
+
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number) {
     this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
-      //console.log('dataTemporal', dataTemp)
-      this.proRequirementeForm.controls.infoBasicaForm.setValue({
-        numeroReq: dataTemp.requerimiento.numeroRequerimiento,
-        dependenciaDes: dataTemp.requerimiento.dependenciaDestin.codigo,
-        mesSeleccion: dataTemp.requerimiento.mesEstimadoInicioSeleccion,
-        mesOfertas: dataTemp.requerimiento.mesEstimadoPresentacion,
-        mesContrato: dataTemp.requerimiento.mesEstmadoInicioEjecucion,
-        duracionMes: dataTemp.requerimiento.duracionMes,
-        duracionDias: dataTemp.requerimiento.duracionDias,
-        modalidadSel: dataTemp.requerimiento.modalidadSeleccion.modSel_ID,
-        actuacionCont: dataTemp.requerimiento.actuacion.actuacion_ID,
-        numeroCont: dataTemp.requerimiento.numeroDeContrato || '',
-        tipoCont: dataTemp.requerimiento.tipoContrato.tipoCont_ID,
-        perfil: dataTemp.requerimiento.perfil.perfil_ID,
-        valorHonMes: dataTemp.requerimiento.honorarios.toString() || '',
-        cantidadCont: dataTemp.requerimiento.cantidadDeContratos || '',
-        descripcion: dataTemp.requerimiento.descripcion,
-        codigoPro: dataTemp.proyecto.codigoProyecto,
-        dependenciaOri: dataTemp.proyecto.dependenciaOrigen
-      })
+      this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
+      console.log('dataTemporal', dataTemp)
+      if (dataTemp != null) {
+        this.proRequirementeForm.controls.infoBasicaForm.setValue({
+          numeroReq: dataTemp.requerimiento.numeroRequerimiento,
+          dependenciaDes: dataTemp.requerimiento.dependenciaDestino,
+          mesSeleccion: dataTemp.requerimiento.mesEstimadoInicioSeleccion.toString(),
+          // mesSeleccion:'1',
+          mesOfertas: dataTemp.requerimiento.mesEstimadoPresentacion.toString(),
+          mesContrato: dataTemp.requerimiento.mesEstmadoInicioEjecucion.toString(),
+          duracionMes: dataTemp.requerimiento.duracionMes,
+          duracionDias: dataTemp.requerimiento.duracionDias,
+          modalidadSel: dataTemp.requerimiento.modalidadSeleccion,
+          actuacionCont: dataTemp.requerimiento.actuacion.actuacion_ID,
+          numeroCont: dataTemp.requerimiento.numeroDeContrato || '',
+          tipoCont: dataTemp.requerimiento.tipoContrato.tipoContrato_ID,
+          perfil: dataTemp.requerimiento.perfil.perfil_ID,
+          valorHonMes: dataTemp.requerimiento.honorarios.toString() || '',
+          cantidadCont: dataTemp.requerimiento.cantidadDeContratos || '',
+          descripcion: dataTemp.requerimiento.descripcion,
+          codigoPro: dataTemp.proyecto.codigoProyecto,
+          dependenciaOri: dataTemp.proyecto.dependenciaOrigen
+        })
+        this.onSelectionChange(dataTemp.requerimiento.actuacion.actuacion_ID, 'actContractual')
+        this.errorNumReq = false
+        this.errorVerifyNumReq = false
+        this.errorDependencia = false
+        this.errorMesSeleccion = false
+        this.errorMesOferta = false
+        this.errorMesContrato = false
+        this.errorDuratioMes = false
+        this.errorMesSeleccion = false
+
+        this.formEditRequirement = true
+        this.dependencieId = dataTemp.requerimiento.dependenciaDestino.dependencia_ID.toString()
+        this.selcModeId = dataTemp.requerimiento.modalidadSeleccion.modalidad_Sel_ID.toString()
+
+        this.cadenasPresupuestalesTemporal = dataTemp.cadenasPresupuestalesTemporal
+        var stringToStoreCla = JSON.stringify(this.cadenasPresupuestalesTemporal);
+        ProChartStorage.setItem("dataTableClacificaciones", stringToStoreCla);
+        var fromStorageCla = ProChartStorage.getItem("dataTableClacificaciones");
+        this.reloadDataTbl(fromStorageCla, 'clasificaciones');
+
+        this.codigosTemporal = dataTemp.codsUNSPSC
+        var stringToStoreCod = JSON.stringify(this.codigosTemporal);
+        ProChartStorage.setItem("dataTableCodigos", stringToStoreCod);
+        var fromStorageCod = ProChartStorage.getItem("dataTableCodigos");
+        this.reloadDataTbl(fromStorageCod, 'codigos');
+
+        this.proRequirementeForm.controls.initialAppro.setValue({
+          apropIni_ID: dataTemp.apropiacionInicial.apropIni_ID,
+          vigencia0: dataTemp.apropiacionInicial.anioV0,
+          valor0: dataTemp.apropiacionInicial.valor0,
+          vigencia1: dataTemp.apropiacionInicial.anioV1,
+          valor1: dataTemp.apropiacionInicial.valor1,
+          vigencia2: dataTemp.apropiacionInicial.anioV2,
+          valor2: dataTemp.apropiacionInicial.valor2,
+          valorTotal: dataTemp.apropiacionInicial.valorTotal
+        })
+      } else {
+
+      }
+
 
     })
   }
   cancel() {
-    this.router.navigate(['/PAA/Requerimientos/' + this.dataProjectID])
+    if (this.typePage == 'Nuevo') {
+      this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+    } else if (this.typePage == 'Editar') {
+      this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+    } else if (this.typePage == 'Revision') {
+      this.router.navigate(['/PAA/BandejaDeTareas/'])
+    } else if (this.typePage == 'Vista') {
+      this.router.navigate(['/PAA/Requerimientos/' + this.dataProjectID])
+    }
   }
 
   saveForm() {
@@ -545,34 +613,45 @@ export class PropertiesRequirementComponent implements OnInit {
       this.errorDescripcionCont = true;
     } else {
 
-console.log('this.proRequirementeForm.value',this.proRequirementeForm.value)
+      console.log('this.proRequirementeForm.value', this.proRequirementeForm.value)
       this.formVerifyComplete['infoBasica'] = this.proRequirementeForm.controls.infoBasicaForm.value
-      this.formVerifyComplete['clasificaciones'] = this.dataTableClasificaciones
-      this.formVerifyComplete['codigos'] = this.dataTableCodigos
 
-      this.dataClasificacion = this.dataTableClasificaciones
+      if (this.formEditRequirement = true) {
+        this.dataCodigos = this.codigosTemporal
+        this.dataClasificacion = this.cadenasPresupuestalesTemporal
+        this.formVerifyComplete['clasificaciones'] = this.cadenasPresupuestalesTemporal
+        this.formVerifyComplete['codigos'] = this.codigosTemporal
+      } else {
+        this.dataCodigos = this.dataTableCodigos
+        this.dataClasificacion = this.dataTableClasificaciones
+        this.formVerifyComplete['clasificaciones'] = this.dataTableClasificaciones
+        this.formVerifyComplete['codigos'] = this.dataTableCodigos
+      }
+
+
       this.dataClasificacion.forEach((item: any) => {
-        item.anioVigRecursos = item.vigenciaRecu
+        // if(this.formEditRequirement = true){
+
+        // }
+        item.anioVigRecursos = item.anioVigRecursos
         item.proj_ID = +this.dataProjectID
-        item.mgA_ID = item.MGA.mgA_ID
-        item.pospre_ID = item.POSPRE.pospre_ID
-        item.activ_ID = item.actividad.actividad_ID
-        item.auxiliar_ID = item.auxiliar
-        item.fuente_ID = item.dataFuente.fuente_ID
+        item.mgA_ID = item.mga.mgA_ID
+        item.pospre_ID = item.pospre.pospre_ID
+        item.actividad_ID = item.actividad.actividad_ID
+        item.auxiliar_ID = item.auxiliar.auxiliar_ID
+        item.fuente_ID = item.fuente.fuente_ID
         delete item.MGA
         delete item.POSPRE
         delete item.actividad
         delete item.auxiliar
         delete item.dataFuente
         delete item.uuid
-        delete item.vigenciaRecu
       })
       this.dataCodigos.forEach((item: any) => {
         item.unspsC_ID = item.unspsC_ID
         delete item.descripcion
         delete item.codigoUNSPSC
       })
-      this.dataCodigos = this.dataTableCodigos
 
       let requerimientoForm = {} as requerimientoI
       requerimientoForm.req_ID = 0
@@ -602,10 +681,11 @@ console.log('this.proRequirementeForm.value',this.proRequirementeForm.value)
       requerimientoForm.version = 0
       this.formVerify.requerimiento = requerimientoForm
       this.formVerify.proj_ID = +this.dataProjectID
+
       this.formVerify.cadenasPresupuestales = this.dataClasificacion
       this.formVerify.codsUNSPSC = this.dataCodigos
       this.formVerify.apropiacionInicial = this.proRequirementeForm.controls.initialAppro.value
-      //console.log('this.formVerify', this.formVerify)
+      console.log('this.formVerify', this.formVerify)
       this.serviceProRequirement.postVerifyDataSaveI(this.formVerify).subscribe(dataResponse => {
         //console.log('dataResponse', dataResponse)
         if (dataResponse.status == 200) {
@@ -621,8 +701,12 @@ console.log('this.proRequirementeForm.value',this.proRequirementeForm.value)
           this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
           this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
         } else {
+          console.log('dataResponse', dataResponse)
           this.openSnackBar('Error', dataResponse.message, 'error');
         }
+      }, err => {
+        console.log('dataResponse', err)
+        this.openSnackBar('Error', err.message, 'error');
       })
     }
 

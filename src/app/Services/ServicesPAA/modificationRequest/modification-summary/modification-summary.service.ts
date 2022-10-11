@@ -13,8 +13,8 @@ export class ModificationSummaryService {
   
   constructor(private http: HttpClient) { }
 
-  getSourcesRequest(idProject: string): Observable<getSourcesI>{
-    let dir = `${this.Url}Proyecto/${idProject}/FuentesComplete`;
+  getSourcesRequest(id_request: string): Observable<getSourcesI>{
+    let dir = `${this.Url}Solicitud/${id_request}/Fuentes`;
     return this.http.get<getSourcesI>(dir);
   }
 

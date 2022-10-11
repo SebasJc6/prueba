@@ -72,14 +72,14 @@ export class ModificationSummaryComponent implements OnInit {
 
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
     this.dataSolicitudModID = this.activeRoute.snapshot.paramMap.get('idSol') || '';
-    this.getSources(this.dataProjectID);
-    this.getSummary(31,this.selectedValueSource, this.pageSummary);
+    this.getSources(this.dataSolicitudModID);
+    this.getSummary(Number(this.dataSolicitudModID),this.selectedValueSource, this.pageSummary);
     this.getModificationRequet(+this.dataProjectID);
   }
 
   //Función que obtiene las fuentes para la lista desplegable
-  getSources(dataProjectID: string) {
-    this.summaryService.getSourcesRequest(dataProjectID).subscribe(request => {
+  getSources(dataSolicitudModID: string) {
+    this.summaryService.getSourcesRequest(dataSolicitudModID).subscribe(request => {
       this.states = request.data;
     });
   }
@@ -109,14 +109,14 @@ export class ModificationSummaryComponent implements OnInit {
 
   //Metodo que ejecuta la lista desplegable Fuente de los recursos
   selectSource(){
-    this.getSummary(31,this.selectedValueSource, this.pageSummary);
+    this.getSummary(Number(this.dataSolicitudModID),this.selectedValueSource, this.pageSummary);
   }
 
   //PAGINACIÓN
   getPagination() {
     this.pageSummary.page = this.paginationForm.get('page')?.value;
     this.pageSummary.take = this.paginationForm.get('take')?.value;
-    this.getSummary(31,this.selectedValueSource, this.pageSummary);
+    this.getSummary(Number(this.dataSolicitudModID),this.selectedValueSource, this.pageSummary);
   }
 
   nextPage() {

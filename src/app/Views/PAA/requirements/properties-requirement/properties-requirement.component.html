@@ -186,6 +186,9 @@
                                 <input class="contData" formControlName="valorHonMes"
                                     value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}"
                                     [ngClass]="{'contDataDisabled' : disabledAdicion == true }">
+                                    <mat-error *ngIf="errorRangeSararial">
+                                         <strong>{{msjVerifyRangeSararial}}</strong>
+                                    </mat-error>
                             </div>
                             <div class="contTxt label1">
                                 <p class="tltData">Cantidad de contratos</p>
@@ -317,7 +320,7 @@
                                     (selectionChange)="onSelectionChange($event, 'actividad')"
                                     [displayWith]="displayFnAct">
                                     <mat-option [value]="item" *ngFor="let item of listActivities">
-                                        {{item.codigoAct}}
+                                        {{item.codigo}}
                                     </mat-option>
                                 </mat-select>
                                 <mat-error *ngIf="errorActi">
@@ -383,7 +386,7 @@
                             <ng-container matColumnDef="vigenciaRecursos">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="vig">
                                     Vigencia de los Recursos
-                                <td mat-cell *matCellDef="let element">{{ element.vigenciaRecu}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.anioVigRecursos}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="auxiliar">
@@ -395,13 +398,13 @@
                             <ng-container matColumnDef="detalleFuente">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="det">
                                     Detalle Fuente
-                                <td mat-cell *matCellDef="let element">{{ element.dataFuente.descripcion}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.fuente.descripcion}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="actividad">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="act">
                                     Actividad
-                                <td mat-cell *matCellDef="let element">{{ element.actividad.codigoAct}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.actividad.codigo}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="meta">
@@ -413,25 +416,25 @@
                             <ng-container matColumnDef="fuente">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="fue">
                                     Fuente
-                                <td mat-cell *matCellDef="let element">{{ element.dataFuente.codigoFuente}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.fuente.codigoFuente}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="fuenteMSPS">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="msp">
                                     Fuente MSPS
-                                <td mat-cell *matCellDef="let element">{{ element.dataFuente.fuenteMSPS}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.fuente.fuenteMSPS}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="MGA">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="mga">
                                     MGA
-                                <td mat-cell *matCellDef="let element">{{ element.MGA.codigoMGA}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.mga.codigoMGA}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="pospre">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="pos">
                                     POSPRE
-                                <td mat-cell *matCellDef="let element">{{ element.POSPRE.codPOSPRE}}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.pospre.codigo}}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="apropiacionDisponible">

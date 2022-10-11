@@ -115,7 +115,7 @@ export interface getAllActivitiesI {
 }
 export interface getAllActivitiesDataI {
     actividad_ID: number,
-    codigoAct: string,
+    codigo: string,
     metaODS: string,
 }
 
@@ -226,7 +226,7 @@ export interface budgetStringsI {
     apropiacionDefinitiva: number,
     giros: number
 }
-export interface verifyNumReqI {
+export interface verifyReqI {
     status: number,
     message: string,
     title: string,
@@ -284,8 +284,8 @@ export interface getDataTemporalI {
         solicitud_Mod_ID: number,
         numeroRequerimiento: number,
         numeroModificacion: number,
-        dependenciaDestin: {
-            depDest_ID: number,
+        dependenciaDestino: {
+            dependencia_ID: number,
             codigo: string
         },
         mesEstimadoInicioSeleccion: number,
@@ -294,7 +294,7 @@ export interface getDataTemporalI {
         duracionDias: number,
         duracionMes: number,
         modalidadSeleccion: {
-            modSel_ID: number,
+            modalidad_Sel_ID: number,
             codigo: string
         },
         actuacion: {
@@ -303,7 +303,7 @@ export interface getDataTemporalI {
         },
         numeroDeContrato: string,
         tipoContrato: {
-            tipoCont_ID: number,
+            tipoContrato_ID: number,
             nombre: string
         },
         perfil: {
@@ -333,9 +333,9 @@ export interface getDataTemporalI {
                 f_MSPS: number
             },
             actividad: {
-                activ_ID: number,
+                actividad_ID: number,
                 codigo: number,
-                meta: string
+                metaODS: string
             },
             mga: {
                 mgA_ID: number,
@@ -355,11 +355,11 @@ export interface getDataTemporalI {
     ],
     apropiacionInicial: {
         apropIni_ID: number,
-        añoV0: number,
+        anioV0: number,
         valor0: number,
-        añoV1: number,
+        anioV1: number,
         valor1: number,
-        añoV2: number,
+        anioV2: number,
         valor2: number,
         valorTotal: number
     },

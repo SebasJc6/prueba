@@ -50,15 +50,32 @@ export class ModificationRequestService {
     return this.http.get<getModificationRequestByRequesI>(dir);
   }
 
-  postModificationRequest(dataSave: postModificationRequestI): Observable<any> {
+  //Funcionalidad de guardar
+  postModificationRequestSave(dataSave: postModificationRequestI): Observable<any> {
     let dir = `${this.Url}SolicitudMod/Guardar`;
     return this.http.post(dir, dataSave);
   }
-
-  putModificationRequest(dataSave: postModificationRequestI): Observable<any> {
+  putModificationRequestSave(dataSave: postModificationRequestI): Observable<any> {
     let dir = `${this.Url}SolicitudMod/Guardar`;
     return this.http.put(dir, dataSave);
   }
+
+  //Funcionalidad de enviar
+  postModificationRequestSend(dataSave: postModificationRequestI): Observable<any> {
+    let dir = `${this.Url}SolicitudMod/Enviar`;
+    return this.http.post(dir, dataSave);
+  }
+  putModificationRequestSend(dataSave: postModificationRequestI): Observable<any> {
+    let dir = `${this.Url}SolicitudMod/Enviar`;
+    return this.http.put(dir, dataSave);
+  }
+  
+
+  deleteModificationRequest(idRequets: number ): Observable<any>{
+    let dir = `${this.Url}SolicitudMod/${idRequets}`;
+    return this.http.delete(dir);
+  }
+
 
   importFile(body: any, file: FormData): Observable<any> {
     let dir = `${this.Url}/SolicitudMod/ImportFile?ProjectId=${body.ProjectId}&Observacion=${body.Observacion}`;

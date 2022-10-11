@@ -93,7 +93,16 @@ export class RequestTrayComponent implements OnInit {
     });
   }
 
-  modificatioRequest(ProjectId : number, requestId: number){
+  modificatioRequest(ProjectId : number, requestId: number, Element: any){
+    let estado: number = 0;
+    if (Element.estado === 'En Modificación') {
+      estado = 1;
+    } else if(Element.estado === 'Enviado'){
+      estado = 2;
+    }
+
+    ProChartStorage.setItem(`estado${requestId}`, estado);
+
     this.dataProjectID = ProjectId;
     this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + requestId ])
   }
@@ -159,4 +168,27 @@ export class RequestTrayComponent implements OnInit {
       this.getRequestTray(this.filterRequestTray);
     }
 
+}
+
+var ProChartStorage = {
+  getItem: function (key: any) {
+    return localStorage.getItem(key);
+  },
+  setItem: function (key: any, value: any) {
+    // console.log("prochart setItem")
+    localStorage.setItem(key, value);
+  },
+  removeItem: function (key: any) {
+    return localStorage.removeItem(key);
+  },
+  clear: function () {
+    var keys = new Array();
+    for (var i = 0, len = localStorage.length; i < len; i++) {
+      var key = localStorage.key(i);
+      if (key?.indexOf("prochart") != -1 || key.indexOf("ProChart") != -1)
+        keys.push(key);
+    }
+    for (var i = 0; i < keys.length; i++)
+      localStorage.removeItem(keys[i]);
+  }
 }

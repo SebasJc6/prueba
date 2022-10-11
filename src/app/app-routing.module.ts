@@ -30,7 +30,7 @@ const routes: Routes = [
       { path: 'BandejaDeTareas', component: TaskTrayComponent },
       { path: 'BandejaDeSolicitudes', component: RequestTrayComponent },
       { path: 'Requerimientos/:data', component: RequirementsComponent },
-      { path: 'PropiedadesRequerimiento/:idPro/:idSol/:numReq', component: PropertiesRequirementComponent },
+      { path: 'PropiedadesRequerimiento/:idPro/:idSol/:idReq/:type', component: PropertiesRequirementComponent },
       { path: 'Resumen/:data', component: AbstractComponent },
       { path: 'SolicitudModificacion/:idPro/:idSol', component: ModificationRequestComponent },
       { path: 'ResumenModificacion/:idPro/:idSol',   component: ModificationSummaryComponent }

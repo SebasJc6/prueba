@@ -17,11 +17,17 @@ export class CounterpartComponent implements OnInit {
 
   constructor( public serviceCounterpar: CounterpartService,
     public dialogRef: MatDialogRef<CounterpartComponent>,
-    @Inject(MAT_DIALOG_DATA) public idProject: string,) 
+    @Inject(MAT_DIALOG_DATA) public id_request: string,) 
     { dialogRef.disableClose = true;}
+
+  dataSolicitudModID: string = '';
 
   //Arreglo que guarda la información del proyecto para mostrar en la lista desplegable
   states: CounterpartInterface[] = [];
+
+  Source = {} as CounterpartInterface;
+  SourcesGet: any[] = [];
+  ArraySources: CounterpartInterface[] = [];
 
   counterpartForm = new FormGroup({
     Fuente: new FormControl(),
@@ -35,7 +41,8 @@ export class CounterpartComponent implements OnInit {
   counterpart = {} as postModificRequestCounterpartI;
 
   ngOnInit(): void {
-    this.getCounterpartF(this.idProject);
+    this.getCounterpartF(this.id_request);
+    this.getCounterpartTemporal();
   }
 
   //Función que trae la información del proyecto de la Api
@@ -43,6 +50,43 @@ export class CounterpartComponent implements OnInit {
     this.counterpartSubscription = this.serviceCounterpar.getCounterpartFRequest(idProject).subscribe(request => {
       this.states = request.data;
     });
+  }
+
+  getCounterpartTemporal() {
+    let fromStorage = ProChartStorage.getItem(`arrayIdSources${this.id_request}`);
+    let listIdSource: string[] = [];
+    
+    
+    if (fromStorage != null) {
+      let objectsFromStorage: string[] = JSON.parse(fromStorage || '');
+      listIdSource = objectsFromStorage.filter((item, index) => {
+        return objectsFromStorage.indexOf(item) === index;
+      });
+
+      this.counterpartSubscription = this.serviceCounterpar.postFuentesGetList(listIdSource).subscribe(res => {
+        this.SourcesGet = res.data;
+        console.log(this.SourcesGet);
+        
+        
+        this.SourcesGet.map(item => {
+          this.Source.descripcion = item.descripcion;
+          this.Source.proyecto_Fuente_ID = item.fuente_ID;
+          this.Source.proyecto_ID = 0;
+  
+          this.ArraySources.push(this.Source);
+          return this.ArraySources;
+        });
+
+        this.states.concat(this.ArraySources);
+      });
+      
+      //console.log(this.ArraySources);
+      
+      
+    }
+    
+    //console.log(this.states);
+    
   }
 
   closedDialog(){
@@ -56,5 +100,28 @@ export class CounterpartComponent implements OnInit {
 
   ngOnDestroy() {
     this.counterpartSubscription.unsubscribe();
+  }
+}
+
+var ProChartStorage = {
+  getItem: function (key: any) {
+    return localStorage.getItem(key);
+  },
+  setItem: function (key: any, value: any) {
+    // console.log("prochart setItem")
+    localStorage.setItem(key, value);
+  },
+  removeItem: function (key: any) {
+    return localStorage.removeItem(key);
+  },
+  clear: function () {
+    var keys = new Array();
+    for (var i = 0, len = localStorage.length; i < len; i++) {
+      var key = localStorage.key(i);
+      if (key?.indexOf("prochart") != -1 || key.indexOf("ProChart") != -1)
+        keys.push(key);
+    }
+    for (var i = 0; i < keys.length; i++)
+      localStorage.removeItem(keys[i]);
   }
 }

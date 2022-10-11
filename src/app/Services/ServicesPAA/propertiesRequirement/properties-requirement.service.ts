@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, skipWhile, tap } from 'rxjs/operators'
 import { environment } from 'src/environments/environment';
-import { getAllActivitiesI, getAllAuxiliarI, getAllContacTypeI, getAllContractualActionI, getAllDependenciesI, getAllFuentesI, getAllMGAI, getAllPOSPREI, getAllProfileI, getAllReviewsAreaI, getAllSelectionModeDataI, getAllSelectionModeI, getAllUNSPSCI, getConceptsI, getDataTemporalI, getInfoToCreateReqI, responseVerifyDataSaveI, verifyDataSaveI, verifyNumReqI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
+import { getAllActivitiesI, getAllAuxiliarI, getAllContacTypeI, getAllContractualActionI, getAllDependenciesI, getAllFuentesI, getAllMGAI, getAllPOSPREI, getAllProfileI, getAllReviewsAreaI, getAllSelectionModeDataI, getAllSelectionModeI, getAllUNSPSCI, getConceptsI, getDataTemporalI, getInfoToCreateReqI, responseVerifyDataSaveI, verifyDataSaveI, verifyReqI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -110,9 +110,14 @@ export class PropertiesRequirementService {
     return this.http.get<getDataTemporalI>(dir)
   }
 
-  verifyNumReq(projectId: number, numReq: number): Observable<verifyNumReqI> {
+  verifyNumReq(projectId: number, numReq: number): Observable<verifyReqI> {
     let dir = this.logicUrl + 'Requerimiento/Verify/' + numReq + '?ProyectId=' + projectId
-    return this.http.get<verifyNumReqI>(dir)
+    return this.http.get<verifyReqI>(dir)
+  }
+
+  verifyRangeSararial(perfilId:number,value:number): Observable<verifyReqI> {
+    let dir = this.genericUrl + 'RangoSalarialPerfil/Validate?perfilId=' + perfilId + '&value=' + value
+    return this.http.get<verifyReqI>(dir)
   }
   postVerifyDataSaveI(form : verifyDataSaveI): Observable<responseVerifyDataSaveI> {  
     let dir = this.logicUrl + 'Requerimiento/Verify'
