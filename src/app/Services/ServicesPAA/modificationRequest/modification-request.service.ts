@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { filterModificationRequestI, getModificationRequestByRequesI, getModificationRequestI, modificationRequestI, postModificationRequestI, postModificRequestCountersI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
+import { getDataI } from 'src/app/Models/ModelsPAA/Requeriment/RequerimentApproved.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -61,10 +62,6 @@ export class ModificationRequestService {
   }
 
   //Funcionalidad de enviar
-  postModificationRequestSend(dataSave: postModificationRequestI): Observable<any> {
-    let dir = `${this.Url}SolicitudMod/Enviar`;
-    return this.http.post(dir, dataSave);
-  }
   putModificationRequestSend(dataSave: postModificationRequestI): Observable<any> {
     let dir = `${this.Url}SolicitudMod/Enviar`;
     return this.http.put(dir, dataSave);
@@ -80,6 +77,11 @@ export class ModificationRequestService {
   importFile(body: any, file: FormData): Observable<any> {
     let dir = `${this.Url}/SolicitudMod/ImportFile?ProjectId=${body.ProjectId}&Observacion=${body.Observacion}`;
     return this.http.post(dir, file);
+  }
+
+  getRequerimentApproved(idRequest: string, idRequeriment: number): Observable<any> {
+    let dir = `${this.Url}/Proyecto/${idRequest}/Requerimiento/${idRequeriment}`;
+    return this.http.get<any>(dir);
   }
 
 }

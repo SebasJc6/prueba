@@ -5,7 +5,7 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { CounterpartInterface, editCounterpartI } from 'src/app/Models/ModelsPAA/modificatioRequest/counterpart/counterpart-interface';
-import { dateTableModificationI, postModificRequestCounterpartI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
+import { dateTableModificationI, postModificRequestCounterpartI, putModificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { CounterpartService } from 'src/app/Services/ServicesPAA/modificationRequest/counterpart/counterpart.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 
@@ -19,7 +19,7 @@ export class CounterpartComponent implements OnInit {
   constructor( public serviceCounterpar: CounterpartService,
     public serviceModRequest: ModificationRequestService,
     public dialogRef: MatDialogRef<CounterpartComponent>,
-    @Inject(MAT_DIALOG_DATA) public id_request: string,) 
+    @Inject(MAT_DIALOG_DATA) public dataCounterparts: any,) 
     { dialogRef.disableClose = true;}
 
   //Arreglo que guarda la información del proyecto para mostrar en la lista desplegable
@@ -44,7 +44,7 @@ export class CounterpartComponent implements OnInit {
   counterpart = {} as postModificRequestCounterpartI;
 
   ngOnInit(): void {
-    this.getCounterpartF(this.id_request);
+    this.getCounterpartF(this.dataCounterparts.id_request);
     this.getSourcesTemporal();
     this.cargarDataEdit();
     
@@ -58,7 +58,7 @@ export class CounterpartComponent implements OnInit {
   }
 
   getSourcesTemporal() {
-    let fromStorage: any = ProChartStorage.getItem(`arrayIdSources${this.id_request}`);
+    let fromStorage: any = ProChartStorage.getItem(`arrayIdSources${this.dataCounterparts.id_request}`);
     let listIdSource: string[] = [];
     let objectsFromStorage: string[] = []
     
@@ -93,8 +93,7 @@ export class CounterpartComponent implements OnInit {
   }
 
   cargarDataEdit() {
-    let CounterFromStorage = ProChartStorage.getItem(`CounterpartEdit${this.id_request}`);
-    console.log(CounterFromStorage);
+    let CounterFromStorage = ProChartStorage.getItem(`CounterpartEdit${this.dataCounterparts.id_request}`);
     
     if (CounterFromStorage?.length != 0 && CounterFromStorage !== null) {
       this.CounterEdit = JSON.parse(CounterFromStorage || '');
@@ -103,9 +102,8 @@ export class CounterpartComponent implements OnInit {
       this.counterpartForm.controls['Descripcion'].setValue(this.CounterEdit.contrapartida.descripcion);
       this.counterpartForm.controls['ValorAumenta'].setValue(this.CounterEdit.contrapartida.valorAumenta);
       this.counterpartForm.controls['ValorDisminuye'].setValue(this.CounterEdit.contrapartida.valorDisminuye);
-      console.log(this.ModificationId);
+      console.log(this.CounterEdit.contrapartida.fuente_ID);
 
-      //this.serviceModRequest.putModificationRequestSave()
     }
   }
 
@@ -113,10 +111,27 @@ export class CounterpartComponent implements OnInit {
     if (this.ModificationId != 0) {
       this.CounterEdit.contrapartida.fuente_ID = this.counterpartForm.value.fuentes || '';
       this.CounterEdit.contrapartida.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
-      this.CounterEdit.contrapartida.valorAumenta = this.counterpartForm.value.ValorAumenta || '';
-      this.CounterEdit.contrapartida.valorDisminuye = this.counterpartForm.value.ValorDisminuye || '';
+      this.CounterEdit.contrapartida.valorAumenta = this.counterpartForm.value.ValorAumenta || 0;
+      this.CounterEdit.contrapartida.valorDisminuye = this.counterpartForm.value.ValorDisminuye || 0;
+
+      let putDataSave = {} as putModificationRequestI;
+      putDataSave.contrapartidas = [this.CounterEdit];
+      putDataSave.datos = [];
+      putDataSave.idProyecto = Number(this.dataCounterparts.id_project);
+      putDataSave.observacion = '';
+      putDataSave.solicitudModID = Number(this.dataCounterparts.id_request);
+      putDataSave.deleteReqIDs = [];
+      putDataSave.deleteContraIDs = [];
 
 
+      //Validar esta parte
+      this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
+        console.log(res.Data);
+        console.log(res.Status);
+      }, error => {
+        console.log(error);
+        
+      });
     }else {
       this.counterpart.fuente_ID = this.counterpartForm.value.fuentes || '';
       this.counterpart.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
