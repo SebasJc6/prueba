@@ -212,7 +212,9 @@ export class PropertiesRequirementComponent implements OnInit {
     this.typePage = this.activeRoute.snapshot.paramMap.get('type') || '';
     ////console.log(+this.dataProjectID, +this.dataRequirementID)
     this.getInfoToCreateReq(+this.dataProjectID);
-    if (this.typePage != 'Nuevo') {
+    if(this.dataSolicitudID == 'true'){
+      console.log('aprobado')
+    }else if (this.typePage != 'Nuevo') {
       this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
     } else {
       this.dataRequirementNum = this.dataRequirementID;
