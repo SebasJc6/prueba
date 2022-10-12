@@ -16,6 +16,7 @@ import { RequestTrayService } from 'src/app/Services/ServicesPAA/request-tray/re
 import { filterRequestTrayI } from 'src/app/Models/ModelsPAA/request-tray/request-tray';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
+import { editCounterpartI } from 'src/app/Models/ModelsPAA/modificatioRequest/counterpart/counterpart-interface';
 
 
 export interface smallTable {
@@ -178,6 +179,8 @@ export class ModificationRequestComponent implements OnInit {
   getModificationRequestByRequestId(requestId: number, filterForm: filterModificationRequestI) {
     this.serviceModRequest.getModificationRequestByRequestId(requestId, filterForm).subscribe((data) => {
       this.viewsModificationRequest = data;
+      console.log(data.data.items.modificacion_ID);
+      
       this.ArrayDataTable = this.viewsModificationRequest.data.items;
       this.dataSourcePrin = new MatTableDataSource(this.viewsModificationRequest.data.items);
       this.numberPages = this.viewsModificationRequest.data.pages;
@@ -264,6 +267,8 @@ export class ModificationRequestComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
+      ProChartStorage.removeItem(`CounterpartEdit${this.dataSolicitudModID}`);
       if (result !== '') {
         let counterpart = {} as dateTableModificationI;
         counterpart.isContrapartida = true;
@@ -341,7 +346,7 @@ export class ModificationRequestComponent implements OnInit {
         let arrayCounterparts = ProChartStorage.getItem(`arrayCounterparts${this.dataSolicitudModID}`);
         let objectsFromStorage = JSON.parse(fromStorage || '');
         let objectArrayCounterparts = JSON.parse(arrayCounterparts || '');
-        console.log(objectArrayCounterparts);
+        // console.log(objectArrayCounterparts);
         
         let toFind = objectsFromStorage.filter((obj: any) => {
           return obj.fuenteId == valueToFind.fuenteId;
@@ -515,12 +520,29 @@ export class ModificationRequestComponent implements OnInit {
   //Boton editar requerimiento
   editRecord(element: dateTableModificationI) {
     if (element.isContrapartida) {
-      console.log('Error');
-      
+      if (element.modificacion_ID) {
+        const CounterpartEdit: editCounterpartI = {
+          modificacion_ID: element.modificacion_ID,
+          contrapartida: {
+            descripcion: element.descripcion,
+            fuente_ID: element.fuenteId,
+            valorAumenta: element.valorAumenta,
+            valorDisminuye: element.valorDisminuye
+          }
+        };
+
+        console.log(element);
+        let stringToStore = JSON.stringify(CounterpartEdit);
+        ProChartStorage.setItem(`CounterpartEdit${this.dataSolicitudModID}`, stringToStore);
+        this.Addcounterpart();
+      }
+
     } else {
+      if (element.modificacion_ID) {
       console.log(element);
-      this.ID_REQUERIMIENTO = element.numeroRequerimiento;
+      this.ID_REQUERIMIENTO = element.modificacion_ID;
       this.router.navigate([`PAA/PropiedadesRequerimiento/${this.dataProjectID}/${this.dataSolicitudModID}/${this.ID_REQUERIMIENTO}/Editar`]);
+      }
     }
   }
 
@@ -633,6 +655,9 @@ export class ModificationRequestComponent implements OnInit {
             this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
           } else if (Status == 404) {
             this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
+          }else if (Status == 200) {
+            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
+            this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
           }
         }, error => {
           let status = error.error.Status;
@@ -882,7 +907,7 @@ export class ModificationRequestComponent implements OnInit {
     ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
     ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
     ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
-    this.StatusRequest = Number(ProChartStorage.getItem(`estado${this.dataSolicitudModID}`));
+    //this.StatusRequest = Number(ProChartStorage.getItem(`estado${this.dataSolicitudModID}`));
     if (this.StatusRequest === 1) {
       this.serviceModRequest.deleteModificationRequest(Number(this.dataSolicitudModID)).subscribe(res => {
         console.log(res.status);
@@ -895,6 +920,9 @@ export class ModificationRequestComponent implements OnInit {
       });
       
     } else if(ProChartStorage.getItem(`estado${this.dataSolicitudModID}`) == null) {      
+      this.router.navigate([`/PAA/Requerimientos/${this.dataProjectID}`]);
+      ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
+    } else if (this.StatusRequest === 0) {
       this.router.navigate([`/PAA/Requerimientos/${this.dataProjectID}`]);
       ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
     }

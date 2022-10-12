@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CurrencyPipe, HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 
 // angular material
@@ -57,7 +58,6 @@ import { TaskTrayComponent } from './Views/PAA/task-tray/task-tray.component';
 import { RequestTrayComponent } from './Views/PAA/request-tray/request-tray.component';
 import { AlertsComponent } from './Templates/alerts/alerts.component';
 import { AlertsPopUpComponent } from './Templates/alerts-pop-up/alerts-pop-up.component';
-import { CurrencyPipe, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { LoginComponent } from './Views/login/login.component';
 
 

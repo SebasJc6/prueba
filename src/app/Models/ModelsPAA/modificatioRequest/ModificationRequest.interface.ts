@@ -13,8 +13,6 @@ export interface getModificationRequestByRequesI {
 }
 
 
-
-
 export interface modificationRequestI {
   idSolicitud: number,
   proyecto_COD: number,

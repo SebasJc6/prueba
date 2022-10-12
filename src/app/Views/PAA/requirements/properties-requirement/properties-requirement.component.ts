@@ -1,4 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
+import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -63,6 +64,7 @@ export class PropertiesRequirementComponent implements OnInit {
   depDesValue: string = '';
   disabledAdicion: boolean = false;
   disabledInicial: boolean = false;
+  viewVersion: boolean = false;
   //variables errores input
   errorNumReq: boolean = false;
   errorVerifyNumReq: boolean = false;
@@ -149,14 +151,14 @@ export class PropertiesRequirementComponent implements OnInit {
     clasPresFinaForm: this.formbuilder.group({
       numModificacion: new FormControl({ value: '', disabled: true }),
       mes: new FormControl(),
-      vigenciaRecu: new FormControl(),
+      anioVigRecursos: new FormControl(),
       auxiliar: new FormControl(),
-      dataFuente: new FormControl(),
+      fuente: new FormControl(),
       ftnMSPS: new FormControl({ value: '', disabled: true }),
       actividad: new FormControl(),
       meta: new FormControl({ value: '', disabled: true }),
-      MGA: new FormControl(),
-      POSPRE: new FormControl()
+      mga: new FormControl(),
+      pospre: new FormControl()
     }),
     codigosForm: this.formbuilder.group({
       codCategoria: new FormControl(),
@@ -180,9 +182,9 @@ export class PropertiesRequirementComponent implements OnInit {
   })
 
   submitted = false;
-
+  public selectedIndex = 0;
   //INFORMACION PARA LA TABLA CLASIFICACION PRESUPUESTAL
-  displayedColumns: string[] = ['mes', 'vigenciaRecursos', 'auxiliar', 'detalleFuente', 'actividad', 'meta', 'fuente', 'fuenteMSPS', 'MGA', 'pospre', 'apropiacionDisponible', 'aumento', 'disminucion', 'apropiacionDefinitiva', 'compromisos', 'giros', 'acciones'];
+  displayedColumns: string[] = ['mes', 'anioVigRecursos', 'auxiliar', 'detalleFuente', 'actividad', 'meta', 'fuente', 'fuenteMSPS', 'MGA', 'pospre', 'apropiacionDisponible', 'aumento', 'disminucion', 'apropiacionDefinitiva', 'compromisos', 'giros', 'acciones'];
   //INFORMACION PARA LA TABLA CODIGOS UNSPSC
   codigosColumns: string[] = ['codigoUNSPSC', 'descripcion', 'eliminar'];
   //INFORMACION PARA LA TABLA REVICIONES
@@ -232,6 +234,7 @@ export class PropertiesRequirementComponent implements OnInit {
     this.getAllConcepts();
     this.verifyNumReq();
     this.verifyRangeSararial();
+    this.valuePerfil();
   }
 
   ngOnInit(): void {
@@ -418,7 +421,7 @@ export class PropertiesRequirementComponent implements OnInit {
     })
   }
   getMGAByCod() {
-    this.proRequirementeForm.controls.clasPresFinaForm.controls.MGA.valueChanges.pipe(
+    this.proRequirementeForm.controls.clasPresFinaForm.controls.mga.valueChanges.pipe(
       distinctUntilChanged()
     ).subscribe(val => {
       this.serviceProRequirement.getMGAElastic(val).subscribe(dataMGA => {
@@ -428,7 +431,7 @@ export class PropertiesRequirementComponent implements OnInit {
     })
   }
   getPOSPREByCod() {
-    this.proRequirementeForm.controls.clasPresFinaForm.controls.POSPRE.valueChanges.pipe(
+    this.proRequirementeForm.controls.clasPresFinaForm.controls.pospre.valueChanges.pipe(
       distinctUntilChanged()
     ).subscribe(val => {
       this.serviceProRequirement.getPOSPREElastic(val).subscribe(dataPOSPRE => {
@@ -476,14 +479,15 @@ export class PropertiesRequirementComponent implements OnInit {
       })
     })
   }
-  verifyRangeSararial() {
+  valuePerfil() {
     this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].valueChanges.pipe(
       distinctUntilChanged()
     ).subscribe(val => {
       this.idPerfil = val;
       console.log('idPerfil', this.idPerfil);
-    }
-    )
+    })
+  }
+  verifyRangeSararial() {   
     this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].valueChanges.pipe(
       distinctUntilChanged()
     ).subscribe(val => {
@@ -640,11 +644,11 @@ export class PropertiesRequirementComponent implements OnInit {
         item.actividad_ID = item.actividad.actividad_ID
         item.auxiliar_ID = item.auxiliar.auxiliar_ID
         item.fuente_ID = item.fuente.fuente_ID
-        delete item.MGA
-        delete item.POSPRE
+        delete item.mga
+        delete item.pospre
         delete item.actividad
         delete item.auxiliar
-        delete item.dataFuente
+        delete item.fuente
         delete item.uuid
       })
       this.dataCodigos.forEach((item: any) => {
@@ -867,17 +871,17 @@ export class PropertiesRequirementComponent implements OnInit {
     if (type == 'clasificaciones') {
       if (this.proRequirementeForm.controls.clasPresFinaForm.controls['mes'].value == '' || this.proRequirementeForm.controls.clasPresFinaForm.controls['mes'].value == null) {
         this.errorMes = true;
-      } else if (this.proRequirementeForm.controls.clasPresFinaForm.controls['vigenciaRecu'].value == '' || this.proRequirementeForm.controls.clasPresFinaForm.controls['vigenciaRecu'].value == null) {
+      } else if (this.proRequirementeForm.controls.clasPresFinaForm.controls['anioVigRecursos'].value == '' || this.proRequirementeForm.controls.clasPresFinaForm.controls['anioVigRecursos'].value == null) {
         this.errorVigRec = true;
       } else if (this.proRequirementeForm.controls.clasPresFinaForm.controls['auxiliar'].value == '' || this.proRequirementeForm.controls.clasPresFinaForm.controls['auxiliar'].value == null) {
         this.errorAux = true;
-      } else if (this.proRequirementeForm.controls.clasPresFinaForm.controls['dataFuente'].value == '' || this.proRequirementeForm.controls.clasPresFinaForm.controls['dataFuente'].value == null) {
+      } else if (this.proRequirementeForm.controls.clasPresFinaForm.controls['fuente'].value == '' || this.proRequirementeForm.controls.clasPresFinaForm.controls['fuente'].value == null) {
         this.errorFuentes = true;
       } else if (this.proRequirementeForm.controls.clasPresFinaForm.controls['actividad'].value == '' || this.proRequirementeForm.controls.clasPresFinaForm.controls['actividad'].value == null) {
         this.errorActi = true;
-      } else if (this.proRequirementeForm.controls.clasPresFinaForm.controls['MGA'].value == '' || this.proRequirementeForm.controls.clasPresFinaForm.controls['MGA'].value == null) {
+      } else if (this.proRequirementeForm.controls.clasPresFinaForm.controls['mga'].value == '' || this.proRequirementeForm.controls.clasPresFinaForm.controls['mga'].value == null) {
         this.errorMGA = true;
-      } else if (this.proRequirementeForm.controls.clasPresFinaForm.controls['POSPRE'].value == '' || this.proRequirementeForm.controls.clasPresFinaForm.controls['POSPRE'].value == null) {
+      } else if (this.proRequirementeForm.controls.clasPresFinaForm.controls['pospre'].value == '' || this.proRequirementeForm.controls.clasPresFinaForm.controls['pospre'].value == null) {
         this.errorPOSPRE = true;
       } else {
         ////console.log('addclasPresFina', this.proRequirementeForm.controls.clasPresFinaForm.value)
@@ -1024,6 +1028,13 @@ export class PropertiesRequirementComponent implements OnInit {
     }
 
 
+  }
+
+  versionActual(event:any){
+ // obtenemos el index del tab
+ console.log(event.index);
+ // actualizamos el index seleccionado
+ this.selectedIndex = event.index;
   }
 
   //Metodo para llamar alertas

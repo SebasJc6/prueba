@@ -6,7 +6,23 @@ export interface getCounterpartI {
 }
 
 export interface CounterpartInterface {
-    proyecto_Fuente_ID: number,
-    proyecto_ID: number,
+    fuente_ID: number,
+    codigoFuente: string,
     descripcion: string,
+    codPresupuestoRenta: string,
+    codFondoBogota: string,
+    fuenteMSPS: string,
+    codSEGPLANFuente: string
+}
+
+export interface editCounterpartI {
+    modificacion_ID: number,
+    contrapartida: CounterpartI
+}
+
+export interface CounterpartI {
+    fuente_ID: number,
+    descripcion: string,
+    valorAumenta: number,
+    valorDisminuye: number
 }

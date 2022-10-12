@@ -12,8 +12,8 @@
     <!--ENTRADA FUENTE DE LOS RECURSOS-->
     <div class="contTxt">
       <p class="tltData">Fuente de los recursos</p>
-      <mat-select class="contDataSelect" formControlName="Fuente">
-          <mat-option *ngFor="let state of states" [value]="state">{{state.descripcion}}</mat-option>
+      <mat-select class="contDataSelect" formControlName="fuentes">
+          <mat-option *ngFor="let state of states" [value]="state.fuente_ID">{{state.descripcion}}</mat-option>
       </mat-select>
     </div>
 

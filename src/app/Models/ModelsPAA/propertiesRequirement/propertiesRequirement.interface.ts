@@ -141,7 +141,7 @@ export interface getAllPOSPREI {
 }
 export interface getAllPOSPREDataI {
     pospre_ID: number,
-    codPOSPRE: string,
+    codigo: string,
     descripcionPOSPRE: string,
 }
 
@@ -183,9 +183,9 @@ export interface dataSourceClasificacionesI {
     POSPRE: getAllPOSPREDataI,
     actividad: getAllActivitiesDataI,
     auxiliar: getAllAuxiliarDataI,
-    dataFuente: getAllFuentesDataI,
+    fuente: getAllFuentesDataI,
     mes: string,
-    vigenciaRecu: number
+    anioVigRecursos: number
 }
 export interface dataSourceRevisionesI {
     revisionID: number;
