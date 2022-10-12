@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { CounterpartInterface, editCounterpartI } from 'src/app/Models/ModelsPAA/modificatioRequest/counterpart/counterpart-interface';
 import { dateTableModificationI, postModificRequestCounterpartI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { CounterpartService } from 'src/app/Services/ServicesPAA/modificationRequest/counterpart/counterpart.service';
+import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 
 @Component({
   selector: 'app-counterpart',
@@ -16,6 +17,7 @@ import { CounterpartService } from 'src/app/Services/ServicesPAA/modificationReq
 export class CounterpartComponent implements OnInit {
 
   constructor( public serviceCounterpar: CounterpartService,
+    public serviceModRequest: ModificationRequestService,
     public dialogRef: MatDialogRef<CounterpartComponent>,
     @Inject(MAT_DIALOG_DATA) public id_request: string,) 
     { dialogRef.disableClose = true;}
@@ -28,6 +30,7 @@ export class CounterpartComponent implements OnInit {
   ArraySources: CounterpartInterface[] = [];
 
   CounterEdit = {} as editCounterpartI;
+  ModificationId: number = 0;
 
   counterpartForm = new FormGroup({
     fuentes: new FormControl(),
@@ -91,25 +94,37 @@ export class CounterpartComponent implements OnInit {
 
   cargarDataEdit() {
     let CounterFromStorage = ProChartStorage.getItem(`CounterpartEdit${this.id_request}`);
-    if (CounterFromStorage?.length != 0 || CounterFromStorage !== null) {
+    console.log(CounterFromStorage);
+    
+    if (CounterFromStorage?.length != 0 && CounterFromStorage !== null) {
       this.CounterEdit = JSON.parse(CounterFromStorage || '');
-      //console.log(this.CounterEdit);
+      this.ModificationId = this.CounterEdit.modificacion_ID;
       this.counterpartForm.controls['fuentes'].setValue(this.CounterEdit.contrapartida.fuente_ID);
       this.counterpartForm.controls['Descripcion'].setValue(this.CounterEdit.contrapartida.descripcion);
       this.counterpartForm.controls['ValorAumenta'].setValue(this.CounterEdit.contrapartida.valorAumenta);
       this.counterpartForm.controls['ValorDisminuye'].setValue(this.CounterEdit.contrapartida.valorDisminuye);
+      console.log(this.ModificationId);
+
+      //this.serviceModRequest.putModificationRequestSave()
     }
   }
 
   closedDialog(){
-    this.counterpart.fuente_ID = this.counterpartForm.value.fuentes.fuente_ID || '';
-    this.counterpart.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
-    this.counterpart.valorAumenta = this.counterpartForm.value.ValorAumenta || '';
-    this.counterpart.valorDisminuye = this.counterpartForm.value.ValorDisminuye || '';
+    if (this.ModificationId != 0) {
+      this.CounterEdit.contrapartida.fuente_ID = this.counterpartForm.value.fuentes || '';
+      this.CounterEdit.contrapartida.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
+      this.CounterEdit.contrapartida.valorAumenta = this.counterpartForm.value.ValorAumenta || '';
+      this.CounterEdit.contrapartida.valorDisminuye = this.counterpartForm.value.ValorDisminuye || '';
 
-    console.log(this.counterpart.fuente_ID );
-    
-    this.dialogRef.close(this.counterpart);
+
+    }else {
+      this.counterpart.fuente_ID = this.counterpartForm.value.fuentes || '';
+      this.counterpart.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
+      this.counterpart.valorAumenta = this.counterpartForm.value.ValorAumenta || '';
+      this.counterpart.valorDisminuye = this.counterpartForm.value.ValorDisminuye || '';
+      
+      this.dialogRef.close(this.counterpart);
+    }
   }
 
   ngOnDestroy() {
