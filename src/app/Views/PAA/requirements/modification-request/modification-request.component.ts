@@ -17,6 +17,7 @@ import { filterRequestTrayI } from 'src/app/Models/ModelsPAA/request-tray/reques
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 import { editCounterpartI } from 'src/app/Models/ModelsPAA/modificatioRequest/counterpart/counterpart-interface';
+import { apropiacionIni, cadenasPresupuestales, cadenasPresupuestalesI, codsUNSPSC, getDataI, RequerimentDataI, requerimiento } from 'src/app/Models/ModelsPAA/Requeriment/RequerimentApproved.interface';
 
 
 export interface smallTable {
@@ -240,9 +241,88 @@ export class ModificationRequestComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result !== '') {
-        let requeriment: dateTableModificationI[] = result;
-        requeriment.map(element =>  {
-          this.ArrayDataStorage.unshift(element);
+        let requerimentNew: dateTableModificationI[] = result;
+
+        let RequerimentToSave = {} as RequerimentDataI;
+        let codigosUNSPSC: codsUNSPSC[] = [];
+        let cadenasPresupuestales: cadenasPresupuestales[] = [];
+
+        let requeriment = {} as requerimiento;
+        let apropiacionInicial = {} as apropiacionIni;
+        let  codigosUNS = {} as codsUNSPSC;
+        let cadenasPres = {} as cadenasPresupuestales;
+        let projectId: number;
+
+        requerimentNew.map(element =>  {
+          console.log(element.requerimientoID);
+
+          this.serviceModRequest.getRequerimentApproved(this.dataProjectID, element.requerimientoID).subscribe((data: getDataI)  => {
+            
+            
+            projectId = data.data.proyecto.proj_ID;
+
+            requeriment.actuacion_Id = data.data.requerimiento.actuacion.actuacion_ID;
+            requeriment.cantidadDeContratos = data.data.requerimiento.cantidadDeContratos;
+            requeriment.dependenciaDestino_Id = data.data.requerimiento.dependenciaDestino.dependencia_ID;
+            requeriment.descripcion = data.data.requerimiento.descripcion;
+            requeriment.duracionDias = data.data.requerimiento.duracionDias;
+            requeriment.duracionMes = data.data.requerimiento.duracionMes;
+            requeriment.honorarios = data.data.requerimiento.honorarios;
+            requeriment.mesEstimadoInicioSeleccion = data.data.requerimiento.mesEstimadoInicioSeleccion;
+            requeriment.mesEstimadoPresentacion = data.data.requerimiento.mesEstimadoPresentacion;
+            requeriment.mesEstmadoInicioEjecucion = data.data.requerimiento.mesEstmadoInicioEjecucion;
+            requeriment.modalidadSeleccion_Id = data.data.requerimiento.modalidadSeleccion.modalidad_Sel_ID;
+            requeriment.numeroDeContrato = data.data.requerimiento.numeroDeContrato;
+            requeriment.numeroModificacion = data.data.requerimiento.numeroModificacion;
+            requeriment.numeroRequerimiento = data.data.requerimiento.numeroRequerimiento;
+            requeriment.perfil_ID = data.data.requerimiento.perfil.perfil_ID;
+            requeriment.req_ID = data.data.requerimiento.req_ID;
+            requeriment.tipoContrato_ID = data.data.requerimiento.tipoContrato.tipoContrato_ID;
+            requeriment.version = data.data.requerimiento.version;
+
+            apropiacionInicial.anioV0 = data.data.apropiacionInicial.anioV0;
+            apropiacionInicial.anioV1 = data.data.apropiacionInicial.anioV1;
+            apropiacionInicial.anioV2 = data.data.apropiacionInicial.anioV2;
+            apropiacionInicial.apropIni_ID = data.data.apropiacionInicial.apropIni_ID;
+            apropiacionInicial.valor0 = data.data.apropiacionInicial.valor0;
+            apropiacionInicial.valor1 = data.data.apropiacionInicial.valor1;
+            apropiacionInicial.valor2 = data.data.apropiacionInicial.valor2;
+            apropiacionInicial.valorTotal = data.data.apropiacionInicial.valorTotal;
+
+            data.data.codsUNSPSC.map(elem => {
+              codigosUNS.unspsC_ID = elem.unspsC_ID;
+              codigosUNSPSC.unshift(codigosUNS);
+            });
+
+            data.data.cadenasPresupuestales.map(elem => {
+              cadenasPres.actividad_ID = elem.actividad.actividad_ID;
+              cadenasPres.anioVigRecursos = elem.anioVigRecursos;
+              cadenasPres.apropiacionDefinitiva = elem.apropiacionDefinitiva;
+              cadenasPres.apropiacionDisponible = elem.apropiacionDisponible;
+              cadenasPres.aumento = elem.aumento;
+              cadenasPres.auxiliar_ID = elem.auxiliar.auxiliar_ID;
+              cadenasPres.compromisos = elem.compromisos;
+              cadenasPres.disminucion = elem.disminucion;
+              cadenasPres.fuente_ID = elem.fuente.fuente_ID;
+              cadenasPres.giros = elem.giros;
+              cadenasPres.mes = elem.mes;
+              cadenasPres.mgA_ID = elem.mga.mgA_ID;
+              cadenasPres.pospre_ID = elem.pospre.pospre_ID;
+              cadenasPres.proj_ID = elem.project_ID;
+              cadenasPres.requerimiento_ID = elem.requerimiento_ID;
+
+              cadenasPresupuestales.unshift(cadenasPres)
+            });
+            
+          });
+          RequerimentToSave.modificacion_ID = element.modificacion_ID;
+          RequerimentToSave.modificacion.apropiacionInicial = apropiacionInicial;
+          RequerimentToSave.modificacion.cadenasPresupuestales = cadenasPresupuestales;
+          RequerimentToSave.modificacion.proj_ID = projectId;
+          RequerimentToSave.modificacion.requerimiento = requeriment;
+          RequerimentToSave.modificacion.codsUNSPSC = codigosUNSPSC;
+          //this.ArrayDataStorage.unshift(element);
+          console.log(RequerimentToSave);
         });
         this.addDataTbl();
       }
@@ -255,15 +335,16 @@ export class ModificationRequestComponent implements OnInit {
 
   Addcounterpart() {
     this.getCodeSources();
-    //  let dataCounterparts: any = {
-    //   id_project: this.dataProjectID,
-    //   id_request: this.dataSolicitudModID
-    //  }
+      
+    let dataCounterparts: any = {
+      id_project: this.dataProjectID,
+      id_request: this.dataSolicitudModID
+    }
 
     const dialogRef = this.dialog.open(CounterpartComponent, {
       width: '1000px',
       height: '580px',
-      data: this.dataSolicitudModID,
+      data: dataCounterparts,
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -542,8 +623,6 @@ export class ModificationRequestComponent implements OnInit {
       console.log(element);
       this.ID_REQUERIMIENTO = element.modificacion_ID;
       this.router.navigate([`PAA/PropiedadesRequerimiento/${this.dataProjectID}/${this.dataSolicitudModID}/${this.ID_REQUERIMIENTO}/Editar`]);
-      } else if (element.requerimientoID) {
-      this.router.navigate([`PAA/PropiedadesRequerimiento/${this.dataProjectID}/true/${element.requerimientoID}/Editar`]);
       }
     }
   }
@@ -823,37 +902,7 @@ export class ModificationRequestComponent implements OnInit {
     }
     console.log(arrayCounterpartsSave);
     
-    
-    if (this.dataSolicitudModID == '0') { 
-      let postDataSave = {} as postModificationRequestI;
-      postDataSave.contrapartidas = arrayCounterpartsSave;
-      postDataSave.datos = arrayDataSave;
-      postDataSave.idProyecto = Number(this.dataProjectID);
-      postDataSave.observacion = this.JustificationText;
-      
-       this.serviceModRequest.postModificationRequestSend(postDataSave).subscribe(res => {
-        // console.log(res);
-        
-        if(res.status == 200) { 
-          this.openSnackBar('Éxito al Enviar', `Solicitud de Modificación Enviada.`, 'success');
-          //Elimación de los registros en LocalStorage
-          ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
-          this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
-        } else if (res.Status == 404) {
-          let Data: string[] = [];
-          Data = Object.values(res.Data);
-          let erorsMessages = '';
-          Data.map(item => {
-            erorsMessages += item + '. ';
-          });
-          this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
-        }
-       }, error => {
-         console.log(error);
-       });
-    } else {
+    //Función actualizar 
       let putDataSave = {} as putModificationRequestI;
       putDataSave.contrapartidas = arrayCounterpartsSave;
       putDataSave.datos = arrayDataSave;
@@ -898,7 +947,6 @@ export class ModificationRequestComponent implements OnInit {
         
       });
     }
-  }
 
 
   //Boton cancelar
