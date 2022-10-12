@@ -110,6 +110,7 @@ export class RequirementsComponent implements OnInit {
     this.serviceRequeriment.getRequerimentsByProject(projectId, filterRequertiments).subscribe((data) => {
       this.viewRequeriments = data;
       this.dataSource = new MatTableDataSource(this.viewRequeriments.data.requerimientos.items);
+     // console.log(this.viewRequeriments.data.requerimientos.items);
       // this.requeriments = this.viewRequeriments.data.requerimientos.items;
       this.codProject = this.viewRequeriments.data.codigoProyecto;
       this.nomProject = this.viewRequeriments.data.nombre;

@@ -8,7 +8,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { concat, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { postModificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { dataSourceClasificacionesI, dataSourceRevisionesI, getAllAuxiliarDataI, getAllUNSPSCDataI, getInfoToCreateReqDataI, requerimientoI, verifyDatacompleteI, verifyDataSaveI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
+import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
 import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
@@ -65,6 +67,10 @@ export class PropertiesRequirementComponent implements OnInit {
   disabledAdicion: boolean = false;
   disabledInicial: boolean = false;
   viewVersion: boolean = false;
+  viewVersionMod: boolean = false;
+  viewBtnVersion: boolean = true;
+  viewActionsBtns: boolean = false;
+  viewActionCancel: boolean = false;
   //variables errores input
   errorNumReq: boolean = false;
   errorVerifyNumReq: boolean = false;
@@ -102,7 +108,9 @@ export class PropertiesRequirementComponent implements OnInit {
   dataTableCodigo: any;
   dataTableClasificaciones = new Array();
   cadenasPresupuestalesTemporal = new Array();
+  cadenasPresupuestalesVerAct = new Array();
   codigosTemporal = new Array();
+  codigosVerAct = new Array();
   dataTableClasificacion: any;
   dataTableRevisiones = new Array();
   dataTableRevision: any;
@@ -113,6 +121,7 @@ export class PropertiesRequirementComponent implements OnInit {
   formVerify = {} as verifyDataSaveI;
   formVerifyComplete = {} as verifyDatacompleteI;
   cantMeses: any[] = [
+    { idMes: '0', nameMes: ' ' },
     { idMes: '1', nameMes: 'Enero' },
     { idMes: '2', nameMes: 'Febrero' },
     { idMes: '3', nameMes: 'Marzo' },
@@ -181,6 +190,33 @@ export class PropertiesRequirementComponent implements OnInit {
     })
   })
 
+  versionActualForm = new FormGroup({
+    codigoProAct: new FormControl({ value: 0, disabled: true }),
+    dependenciaOriAct: new FormControl({ value: '', disabled: true }),
+    numeroReqAct: new FormControl({ value: '', disabled: true }),
+    dependenciaDesAct: new FormControl({ value: {}, disabled: true }),
+    mesSeleccionAct: new FormControl({ value: '', disabled: true }),
+    mesOfertasAct: new FormControl({ value: '', disabled: true }),
+    mesContratoAct: new FormControl({ value: '', disabled: true }),
+    duracionMesAct: new FormControl({ value: 0, disabled: true }),
+    duracionDiasAct: new FormControl({ value: 0, disabled: true }),
+    modalidadSelAct: new FormControl({ value: {}, disabled: true }),
+    actuacionContAct: new FormControl({ value: 0, disabled: true }),
+    numeroContAct: new FormControl({ value: '', disabled: true }),
+    tipoContAct: new FormControl({ value: 0, disabled: true }),
+    perfilAct: new FormControl({ value: 0, disabled: true }),
+    valorHonMesAct: new FormControl({ value: '', disabled: true }),
+    cantidadContAct: new FormControl({ value: 0, disabled: true }),
+    descripcionAct: new FormControl({ value: '', disabled: true }),
+
+    vigencia0Act: new FormControl({ value: 2020, disabled: true }),
+    valor0Act: new FormControl({ value: 20000000, disabled: true }),
+    vigencia1Act: new FormControl({ value: 2021, disabled: true }),
+    valor1Act: new FormControl({ value: 40000000, disabled: true }),
+    vigencia2Act: new FormControl({ value: 2022, disabled: true }),
+    valor2Act: new FormControl({ value: 60000000, disabled: true }),
+    valorTotalAct: new FormControl({ value: 120000000, disabled: true })
+  })
   submitted = false;
   public selectedIndex = 0;
   //INFORMACION PARA LA TABLA CLASIFICACION PRESUPUESTAL
@@ -192,12 +228,15 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
   dataSourceCodigos!: MatTableDataSource<getAllUNSPSCDataI>;
+  dataSourceCodigosAct!: MatTableDataSource<getAllUNSPSCDataI>;
   dataSourceClasificaciones!: MatTableDataSource<dataSourceClasificacionesI>;
+  dataSourceClasificacionesAct!: MatTableDataSource<dataSourceClasificacionesI>;
   dataSourceRevisiones!: MatTableDataSource<dataSourceRevisionesI>;
 
   constructor(
     public serviceProject: ProjectService,
     public serviceProRequirement: PropertiesRequirementService,
+    public serviceModRequest: ModificationRequestService,
     public router: Router,
     private activeRoute: ActivatedRoute,
     private formbuilder: FormBuilder,
@@ -212,13 +251,11 @@ export class PropertiesRequirementComponent implements OnInit {
     this.typePage = this.activeRoute.snapshot.paramMap.get('type') || '';
     ////console.log(+this.dataProjectID, +this.dataRequirementID)
     this.getInfoToCreateReq(+this.dataProjectID);
-    if(this.dataSolicitudID == 'true'){
-      console.log('aprobado')
-    }else if (this.typePage != 'Nuevo') {
-      this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
-    } else {
-      this.dataRequirementNum = this.dataRequirementID;
-    }
+    // if (this.dataSolicitudID == 'true') {
+    //   console.log('aprobado')
+    //   this.getDataAprobad(+this.dataProjectID, +this.dataRequirementID);
+    // } else
+
   }
   uploadDropdownLists() {
     this.getDependenciesByCod();
@@ -244,6 +281,19 @@ export class PropertiesRequirementComponent implements OnInit {
     this.uploadDropdownLists();
     this.currencyInput();
     this.valueRequired();
+
+    if (this.typePage == 'Vista') {
+      this.getDataAprobad(+this.dataProjectID, +this.dataRequirementID);
+      this.viewBtnVersion = false;
+      this.viewVersionMod = false;
+      this.viewVersion = true;
+      this.viewActionCancel = true;
+    }
+    if (this.typePage != 'Nuevo') {
+      this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
+    } else {
+      this.dataRequirementNum = this.dataRequirementID;
+    }
   }
 
   currencyInput() {
@@ -489,7 +539,7 @@ export class PropertiesRequirementComponent implements OnInit {
       console.log('idPerfil', this.idPerfil);
     })
   }
-  verifyRangeSararial() {   
+  verifyRangeSararial() {
     this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].valueChanges.pipe(
       distinctUntilChanged()
     ).subscribe(val => {
@@ -573,6 +623,55 @@ export class PropertiesRequirementComponent implements OnInit {
 
     })
   }
+  getDataAprobad(projectId: number, requerimetId: number) {
+    this.serviceProRequirement.getDataAprobad(projectId, requerimetId).subscribe(dataAprobad => {
+      let dataApro = dataAprobad.data
+      console.log('dataAprobad', dataAprobad)
+      if (dataAprobad.data != null) {
+        console.log('dataApro', dataApro)
+        this.dataRequirementNum = dataApro.requerimiento.numeroRequerimiento.toString();
+
+        this.versionActualForm.setValue({
+          codigoProAct: dataApro.proyecto.codigoProyecto,
+          dependenciaOriAct: dataApro.proyecto.dependenciaOrigen,
+          numeroReqAct: dataApro.requerimiento.numeroRequerimiento.toString(),
+          dependenciaDesAct: dataApro.requerimiento.dependenciaDestino,
+          mesSeleccionAct: dataApro.requerimiento.mesEstimadoInicioSeleccion.toString(),
+          mesOfertasAct: dataApro.requerimiento.mesEstimadoPresentacion.toString(),
+          mesContratoAct: dataApro.requerimiento.mesEstmadoInicioEjecucion.toString(),
+          duracionMesAct: dataApro.requerimiento.duracionMes,
+          duracionDiasAct: dataApro.requerimiento.duracionDias,
+          modalidadSelAct: dataApro.requerimiento.modalidadSeleccion,
+          actuacionContAct: dataApro.requerimiento.actuacion.actuacion_ID,
+          numeroContAct: dataApro.requerimiento.numeroDeContrato,
+          tipoContAct: dataApro.requerimiento.tipoContrato.tipoContrato_ID,
+          perfilAct: dataApro.requerimiento.perfil.perfil_ID,
+          valorHonMesAct: dataApro.requerimiento.honorarios.toString(),
+          cantidadContAct: dataApro.requerimiento.cantidadDeContratos,
+          descripcionAct: dataApro.requerimiento.descripcion,
+
+          vigencia0Act: dataApro.apropiacionInicial.anioV0,
+          valor0Act: dataApro.apropiacionInicial.valor0,
+          vigencia1Act: dataApro.apropiacionInicial.anioV1,
+          valor1Act: dataApro.apropiacionInicial.valor1,
+          vigencia2Act: dataApro.apropiacionInicial.anioV2,
+          valor2Act: dataApro.apropiacionInicial.valor2,
+          valorTotalAct: dataApro.apropiacionInicial.valorTotal
+        })
+
+        this.cadenasPresupuestalesVerAct = dataApro.cadenasPresupuestales
+        this.dataSourceClasificacionesAct = new MatTableDataSource(this.cadenasPresupuestalesVerAct)
+
+        this.codigosVerAct = dataApro.codsUNSPSC
+        this.dataSourceCodigosAct = new MatTableDataSource(this.codigosVerAct);
+      } else if (dataAprobad.data == null) {
+        console.log('Message', dataAprobad.Message)
+        this.openSnackBar('Error', dataAprobad.Message, 'error')
+        this.viewVersion = false
+      }
+
+    })
+  }
   cancel() {
     if (this.typePage == 'Nuevo') {
       this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
@@ -586,6 +685,8 @@ export class PropertiesRequirementComponent implements OnInit {
   }
 
   saveForm() {
+
+
     /** traer todos los ID del arreglo dataTableCodigos */
     let idsCodigos = this.dataTableCodigos.map((item) => {
       return item.unspsC_ID = item.unspsC_ID
@@ -658,63 +759,81 @@ export class PropertiesRequirementComponent implements OnInit {
         delete item.descripcion
         delete item.codigoUNSPSC
       })
-
-      let requerimientoForm = {} as requerimientoI
-      requerimientoForm.req_ID = 0
-      requerimientoForm.numeroRequerimiento = this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].value
-      requerimientoForm.numeroModificacion = +this.dataRequirementNum
-      requerimientoForm.dependenciaDestino_Id = +this.dependencieId
-      requerimientoForm.mesEstimadoInicioSeleccion = this.proRequirementeForm.controls.infoBasicaForm.value.mesSeleccion
-      requerimientoForm.mesEstimadoPresentacion = this.proRequirementeForm.controls.infoBasicaForm.value.mesOfertas
-      requerimientoForm.mesEstmadoInicioEjecucion = this.proRequirementeForm.controls.infoBasicaForm.value.mesContrato
-      requerimientoForm.duracionMes = this.proRequirementeForm.controls.infoBasicaForm.value.duracionMes
-      requerimientoForm.duracionDias = this.proRequirementeForm.controls.infoBasicaForm.value.duracionDias
-      requerimientoForm.modalidadSeleccion_Id = +this.selcModeId
-      requerimientoForm.actuacion_Id = this.proRequirementeForm.controls.infoBasicaForm.value.actuacionCont
-      if (requerimientoForm.actuacion_Id == 1) {
-        requerimientoForm.numeroDeContrato = '0'
-        requerimientoForm.tipoContrato_Id = this.proRequirementeForm.controls.infoBasicaForm.value.tipoCont
-        requerimientoForm.perfil_Id = this.proRequirementeForm.controls.infoBasicaForm.value.perfil
-        requerimientoForm.honorarios = +this.proRequirementeForm.controls.infoBasicaForm.value.valorHonMes
-      } else {
-        requerimientoForm.numeroDeContrato = this.proRequirementeForm.controls.infoBasicaForm.value.numeroCont
-        requerimientoForm.tipoContrato_Id = 0
-        requerimientoForm.perfil_Id = 0
-        requerimientoForm.honorarios = 0
-      }
-      requerimientoForm.cantidadDeContratos = this.proRequirementeForm.controls.infoBasicaForm.value.cantidadCont
-      requerimientoForm.descripcion = this.proRequirementeForm.controls.infoBasicaForm.value.descripcion
-      requerimientoForm.version = 0
-      this.formVerify.requerimiento = requerimientoForm
-      this.formVerify.proj_ID = +this.dataProjectID
-
-      this.formVerify.cadenasPresupuestales = this.dataClasificacion
-      this.formVerify.codsUNSPSC = this.dataCodigos
-      this.formVerify.apropiacionInicial = this.proRequirementeForm.controls.initialAppro.value
-      console.log('this.formVerify', this.formVerify)
-      this.serviceProRequirement.postVerifyDataSaveI(this.formVerify).subscribe(dataResponse => {
-        //console.log('dataResponse', dataResponse)
-        if (dataResponse.status == 200) {
-          console.log('formVerifyComplete', this.formVerifyComplete)
-          var stringToStoreCom = JSON.stringify(this.formVerifyComplete);
-          ProChartStorage.setItem("formVerifyComplete", stringToStoreCom);
-          var stringToStore = JSON.stringify(this.formVerify);
-          ProChartStorage.setItem("formVerify", stringToStore);
-
-          ProChartStorage.removeItem('dataTableClacificaciones')
-          ProChartStorage.removeItem('dataTableCodigos')
-          ProChartStorage.removeItem('dataTableRevisiones')
-          this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
-          this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+      if (this.typePage == 'nuevo') {
+        let requerimientoForm = {} as requerimientoI
+        requerimientoForm.req_ID = 0
+        requerimientoForm.numeroRequerimiento = this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].value
+        requerimientoForm.numeroModificacion = +this.dataRequirementNum
+        requerimientoForm.dependenciaDestino_Id = +this.dependencieId
+        requerimientoForm.mesEstimadoInicioSeleccion = this.proRequirementeForm.controls.infoBasicaForm.value.mesSeleccion
+        requerimientoForm.mesEstimadoPresentacion = this.proRequirementeForm.controls.infoBasicaForm.value.mesOfertas
+        requerimientoForm.mesEstmadoInicioEjecucion = this.proRequirementeForm.controls.infoBasicaForm.value.mesContrato
+        requerimientoForm.duracionMes = this.proRequirementeForm.controls.infoBasicaForm.value.duracionMes
+        requerimientoForm.duracionDias = this.proRequirementeForm.controls.infoBasicaForm.value.duracionDias
+        requerimientoForm.modalidadSeleccion_Id = +this.selcModeId
+        requerimientoForm.actuacion_Id = this.proRequirementeForm.controls.infoBasicaForm.value.actuacionCont
+        if (requerimientoForm.actuacion_Id == 1) {
+          requerimientoForm.numeroDeContrato = '0'
+          requerimientoForm.tipoContrato_Id = this.proRequirementeForm.controls.infoBasicaForm.value.tipoCont
+          requerimientoForm.perfil_Id = this.proRequirementeForm.controls.infoBasicaForm.value.perfil
+          requerimientoForm.honorarios = +this.proRequirementeForm.controls.infoBasicaForm.value.valorHonMes
         } else {
-          console.log('dataResponse', dataResponse)
-          this.openSnackBar('Error', dataResponse.message, 'error');
+          requerimientoForm.numeroDeContrato = this.proRequirementeForm.controls.infoBasicaForm.value.numeroCont
+          requerimientoForm.tipoContrato_Id = 0
+          requerimientoForm.perfil_Id = 0
+          requerimientoForm.honorarios = 0
         }
-      }, err => {
-        console.log('dataResponse', err)
-        this.openSnackBar('Error', err.message, 'error');
-      })
+        requerimientoForm.cantidadDeContratos = this.proRequirementeForm.controls.infoBasicaForm.value.cantidadCont
+        requerimientoForm.descripcion = this.proRequirementeForm.controls.infoBasicaForm.value.descripcion
+        requerimientoForm.version = 0
+        this.formVerify.requerimiento = requerimientoForm
+        this.formVerify.proj_ID = +this.dataProjectID
+
+        this.formVerify.cadenasPresupuestales = this.dataClasificacion
+        this.formVerify.codsUNSPSC = this.dataCodigos
+        this.formVerify.apropiacionInicial = this.proRequirementeForm.controls.initialAppro.value
+        console.log('this.formVerify', this.formVerify)
+        this.serviceProRequirement.postVerifyDataSaveI(this.formVerify).subscribe(dataResponse => {
+          //console.log('dataResponse', dataResponse)
+          if (dataResponse.status == 200) {
+            console.log('formVerifyComplete', this.formVerifyComplete)
+            var stringToStoreCom = JSON.stringify(this.formVerifyComplete);
+            ProChartStorage.setItem("formVerifyComplete", stringToStoreCom);
+            var stringToStore = JSON.stringify(this.formVerify);
+            ProChartStorage.setItem("formVerify", stringToStore);
+
+            ProChartStorage.removeItem('dataTableClacificaciones')
+            ProChartStorage.removeItem('dataTableCodigos')
+            ProChartStorage.removeItem('dataTableRevisiones')
+            this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
+            this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+          } else {
+            console.log('dataResponse', dataResponse)
+            this.openSnackBar('Error', dataResponse.message, 'error');
+          }
+        }, err => {
+          console.log('dataResponse', err)
+          this.openSnackBar('Error', err.message, 'error');
+        })
+      } else if (this.typePage == 'editar') {
+        let formModificationRequest = {} as postModificationRequestI;
+
+        // //post solicitud de modificacion
+        // this.serviceModRequest.postModificationRequestSave(this.formModificationRequest).subscribe(data => {
+        //   console.log('data', data)
+        // })
+        //put solicitud de modificacion
+        this.serviceModRequest.putModificationRequestSave(formModificationRequest).subscribe(data => {
+          console.log('data', data)
+        })
+
+      }
     }
+
+
+
+
+
 
   }
 
@@ -866,6 +985,8 @@ export class PropertiesRequirementComponent implements OnInit {
     if (type == 'revisiones') {
       this.dataSourceRevisiones = new MatTableDataSource(objectsFromStorage)
     }
+
+
   }
 
 
@@ -1032,11 +1153,14 @@ export class PropertiesRequirementComponent implements OnInit {
 
   }
 
-  versionActual(event:any){
- // obtenemos el index del tab
- console.log(event.index);
- // actualizamos el index seleccionado
- this.selectedIndex = event.index;
+  versionActual(event: any) {
+    // obtenemos el index del tab
+    console.log(event.index);
+    // actualizamos el index seleccionado
+    this.selectedIndex = event.index;
+    if (event.index == 1) {
+      this.getDataAprobad(+this.dataProjectID, +this.dataRequirementID);
+    }
   }
 
   //Metodo para llamar alertas

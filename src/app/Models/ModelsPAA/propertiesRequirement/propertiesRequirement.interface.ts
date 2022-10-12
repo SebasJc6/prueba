@@ -273,7 +273,12 @@ export interface responseVerifyDataSaveI {
         Proj_ID: string[]
     }
 }
-
+export interface getDataAprobadaI{
+    status: number,
+    Message: string,
+    title: string,
+    data: getDataTemporalI
+}
 //data temporal
 export interface getDataTemporalI {
     proyecto: getInfoToCreateReqDataI,
@@ -308,7 +313,7 @@ export interface getDataTemporalI {
         },
         perfil: {
             perfil_ID: number,
-            nombre: string
+            nombre_Perfil: string
         },
         honorarios: number,
         cantidadDeContratos: number,
@@ -316,43 +321,8 @@ export interface getDataTemporalI {
         version: number,
         estado: string,
     },
-    cadenasPresupuestalesTemporal: [
-        {
-            project_ID: number,
-            requerimiento_ID: number,
-            mes: number,
-            anioVigRecursos: number,
-            auxiliar: {
-                aux_ID: number,
-                codigo: number
-            },
-            fuente: {
-                fuente_ID: number,
-                codigoFuente: number,
-                detalleFuente: string,
-                f_MSPS: number
-            },
-            actividad: {
-                actividad_ID: number,
-                codigo: number,
-                metaODS: string
-            },
-            mga: {
-                mgA_ID: number,
-                codigo: number
-            },
-            pospre: {
-                pospre_ID: number,
-                codigo: number
-            },
-            apropiacionDisponible: number,
-            aumento: number,
-            disminucion: number,
-            compromisos: number,
-            apropiacionDefinitiva: number,
-            giros: number
-        },
-    ],
+    cadenasPresupuestalesTemporal: cadenasPresupuestalesI[],
+    cadenasPresupuestales: cadenasPresupuestalesI[],
     apropiacionInicial: {
         apropIni_ID: number,
         anioV0: number,
@@ -370,5 +340,41 @@ export interface getDataTemporalI {
             descripcion: string
         },
     ]
+
+}
+export interface cadenasPresupuestalesI{
+        project_ID: number,
+        requerimiento_ID: number,
+        mes: number,
+        anioVigRecursos: number,
+        auxiliar: {
+            aux_ID: number,
+            codigo: number
+        },
+        fuente: {
+            fuente_ID: number,
+            codigoFuente: number,
+            detalleFuente: string,
+            f_MSPS: number
+        },
+        actividad: {
+            actividad_ID: number,
+            codigo: number,
+            metaODS: string
+        },
+        mga: {
+            mgA_ID: number,
+            codigo: number
+        },
+        pospre: {
+            pospre_ID: number,
+            codigo: number
+        },
+        apropiacionDisponible: number,
+        aumento: number,
+        disminucion: number,
+        compromisos: number,
+        apropiacionDefinitiva: number,
+        giros: number   
 
 }

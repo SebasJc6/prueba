@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, skipWhile, tap } from 'rxjs/operators'
 import { environment } from 'src/environments/environment';
-import { getAllActivitiesI, getAllAuxiliarI, getAllContacTypeI, getAllContractualActionI, getAllDependenciesI, getAllFuentesI, getAllMGAI, getAllPOSPREI, getAllProfileI, getAllReviewsAreaI, getAllSelectionModeDataI, getAllSelectionModeI, getAllUNSPSCI, getConceptsI, getDataTemporalI, getInfoToCreateReqI, responseVerifyDataSaveI, verifyDataSaveI, verifyReqI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
+import { getAllActivitiesI, getAllAuxiliarI, getAllContacTypeI, getAllContractualActionI, getAllDependenciesI, getAllFuentesI, getAllMGAI, getAllPOSPREI, getAllProfileI, getAllReviewsAreaI, getAllSelectionModeDataI, getAllSelectionModeI, getAllUNSPSCI, getConceptsI, getDataAprobadaI, getDataTemporalI, getInfoToCreateReqI, responseVerifyDataSaveI, verifyDataSaveI, verifyReqI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -61,7 +61,7 @@ export class PropertiesRequirementService {
   }
 
   getAuxiliarByProject(projectId: number): Observable<getAllAuxiliarI> {
-    let dir = this.logicUrl + 'Proyecto/' + projectId +'/Auxiliares'
+    let dir = this.logicUrl + 'Proyecto/' + projectId + '/Auxiliares'
     return this.http.get<getAllAuxiliarI>(dir)
   }
 
@@ -71,7 +71,7 @@ export class PropertiesRequirementService {
   }
 
   getFuentesByProject(projectId: number): Observable<getAllFuentesI> {
-    let dir = this.logicUrl + 'Proyecto/' + projectId +'/FuentesComplete'
+    let dir = this.logicUrl + 'Proyecto/' + projectId + '/FuentesComplete'
     return this.http.get<getAllFuentesI>(dir)
   }
 
@@ -109,17 +109,21 @@ export class PropertiesRequirementService {
     let dir = this.logicUrl + 'Solicitud/' + requestId + '/Proyecto/' + projectId + '/Temporal/' + reqTempId
     return this.http.get<getDataTemporalI>(dir)
   }
+  getDataAprobad(projectId: number, requerimetId: number): Observable<getDataAprobadaI> {
+    let dir = this.logicUrl + '/Proyecto/' + projectId + '/Requerimiento/' + requerimetId
+    return this.http.get<getDataAprobadaI>(dir)
+  }
 
   verifyNumReq(projectId: number, numReq: number): Observable<verifyReqI> {
     let dir = this.logicUrl + 'Requerimiento/Verify/' + numReq + '?ProyectId=' + projectId
     return this.http.get<verifyReqI>(dir)
   }
 
-  verifyRangeSararial(perfilId:number,value:number): Observable<verifyReqI> {
+  verifyRangeSararial(perfilId: number, value: number): Observable<verifyReqI> {
     let dir = this.genericUrl + 'RangoSalarialPerfil/Validate?perfilId=' + perfilId + '&value=' + value
     return this.http.get<verifyReqI>(dir)
   }
-  postVerifyDataSaveI(form : verifyDataSaveI): Observable<responseVerifyDataSaveI> {  
+  postVerifyDataSaveI(form: verifyDataSaveI): Observable<responseVerifyDataSaveI> {
     let dir = this.logicUrl + 'Requerimiento/Verify'
     return this.http.post<responseVerifyDataSaveI>(dir, form)
   }

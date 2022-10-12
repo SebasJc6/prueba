@@ -17,18 +17,22 @@
     </div>
 
     <!--BOTON QUE CARGA VERSION ACTUAL-->
-    <!-- <div>
+    <div *ngIf="viewBtnVersion">
         <div class="btnAction" style="margin-bottom: 1.5%;">
             <span>Versión Actual</span>
-            <mat-icon style="margin-bottom: -0.7%;" mat-icon-button matTooltip="Version Actual">
+            <mat-icon style="margin-bottom: -0.7%;" mat-icon-button matTooltip="Version Actual" (click)="viewVersion = !viewVersion">
                 insert_drive_file</mat-icon>
         </div>
-    </div> -->
+    </div>
 
     <!-- #docregion slow-animation-duration -->
     <mat-tab-group animationDuration="1000ms"  mat-align-tabs="center" dynamicHeight (selectedTabChange)="versionActual($event)"  [selectedIndex]="selectedIndex">
         <!-- #enddocregion slow-animation-duration -->
-        <mat-tab label="Version modificada" >
+        <mat-tab  *ngIf="viewVersionMod">
+            <ng-template mat-tab-label>
+                Version modificada
+                <mat-icon class="example-tab-icon">insert_drive_file</mat-icon>                
+              </ng-template>
             <form [formGroup]="proRequirementeForm">
                 <!-- SECCIONES DESPLEGABLES -->
                 <mat-accordion multi>
@@ -815,8 +819,12 @@
             </form>
         </mat-tab>
 
-        <mat-tab label="Version actual">
-            <form [formGroup]="proRequirementeForm">
+        <mat-tab  *ngIf="viewVersion">
+            <ng-template mat-tab-label>
+                Version actual
+                <mat-icon class="example-tab-icon">insert_drive_file</mat-icon>                
+              </ng-template>
+            <form [formGroup]="versionActualForm">
                 <!-- SECCIONES DESPLEGABLES -->
                 <mat-accordion multi>
 
@@ -832,33 +840,25 @@
                         <mat-card class="colorCard1">
 
                             <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
-                            <div class="formCont" formGroupName="infoBasicaForm">
+                            <div class="formCont" >
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Código del proyecto</p>
-                                        <input class="contData contDataDisabled" formControlName="codigoPro">
+                                        <input class="contData contDataDisabled" formControlName="codigoProAct">
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Dependencia origen de los recursos</p>
-                                        <input class="contData contDataDisabled" formControlName="dependenciaOri">
+                                        <input class="contData contDataDisabled" formControlName="dependenciaOriAct">
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Número de requerimiento</p>
-                                        <input class="contData" formControlName="numeroReq">
-                                        <mat-error *ngIf="errorNumReq">
-                                            Campo <strong>Obligatorio</strong>
-                                        </mat-error>
-                                        <mat-error *ngIf="errorVerifyNumReq">
-                                            <strong>{{msjVerifyNumReq}}</strong>
-                                        </mat-error>
+                                        <input class="contData contDataDisabled" formControlName="numeroReqAct">                                       
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Dependencia destino de los recursos</p>
-                                        <input type="text" class="contDataAutocomplete" [matAutocomplete]="auto"
-                                            formControlName="dependenciaDes">
-                                        <mat-error *ngIf="errorDependencia">
-                                            Campo <strong>Obligatorio</strong>
-                                        </mat-error>
+                                        <input type="text" class="contDataAutocomplete contDataDisabled" [matAutocomplete]="auto"
+                                            formControlName="dependenciaDesAct">
+                                       
                                         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
                                             (optionSelected)="onSelectionChange($event, 'dependenciaDes')">
                                             <mat-option [value]="option" *ngFor="let option of listDependencies">
@@ -870,51 +870,41 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Mes estimado inicio de proceso de seleccion</p>
-                                        <mat-select formControlName="mesSeleccion" class="contDataAutocomplete">
+                                        <mat-select formControlName="mesSeleccionAct" class="contDataAutocomplete contDataDisabled">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
                                                 selected="item.codigo">
                                                 {{item.idMes}} {{item.nameMes}}</mat-option>
                                         </mat-select>
-                                        <mat-error *ngIf="errorMesSeleccion">
-                                            Campo <strong>Obligatorio</strong>
-                                        </mat-error>
+                                        
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Mes estimado presentacion de ofertas</p>
-                                        <mat-select formControlName="mesOfertas" class="contDataAutocomplete">
+                                        <mat-select formControlName="mesOfertasAct" class="contDataAutocomplete contDataDisabled">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
                                                 selected="item.codigo">
                                                 {{item.idMes}} {{item.nameMes}}</mat-option>
                                         </mat-select>
-                                        <mat-error *ngIf="errorMesOferta">
-                                            Campo <strong>Obligatorio</strong>
-                                        </mat-error>
+                                       
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Mes de incio de ejecucion del contrato</p>
-                                        <mat-select formControlName="mesContrato" class="contDataAutocomplete">
+                                        <mat-select formControlName="mesContratoAct" class="contDataAutocomplete contDataDisabled">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
                                                 selected="item.codigo">
                                                 {{item.idMes}} {{item.nameMes}}</mat-option>
                                         </mat-select>
-                                        <mat-error *ngIf="errorMesContrato">
-                                            Campo <strong>Obligatorio</strong>
-                                        </mat-error>
+                                       
                                     </div>
                                     <div class="contTxt label3 ">
                                         <p class="tltData">Duracion estimada del contrato</p>
-                                        <input type="number" class="contData" style="width: 20%;"
-                                            formControlName="duracionMes">
-                                        <mat-error *ngIf="errorDuratioMes">
-                                            Campo <strong>Obligatorio</strong>
-                                        </mat-error>
+                                        <input type="number" class="contData contDataDisabled" style="width: 20%;"
+                                            formControlName="duracionMesAct">
+                                        
                                         meses&nbsp;&nbsp;
 
-                                        <input type="number" class="contData" style="width: 20%;"
-                                            formControlName="duracionDias" maxlength="2" min="1" max="29">
-                                        <mat-error *ngIf="errorDurationDia">
-                                            Campo <strong>Obligatorio</strong>
-                                        </mat-error>
+                                        <input type="number" class="contData contDataDisabled" style="width: 20%;"
+                                            formControlName="duracionDiasAct" maxlength="2" min="1" max="29">
+                                       
                                         Dias
                                     </div>
                                 </div>
@@ -926,11 +916,9 @@
                                             <option [value]="item.modalidad_Sel_ID" *ngFor="let item of allSelectionMode">
                                                 {{item.codigo}}</option>
                                         </select> -->
-                                        <input type="text" class="contDataAutocomplete" [matAutocomplete]="auto2"
-                                            formControlName="modalidadSel">
-                                        <mat-error *ngIf="errorModalidad">
-                                            Campo <strong>Obligatorio</strong>
-                                        </mat-error>
+                                        <input type="text" class="contDataAutocomplete contDataDisabled" [matAutocomplete]="auto2"
+                                            formControlName="modalidadSelAct">
+                                       
                                         <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn"
                                             (optionSelected)="onSelectionChange($event, 'modalidadSel')">
                                             <mat-option [value]="item" *ngFor="let item of listSelcMode">
@@ -940,20 +928,17 @@
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Actuación Contractual</p>
-                                        <mat-select formControlName="actuacionCont" class="contDataAutocomplete"
+                                        <mat-select formControlName="actuacionContAct" class="contDataAutocomplete contDataDisabled"
                                             (valueChange)="onSelectionChange($event , 'actContractual')">
                                             <mat-option [value]="item.actuacion_ID"
                                                 *ngFor="let item of allContractualAction">
                                                 {{item.tipo}}</mat-option>
                                         </mat-select>
-                                        <mat-error *ngIf="errorActuacion">
-                                            Campo <strong>Obligatorio</strong>
-                                        </mat-error>
+                                       
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Número de contrato</p>
-                                        <input class="contData" formControlName="numeroCont"
-                                            [ngClass]="{'contDataDisabled' : disabledInicial == true }">
+                                        <input class="contData contDataDisabled" formControlName="numeroContAct">
 
                                     </div>
                                 </div>
@@ -961,8 +946,8 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Tipo de contrato</p>
-                                        <mat-select formControlName="tipoCont" class="contDataAutocomplete"
-                                            [ngClass]="{'contDataDisabled' : disabledAdicion == true }">
+                                        <mat-select formControlName="tipoContAct" class="contDataAutocomplete contDataDisabled"
+                                           >
                                             <mat-option [value]="item.tipoContrato_ID"
                                                 *ngFor="let item of listContacType">
                                                 {{item.nombre}}</mat-option>
@@ -970,24 +955,24 @@
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Perfil</p>
-                                        <mat-select formControlName="perfil" class="contDataAutocomplete"
-                                            [ngClass]="{'contDataDisabled' : disabledAdicion == true }">
+                                        <mat-select formControlName="perfilAct" class="contDataAutocomplete contDataDisabled"
+                                            >
                                             <mat-option [value]="item.perfil_ID" *ngFor="let item of allProfile">
                                                 {{item.nombre_Perfil}}</mat-option>
                                         </mat-select>
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Valor Honorarios / mes</p>
-                                        <input class="contData" formControlName="valorHonMes"
+                                        <input class="contData contDataDisabled" formControlName="valorHonMesAct"
                                             value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}"
-                                            [ngClass]="{'contDataDisabled' : disabledAdicion == true }">
+                                            >
                                         <mat-error *ngIf="errorRangeSararial">
                                             <strong>{{msjVerifyRangeSararial}}</strong>
                                         </mat-error>
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Cantidad de contratos</p>
-                                        <input class="contData" formControlName="cantidadCont">
+                                        <input class="contData contDataDisabled" formControlName="cantidadContAct">
                                         <mat-error *ngIf="errorCantContrato">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
@@ -997,18 +982,12 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Descripción (Objeto del contrato)</p>
-                                        <textarea class="contDataArea" formControlName="descripcion"></textarea>
+                                        <textarea class="contDataArea contDataDisabled" formControlName="descripcionAct"></textarea>
                                         <mat-error *ngIf="errorDescripcionCont">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
                                     </div>
-                                    <!-- <div class="contTxt label1">
-                                        <p class="tltData">Descripción (Objeto del contrato)</p>
-                                        <input class="contDataArea" >
-                                        <mat-error *ngIf="errorDescripcionCont">
-                                            Campo <strong>Obligatorio</strong>
-                                        </mat-error>
-                                    </div> -->
+                                
                                 </div>
                             </div>
                         </mat-card>
@@ -1030,7 +1009,7 @@
 
                             <!-- TABLA CLASIFICACION PRESUPUESTAL -->
                             <div style="overflow: auto; ">
-                                <table mat-table [dataSource]="dataSourceClasificaciones" class="mat-elevation-z8"
+                                <table mat-table [dataSource]="dataSourceClasificacionesAct" class="mat-elevation-z8"
                                     matSort>
 
                                     <ng-container matColumnDef="mes">
@@ -1179,11 +1158,11 @@
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
                                 <mat-card class="colorCard2">
-                                    <div class="formCont" formGroupName="codigosForm">
+                                    <div class="formCont">
                                         <!-- TABLA CLASIFICACION CODIGOS UNSPSC -->
                                         <div style="overflow: auto; ">
                                             <!-- <table mat-table [dataSource]="dataCodigos" class="mat-elevation-z8" matSort> -->
-                                            <table mat-table [dataSource]="dataSourceCodigos" class="mat-elevation-z8"
+                                            <table mat-table [dataSource]="dataSourceCodigosAct" class="mat-elevation-z8"
                                                 matSort>
 
 
@@ -1240,40 +1219,40 @@
                                 <mat-card class="colorCard2">
 
                                     <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
-                                    <div class="formCont" formGroupName="initialAppro">
+                                    <div class="formCont" >
                                         <div class="tablaCont">
                                             <div class="contTxt label1">
                                                 <p class="tltData">Año vigencia 0</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia0">
+                                                <input class="contData contDataDisabled" formControlName="vigencia0Act">
                                             </div>
 
                                             <div class="contTxt label1">
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor0">
+                                                <input class="contData contDataDisabled" formControlName="valor0Act">
                                             </div>
 
                                             <div class="contTxt label1">
                                                 <p class="tltData">Año vigencia 1</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia1">
+                                                <input class="contData contDataDisabled" formControlName="vigencia1Act">
                                             </div>
                                             <div class="contTxt label1">
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor1">
+                                                <input class="contData contDataDisabled" formControlName="valor1Act">
                                             </div>
                                         </div>
 
                                         <div class="tablaCont">
                                             <div class="contTxt label1">
                                                 <p class="tltData">Año vigencia 2</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia2">
+                                                <input class="contData contDataDisabled" formControlName="vigencia2Act">
                                             </div>
                                             <div class="contTxt label1">
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor2">
+                                                <input class="contData contDataDisabled" formControlName="valor2Act">
                                             </div>
                                             <div class="contTxt label2">
                                                 <p class="tltData">Valor total</p>
-                                                <input class="contData contDataDisabled" formControlName="valorTotal">
+                                                <input class="contData contDataDisabled" formControlName="valorTotalAct">
                                             </div>
                                         </div>
                                     </div>
@@ -1283,6 +1262,11 @@
                     </mat-expansion-panel>
 
                 </mat-accordion>
+                <mat-card-actions *ngIf="viewActionCancel">
+                    <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
+                        CANCELAR
+                    </button>
+                </mat-card-actions>
 
             </form>
             <br><br>
