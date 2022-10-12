@@ -179,7 +179,7 @@ export class ModificationRequestComponent implements OnInit {
   getModificationRequestByRequestId(requestId: number, filterForm: filterModificationRequestI) {
     this.serviceModRequest.getModificationRequestByRequestId(requestId, filterForm).subscribe((data) => {
       this.viewsModificationRequest = data;
-      console.log(data.data.items.modificacion_ID);
+      //console.log(data.data.items);
       
       this.ArrayDataTable = this.viewsModificationRequest.data.items;
       this.dataSourcePrin = new MatTableDataSource(this.viewsModificationRequest.data.items);
@@ -542,6 +542,8 @@ export class ModificationRequestComponent implements OnInit {
       console.log(element);
       this.ID_REQUERIMIENTO = element.modificacion_ID;
       this.router.navigate([`PAA/PropiedadesRequerimiento/${this.dataProjectID}/${this.dataSolicitudModID}/${this.ID_REQUERIMIENTO}/Editar`]);
+      } else if (element.requerimientoID) {
+      this.router.navigate([`PAA/PropiedadesRequerimiento/${this.dataProjectID}/true/${element.requerimientoID}/Editar`]);
       }
     }
   }
