@@ -402,55 +402,55 @@
                                     <ng-container matColumnDef="anioVigRecursos">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="vig">
                                             Vigencia de los Recursos
-                                        <td mat-cell *matCellDef="let element">{{ element.anioVigRecursos}}</td>
+                                        <td mat-cell *matCellDef="let element">{{ element.anioVigRecursos }}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="auxiliar">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="aux">
                                             Auxiliar
-                                        <td mat-cell *matCellDef="let element">{{ element.auxiliar}}</td>
+                                        <td mat-cell *matCellDef="let element">{{  element.auxiliar.codigoAuxiliar }}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="detalleFuente">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="det">
                                             Detalle Fuente
-                                        <td mat-cell *matCellDef="let element">{{ element.fuente.descripcion}}</td>
+                                        <td mat-cell *matCellDef="let element">{{  element.fuente.descripcion }}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="actividad">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="act">
-                                            Actividad
-                                        <td mat-cell *matCellDef="let element">{{ element.actividad.codigo}}</td>
+                                            ActividadS
+                                        <td mat-cell *matCellDef="let element">{{  element.actividad.codigo }}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="meta">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="met">
                                             Meta
-                                        <td mat-cell *matCellDef="let element">{{ element.actividad.metaODS}}</td>
+                                        <td mat-cell *matCellDef="let element">{{  element.actividad.metaODS }}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="fuente">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="fue">
                                             Fuente
-                                        <td mat-cell *matCellDef="let element">{{ element.fuente.codigoFuente}}</td>
+                                        <td mat-cell *matCellDef="let element">{{  element.fuente.codigoFuente }}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="fuenteMSPS">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="msp">
                                             Fuente MSPS
-                                        <td mat-cell *matCellDef="let element">{{ element.fuente.fuenteMSPS}}</td>
+                                        <td mat-cell *matCellDef="let element">{{  element.fuente.fuenteMSPS }}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="MGA">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="mga">
                                             MGA
-                                        <td mat-cell *matCellDef="let element">{{ element.mga.codigoMGA}}</td>
+                                        <td mat-cell *matCellDef="let element">{{  element.mga.codigoMGA }}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="pospre">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="pos">
                                             POSPRE
-                                        <td mat-cell *matCellDef="let element">{{ element.pospre.codigo}}</td>
+                                        <td mat-cell *matCellDef="let element">{{  element.pospre.codigo }}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="apropiacionDisponible">
@@ -472,14 +472,14 @@
                                     <ng-container matColumnDef="disminucion">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="dis">
                                             Disminución
-                                        <td mat-cell *matCellDef="let element">{{ element.disminucion| currency: 'USD' :
+                                        <td mat-cell *matCellDef="let element">{{element.disminucion| currency: 'USD' :
                                             'symbol' : '1.0-0'}}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="apropiacionDefinitiva">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="aproDef">
                                             Apropiación Definitiva
-                                        <td mat-cell *matCellDef="let element">{{ element.apropiacionDefinitiva |
+                                        <td mat-cell *matCellDef="let element">{{element.apropiacionDefinitiva |
                                             currency:'USD'
                                             : 'symbol' : '1.0-0'}}
                                         </td>
