@@ -582,7 +582,7 @@
                                                 <ng-container matColumnDef="codigoUNSPSC">
                                                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="Cod">
                                                         Código UNSPSC
-                                                    <td mat-cell *matCellDef="let element">{{ element.unspsc.codigoUNSPSC}}
+                                                    <td mat-cell *matCellDef="let element">{{ element.unspsc.codigoUNSPSC || element.codigoUNSPSC}}
                                                     </td>
                                                 </ng-container>
 
