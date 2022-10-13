@@ -1,13 +1,15 @@
 export interface RequerimentDataI {
         modificacion_ID: number,
         accion: number,
-        modificacion: {
-          proj_ID: number,
-          requerimiento: requerimiento,
-          cadenasPresupuestales: cadenasPresupuestales[],
-          codsUNSPSC: codsUNSPSC[],
-          apropiacionInicial: apropiacionIni
-        }
+        modificacion: MODIFICACION
+    }
+
+    export interface MODIFICACION {
+        proj_ID: number,
+        requerimiento: requerimiento,
+        cadenasPresupuestales: cadenasPresupuestales[],
+        codsUNSPSC: codsUNSPSC[],
+        apropiacionInicial: apropiacionIni
     }
 
     export interface requerimiento {
