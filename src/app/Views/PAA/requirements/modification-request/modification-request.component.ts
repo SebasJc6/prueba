@@ -138,9 +138,13 @@ export class ModificationRequestComponent implements OnInit {
   accionRequeriment: number = 1;
   modification_Id: number = 0;
 
+  //Se guarda toda la información del requerimiento aprovado para obtener solo la importante
   dataRequerimentApproved: getDataI[] = [];
 
+  //Aquí se guarda la informacion importante del requerimiento aprovado que se guardará en temporal
   RequerimentToSave = {} as RequerimentDataI;
+
+  ArrayRequerimentApproved: postDataModReqI[] = [];
 
   constructor(
     private serviceFiles: FilesService,
@@ -179,14 +183,13 @@ export class ModificationRequestComponent implements OnInit {
       this.numModification = data.data.numero_Modificacion;
       this.nomProject = data.data.nombreProyecto;
       this.JustificationText = data.data.observacion;
-      // console.log(data)
+      // console.log(data.data.observacion)
     })
   }
 
   getModificationRequestByRequestId(requestId: number, filterForm: filterModificationRequestI) {
     this.serviceModRequest.getModificationRequestByRequestId(requestId, filterForm).subscribe((data) => {
       this.viewsModificationRequest = data;
-      //console.log(data.data.items);
       
       this.ArrayDataTable = this.viewsModificationRequest.data.items;
       this.dataSourcePrin = new MatTableDataSource(this.viewsModificationRequest.data.items);
@@ -248,35 +251,18 @@ export class ModificationRequestComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result !== '') {
         let requerimentNew: dateTableModificationI[] = result;
-        
+
         requerimentNew.forEach(element =>  {
           console.log(element.requerimientoID);
+          this.ArrayDataStorage.unshift(element);
           
-          if (this.ArrayDatos.length > 0) {
-            this.ArrayDatos.forEach(elem => {
-              if (elem.modificacion.requerimiento.req_ID !== element.requerimientoID) {
-                
-                this.serviceModRequest.getRequerimentApproved(this.dataProjectID, element.requerimientoID).subscribe((data: getDataI)  => {
-                  this.dataRequerimentApproved.unshift(data);
-                  this.getRequerimentApproved();
-                });
-              } else {
-                console.log('Duplicado');
-              }
-            })
-          } else {
-            console.log('Add');
-            
-            this.serviceModRequest.getRequerimentApproved(this.dataProjectID, element.requerimientoID).subscribe((data: getDataI)  => {
-              this.dataRequerimentApproved.unshift(data);
-              this.getRequerimentApproved();
+            this.serviceModRequest.getRequerimentApproved(this.dataProjectID, element.requerimientoID).subscribe(data  => {
+              this.dataRequerimentApproved.push(data);
             });
-          }
-          
-        });
-        
-        this.addDataTbl();
-      }
+
+            this.addDataTbl();
+          });
+        }        
     });
   }
 
@@ -360,14 +346,10 @@ export class ModificationRequestComponent implements OnInit {
               accion: 2,
               modificacion: modificacion
             }
-            
-              this.ArrayDatos.unshift(datosRequeriment);
-              let stringToStore = JSON.stringify(this.ArrayDatos);
-              ProChartStorage.setItem(`arrayDatos${this.dataSolicitudModID}`, stringToStore);
-            
 
-            console.log(this.ArrayDatos);
-          });
+            this.ArrayRequerimentApproved.push(datosRequeriment);
+            console.log(this.ArrayRequerimentApproved);
+          });          
   }
 
   newRequeriment() {
@@ -391,7 +373,8 @@ export class ModificationRequestComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
       ProChartStorage.removeItem(`CounterpartEdit${this.dataSolicitudModID}`);
-      if (result !== '') {
+      if (result !== '' && result !== undefined) {
+        
         let counterpart = {} as dateTableModificationI;
         counterpart.isContrapartida = true;
         counterpart.fuenteId = result.fuente_ID;
@@ -422,6 +405,8 @@ export class ModificationRequestComponent implements OnInit {
         let stringToStore = JSON.stringify(this.arrayCounterpart);
         ProChartStorage.setItem(`arrayCounterparts${this.dataSolicitudModID}`, stringToStore);
         this.addDataTbl();
+      } else if (this.dataSolicitudModID != '0') {
+        this.getModificationRequestByRequestId(Number(this.dataSolicitudModID), this.filterModificationRequest);
       }
     });
   }
@@ -653,7 +638,7 @@ export class ModificationRequestComponent implements OnInit {
           }
         };
 
-        console.log(element);
+        // console.log(element);
         let stringToStore = JSON.stringify(CounterpartEdit);
         ProChartStorage.setItem(`CounterpartEdit${this.dataSolicitudModID}`, stringToStore);
         this.Addcounterpart();
@@ -661,7 +646,7 @@ export class ModificationRequestComponent implements OnInit {
 
     } else {
       if (element.modificacion_ID) {
-      console.log(element);
+      // console.log(element);
       this.ID_REQUERIMIENTO = element.modificacion_ID;
       this.router.navigate([`PAA/PropiedadesRequerimiento/${this.dataProjectID}/${this.dataSolicitudModID}/${this.ID_REQUERIMIENTO}/Editar`]);
       }
@@ -944,9 +929,9 @@ export class ModificationRequestComponent implements OnInit {
     if (this.dataSolicitudModID == '0') {
       this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe guardar primero la solicitud para poder enviarla.`);
     } else if(fromStorageArrayData !== null ) {
-      this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe guardar primero todos los registros.`);
+      this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe guardar o eliminar los requerimientos nuevos.`);
     } else if(fromStorageCounters !== null ) {
-      this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe guardar primero todos los registros.`);
+      this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe guardar o eliminar las contrapartidas nuevas.`);
     } else if (this.StatusRequest == 'Modificacion' || this.StatusRequest == 'Ajuste'){
 
       let sendData = {
@@ -1000,7 +985,8 @@ export class ModificationRequestComponent implements OnInit {
     if (this.StatusRequest == 'Modificacion') {
       this.serviceModRequest.deleteModificationRequest(Number(this.dataSolicitudModID)).subscribe(res => {
         console.log(res.status);
-        if (res.status) {
+        if (res.status == 200) {
+          this.openSnackBar('Acciones Canceladas', `Solicitud de Modificación Eliminada.`, 'success');
           this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
           ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
         }
@@ -1023,7 +1009,7 @@ export class ModificationRequestComponent implements OnInit {
   }
 
 
-    //Metodo para llamar alertas
+  //Metodo para llamar alertas
   openSnackBar(title:string, message: string, type:string, message2?: string) {
     this.snackBar.openFromComponent(AlertsComponent, {
       data:{title,message,message2,type},

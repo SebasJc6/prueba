@@ -3,11 +3,14 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CounterpartInterface, editCounterpartI } from 'src/app/Models/ModelsPAA/modificatioRequest/counterpart/counterpart-interface';
 import { dateTableModificationI, postModificRequestCounterpartI, putModificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { CounterpartService } from 'src/app/Services/ServicesPAA/modificationRequest/counterpart/counterpart.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
+import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 
 @Component({
   selector: 'app-counterpart',
@@ -17,6 +20,8 @@ import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modific
 export class CounterpartComponent implements OnInit {
 
   constructor( public serviceCounterpar: CounterpartService,
+    public router: Router,
+    private snackBar: MatSnackBar,
     public serviceModRequest: ModificationRequestService,
     public dialogRef: MatDialogRef<CounterpartComponent>,
     @Inject(MAT_DIALOG_DATA) public dataCounterparts: any,) 
@@ -51,8 +56,8 @@ export class CounterpartComponent implements OnInit {
   }
 
   //Función que trae la información del proyecto de la Api
-  getCounterpartF(idProject: string) {
-    this.counterpartSubscription = this.serviceCounterpar.getCounterpartFRequest(idProject).subscribe(request => {
+  getCounterpartF(idRequest: string) {
+    this.counterpartSubscription = this.serviceCounterpar.getCounterpartFRequest(idRequest).subscribe(request => {
       this.states = request.data;
     });
   }
@@ -102,44 +107,60 @@ export class CounterpartComponent implements OnInit {
       this.counterpartForm.controls['Descripcion'].setValue(this.CounterEdit.contrapartida.descripcion);
       this.counterpartForm.controls['ValorAumenta'].setValue(this.CounterEdit.contrapartida.valorAumenta);
       this.counterpartForm.controls['ValorDisminuye'].setValue(this.CounterEdit.contrapartida.valorDisminuye);
-      console.log(this.CounterEdit.contrapartida.fuente_ID);
 
     }
   }
 
   closedDialog(){
-    if (this.ModificationId != 0) {
-      this.CounterEdit.contrapartida.fuente_ID = this.counterpartForm.value.fuentes || '';
-      this.CounterEdit.contrapartida.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
-      this.CounterEdit.contrapartida.valorAumenta = this.counterpartForm.value.ValorAumenta || 0;
-      this.CounterEdit.contrapartida.valorDisminuye = this.counterpartForm.value.ValorDisminuye || 0;
-
-      let putDataSave = {} as putModificationRequestI;
-      putDataSave.contrapartidas = [this.CounterEdit];
-      putDataSave.datos = [];
-      putDataSave.idProyecto = Number(this.dataCounterparts.id_project);
-      putDataSave.observacion = '';
-      putDataSave.solicitudModID = Number(this.dataCounterparts.id_request);
-      putDataSave.deleteReqIDs = [];
-      putDataSave.deleteContraIDs = [];
-
-
-      //Validar esta parte
-      this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
-        console.log(res.Data);
-        console.log(res.Status);
-      }, error => {
-        console.log(error);
+    if (this.counterpartForm.value.fuentes){
+      if (this.ModificationId != 0) {
+        this.CounterEdit.contrapartida.fuente_ID = this.counterpartForm.value.fuentes || '';
+        this.CounterEdit.contrapartida.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
+        this.CounterEdit.contrapartida.valorAumenta = this.counterpartForm.value.ValorAumenta || 0;
+        this.CounterEdit.contrapartida.valorDisminuye = this.counterpartForm.value.ValorDisminuye || 0;
+  
+        let putDataSave = {} as putModificationRequestI;
+        putDataSave.contrapartidas = [this.CounterEdit];
+        putDataSave.datos = [];
+        putDataSave.idProyecto = Number(this.dataCounterparts.id_project);
+        putDataSave.observacion = '';
+        putDataSave.solicitudModID = Number(this.dataCounterparts.id_request);
+        putDataSave.deleteReqIDs = [];
+        putDataSave.deleteContraIDs = [];
+  
+  
+        //Validar esta parte
+        this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
+          if (res.status == 200) {
+            this.openSnackBar('Éxito al Guardar', `Contrapartida Actualizada.`, 'success');
+            this.router.navigate([`/PAA/SolicitudModificacion/${this.dataCounterparts.id_project}/${res.data.idSolicitud}`]);
+            this.dialogRef.close();
+          }
+        }, error => {
+          console.log(error);
+          
+        });
+      }else {
+        this.counterpart.fuente_ID = this.counterpartForm.value.fuentes || '';
+        this.counterpart.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
+        this.counterpart.valorAumenta = this.counterpartForm.value.ValorAumenta || '';
+        this.counterpart.valorDisminuye = this.counterpartForm.value.ValorDisminuye || '';
         
-      });
-    }else {
-      this.counterpart.fuente_ID = this.counterpartForm.value.fuentes || '';
-      this.counterpart.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
-      this.counterpart.valorAumenta = this.counterpartForm.value.ValorAumenta || '';
-      this.counterpart.valorDisminuye = this.counterpartForm.value.ValorDisminuye || '';
-      
-      this.dialogRef.close(this.counterpart);
+        this.dialogRef.close(this.counterpart);
+      }
+    } else {
+      this.openSnackBar('Lo sentimos', `No hay una fuente seleccionada`, 'error', `Debe seleccionar una fuente antes de añadir.`);
     }
+  }
+
+  //Metodo para llamar alertas
+  openSnackBar(title:string, message: string, type:string, message2?: string) {
+    this.snackBar.openFromComponent(AlertsComponent, {
+      data:{title,message,message2,type},
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: [type],
+    });
   }
 
   ngOnDestroy() {
