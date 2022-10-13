@@ -94,11 +94,19 @@ export class RequestTrayComponent implements OnInit {
   }
 
   modificatioRequest(ProjectId : number, requestId: number, Element: any){
-    let estado: number = 0;
-    if (Element.estado === 'En Modificación') {
-      estado = 1;
-    } else if(Element.estado === 'Enviado'){
-      estado = 2;
+    let estado: string = '';
+    console.log(Element.estado);
+    
+    if (Element.estado == 'En Modificación') {
+      estado = 'Modificacion';
+    } else if(Element.estado == 'En Ajuste') {
+      estado = 'Ajuste';
+    } else if(Element.estado == 'Aprobada') {
+      estado = 'Aprobada';
+    }else if(Element.estado == 'Rechazada') {
+      estado = 'Rechazada';
+    }else if(Element.estado == 'En Revisión') {
+      estado = 'Revision';
     }
 
     ProChartStorage.setItem(`estado${requestId}`, estado);

@@ -79,6 +79,12 @@ export class ModificationRequestService {
     return this.http.post(dir, file);
   }
 
+
+  exportFile(projectId: string, requestId: string): Observable<any> {
+    let dir = `${this.Url}/SolicitudMod/ExportFile?ProyectoId=${projectId}&SolicitudId=${requestId}`;
+    return this.http.get<any>(dir);
+  }
+
   getRequerimentApproved(idRequest: string, idRequeriment: number): Observable<any> {
     let dir = `${this.Url}/Proyecto/${idRequest}/Requerimiento/${idRequeriment}`;
     return this.http.get<any>(dir);

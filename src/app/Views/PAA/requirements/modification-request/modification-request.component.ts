@@ -132,7 +132,7 @@ export class ModificationRequestComponent implements OnInit {
   ID_REQUERIMIENTO: number = 0;
 
   //Propiedad para validar el estado de una Solicitud de Modificación
-  StatusRequest: number = 0;
+  StatusRequest: string = '';
 
   //Validar accion dependiendo de si se va a crear nuevo o actualización de un nuevo requerimiento
   accionRequeriment: number = 1;
@@ -156,6 +156,7 @@ export class ModificationRequestComponent implements OnInit {
     this.dataSolicitudModID = this.activeRoute.snapshot.paramMap.get('idSol') || '';
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
     this.getModificationRequet(+this.dataProjectID);
+    this.StatusRequest = ProChartStorage.getItem(`estado${this.dataSolicitudModID}`) || '';
     if (this.dataSolicitudModID != '0') {
       this.getModificationRequestByRequestId(+this.dataSolicitudModID, this.filterModificationRequest);
       this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
@@ -170,6 +171,7 @@ export class ModificationRequestComponent implements OnInit {
       this.getNewRequeriment();
     }
   }
+
 
   getModificationRequet(projectId: number) {
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
@@ -798,6 +800,15 @@ export class ModificationRequestComponent implements OnInit {
     }
   }
 
+  exportFile() {
+    this.serviceModRequest.exportFile(this.dataProjectID, this.dataSolicitudModID).subscribe(res => {
+      console.log(res);
+      
+    }, error => {
+      console.log(error);
+    })
+  }
+
 
   extraerBase64 = async ($event: any) => new Promise((resolve) => {
     try {
@@ -981,8 +992,7 @@ export class ModificationRequestComponent implements OnInit {
     ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
     ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
     ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
-    //this.StatusRequest = Number(ProChartStorage.getItem(`estado${this.dataSolicitudModID}`));
-    if (this.StatusRequest === 1) {
+    if (this.StatusRequest == 'Modificacion') {
       this.serviceModRequest.deleteModificationRequest(Number(this.dataSolicitudModID)).subscribe(res => {
         console.log(res.status);
         if (res.status) {
@@ -992,14 +1002,18 @@ export class ModificationRequestComponent implements OnInit {
       }, error => {
         console.log(error);
       });
-      
-    } else if(ProChartStorage.getItem(`estado${this.dataSolicitudModID}`) == null) {      
+    } else if(ProChartStorage.getItem(`estado${this.dataSolicitudModID}`) == null || this.StatusRequest === '') {            
       this.router.navigate([`/PAA/Requerimientos/${this.dataProjectID}`]);
-      ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
-    } else if (this.StatusRequest === 0) {
-      this.router.navigate([`/PAA/Requerimientos/${this.dataProjectID}`]);
-      ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
+    } else if(this.StatusRequest == 'Revision') {
+      this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
+    }else if(this.StatusRequest == 'Ajuste') {
+      this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
+    }else if(this.StatusRequest == 'Aprobada') {
+      this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
+    }else if(this.StatusRequest == 'Rechazada') {
+      this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
     }
+    ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
 
   }
 
