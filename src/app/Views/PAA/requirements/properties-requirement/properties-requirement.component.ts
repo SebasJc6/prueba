@@ -298,7 +298,8 @@ export class PropertiesRequirementComponent implements OnInit {
     } else {
       this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
       this.viewVersionMod = true;
-
+      this.errorNumReq = false;
+      this.errorVerifyNumReq = false;
 
     }
   }
@@ -527,7 +528,7 @@ export class PropertiesRequirementComponent implements OnInit {
       distinctUntilChanged()
     ).subscribe(val => {
       this.serviceProRequirement.verifyNumReq(+this.dataProjectID, val).subscribe(data => {
-        this.errorNumReq = val.length > 0 ? false : true;
+        this.errorNumReq =  false 
         if (data.data == false) {
           this.errorVerifyNumReq = true
           this.msjVerifyNumReq = data.title
@@ -604,13 +605,20 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dependencieId = dataTemp.requerimiento.dependenciaDestino.dependencia_ID.toString()
         this.selcModeId = dataTemp.requerimiento.modalidadSeleccion.modalidad_Sel_ID.toString()
 
+        this.dataTableClasificaciones = dataTemp.cadenasPresupuestales
         this.cadenasPresupuestalesTemporal = dataTemp.cadenasPresupuestales
         var stringToStoreCla = JSON.stringify(this.cadenasPresupuestalesTemporal);
         ProChartStorage.setItem("dataTableClacificaciones", stringToStoreCla);
         var fromStorageCla = ProChartStorage.getItem("dataTableClacificaciones");
         this.reloadDataTbl(fromStorageCla, 'clasificaciones');
 
+        // this.codigosTemporal = dataTemp.codsUNSPSC 
+        // let codTem = this.codigosTemporal.forEach(element => {
+        //   return JSON.parse(element.unspsc.codUNSPSC +element.unspsc.descripcion+element.unspsc.descripcion )
+        // });
+        this.dataTableCodigos = dataTemp.codsUNSPSC
         this.codigosTemporal = dataTemp.codsUNSPSC
+        console.log('codigosTemporal', this.codigosTemporal)
         var stringToStoreCod = JSON.stringify(this.codigosTemporal);
         ProChartStorage.setItem("dataTableCodigos", stringToStoreCod);
         var fromStorageCod = ProChartStorage.getItem("dataTableCodigos");
@@ -773,7 +781,7 @@ export class PropertiesRequirementComponent implements OnInit {
       console.log('this.dataClasificacion', this.dataClasificacion)
       this.dataCodigos.forEach((item: any) => {
         console.log('this.item', item)
-        item.unspsC_ID = item.unspsC_ID
+        item.unspsC_ID = item.unspsC_ID || item.unspsc.unspsC_ID
         delete item.unspsc
         delete item.descripcion
         delete item.codigoUNSPSC
@@ -875,6 +883,9 @@ export class PropertiesRequirementComponent implements OnInit {
           } else {
             this.openSnackBar('Error', dataResponse.message, 'error');
           }
+        }, err => {
+          console.log('dataResponse', err)
+          this.openSnackBar('Error', JSON.stringify(err.error.Data), 'error');
         })
 
       }
@@ -1068,6 +1079,7 @@ export class PropertiesRequirementComponent implements OnInit {
           //console.log('ya existe', repe);
           this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
           return;
+          
         }
         this.dataTableClasificaciones.push(this.dataTableClasificacion)
         var stringToStore = JSON.stringify(this.dataTableClasificaciones);
@@ -1077,6 +1089,7 @@ export class PropertiesRequirementComponent implements OnInit {
       }
     }
     if (type == 'codigos') {
+      
       if (this.proRequirementeForm.controls.codigosForm.controls['codCategoria'].value == '' || this.proRequirementeForm.controls.codigosForm.controls['codCategoria'].value == null) {
         this.errorCodigos = true;
       } else {
