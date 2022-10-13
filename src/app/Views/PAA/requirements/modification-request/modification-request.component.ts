@@ -349,7 +349,7 @@ export class ModificationRequestComponent implements OnInit {
 
             this.ArrayRequerimentApproved.push(datosRequeriment);
             console.log(this.ArrayRequerimentApproved);
-          });          
+          });
   }
 
   newRequeriment() {
@@ -785,10 +785,10 @@ export class ModificationRequestComponent implements OnInit {
 
   exportFile() {
     this.serviceModRequest.exportFile(this.dataProjectID, this.dataSolicitudModID).subscribe(res => {
-      console.log(res);
       
     }, error => {
       console.log(error);
+      this.openSnackBar('Lo sentimos', `Error en Servidor`, 'error', `Ocurrió un error interno en el servidor.`);
     })
   }
 
@@ -831,7 +831,8 @@ export class ModificationRequestComponent implements OnInit {
   }
 
   //Botón Guardar
-  guardar() { 
+  guardar() {
+
     let arrayDataSave: postDataModReqI[] = [];
     let fromStorageArrayData = ProChartStorage.getItem(`arrayDatos${this.dataSolicitudModID}`);
     if (fromStorageArrayData != null) {
@@ -844,7 +845,7 @@ export class ModificationRequestComponent implements OnInit {
     if (fromStorageCounters != null) {
       arrayCounterpartsSave = JSON.parse(fromStorageCounters || '');
     }
-    console.log(arrayCounterpartsSave);
+    // console.log(arrayCounterpartsSave);
     
     
     if (this.dataSolicitudModID == '0') { 
@@ -855,6 +856,7 @@ export class ModificationRequestComponent implements OnInit {
       postDataSave.observacion = this.JustificationText;
       
        this.serviceModRequest.postModificationRequestSave(postDataSave).subscribe(res => {
+        // console.log(res);
         
         if(res.status == 200) { 
           this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
@@ -870,7 +872,10 @@ export class ModificationRequestComponent implements OnInit {
           Data.map(item => {
             erorsMessages += item + '. ';
           });
-          this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
+          this.openSnackBar('Lo sentimos', `No hay registros para guardar`, 'error', erorsMessages);
+          ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
+          this.ArrayDataStorage = [];
+          this.reloadDataTbl();
         }
        }, error => {
          console.log(error);
@@ -940,11 +945,15 @@ export class ModificationRequestComponent implements OnInit {
       }
         
         this.serviceModRequest.putModificationRequestSend(sendData).subscribe(res => {
-          console.log(res);
+          // console.log(res);
           
           if(res.status == 200) {
             this.openSnackBar('Éxito al Enviar', `Solicitud de Modificación Enviada.`, 'success');
             //Elimación de los registros en LocalStorage
+            ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
+            ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
+            ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
+            ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
             ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
             this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
           } else if (res.status == 404) {
