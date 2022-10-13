@@ -407,7 +407,7 @@
                                     <ng-container matColumnDef="auxiliar">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="aux">
                                             Auxiliar
-                                        <td mat-cell *matCellDef="let element">{{ element.auxiliar.codigoAuxiliar}}</td>
+                                        <td mat-cell *matCellDef="let element">{{ element.auxiliar}}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="detalleFuente">
@@ -582,14 +582,14 @@
                                                 <ng-container matColumnDef="codigoUNSPSC">
                                                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="Cod">
                                                         Código UNSPSC
-                                                    <td mat-cell *matCellDef="let element">{{ element.unspsc.codigoUNSPSC}}
-                                                    </td>
+                                                    <td mat-cell *matCellDef="let element">{{ element.codigoUNSPSC}}</td>
+                                                    
                                                 </ng-container>
 
                                                 <ng-container matColumnDef="descripcion">
                                                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="Des">
                                                         Descripción de categoría
-                                                    <td mat-cell *matCellDef="let element">{{ element.unspsc.descripcion}}</td>
+                                                    <td mat-cell *matCellDef="let element">{{ element.descripcion}}</td>
                                                 </ng-container>
 
                                                 <ng-container matColumnDef="eliminar">

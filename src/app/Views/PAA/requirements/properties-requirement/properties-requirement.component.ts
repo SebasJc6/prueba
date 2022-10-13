@@ -733,20 +733,25 @@ export class PropertiesRequirementComponent implements OnInit {
       console.log('this.proRequirementeForm.value', this.proRequirementeForm.value)
       this.formVerifyComplete['infoBasica'] = this.proRequirementeForm.controls.infoBasicaForm.value
 
-      if (this.formEditRequirement = true) {
-        this.dataCodigos = this.codigosTemporal
+      // if (this.formEditRequirement = true) {
+      //   this.dataCodigos = this.codigosTemporal
+      //   this.dataClasificacion = this.cadenasPresupuestalesTemporal
+      //   this.formVerifyComplete['clasificaciones'] = this.cadenasPresupuestalesTemporal
+      //   this.formVerifyComplete['codigos'] = this.codigosTemporal
+      // } else {
+      //   this.dataCodigos = this.dataTableCodigos
+      //   this.dataClasificacion = this.dataTableClasificaciones
+       
+      // }
 
-        this.dataClasificacion = this.cadenasPresupuestalesTemporal
-        this.formVerifyComplete['clasificaciones'] = this.cadenasPresupuestalesTemporal
-        this.formVerifyComplete['codigos'] = this.codigosTemporal
-      } else {
-        this.dataCodigos = this.dataTableCodigos
-        this.dataClasificacion = this.dataTableClasificaciones
-        this.formVerifyComplete['clasificaciones'] = this.dataTableClasificaciones
-        this.formVerifyComplete['codigos'] = this.dataTableCodigos
-      }
+      let dtaCla = ProChartStorage.getItem('dataTableClacificaciones')
+      this.dataClasificacion = JSON.parse(dtaCla||'[]')
+      this.formVerifyComplete['clasificaciones'] = JSON.parse(dtaCla||'[]')
+      let dtaCod = ProChartStorage.getItem('dataTableCodigos')
+      this.dataCodigos = JSON.parse(dtaCod || '[]')
+      this.formVerifyComplete['codigos'] = JSON.parse(dtaCod || '[]')
 
-      console.log('this.dataClasificacion', this.dataClasificacion)
+    //  console.log('this.dataClasificacion', this.dataClasificacion)
       this.dataClasificacion.forEach((item: any) => {
         // if(this.formEditRequirement = true){
         console.log('dataClasificacion', item)
@@ -756,7 +761,7 @@ export class PropertiesRequirementComponent implements OnInit {
         item.mgA_ID = item.mga.mgA_ID
         item.pospre_ID = item.pospre.pospre_ID
         item.actividad_ID = item.actividad.actividad_ID
-        item.auxiliar_ID = item.auxiliar.auxiliar_ID
+        item.auxiliar_ID = item.auxiliar
         item.fuente_ID = item.fuente.fuente_ID
         delete item.mga
         delete item.pospre
@@ -765,15 +770,15 @@ export class PropertiesRequirementComponent implements OnInit {
         delete item.fuente
         delete item.uuid
       })
-      console.log('this.dataCodigos', this.dataCodigos)
+      console.log('this.dataClasificacion', this.dataClasificacion)
       this.dataCodigos.forEach((item: any) => {
         console.log('this.item', item)
-
-        item.unspsC_ID = item.unspsc.unspsC_ID || item.unspsC_ID
+        item.unspsC_ID = item.unspsC_ID
         delete item.unspsc
         delete item.descripcion
         delete item.codigoUNSPSC
       })
+      console.log('this.dataCodigos arr', this.dataCodigos)
 
       let requerimientoForm = {} as requerimientoI
       if (this.typePage == 'nuevo') {
@@ -815,7 +820,7 @@ export class PropertiesRequirementComponent implements OnInit {
       this.formVerify.apropiacionInicial = this.proRequirementeForm.controls.initialAppro.value
       console.log('this.formVerify', this.formVerify)
 
-      if (this.typePage == 'nuevo') {
+      if (this.typePage == 'Nuevo') {
         this.serviceProRequirement.postVerifyDataSaveI(this.formVerify).subscribe(dataResponse => {
           //console.log('dataResponse', dataResponse)
           if (dataResponse.status == 200) {
@@ -836,7 +841,7 @@ export class PropertiesRequirementComponent implements OnInit {
           }
         }, err => {
           console.log('dataResponse', err)
-          this.openSnackBar('Error', err.message, 'error');
+          this.openSnackBar('Error', JSON.stringify(err.error.Data), 'error');
         })
       } else {
         console.log('formModificationRequest', this.formModificationRequest)
@@ -900,7 +905,7 @@ export class PropertiesRequirementComponent implements OnInit {
   }
   displayFnPOSPRE(value: any) {
     //console.log('value', value)
-    return value ? value.codPOSPRE : ''
+    return value ? value.codigo : ''
   }
   displayFnCod(value: any) {
     //console.log('value', value)
@@ -969,8 +974,8 @@ export class PropertiesRequirementComponent implements OnInit {
       this.errorAux = false;
       // this.auxiliarId = event.option.value.auxiliarId;
     }
-    if (tipo == 'dataFuente') {
-      // //console.log('onSelectionChange dataFuente', event.fuenteMSPS);
+    if (tipo == 'fuente') {
+     // console.log('onSelectionChange dataFuente', event.fuenteMSPS);
       this.fuenteId = event.fuente_ID
       this.errorFuentes = false;
       // //console.log('onSelectionChange dataFuente', event.option.value.fuenteMSPS);
@@ -1075,7 +1080,7 @@ export class PropertiesRequirementComponent implements OnInit {
       if (this.proRequirementeForm.controls.codigosForm.controls['codCategoria'].value == '' || this.proRequirementeForm.controls.codigosForm.controls['codCategoria'].value == null) {
         this.errorCodigos = true;
       } else {
-        this.dataTableCodigo = this.proRequirementeForm.controls.codigosForm.controls.codCategoria.value
+        this.dataTableCodigo =  this.proRequirementeForm.controls.codigosForm.controls.codCategoria.value
         let repe = this.dataTableCodigos.filter(u => u.unspsC_ID == this.dataTableCodigo['unspsC_ID'])
         if (repe.length != 0) {
           //console.log('ya existe', repe);
