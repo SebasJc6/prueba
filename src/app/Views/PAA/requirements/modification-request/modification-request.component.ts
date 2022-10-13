@@ -253,21 +253,27 @@ export class ModificationRequestComponent implements OnInit {
         let requerimentNew: dateTableModificationI[] = result;
 
         requerimentNew.forEach(element =>  {
-          console.log(element.requerimientoID);
           this.ArrayDataStorage.unshift(element);
           
+          this.dataRequerimentApproved = [];
+          
             this.serviceModRequest.getRequerimentApproved(this.dataProjectID, element.requerimientoID).subscribe(data  => {
+              // console.log('Data: ', data);
               this.dataRequerimentApproved.push(data);
+
+              // console.log('dataRequerimentApproved: ', this.dataRequerimentApproved);
+              
+              this.getRequeriment();
             });
 
             this.addDataTbl();
           });
-        }        
+        }
     });
   }
 
 
-  getRequerimentApproved() {
+  getRequeriment() {
     let codigosUNSPSC: codsUNSPSC[] = [];
     let cadenasPresupuestales: postDataModifCadenasPresI[] = [];
     let requeriment = {} as postDataModifRequerimentsI;
@@ -347,8 +353,21 @@ export class ModificationRequestComponent implements OnInit {
               modificacion: modificacion
             }
 
-            this.ArrayRequerimentApproved.push(datosRequeriment);
-            console.log(this.ArrayRequerimentApproved);
+            if (this.ArrayDatos.length > 0) {
+              this.ArrayDatos.forEach(item => {
+                let index = this.ArrayDatos.findIndex((x: any) => x.modificacion.requerimiento.req_ID === datosRequeriment.modificacion.requerimiento.req_ID);
+                if (index >= 0) {
+                  this.ArrayDatos.splice(index, 1);
+                }
+                this.ArrayDatos.unshift(datosRequeriment);
+              });
+              
+            } else {
+              this.ArrayDatos.unshift(datosRequeriment);
+            }
+            
+            let stringToStore = JSON.stringify(this.ArrayDatos);
+            ProChartStorage.setItem(`arrayDatos${this.dataSolicitudModID}`, stringToStore);
           });
   }
 
@@ -787,7 +806,7 @@ export class ModificationRequestComponent implements OnInit {
     this.serviceModRequest.exportFile(this.dataProjectID, this.dataSolicitudModID).subscribe(res => {
       
     }, error => {
-      console.log(error);
+      // console.log(error);
       this.openSnackBar('Lo sentimos', `Error en Servidor`, 'error', `Ocurrió un error interno en el servidor.`);
     })
   }
@@ -865,6 +884,7 @@ export class ModificationRequestComponent implements OnInit {
           ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
           this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
+
         } else if (res.Status == 404) {
           let Data: string[] = [];
           Data = Object.values(res.Data);
@@ -878,7 +898,20 @@ export class ModificationRequestComponent implements OnInit {
           this.reloadDataTbl();
         }
        }, error => {
-         console.log(error);
+        //  console.log(error);
+
+         if (error.status == 400) {
+          let Data: string[] = [];
+          Data = Object.values(error.error.Data);
+          let erorsMessages = '';
+          Data.map(item => {
+            erorsMessages += item + '. ';
+          });
+          this.openSnackBar('Lo sentimos', error.error.Message, 'error', erorsMessages);
+          // ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
+          // this.ArrayDataStorage = [];
+          // this.reloadDataTbl();
+        }
        });
     } else {
       let putDataSave = {} as putModificationRequestI;
@@ -890,7 +923,7 @@ export class ModificationRequestComponent implements OnInit {
       putDataSave.deleteReqIDs = this.RequerimentsDelete;
       putDataSave.deleteContraIDs = this.CounterpartsDelete;
       
-      console.log(arrayCounterpartsSave);
+      // console.log(arrayCounterpartsSave);
       
       this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
         
@@ -920,8 +953,20 @@ export class ModificationRequestComponent implements OnInit {
           this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
         }
       }, error => {
-        console.log('Hubo un error ', error);
-        
+        // console.log('Hubo un error ', error);
+
+        if (error.status == 400) {
+          let Data: string[] = [];
+          Data = Object.values(error.error.Data);
+          let erorsMessages = '';
+          Data.map(item => {
+            erorsMessages += item + '. ';
+          });
+          this.openSnackBar('Lo sentimos', error.error.Message, 'error', erorsMessages);
+          // ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
+          // this.ArrayDataStorage = [];
+          // this.reloadDataTbl();
+        }        
       });
     }
   }
@@ -993,7 +1038,7 @@ export class ModificationRequestComponent implements OnInit {
     ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
     if (this.StatusRequest == 'Modificacion') {
       this.serviceModRequest.deleteModificationRequest(Number(this.dataSolicitudModID)).subscribe(res => {
-        console.log(res.status);
+        // console.log(res.status);
         if (res.status == 200) {
           this.openSnackBar('Acciones Canceladas', `Solicitud de Modificación Eliminada.`, 'success');
           this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
