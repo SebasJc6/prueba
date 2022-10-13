@@ -940,9 +940,14 @@ export class ModificationRequestComponent implements OnInit {
   enviar() { 
     let fromStorageArrayData = ProChartStorage.getItem(`arrayDatos${this.dataSolicitudModID}`);
     let fromStorageCounters = ProChartStorage.getItem(`arrayCounterparts${this.dataSolicitudModID}`);
-    if (fromStorageArrayData != null && fromStorageCounters != null) {
+    
+    if (this.dataSolicitudModID == '0') {
+      this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe guardar primero la solicitud para poder enviarla.`);
+    } else if(fromStorageArrayData !== null ) {
       this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe guardar primero todos los registros.`);
-    }else if (this.StatusRequest == 'Modificacion' || this.StatusRequest == 'Ajuste'){
+    } else if(fromStorageCounters !== null ) {
+      this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe guardar primero todos los registros.`);
+    } else if (this.StatusRequest == 'Modificacion' || this.StatusRequest == 'Ajuste'){
 
       let sendData = {
         idProyecto: this.dataProjectID,
