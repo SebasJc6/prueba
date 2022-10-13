@@ -166,7 +166,7 @@ export interface postDataModifCadenasPresI {
   anioVigRecursos: number,
   auxiliar_ID: number,
   fuente_ID: number,
-  activ_ID: number,
+  actividad_ID: number,
   mgA_ID: number,
   pospre_ID: number,
   apropiacionDisponible: number,
@@ -179,11 +179,11 @@ export interface postDataModifCadenasPresI {
 
 export interface postDataModifApropiacionInicialI {
   apropIni_ID: number,
-  añoV0: number,
+  anioV0: number,
   valor0: number,
-  añoV1: number,
+  anioV1: number,
   valor1: number,
-  añoV2: number,
+  anioV2: number,
   valor2: number,
   valorTotal:number
 }

@@ -62,7 +62,7 @@ export class ModificationRequestService {
   }
 
   //Funcionalidad de enviar
-  putModificationRequestSend(dataSave: postModificationRequestI): Observable<any> {
+  putModificationRequestSend(dataSave: any): Observable<any> {
     let dir = `${this.Url}SolicitudMod/Enviar`;
     return this.http.put(dir, dataSave);
   }
