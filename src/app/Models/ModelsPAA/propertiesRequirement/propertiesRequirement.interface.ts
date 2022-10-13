@@ -232,6 +232,21 @@ export interface verifyReqI {
     title: string,
     data: boolean
 }
+export interface saveDataEditI{
+    idProyecto: number,
+    observacion: string,
+    datos: saveDataEditDatosI[],
+    contrapartidas: [],
+    solicitudModID: number,
+    deleteReqIDs:[],
+    deleteContraIDs:[]
+
+}
+export interface saveDataEditDatosI{
+    modificacion_ID: number,
+    accion: number,
+    modificacion:verifyDataSaveI,
+}
 
 export interface verifyDataSaveI {
     proj_ID: number,

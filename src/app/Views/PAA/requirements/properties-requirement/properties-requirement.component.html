@@ -582,14 +582,14 @@
                                                 <ng-container matColumnDef="codigoUNSPSC">
                                                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="Cod">
                                                         Código UNSPSC
-                                                    <td mat-cell *matCellDef="let element">{{ element.codigoUNSPSC}}
+                                                    <td mat-cell *matCellDef="let element">{{ element.unspsc.codigoUNSPSC}}
                                                     </td>
                                                 </ng-container>
 
                                                 <ng-container matColumnDef="descripcion">
                                                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="Des">
                                                         Descripción de categoría
-                                                    <td mat-cell *matCellDef="let element">{{ element.descripcion}}</td>
+                                                    <td mat-cell *matCellDef="let element">{{ element.unspsc.descripcion}}</td>
                                                 </ng-container>
 
                                                 <ng-container matColumnDef="eliminar">
@@ -821,7 +821,7 @@
 
         <mat-tab  *ngIf="viewVersion">
             <ng-template mat-tab-label>
-                Version actual
+                Versión actual
                 <mat-icon class="example-tab-icon">insert_drive_file</mat-icon>                
               </ng-template>
             <form [formGroup]="versionActualForm">
@@ -1122,28 +1122,8 @@
                                         </td>
                                     </ng-container>
 
-                                    <ng-container matColumnDef="acciones">
-                                        <tr>
-                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="acc"> Acciones
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <td mat-cell *matCellDef="let element">
-                                                <div class="Actions">
-                                                    <mat-icon mat-icon-button class="btnActions" matTooltip="Editar">
-                                                        edit
-                                                    </mat-icon>
-                                                    <mat-icon mat-icon-button style="margin-left: 5px;"
-                                                        class="btnActions" matTooltip="Eliminar"
-                                                        (click)="removeDataTbl(element,'clasificaciones')">delete
-                                                    </mat-icon>
-                                                </div>
-                                            </td>
-                                        <tr>
-                                    </ng-container>
-
-                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>S
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumnsAct"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumnsAct"></tr>S
                                 </table>
                             </div>
                             <!-- FIN TABLA -->
@@ -1179,27 +1159,9 @@
                                                     <td mat-cell *matCellDef="let element">{{ element.descripcion}}</td>
                                                 </ng-container>
 
-                                                <ng-container matColumnDef="eliminar">
-                                                    <tr>
-                                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                                            class="Acc">
-                                                            Eliminar
-                                                        </th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td mat-cell *matCellDef="let element">
-                                                            <div style="text-align: center;">
-                                                                <mat-icon mat-icon-button class="btnActions"
-                                                                    matTooltip="Eliminar"
-                                                                    (click)="removeDataTbl(element.unspsC_ID,'codigos')">
-                                                                    delete</mat-icon>
-                                                            </div>
-                                                        </td>
-                                                    <tr>
-                                                </ng-container>
 
-                                                <tr mat-header-row *matHeaderRowDef="codigosColumns"></tr>
-                                                <tr mat-row *matRowDef="let row; columns: codigosColumns"></tr>
+                                                <tr mat-header-row *matHeaderRowDef="codigosColumnsAct"></tr>
+                                                <tr mat-row *matRowDef="let row; columns: codigosColumnsAct"></tr>
                                             </table>
                                         </div>
                                         <!-- FIN TABLA -->

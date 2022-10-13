@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, skipWhile, tap } from 'rxjs/operators'
 import { environment } from 'src/environments/environment';
-import { getAllActivitiesI, getAllAuxiliarI, getAllContacTypeI, getAllContractualActionI, getAllDependenciesI, getAllFuentesI, getAllMGAI, getAllPOSPREI, getAllProfileI, getAllReviewsAreaI, getAllSelectionModeDataI, getAllSelectionModeI, getAllUNSPSCI, getConceptsI, getDataAprobadaI, getDataTemporalI, getInfoToCreateReqI, responseVerifyDataSaveI, verifyDataSaveI, verifyReqI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
+import { getAllActivitiesI, getAllAuxiliarI, getAllContacTypeI, getAllContractualActionI, getAllDependenciesI, getAllFuentesI, getAllMGAI, getAllPOSPREI, getAllProfileI, getAllReviewsAreaI, getAllSelectionModeDataI, getAllSelectionModeI, getAllUNSPSCI, getConceptsI, getDataAprobadaI, getDataTemporalI, getInfoToCreateReqI, responseVerifyDataSaveI, saveDataEditI, verifyDataSaveI, verifyReqI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -126,5 +126,12 @@ export class PropertiesRequirementService {
   postVerifyDataSaveI(form: verifyDataSaveI): Observable<responseVerifyDataSaveI> {
     let dir = this.logicUrl + 'Requerimiento/Verify'
     return this.http.post<responseVerifyDataSaveI>(dir, form)
+  }
+
+  
+
+  putModificationRequestSend(form: saveDataEditI): Observable<any> {
+    let dir = `${this.logicUrl}SolicitudMod/Guardar`;
+    return this.http.put(dir, form);
   }
 }
