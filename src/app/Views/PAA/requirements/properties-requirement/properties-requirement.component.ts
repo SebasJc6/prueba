@@ -13,6 +13,7 @@ import { dataSourceClasificacionesI, dataSourceRevisionesI, getAllAuxiliarDataI,
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
 import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
+import { ReviewsService } from 'src/app/Services/ServicesPAA/propertiesRequirement/reviews/reviews.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 import { v4 as uuid } from 'uuid';
 
@@ -104,6 +105,7 @@ export class PropertiesRequirementComponent implements OnInit {
   errorObservaciones: boolean = false;
   msjVerifyRangeSararial: string = '';
   formEditRequirement: boolean = false;
+  loading: boolean = false;
   //variables localstorage
   dataTableCodigos = new Array();
   dataTableCodigo: any;
@@ -241,6 +243,7 @@ export class PropertiesRequirementComponent implements OnInit {
     public serviceProject: ProjectService,
     public serviceProRequirement: PropertiesRequirementService,
     public serviceModRequest: ModificationRequestService,
+    public serviceReviews: ReviewsService,
     public router: Router,
     private activeRoute: ActivatedRoute,
     private formbuilder: FormBuilder,
@@ -302,6 +305,7 @@ export class PropertiesRequirementComponent implements OnInit {
       this.errorVerifyNumReq = false;
 
     }
+    this.getAllReviews(+this.dataRequirementID);
   }
 
   currencyInput() {
@@ -528,7 +532,7 @@ export class PropertiesRequirementComponent implements OnInit {
       distinctUntilChanged()
     ).subscribe(val => {
       this.serviceProRequirement.verifyNumReq(+this.dataProjectID, val).subscribe(data => {
-        this.errorNumReq =  false 
+        this.errorNumReq = false
         if (data.data == false) {
           this.errorVerifyNumReq = true
           this.msjVerifyNumReq = data.title
@@ -749,17 +753,17 @@ export class PropertiesRequirementComponent implements OnInit {
       // } else {
       //   this.dataCodigos = this.dataTableCodigos
       //   this.dataClasificacion = this.dataTableClasificaciones
-       
+
       // }
 
       let dtaCla = ProChartStorage.getItem('dataTableClacificaciones')
-      this.dataClasificacion = JSON.parse(dtaCla||'[]')
-      this.formVerifyComplete['clasificaciones'] = JSON.parse(dtaCla||'[]')
+      this.dataClasificacion = JSON.parse(dtaCla || '[]')
+      this.formVerifyComplete['clasificaciones'] = JSON.parse(dtaCla || '[]')
       let dtaCod = ProChartStorage.getItem('dataTableCodigos')
       this.dataCodigos = JSON.parse(dtaCod || '[]')
       this.formVerifyComplete['codigos'] = JSON.parse(dtaCod || '[]')
 
-    //  console.log('this.dataClasificacion', this.dataClasificacion)
+      //  console.log('this.dataClasificacion', this.dataClasificacion)
       this.dataClasificacion.forEach((item: any) => {
         // if(this.formEditRequirement = true){
         console.log('dataClasificacion', item)
@@ -878,8 +882,11 @@ export class PropertiesRequirementComponent implements OnInit {
         this.serviceProRequirement.putModificationRequestSend(this.formModificationRequest).subscribe(dataResponse => {
           console.log('dataResponse', dataResponse)
           if (dataResponse.status == 200) {
+            this.loading = true
             this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
             this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+            this.loading = false
+
           } else {
             this.openSnackBar('Error', dataResponse.message, 'error');
           }
@@ -986,7 +993,7 @@ export class PropertiesRequirementComponent implements OnInit {
       // this.auxiliarId = event.option.value.auxiliarId;
     }
     if (tipo == 'fuente') {
-     // console.log('onSelectionChange dataFuente', event.fuenteMSPS);
+      // console.log('onSelectionChange dataFuente', event.fuenteMSPS);
       this.fuenteId = event.fuente_ID
       this.errorFuentes = false;
       // //console.log('onSelectionChange dataFuente', event.option.value.fuenteMSPS);
@@ -1079,7 +1086,7 @@ export class PropertiesRequirementComponent implements OnInit {
           //console.log('ya existe', repe);
           this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
           return;
-          
+
         }
         this.dataTableClasificaciones.push(this.dataTableClasificacion)
         var stringToStore = JSON.stringify(this.dataTableClasificaciones);
@@ -1089,11 +1096,11 @@ export class PropertiesRequirementComponent implements OnInit {
       }
     }
     if (type == 'codigos') {
-      
+
       if (this.proRequirementeForm.controls.codigosForm.controls['codCategoria'].value == '' || this.proRequirementeForm.controls.codigosForm.controls['codCategoria'].value == null) {
         this.errorCodigos = true;
       } else {
-        this.dataTableCodigo =  this.proRequirementeForm.controls.codigosForm.controls.codCategoria.value
+        this.dataTableCodigo = this.proRequirementeForm.controls.codigosForm.controls.codCategoria.value
         let repe = this.dataTableCodigos.filter(u => u.unspsC_ID == this.dataTableCodigo['unspsC_ID'])
         if (repe.length != 0) {
           //console.log('ya existe', repe);
@@ -1118,8 +1125,6 @@ export class PropertiesRequirementComponent implements OnInit {
         moment.locale("es");
         const fechaActual = Date.now();
         let dataRevision = {} as dataSourceRevisionesI
-        // dataRevision.revisionID = 1
-        // dataRevision.revisionID = dataRevision.revisionID + 1;
         dataRevision.fecha = moment(fechaActual).format("DD-MM-YYYY");;
         dataRevision.usuario = 'Ususario Prueba';
         dataRevision.area = this.proRequirementeForm.controls.reviews.controls.area.value;
@@ -1135,12 +1140,16 @@ export class PropertiesRequirementComponent implements OnInit {
           this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
           return;
         }
-        this.dataTableRevisiones.push(this.dataTableRevision);
-        var stringToStore = JSON.stringify(this.dataTableRevisiones);
-        ProChartStorage.setItem("dataTableRevisiones", stringToStore);
-        var fromStorage = ProChartStorage.getItem("dataTableRevisiones");
-        ////console.log('revisiones fromStorage', fromStorage)
-        this.reloadDataTbl(fromStorage, 'revisiones');
+        let dtl = this.dataTableRevision
+        console.log('this.dtl 1', dtl)
+
+        this.dataTableRevisiones.push(dtl);
+        var stringToStoredtl = JSON.stringify(this.dataTableRevisiones);
+        ProChartStorage.setItem("dataTableRevisiones", stringToStoredtl);
+        var fromStoragedtl = ProChartStorage.getItem("dataTableRevisiones");
+        this.reloadDataTbl(fromStoragedtl, 'revisiones');
+        console.log('this.dtl 2', dtl)
+return;
       }
     }
   }
@@ -1209,6 +1218,20 @@ export class PropertiesRequirementComponent implements OnInit {
       }
     }
 
+
+  }
+
+
+  getAllReviews(Modificacion_ID: number) {
+    this.serviceReviews.getAllReviews(Modificacion_ID).subscribe((data: any) => {
+      this.dataTableRevisiones = data.data.items;
+      console.log('data revisiones', data)
+      var stringToStore = JSON.stringify(this.dataTableRevisiones);
+      ProChartStorage.setItem("dataTableRevisiones", stringToStore);
+      this.reloadDataTbl(stringToStore, 'revisiones');
+    });
+  }
+  btnReviews(){
 
   }
 

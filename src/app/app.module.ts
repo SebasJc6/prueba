@@ -59,6 +59,7 @@ import { RequestTrayComponent } from './Views/PAA/request-tray/request-tray.comp
 import { AlertsComponent } from './Templates/alerts/alerts.component';
 import { AlertsPopUpComponent } from './Templates/alerts-pop-up/alerts-pop-up.component';
 import { LoginComponent } from './Views/login/login.component';
+import { SpinnerComponent } from './Templates/spinner/spinner.component';
 
 
 const materialModules = [
@@ -116,7 +117,8 @@ const materialModules = [
     RequestTrayComponent,
     AlertsComponent,
     AlertsPopUpComponent,
-    LoginComponent
+    LoginComponent,
+    SpinnerComponent
 
   ],
   imports: [
