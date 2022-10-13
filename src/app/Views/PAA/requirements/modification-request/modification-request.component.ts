@@ -370,8 +370,6 @@ export class ModificationRequestComponent implements OnInit {
           });
   }
 
-
-
   newRequeriment() {
     this.router.navigate([`PAA/PropiedadesRequerimiento/${this.dataProjectID}/${this.dataSolicitudModID}/${this.ID_REQUERIMIENTO}/Nuevo`]);
   }
@@ -940,11 +938,11 @@ export class ModificationRequestComponent implements OnInit {
 
   //Botón Enviar
   enviar() { 
-    let arrayDataSave: postDataModReqI[] = [];
     let fromStorageArrayData = ProChartStorage.getItem(`arrayDatos${this.dataSolicitudModID}`);
-    if (fromStorageArrayData != null) {
+    let fromStorageCounters = ProChartStorage.getItem(`arrayCounterparts${this.dataSolicitudModID}`);
+    if (fromStorageArrayData != null && fromStorageCounters != null) {
       this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe guardar primero todos los registros.`);
-    }else {
+    }else if (this.StatusRequest == 'Modificacion' || this.StatusRequest == 'Ajuste'){
 
       let sendData = {
         idProyecto: this.dataProjectID,
@@ -980,6 +978,8 @@ export class ModificationRequestComponent implements OnInit {
           console.log('Hubo un error ', error);
           
         });
+    } else {
+      this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe estar en estado "En Modificación" ó "En Ajuste" para ser enviada.`);
     }
   }
 
