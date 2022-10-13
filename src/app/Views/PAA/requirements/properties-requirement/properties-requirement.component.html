@@ -1,4 +1,5 @@
 <!--CONTENEDOR TOTAL COMPONENTE PROPIEDADES DEL REQUERIMIENTO-->
+<app-spinner [loading]="loading" *ngIf="loading"></app-spinner>
 <div class="container center-h center-v" >
 
     <!--MIGA PAN-->
@@ -726,7 +727,7 @@
                                     </div>
                                     <!-- BOTON AÑADIR REGISTRO A LA TABLA REVISIONES -->
                                     <mat-card-actions class="btnCard">
-                                        <button class="buton2 btn" mat-button mat-icon-button>
+                                        <button class="buton2 btn" mat-button mat-icon-button   (click)="addDataTbl('revisiones')">
                                             AÑADIR
                                         </button>
                                     </mat-card-actions>
@@ -741,7 +742,7 @@
                                         <ng-container matColumnDef="fecha">
                                             <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
                                                 Fecha
-                                            <td mat-cell *matCellDef="let element">{{ element.fecha}}</td>
+                                            <td mat-cell *matCellDef="let element">{{ element.fecha || element.fechaRevision}}</td>
                                         </ng-container>
 
                                         <ng-container matColumnDef="usuario">
@@ -753,7 +754,7 @@
                                         <ng-container matColumnDef="area">
                                             <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
                                                 Área
-                                            <td mat-cell *matCellDef="let element">{{ element.area.nombre}}</td>
+                                            <td mat-cell *matCellDef="let element">{{ element.area.nombre || element.area}}</td>
                                         </ng-container>
 
                                         <ng-container matColumnDef="concepto">
@@ -809,7 +810,7 @@
                     <button class="buton btn" mat-button mat-icon-button (click)="saveForm()">
                         GUARDAR
                     </button>
-                    <button class="buton btn" style="margin-left: 4%;" mat-button mat-icon-button>
+                    <button class="buton btn" style="margin-left: 4%;" mat-button mat-icon-button (click)="btnReviews()">
                         REVISADO
                     </button>
                     <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
