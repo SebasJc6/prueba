@@ -232,20 +232,20 @@ export interface verifyReqI {
     title: string,
     data: boolean
 }
-export interface saveDataEditI{
+export interface saveDataEditI {
     idProyecto: number,
     observacion: string,
     datos: saveDataEditDatosI[],
     contrapartidas: [],
     solicitudModID: number,
-    deleteReqIDs:[],
-    deleteContraIDs:[]
+    deleteReqIDs: [],
+    deleteContraIDs: []
 
 }
-export interface saveDataEditDatosI{
+export interface saveDataEditDatosI {
     modificacion_ID: number,
     accion: number,
-    modificacion:verifyDataSaveI,
+    modificacion: verifyDataSaveI,
 }
 
 export interface verifyDataSaveI {
@@ -288,7 +288,7 @@ export interface responseVerifyDataSaveI {
         Proj_ID: string[]
     }
 }
-export interface getDataAprobadaI{
+export interface getDataAprobadaI {
     status: number,
     Message: string,
     title: string,
@@ -338,6 +338,7 @@ export interface getDataTemporalI {
     },
     cadenasPresupuestalesTemporal: cadenasPresupuestalesI[],
     cadenasPresupuestales: cadenasPresupuestalesI[],
+
     apropiacionInicial: {
         apropIni_ID: number,
         anioV0: number,
@@ -357,7 +358,9 @@ export interface getDataTemporalI {
     ]
 
 }
-export interface cadenasPresupuestalesI{
+export interface cadenasPresupuestalesI {
+    cadenaPresupuestalDto: {
+        uuid: string,
         project_ID: number,
         requerimiento_ID: number,
         mes: number,
@@ -370,7 +373,7 @@ export interface cadenasPresupuestalesI{
             fuente_ID: number,
             codigoFuente: number,
             detalleFuente: string,
-            f_MSPS: number
+            fuenteMSPS: number
         },
         actividad: {
             actividad_ID: number,
@@ -390,6 +393,41 @@ export interface cadenasPresupuestalesI{
         disminucion: number,
         compromisos: number,
         apropiacionDefinitiva: number,
-        giros: number   
+        giros: number
+    },
+    project_ID: number,
+    requerimiento_ID: number,
+    mes: number,
+    anioVigRecursos: number,
+    auxiliar: {
+        aux_ID: number,
+        codigo: number
+    },
+    fuente: {
+        fuente_ID: number,
+        codigoFuente: number,
+        detalleFuente: string,
+        fuenteMSPS: number
+    },
+    actividad: {
+        actividad_ID: number,
+        codigo: number,
+        metaODS: string
+    },
+    mga: {
+        mgA_ID: number,
+        codigo: number
+    },
+    pospre: {
+        pospre_ID: number,
+        codigo: number
+    },
+    apropiacionDisponible: number,
+    aumento: number,
+    disminucion: number,
+    compromisos: number,
+    apropiacionDefinitiva: number,
+    giros: number,
+    
 
 }

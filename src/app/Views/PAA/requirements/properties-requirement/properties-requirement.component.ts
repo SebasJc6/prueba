@@ -609,13 +609,13 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dependencieId = dataTemp.requerimiento.dependenciaDestino.dependencia_ID.toString()
         this.selcModeId = dataTemp.requerimiento.modalidadSeleccion.modalidad_Sel_ID.toString()
 
-        this.dataTableClasificaciones = dataTemp.cadenasPresupuestales
-        this.cadenasPresupuestalesTemporal = dataTemp.cadenasPresupuestales
+        this.dataTableClasificaciones = dataTemp.cadenasPresupuestalesTemporal
+        this.cadenasPresupuestalesTemporal = dataTemp.cadenasPresupuestalesTemporal
         var stringToStoreCla = JSON.stringify(this.cadenasPresupuestalesTemporal);
         ProChartStorage.setItem("dataTableClacificaciones", stringToStoreCla);
         var fromStorageCla = ProChartStorage.getItem("dataTableClacificaciones");
         this.reloadDataTbl(fromStorageCla, 'clasificaciones');
-
+        console.log('this.dataTableClasificaciones', this.dataTableClasificaciones)
         // this.codigosTemporal = dataTemp.codsUNSPSC 
         // let codTem = this.codigosTemporal.forEach(element => {
         //   return JSON.parse(element.unspsc.codUNSPSC +element.unspsc.descripcion+element.unspsc.descripcion )
@@ -1044,6 +1044,7 @@ export class PropertiesRequirementComponent implements OnInit {
       this.dataSourceCodigos = new MatTableDataSource(objectsFromStorage);
     }
     if (type == 'clasificaciones') {
+      console.log('objectsFromStorage clasificaciones', objectsFromStorage)
       this.dataSourceClasificaciones = new MatTableDataSource(objectsFromStorage)
     }
     if (type == 'revisiones') {
@@ -1189,6 +1190,7 @@ return;
       });
       // find the index of the item to delete
       var index = objectsFromStorage.findIndex((x: any) => x.unspsC_ID === valueToFind);
+
       if (index >= 0) {
         this.dataTableCodigos.splice(index, 1);
         //  //console.log('arreglo rem,ove',this.dataTableCodigos)
@@ -1200,7 +1202,7 @@ return;
     }
     if (type == 'revisiones') {
       //console.log('clasificaciones', valueToFind)
-      return
+     
       var fromStorage = ProChartStorage.getItem("dataTableCodigos");
       var objectsFromStorage = JSON.parse(fromStorage || '')
       var toFind = objectsFromStorage.filter(function (obj: any) {
