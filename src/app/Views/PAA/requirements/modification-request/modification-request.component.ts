@@ -349,7 +349,7 @@ export class ModificationRequestComponent implements OnInit {
 
             this.ArrayRequerimentApproved.push(datosRequeriment);
             console.log(this.ArrayRequerimentApproved);
-          });          
+          });
   }
 
   newRequeriment() {
@@ -831,7 +831,8 @@ export class ModificationRequestComponent implements OnInit {
   }
 
   //Botón Guardar
-  guardar() { 
+  guardar() {
+
     let arrayDataSave: postDataModReqI[] = [];
     let fromStorageArrayData = ProChartStorage.getItem(`arrayDatos${this.dataSolicitudModID}`);
     if (fromStorageArrayData != null) {
@@ -940,11 +941,15 @@ export class ModificationRequestComponent implements OnInit {
       }
         
         this.serviceModRequest.putModificationRequestSend(sendData).subscribe(res => {
-          console.log(res);
+          // console.log(res);
           
           if(res.status == 200) {
             this.openSnackBar('Éxito al Enviar', `Solicitud de Modificación Enviada.`, 'success');
             //Elimación de los registros en LocalStorage
+            ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
+            ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
+            ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
+            ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
             ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
             this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
           } else if (res.status == 404) {
