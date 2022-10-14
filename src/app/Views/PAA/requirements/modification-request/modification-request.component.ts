@@ -163,6 +163,7 @@ export class ModificationRequestComponent implements OnInit {
     this.StatusRequest = ProChartStorage.getItem(`estado${this.dataSolicitudModID}`) || '';
     if (this.dataSolicitudModID != '0') {
       this.getModificationRequestByRequestId(+this.dataSolicitudModID, this.filterModificationRequest);
+      this.getRequestAndProject(Number(this.dataProjectID), Number(this.dataSolicitudModID));
       this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
     } else {
       let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
@@ -176,13 +177,17 @@ export class ModificationRequestComponent implements OnInit {
     }
   }
 
+  getRequestAndProject(id_project: number, id_request: number) {
+    this.serviceModRequest.getModificationRequestByRequest(id_project, id_request).subscribe(res => {
+      this.JustificationText = res.data.observacion;
+    })
+  }
 
   getModificationRequet(projectId: number) {
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
       this.codProject = data.data.proyecto_COD;
       this.numModification = data.data.numero_Modificacion;
       this.nomProject = data.data.nombreProyecto;
-      this.JustificationText = data.data.observacion;
       // console.log(data.data.observacion)
     })
   }
