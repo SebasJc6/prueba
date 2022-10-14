@@ -258,16 +258,10 @@ export class ModificationRequestComponent implements OnInit {
         let requerimentNew: dateTableModificationI[] = result;
 
         requerimentNew.forEach(element =>  {
-          this.ArrayDataStorage.unshift(element);
-          
-          this.dataRequerimentApproved = [];
-          
+          this.ArrayDataStorage.unshift(element);                    
             this.serviceModRequest.getRequerimentApproved(this.dataProjectID, element.requerimientoID).subscribe(data  => {
-              // console.log('Data: ', data);
-              this.dataRequerimentApproved.push(data);
-
-              // console.log('dataRequerimentApproved: ', this.dataRequerimentApproved);
-              
+              this.dataRequerimentApproved = [];
+              this.dataRequerimentApproved.push(data);   
               this.getRequeriment();
             });
 
