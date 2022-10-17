@@ -179,7 +179,9 @@ export class ModificationRequestComponent implements OnInit {
 
   getRequestAndProject(id_project: number, id_request: number) {
     this.serviceModRequest.getModificationRequestByRequest(id_project, id_request).subscribe(res => {
-      this.JustificationText = res.data.observacion;
+      if (res.data.observacion) {
+        this.JustificationText = res.data.observacion;
+      }
     })
   }
 
@@ -258,6 +260,12 @@ export class ModificationRequestComponent implements OnInit {
         let requerimentNew: dateTableModificationI[] = result;
 
         requerimentNew.forEach(element =>  {
+          this.ArrayDataStorage.forEach(item => {
+            let index = this.ArrayDataStorage.findIndex((x: any) => x.requerimientoID === element.requerimientoID);
+            if (index >= 0) {
+              this.ArrayDataStorage.splice(index, 1);
+            }
+          });
           this.ArrayDataStorage.unshift(element);                    
             this.serviceModRequest.getRequerimentApproved(this.dataProjectID, element.requerimientoID).subscribe(data  => {
               this.dataRequerimentApproved = [];
@@ -360,7 +368,7 @@ export class ModificationRequestComponent implements OnInit {
                 }
                 this.ArrayDatos.unshift(datosRequeriment);
               });
-              
+
             } else {
               this.ArrayDatos.unshift(datosRequeriment);
             }
@@ -802,14 +810,29 @@ export class ModificationRequestComponent implements OnInit {
   }
 
   exportFile() {
+    const fileName = `Reporte_${Math.random()}.xlsx`;
     this.serviceModRequest.exportFile(this.dataProjectID, this.dataSolicitudModID).subscribe(res => {
-      
+      // console.log(res);
+      this.manageExcelFile(res, fileName);
     }, error => {
-      // console.log(error);
       this.openSnackBar('Lo sentimos', `Error en Servidor`, 'error', `Ocurrió un error interno en el servidor.`);
     })
   }
 
+  //Función que recibe y descarga el reporte excel
+  manageExcelFile(response: any, fileName: string):void {
+    const dataType = response.type;
+    const binaryData = [];
+    binaryData.push(response);
+
+    const filePath = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
+    const downloadLink = document.createElement('a');
+    downloadLink.href = filePath;
+    downloadLink.setAttribute('download', fileName);
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    this.openSnackBar('Éxito al Exportar', `${fileName}. Descargado correctamente.`, 'success');
+  }
 
   extraerBase64 = async ($event: any) => new Promise((resolve) => {
     try {
@@ -922,7 +945,6 @@ export class ModificationRequestComponent implements OnInit {
       putDataSave.deleteReqIDs = this.RequerimentsDelete;
       putDataSave.deleteContraIDs = this.CounterpartsDelete;
       
-      // console.log(arrayCounterpartsSave);
       
       this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
         
@@ -935,13 +957,15 @@ export class ModificationRequestComponent implements OnInit {
           ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
           this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
         } else if (res.status == 404) {
+          console.log(res);
+          
           let Data: string[] = [];
-          Data = Object.values(res.Data);
+          Data = Object.values(res.data);
           let erorsMessages = '';
           Data.map(item => {
             erorsMessages += item + '. ';
           });
-          this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
+          this.openSnackBar('Lo sentimos', res.data.Message, 'error', erorsMessages);
         } else if (res.Status == 404) {
           let Data: string[] = [];
           Data = Object.values(res.Data);
