@@ -957,7 +957,6 @@ export class ModificationRequestComponent implements OnInit {
           ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
           this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
         } else if (res.status == 404) {
-          console.log(res);
           
           let Data: string[] = [];
           Data = Object.values(res.data);
