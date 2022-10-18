@@ -22,7 +22,7 @@ export class ProjectService {
 
   getAllProjects(): Observable<getProjectI> {
     let dir = this.url;
-    return this.http.get<getProjectI>(dir);
+    return this.http.get<getProjectI>(dir,{ headers: this.headers });
   }
   getAllProjectsFilter(formFilter: filterProjectI): Observable<getProjectI> {
     let dir = this.url +
@@ -38,16 +38,16 @@ export class ProjectService {
   }
   getProjectById(projectId: number): Observable<getProjectByIdI> {
     let dir = this.url + '/' + projectId;
-    return this.http.get<getProjectByIdI>(dir);
+    return this.http.get<getProjectByIdI>(dir,{ headers: this.headers });
   }
 
   patchExecutionProject(projectId: number): Observable<statusI> {
     let dir = this.url + '/Ejecucion/' + projectId;
-    return this.http.patch<statusI>(dir, null);
+    return this.http.patch<statusI>(dir,{ headers: this.headers });
   }
 
   patchStatusProject(projectId: number): Observable<statusI> {
     let dir = this.url + '/Estado/' + projectId;
-    return this.http.patch<statusI>(dir, null);
+    return this.http.patch<statusI>(dir,{ headers: this.headers });
   }
 }

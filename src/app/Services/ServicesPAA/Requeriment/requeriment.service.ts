@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { getRequerimentsByProjectI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
@@ -10,7 +10,11 @@ import { environment } from 'src/environments/environment';
 })
 export class RequerimentService {
   url: string = environment.baseUrl.logic + 'Proyecto/';
+  token = sessionStorage.getItem('token');
 
+  headers: HttpHeaders = new HttpHeaders({
+    Authorization: 'Bearer ' + this.token,
+  });
   constructor(private http: HttpClient) { }
 
 
@@ -31,7 +35,7 @@ export class RequerimentService {
       '&columna=' + formFilter.columna +
       '&ascending=' + formFilter.ascending;
 
-    return this.http.get<getRequerimentsByProjectI>(dir);
+    return this.http.get<getRequerimentsByProjectI>(dir,{ headers: this.headers });
   }
 
   getDataRequeriment(projectId: number, formFilter: filterDataRequerimentI): Observable<getDataRequerimentI> {
@@ -40,6 +44,6 @@ export class RequerimentService {
       '&take=' + formFilter.take +
       '&NumeroRequerimiento=' + formFilter.NumeroRequerimiento +
       '&Descripcion=' + formFilter.Descripcion;
-    return this.http.get<getDataRequerimentI>(dir);
+    return this.http.get<getDataRequerimentI>(dir,{ headers: this.headers });
   }
 }
