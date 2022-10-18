@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
+import jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ export class LoginComponent implements OnInit {
   //   password : new FormControl<string>('', { nonNullable: true })
   // });
   public loginForm!: FormGroup;
+  dataToken: any;
 
   // tokenIn = new FormGroup({
   //   token: new FormControl(''),
@@ -43,6 +45,10 @@ export class LoginComponent implements OnInit {
       // let isSuccessful =
        this.ServicesAuth.login(this.loginForm.value).subscribe(dataToken => {
         console.log('dataToken',dataToken);
+        this.dataToken = dataToken;
+        sessionStorage.setItem('token', this.dataToken.accessToken);
+        const tokenInfo  =  this.deocdeToken(this.dataToken.accessToken);
+        console.log('tokenInfo',tokenInfo);
         this.router.navigate(['WAPI/Home']);      
       }, error => {
         console.log('error', error);
@@ -53,6 +59,14 @@ export class LoginComponent implements OnInit {
       // } else {
       //   alert('Usuario o contraseña incorrectos');
       // }
+    }
+
+  }
+  deocdeToken(token: string) {
+    try{
+      return jwt_decode(token)
+    }catch(Error){
+      return null;
     }
 
   }

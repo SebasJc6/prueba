@@ -1295,7 +1295,7 @@ export class PropertiesRequirementComponent implements OnInit {
       console.log('dataTableRevisiones', this.dataTableRevisiones)
       let rev = JSON.stringify(this.dataTableRevisiones)
       console.log('rev', rev)
-      this.reviewsUp = JSON.parse(rev)
+      //this.reviewsUp = JSON.parse(rev)
       this.reviewsUp.forEach((element: any) => {
         element.revision_ID = element.solicitudRevID
         delete element.solicitudRevID
@@ -1311,9 +1311,18 @@ export class PropertiesRequirementComponent implements OnInit {
       putReviews.modificacion_ID = +this.dataRequirementID
       putReviews.revisiones = [this.reviewsUp]
       console.log('putReviews', putReviews)
-      console.log('this.dataTableRevisiones',this.dataTableRevisiones)
+      console.log('this.dataTableRevisiones', this.dataTableRevisiones)
     }
-   
+
+  }
+  showOptions(event: any, objectReviews:any) {
+    objectReviews.revisado = event.checked
+
+    objectReviews
+    console.log('event', event, 'idReviews', objectReviews)
+
+    this.reviewsUp.push(objectReviews)
+    console.log('this.reviewsUp', this.reviewsUp)
   }
 
   versionActual(event: any) {

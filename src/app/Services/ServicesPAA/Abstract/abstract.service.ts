@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { getAbstractI } from 'src/app/Models/ModelsPAA/Abstract/abstract';
 
@@ -10,11 +10,15 @@ import { getAbstractI } from 'src/app/Models/ModelsPAA/Abstract/abstract';
 })
 export class AbstractService {
   readonly Url: string= environment.baseUrl.logic;
+  token = sessionStorage.getItem('token');
 
+  headers: HttpHeaders = new HttpHeaders({
+    Authorization: 'Bearer ' + this.token,
+  });
   constructor(private http: HttpClient) { }
 
   getAbstract(projectId: string): Observable<getAbstractI> {
     let dir = `${this.Url}Proyecto/${projectId}/Resumen`;
-    return this.http.get<getAbstractI>(dir);
+    return this.http.get<getAbstractI>(dir,{ headers: this.headers });
   }
 }
