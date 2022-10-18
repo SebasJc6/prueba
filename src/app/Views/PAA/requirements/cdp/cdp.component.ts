@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 
 @Component({
@@ -12,6 +12,7 @@ import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modific
 export class CDPComponent implements OnInit {
 
   constructor( private activeRoute: ActivatedRoute,
+    public router: Router,
     private serviceModRequest: ModificationRequestService,) { }
 
   displayedColumns: string[] = [
@@ -102,6 +103,6 @@ export class CDPComponent implements OnInit {
 
 
   regresar() {
-    
+    this.router.navigate([`/WAPI/PAA/Requerimientos/${this.dataProjectID}`]);
   }
 }
