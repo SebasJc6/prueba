@@ -7,6 +7,7 @@ import { LoginComponent } from './Views/login/login.component';
 import { AbstractComponent } from './Views/PAA/abstract/abstract.component';
 import { AcquisitionsComponent } from './Views/PAA/acquisitions/acquisitions.component';
 import { RequestTrayComponent } from './Views/PAA/request-tray/request-tray.component';
+import { CDPComponent } from './Views/PAA/requirements/cdp/cdp.component';
 import { ModificationRequestComponent } from './Views/PAA/requirements/modification-request/modification-request.component';
 import { ModificationSummaryComponent } from './Views/PAA/requirements/modification-request/modification-summary/modification-summary.component';
 import { PropertiesRequirementComponent } from './Views/PAA/requirements/properties-requirement/properties-requirement.component';
@@ -35,6 +36,7 @@ const routes: Routes = [
           { path: 'Requerimientos/:data', component: RequirementsComponent },
           { path: 'PropiedadesRequerimiento/:idPro/:idSol/:idReq/:type', component: PropertiesRequirementComponent },
           { path: 'Resumen/:data', component: AbstractComponent },
+          { path: 'CDP/:idPro/:idReq', component: CDPComponent },
           { path: 'SolicitudModificacion/:idPro/:idSol', component: ModificationRequestComponent },
           { path: 'ResumenModificacion/:idPro/:idSol', component: ModificationSummaryComponent }
         ]

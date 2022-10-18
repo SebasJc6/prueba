@@ -60,6 +60,7 @@ import { AlertsComponent } from './Templates/alerts/alerts.component';
 import { AlertsPopUpComponent } from './Templates/alerts-pop-up/alerts-pop-up.component';
 import { LoginComponent } from './Views/login/login.component';
 import { SpinnerComponent } from './Templates/spinner/spinner.component';
+import { CDPComponent } from './Views/PAA/requirements/cdp/cdp.component';
 
 
 const materialModules = [
@@ -118,7 +119,8 @@ const materialModules = [
     AlertsComponent,
     AlertsPopUpComponent,
     LoginComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    CDPComponent
 
   ],
   imports: [
