@@ -101,7 +101,53 @@ export interface filterProjectI{
     ascending: boolean
 }
 
+//Interface para el Endpoint de Proyecto que pide id_project y id_request y obtiene todos los requerimientos de una solicitud EN DESUSO ACTUALMENTE
+export interface getProjectAndRequestI {
+    status: number,
+    message: null,
+    title: null,
+    data: dataProjectAndRequestI
+}
 
+export interface dataProjectAndRequestI {
+    idSolicitud: number,
+    proyecto_COD: number,
+    numero_Modificacion: number,
+    nombreProyecto: string,
+    datos: datosProjectAndRequestI,
+    observacion: string,
+    archivos: []
+}
 
+export interface datosProjectAndRequestI {
+    hasItems: boolean,
+    items: itemsProjectAndRequestI[],
+    calculados: [],
+    total: number,
+    page: number,
+    pages: number
+}
 
+export interface itemsProjectAndRequestI {
+    modificacion_ID: number,
+    isContrapartida: boolean,
+    numeroRequerimiento: number,
+    dependenciaDestino: string,
+    descripcion: string,
+    actuacionContractual: string,
+    numeroContrato: string,
+    tipoContrato: string,
+    perfil: string,
+    honorarios: number,
+    saldoRequerimiento: number,
+    valorAumenta: number,
+    valorDisminuye: number,
+    nuevoSaldoApropiacion: number,
+    modalidadSeleccion: string
+}
+
+export interface calculadosProjectAndRequestI {
+    detalle: string,
+    valor: number
+}
 

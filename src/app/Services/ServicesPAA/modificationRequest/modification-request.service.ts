@@ -82,7 +82,7 @@ export class ModificationRequestService {
 
   exportFile(projectId: string, requestId: string): Observable<any> {
     let dir = `${this.Url}/SolicitudMod/ExportFile?ProyectoId=${projectId}&SolicitudId=${requestId}`;
-    return this.http.get<any>(dir);
+    return this.http.get(dir, {responseType: 'blob'});
   }
 
   getRequerimentApproved(idRequest: string, idRequeriment: number): Observable<any> {

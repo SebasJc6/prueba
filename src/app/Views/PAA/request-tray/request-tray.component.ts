@@ -95,8 +95,6 @@ export class RequestTrayComponent implements OnInit {
 
   modificatioRequest(ProjectId : number, requestId: number, Element: any){
     let estado: string = '';
-    console.log(Element.estado);
-    
     if (Element.estado == 'En Modificación') {
       estado = 'Modificacion';
     } else if(Element.estado == 'En Ajuste') {
