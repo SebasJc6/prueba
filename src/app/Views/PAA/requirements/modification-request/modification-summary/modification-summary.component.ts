@@ -74,7 +74,7 @@ export class ModificationSummaryComponent implements OnInit {
     this.dataSolicitudModID = this.activeRoute.snapshot.paramMap.get('idSol') || '';
     this.getSources(this.dataSolicitudModID);
     this.getSummary(Number(this.dataSolicitudModID),this.selectedValueSource, this.pageSummary);
-    this.getModificationRequet(+this.dataProjectID);
+    this.getModificationRequet(Number(this.dataProjectID));
   }
 
   //Función que obtiene las fuentes para la lista desplegable
