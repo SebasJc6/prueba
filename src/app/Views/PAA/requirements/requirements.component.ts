@@ -188,6 +188,10 @@ export class RequirementsComponent implements OnInit {
     this.router.navigate(['/WAPI/PAA/PropiedadesRequerimiento/' + this.dataProjectID + '/0/' + requirementId+ '/Vista'])
   }
 
+  CDP(requirementId: number) {
+    this.router.navigate([`/WAPI/PAA/CDP/${this.dataProjectID}/${requirementId}`])
+  }
+
   modificatioRequest() {
     this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/0' ])
   }

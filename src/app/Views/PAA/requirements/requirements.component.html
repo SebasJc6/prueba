@@ -155,8 +155,10 @@
               <mat-icon mat-icon-button class="btnActions" matTooltip="Propiedades requerimiento"
                 (click)="propertiesRequirement(element.requerimientoId)">
                 insert_drive_file</mat-icon>
-              <mat-icon mat-icon-button class="btnActions">attach_money</mat-icon>
-              <mat-icon mat-icon-button class="btnActions">autorenew</mat-icon>
+              <mat-icon mat-icon-button class="btnActions" matTooltip="CDP" 
+              (click)="CDP(element.requerimientoId)"
+              >attach_money</mat-icon>
+              <mat-icon mat-icon-button class="btnActions" matTooltip="Giros">autorenew</mat-icon>
             </div>
           </td>
         <tr>
