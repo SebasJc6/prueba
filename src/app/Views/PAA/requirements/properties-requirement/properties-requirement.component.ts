@@ -699,13 +699,13 @@ export class PropertiesRequirementComponent implements OnInit {
   }
   cancel() {
     if (this.typePage == 'Nuevo') {
-      this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+      this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
     } else if (this.typePage == 'Editar') {
-      this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+      this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
     } else if (this.typePage == 'Revision') {
-      this.router.navigate(['/PAA/BandejaDeTareas/'])
+      this.router.navigate(['/WAPI/PAA/BandejaDeTareas/'])
     } else if (this.typePage == 'Vista') {
-      this.router.navigate(['/PAA/Requerimientos/' + this.dataProjectID])
+      this.router.navigate(['/WAPI/PAA/Requerimientos/' + this.dataProjectID])
     }
   }
 
@@ -849,7 +849,7 @@ export class PropertiesRequirementComponent implements OnInit {
             ProChartStorage.removeItem('dataTableCodigos')
             ProChartStorage.removeItem('dataTableRevisiones')
             this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
-            this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+            this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
           } else {
             console.log('dataResponse', dataResponse)
             this.openSnackBar('Error', dataResponse.message, 'error');
@@ -887,7 +887,7 @@ export class PropertiesRequirementComponent implements OnInit {
           if (dataResponse.status == 200) {
             this.loading = true
             this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
-            this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+            this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
             this.loading = false
 
           } else {

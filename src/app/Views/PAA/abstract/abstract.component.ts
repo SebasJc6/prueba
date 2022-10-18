@@ -57,7 +57,7 @@ export class AbstractComponent implements OnInit {
   // }
 
   regresar(){
-    this.router.navigate(['WAPI/PAA/Adquisiciones'])
+    this.router.navigate(['/WAPI/PAA/Adquisiciones'])
   }
 }
 

@@ -149,7 +149,7 @@ export class ModificationSummaryComponent implements OnInit {
   }
 
   regresar(){
-    this.router.navigate([`/PAA/SolicitudModificacion/${this.dataProjectID}/${this.dataSolicitudModID}`])
+    this.router.navigate([`/WAPI/PAA/SolicitudModificacion/${this.dataProjectID}/${this.dataSolicitudModID}`])
   }
 
 }

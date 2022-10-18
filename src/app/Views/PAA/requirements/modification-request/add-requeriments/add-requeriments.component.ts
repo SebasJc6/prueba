@@ -4,7 +4,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { dateTableModificationI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { addRequirementEdit, dataTableDataRequerimentI, filterDataRequerimentI } from 'src/app/Models/ModelsPAA/Requeriment/Requeriment.interface';
 import { RequerimentService } from 'src/app/Services/ServicesPAA/Requeriment/requeriment.service';
@@ -33,7 +32,6 @@ export class AddrequirementsComponent implements OnInit {
     public dialogRef: MatDialogRef<AddrequirementsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
   ) { dialogRef.disableClose = true; }
-  public router!: Router;
   pageSizeOptions: number[] = [3, 6, 12];
   paginationForm = new FormGroup({
     page: new FormControl(),

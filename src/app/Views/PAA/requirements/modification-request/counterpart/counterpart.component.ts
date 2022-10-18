@@ -133,7 +133,7 @@ export class CounterpartComponent implements OnInit {
         this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
           if (res.status == 200) {
             this.openSnackBar('Éxito al Guardar', `Contrapartida Actualizada.`, 'success');
-            this.router.navigate([`/PAA/SolicitudModificacion/${this.dataCounterparts.id_project}/${res.data.idSolicitud}`]);
+            this.router.navigate([`/WAPI/PAA/SolicitudModificacion/${this.dataCounterparts.id_project}/${res.data.idSolicitud}`]);
             this.dialogRef.close();
           }
         }, error => {

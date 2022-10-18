@@ -245,7 +245,7 @@ export class ModificationRequestComponent implements OnInit {
 
 
   Requerimientos() {
-    this.router.navigate(['/Requerimientos/:data'])
+    this.router.navigate(['/WAPI/Requerimientos/:data'])
   }
 
   Addrequirement() {
@@ -379,7 +379,7 @@ export class ModificationRequestComponent implements OnInit {
   }
 
   newRequeriment() {
-    this.router.navigate([`PAA/PropiedadesRequerimiento/${this.dataProjectID}/${this.dataSolicitudModID}/${this.ID_REQUERIMIENTO}/Nuevo`]);
+    this.router.navigate([`/WAPI/PAA/PropiedadesRequerimiento/${this.dataProjectID}/${this.dataSolicitudModID}/${this.ID_REQUERIMIENTO}/Nuevo`]);
   }
 
   Addcounterpart() {
@@ -646,7 +646,7 @@ export class ModificationRequestComponent implements OnInit {
 
 
   ResumenModificacion() {
-    this.router.navigate([`/PAA/ResumenModificacion/${this.dataProjectID}/${this.dataSolicitudModID}`])
+    this.router.navigate([`/WAPI/PAA/ResumenModificacion/${this.dataProjectID}/${this.dataSolicitudModID}`])
   }
 
 
@@ -674,7 +674,7 @@ export class ModificationRequestComponent implements OnInit {
       if (element.modificacion_ID) {
       // console.log(element);
       this.ID_REQUERIMIENTO = element.modificacion_ID;
-      this.router.navigate([`PAA/PropiedadesRequerimiento/${this.dataProjectID}/${this.dataSolicitudModID}/${this.ID_REQUERIMIENTO}/Editar`]);
+      this.router.navigate([`/WAPI/PAA/PropiedadesRequerimiento/${this.dataProjectID}/${this.dataSolicitudModID}/${this.ID_REQUERIMIENTO}/Editar`]);
       }
     }
   }
@@ -785,12 +785,12 @@ export class ModificationRequestComponent implements OnInit {
             this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
           } else if (status == 200) {
             this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
-            this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
+            this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           } else if (Status == 404) {
             this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
           }else if (Status == 200) {
             this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
-            this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
+            this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           }
         }, error => {
           let status = error.error.Status;
@@ -897,7 +897,7 @@ export class ModificationRequestComponent implements OnInit {
       postDataSave.observacion = this.JustificationText;
       
        this.serviceModRequest.postModificationRequestSave(postDataSave).subscribe(res => {
-        // console.log(res);
+         console.log(res);
         
         if(res.status == 200) { 
           this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
@@ -905,11 +905,22 @@ export class ModificationRequestComponent implements OnInit {
           ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
-          this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
+          this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
 
         } else if (res.Status == 404) {
           let Data: string[] = [];
           Data = Object.values(res.Data);
+          let erorsMessages = '';
+          Data.map(item => {
+            erorsMessages += item + '. ';
+          });
+          this.openSnackBar('Lo sentimos', `No hay registros para guardar`, 'error', erorsMessages);
+          ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
+          this.ArrayDataStorage = [];
+          this.reloadDataTbl();
+        }else if (res.status == 404) {
+          let Data: string[] = [];
+          Data = Object.values(res.data);
           let erorsMessages = '';
           Data.map(item => {
             erorsMessages += item + '. ';
@@ -955,7 +966,7 @@ export class ModificationRequestComponent implements OnInit {
           ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
-          this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
+          this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
         } else if (res.status == 404) {
           
           let Data: string[] = [];
@@ -1022,7 +1033,7 @@ export class ModificationRequestComponent implements OnInit {
             ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
             ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
             ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
-            this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
+            this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           } else if (res.status == 404) {
             let Data: string[] = [];
             Data = Object.values(res.Data);
@@ -1063,22 +1074,22 @@ export class ModificationRequestComponent implements OnInit {
         // console.log(res.status);
         if (res.status == 200) {
           this.openSnackBar('Acciones Canceladas', `Solicitud de Modificación Eliminada.`, 'success');
-          this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
+          this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
         }
       }, error => {
         console.log(error);
       });
     } else if(ProChartStorage.getItem(`estado${this.dataSolicitudModID}`) == null || this.StatusRequest === '') {            
-      this.router.navigate([`/PAA/Requerimientos/${this.dataProjectID}`]);
+      this.router.navigate([`/WAPI/PAA/Requerimientos/${this.dataProjectID}`]);
     } else if(this.StatusRequest == 'Revision') {
-      this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
+      this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
     }else if(this.StatusRequest == 'Ajuste') {
-      this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
+      this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
     }else if(this.StatusRequest == 'Aprobada') {
-      this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
+      this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
     }else if(this.StatusRequest == 'Rechazada') {
-      this.router.navigate([`/PAA/BandejaDeSolicitudes`]);
+      this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
     }
     ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
 
