@@ -25,8 +25,5 @@ export class SidenavListComponent implements OnInit {
   public onToggleSidenav = () => {
     this.sidenavToggle.emit();
   }
-  PAA(){
-    this.router.navigate(['WAPI/PAA/Adquisiciones']);
-  }
 }
 

@@ -110,7 +110,7 @@ export class RequestTrayComponent implements OnInit {
     ProChartStorage.setItem(`estado${requestId}`, estado);
 
     this.dataProjectID = ProjectId;
-    this.router.navigate(['/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + requestId ])
+    this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + requestId ])
   }
 
   //FILTRO

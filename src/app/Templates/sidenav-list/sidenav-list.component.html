@@ -50,13 +50,13 @@
                             <span class="title">Plan anual de adquisisiones (PAA)</span>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
-                    <button mat-button class="menu-button"  (click)="PAA()">
+                    <button mat-button class="menu-button" [routerLink]="['PAA/Adquisiciones']" (click)="onToggleSidenav()">
                         <span>PAA</span>
                     </button>
-                    <button mat-button class="menu-button" [routerLink]="['WAPI/PAA/BandejaDeTareas']">
+                    <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeTareas']">
                         <span>Bandeja de tareas</span>
                     </button>
-                    <button mat-button class="menu-button" [routerLink]="['/PAA/BandejaDeSolicitudes']">
+                    <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeSolicitudes']">
                         <span>Modificaciones solicitadas</span>
                     </button>
                 </mat-expansion-panel>

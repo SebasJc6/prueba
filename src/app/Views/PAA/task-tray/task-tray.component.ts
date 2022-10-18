@@ -183,7 +183,7 @@ export class TaskTrayComponent implements OnInit {
   // }
 
   propertiesRequirement(numReq: number,projectId:number,solId:number) {
-    this.router.navigate(['/PAA/PropiedadesRequerimiento/' + projectId + '/'+solId+'/' + numReq+ '/Revision'])
+    this.router.navigate(['/WAPI/PAA/PropiedadesRequerimiento/' + projectId + '/'+solId+'/' + numReq+ '/Revision'])
   }
 
 }

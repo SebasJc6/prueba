@@ -210,10 +210,10 @@ export class AcquisitionsComponent implements OnInit {
   }
 
   openRequeriment(proyectoID: number) {
-    this.router.navigate(['/PAA/Requerimientos', proyectoID])
+    this.router.navigate(['/WAPI/PAA/Requerimientos', proyectoID])
   }
   openAbstract(proyectoID: number) {
-    this.router.navigate(['/PAA/Resumen', proyectoID])
+    this.router.navigate(['/WAPI/PAA/Resumen', proyectoID])
   }
   changeExecution(proyectoID: number) {   
     this.serviceProject.patchExecutionProject(proyectoID).subscribe(data => {
