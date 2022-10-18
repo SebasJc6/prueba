@@ -727,7 +727,8 @@
                                     </div>
                                     <!-- BOTON AÑADIR REGISTRO A LA TABLA REVISIONES -->
                                     <mat-card-actions class="btnCard">
-                                        <button class="buton2 btn" mat-button mat-icon-button   (click)="addDataTbl('revisiones')">
+                                        <!-- <button class="buton2 btn" mat-button mat-icon-button   (click)="addDataTbl('revisiones')"> -->
+                                            <button class="buton2 btn" mat-button mat-icon-button   (click)="btnReviews(0,'Agregar')">
                                             AÑADIR
                                         </button>
                                     </mat-card-actions>
@@ -788,7 +789,7 @@
                                                     <div style="text-align: center;">
                                                         <mat-icon mat-icon-button class="btnActions"
                                                             matTooltip="Eliminar"
-                                                            (click)="removeDataTbl(element.revisionID,'revisiones')">
+                                                            (click)="btnReviews(element.solicitudRevID,'Delete')">
                                                             delete</mat-icon>
                                                     </div>
                                                 </td>
@@ -810,7 +811,7 @@
                     <button class="buton btn" mat-button mat-icon-button (click)="saveForm()">
                         GUARDAR
                     </button>
-                    <button class="buton btn" style="margin-left: 4%;" mat-button mat-icon-button (click)="btnReviews()">
+                    <button class="buton btn" style="margin-left: 4%;" mat-button mat-icon-button (click)="btnReviews(0,'Revisar')">
                         REVISADO
                     </button>
                     <button class="buton btn" mat-button mat-icon-button (click)="cancel()">

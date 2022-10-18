@@ -24,20 +24,18 @@ export interface getAllReviewsItemsI {
 
 export interface postReviewsI {
     modificacion_ID: number,
-    revisiones: {
-        revisado: boolean,
-        concepto: string,
-        observacion: string,
-        area_ID: number
-    }
+    revisiones: reviewsI[]
+}
+export interface reviewsI{
+    revisado: boolean,
+    concepto: string,
+    observacion: string,
+    area_ID: number
 }
 
 export interface putUpdateReviewsI {
     modificacion_ID: number,
-    revisiones: {
-        revisio_ID: number,
-        revisado: boolean
-    }
+    revisiones: [any]
 }
 export interface putGetReviewsI {
     idSolicitud: number,
@@ -47,5 +45,5 @@ export interface putGetReviewsI {
 }
 export interface deleteReviewsI {
     modificacion_ID: number,
-    revisiones: []
+    revisiones: any
 }

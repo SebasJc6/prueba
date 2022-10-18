@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { deleteReviewsI, getAllReviewsI, postReviewsI, putGetReviewsI, putUpdateReviewsI } from 'src/app/Models/ModelsPAA/propertiesRequirement/Reviews/reviews.interface';
@@ -34,8 +34,8 @@ export class ReviewsService {
     return this.http.put<any>(dir, form);
   }
 
-  // deleteReviews(form:deleteReviewsI): Observable<any>{
-  //   let dir = this.logicUrl + '/Revisiones/Delete'
-  //   return this.http.delete<any>(dir, form);
-  // }
+  deleteReviews(form:deleteReviewsI){
+    let dir = this.logicUrl + 'Revisiones/Delete'
+    return this.http.delete(dir ,{ body: form});
+  }
 }

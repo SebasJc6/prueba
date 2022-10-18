@@ -10,6 +10,7 @@ import { concat, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { postDataModificationsI, postDataModifRequerimentsI, postDataModReqI, postModificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { dataSourceClasificacionesI, dataSourceRevisionesI, getAllAuxiliarDataI, getAllUNSPSCDataI, getInfoToCreateReqDataI, saveDataEditDatosI, requerimientoI, saveDataEditI, verifyDatacompleteI, verifyDataSaveI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
+import { deleteReviewsI, postReviewsI, putUpdateReviewsI, reviewsI } from 'src/app/Models/ModelsPAA/propertiesRequirement/Reviews/reviews.interface';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
 import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
@@ -119,13 +120,14 @@ export class PropertiesRequirementComponent implements OnInit {
   dataTableRevision: any;
   dataClasificacion = new Array()
   dataCodigos = new Array()
+  reviewsUp = new Array()
   dependencieDes = new FormControl('');
   idPerfil = 0
   formVerify = {} as verifyDataSaveI;
   formVerifyComplete = {} as verifyDatacompleteI;
   formModificationRequest = {} as saveDataEditI
   cantMeses: any[] = [
-    { idMes: '0', nameMes: ' ' },
+    //  { idMes: '0', nameMes: ' ' },
     { idMes: '1', nameMes: 'Enero' },
     { idMes: '2', nameMes: 'Febrero' },
     { idMes: '3', nameMes: 'Marzo' },
@@ -284,6 +286,7 @@ export class PropertiesRequirementComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // this.loading = true;
     this.ngAfterViewInit();
     this.uploadDropdownLists();
     this.currencyInput();
@@ -609,8 +612,8 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dependencieId = dataTemp.requerimiento.dependenciaDestino.dependencia_ID.toString()
         this.selcModeId = dataTemp.requerimiento.modalidadSeleccion.modalidad_Sel_ID.toString()
 
-        this.dataTableClasificaciones = dataTemp.cadenasPresupuestalesTemporal
-        this.cadenasPresupuestalesTemporal = dataTemp.cadenasPresupuestalesTemporal
+        this.dataTableClasificaciones = dataTemp.cadenasPresupuestales
+        this.cadenasPresupuestalesTemporal = dataTemp.cadenasPresupuestales
         var stringToStoreCla = JSON.stringify(this.cadenasPresupuestalesTemporal);
         ProChartStorage.setItem("dataTableClacificaciones", stringToStoreCla);
         var fromStorageCla = ProChartStorage.getItem("dataTableClacificaciones");
@@ -1047,9 +1050,9 @@ export class PropertiesRequirementComponent implements OnInit {
       console.log('objectsFromStorage clasificaciones', objectsFromStorage)
       this.dataSourceClasificaciones = new MatTableDataSource(objectsFromStorage)
     }
-    if (type == 'revisiones') {
-      this.dataSourceRevisiones = new MatTableDataSource(objectsFromStorage)
-    }
+    // if (type == 'revisiones') {
+    //   this.dataSourceRevisiones = new MatTableDataSource(objectsFromStorage)
+    // }
 
 
   }
@@ -1150,7 +1153,7 @@ export class PropertiesRequirementComponent implements OnInit {
         var fromStoragedtl = ProChartStorage.getItem("dataTableRevisiones");
         this.reloadDataTbl(fromStoragedtl, 'revisiones');
         console.log('this.dtl 2', dtl)
-return;
+        return;
       }
     }
   }
@@ -1200,25 +1203,25 @@ return;
         this.reloadDataTbl(stringToStore, 'codigos');
       }
     }
-    if (type == 'revisiones') {
-      //console.log('clasificaciones', valueToFind)
-     
-      var fromStorage = ProChartStorage.getItem("dataTableCodigos");
-      var objectsFromStorage = JSON.parse(fromStorage || '')
-      var toFind = objectsFromStorage.filter(function (obj: any) {
-        return obj.unspsC_ID == valueToFind;
-      });
-      // find the index of the item to delete
-      var index = objectsFromStorage.findIndex((x: any) => x.unspsC_ID === valueToFind);
-      if (index >= 0) {
-        this.dataTableCodigos.splice(index, 1);
-        //  //console.log('arreglo rem,ove',this.dataTableCodigos)
-        objectsFromStorage.splice(index, 1);
-        var stringToStore = JSON.stringify(objectsFromStorage);
-        ProChartStorage.setItem("dataTableCodigos", stringToStore);
-        this.reloadDataTbl(stringToStore, 'revisiones');
-      }
-    }
+    // if (type == 'revisiones') {
+    //   //console.log('clasificaciones', valueToFind)
+
+    //   var fromStorage = ProChartStorage.getItem("dataTableCodigos");
+    //   var objectsFromStorage = JSON.parse(fromStorage || '')
+    //   var toFind = objectsFromStorage.filter(function (obj: any) {
+    //     return obj.unspsC_ID == valueToFind;
+    //   });
+    //   // find the index of the item to delete
+    //   var index = objectsFromStorage.findIndex((x: any) => x.unspsC_ID === valueToFind);
+    //   if (index >= 0) {
+    //     this.dataTableCodigos.splice(index, 1);
+    //     //  //console.log('arreglo rem,ove',this.dataTableCodigos)
+    //     objectsFromStorage.splice(index, 1);
+    //     var stringToStore = JSON.stringify(objectsFromStorage);
+    //     ProChartStorage.setItem("dataTableCodigos", stringToStore);
+    //     this.reloadDataTbl(stringToStore, 'revisiones');
+    //   }
+    // }
 
 
   }
@@ -1227,14 +1230,90 @@ return;
   getAllReviews(Modificacion_ID: number) {
     this.serviceReviews.getAllReviews(Modificacion_ID).subscribe((data: any) => {
       this.dataTableRevisiones = data.data.items;
-      console.log('data revisiones', data)
-      var stringToStore = JSON.stringify(this.dataTableRevisiones);
-      ProChartStorage.setItem("dataTableRevisiones", stringToStore);
-      this.reloadDataTbl(stringToStore, 'revisiones');
+      this.dataSourceRevisiones = new MatTableDataSource(this.dataTableRevisiones)
+      console.log('this.dataSourceRevisiones', this.dataTableRevisiones)
+      // console.log('data revisiones', data)
+      // var stringToStore = JSON.stringify(this.dataTableRevisiones);
+      // ProChartStorage.setItem("dataTableRevisiones", stringToStore);
+      // this.reloadDataTbl(stringToStore, 'revisiones');
     });
   }
-  btnReviews(){
+  btnReviews(idReviews: number, type: string) {
+    this.loading = true;
 
+    if (type == 'Agregar') {
+      console.log('Agregar', this.proRequirementeForm.controls.reviews.value)
+      let reviewsData = {} as postReviewsI
+
+      reviewsData.modificacion_ID = +this.dataRequirementID
+      let reviews = {} as reviewsI
+      reviews.revisado = false
+      reviews.concepto = this.proRequirementeForm.controls.reviews.controls.concepto.value || ''
+      reviews.observacion = this.proRequirementeForm.controls.reviews.controls.observaciones.value || ''
+      reviews.area_ID = this.proRequirementeForm.controls.reviews.controls.area.value.area_ID || 0
+      reviewsData.revisiones = [reviews]
+      // console.log('reviewsData', reviewsData)
+      this.serviceReviews.postReviews(reviewsData).subscribe((data: any) => {
+        // console.log('data', data)
+        if (data.status != 200) {
+          this.openSnackBar('ERROR', data.Message, 'error')
+          this.loading = false;
+
+        } else {
+          this.getAllReviews(+this.dataRequirementID)
+          this.loading = false;
+
+        }
+      });
+
+    }
+    if (type == 'Delete') {
+
+      // console.log('Delete', idReviews)
+      let reviewsDelete = {} as deleteReviewsI
+      reviewsDelete.modificacion_ID = +this.dataRequirementID
+      reviewsDelete.revisiones = [idReviews]
+      // console.log('reviewsDelete', reviewsDelete)
+      this.serviceReviews.deleteReviews(reviewsDelete).subscribe((data: any) => {
+        console.log('data', data)
+        // if(data.Status != 200){
+        //   this.openSnackBar('ERROR', data.Message, 'error')
+        // }else
+        if (data.status != 200) {
+          this.openSnackBar('ERROR', data.Message, 'error')
+        }
+
+        this.getAllReviews(+this.dataRequirementID)
+
+        this.loading = false;
+
+      });
+
+    }
+    if (type == 'Revisar') {
+      console.log('Revisar', this.proRequirementeForm.controls.reviews.value)
+      console.log('dataTableRevisiones', this.dataTableRevisiones)
+      let rev = JSON.stringify(this.dataTableRevisiones)
+      console.log('rev', rev)
+      this.reviewsUp = JSON.parse(rev)
+      this.reviewsUp.forEach((element: any) => {
+        element.revision_ID = element.solicitudRevID
+        delete element.solicitudRevID
+        delete element.area
+        delete element.usuario
+        delete element.concepto
+        delete element.observacion
+        delete element.fechaRevision
+      })
+      console.log('reviews', this.reviewsUp)
+      this.loading = false;
+      let putReviews = {} as putUpdateReviewsI
+      putReviews.modificacion_ID = +this.dataRequirementID
+      putReviews.revisiones = [this.reviewsUp]
+      console.log('putReviews', putReviews)
+      console.log('this.dataTableRevisiones',this.dataTableRevisiones)
+    }
+   
   }
 
   versionActual(event: any) {
