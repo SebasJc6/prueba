@@ -42,6 +42,7 @@ export class LoginComponent implements OnInit {
       console.log(this.loginForm.value);
       // let isSuccessful =
        this.ServicesAuth.login(this.loginForm.value).subscribe(dataToken => {
+        console.log('dataToken',dataToken);
         this.router.navigate(['WAPI/Home']);      
       }, error => {
         console.log('error', error);
