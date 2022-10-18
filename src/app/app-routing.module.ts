@@ -19,23 +19,29 @@ import { TaskTrayComponent } from './Views/PAA/task-tray/task-tray.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/Home', pathMatch: 'full' },
+  { path: '', redirectTo: '/Login', pathMatch: 'full' },
   { path: 'Login', component: LoginComponent },
-  { path: 'Home', component: HomeComponent },
   {
-    path: 'PAA',
+    path: 'WAPI', component: DashboardComponent,
     children: [
-      { path: '', redirectTo: '/Adquisiciones', pathMatch: 'full' },
-      { path: 'Adquisiciones', component: AcquisitionsComponent },
-      { path: 'BandejaDeTareas', component: TaskTrayComponent },
-      { path: 'BandejaDeSolicitudes', component: RequestTrayComponent },
-      { path: 'Requerimientos/:data', component: RequirementsComponent },
-      { path: 'PropiedadesRequerimiento/:idPro/:idSol/:idReq/:type', component: PropertiesRequirementComponent },
-      { path: 'Resumen/:data', component: AbstractComponent },
-      { path: 'SolicitudModificacion/:idPro/:idSol', component: ModificationRequestComponent },
-      { path: 'ResumenModificacion/:idPro/:idSol',   component: ModificationSummaryComponent }
+      { path: 'Home', component: HomeComponent },
+      {
+        path: 'PAA',
+        children: [
+          { path: '', redirectTo: '/Adquisiciones', pathMatch: 'full' },
+          { path: 'Adquisiciones', component: AcquisitionsComponent },
+          { path: 'BandejaDeTareas', component: TaskTrayComponent },
+          { path: 'BandejaDeSolicitudes', component: RequestTrayComponent },
+          { path: 'Requerimientos/:data', component: RequirementsComponent },
+          { path: 'PropiedadesRequerimiento/:idPro/:idSol/:idReq/:type', component: PropertiesRequirementComponent },
+          { path: 'Resumen/:data', component: AbstractComponent },
+          { path: 'SolicitudModificacion/:idPro/:idSol', component: ModificationRequestComponent },
+          { path: 'ResumenModificacion/:idPro/:idSol', component: ModificationSummaryComponent }
+        ]
+      }
     ]
-  }
+  },
+ 
 
 
 

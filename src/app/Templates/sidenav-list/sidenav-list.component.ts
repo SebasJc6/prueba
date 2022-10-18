@@ -1,6 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidenav-list',
@@ -13,7 +14,8 @@ export class SidenavListComponent implements OnInit {
 
 
 
-  constructor(private observer: BreakpointObserver) { }
+  constructor(private observer: BreakpointObserver,
+    private router: Router,) { }
 
 
   ngOnInit(): void {
@@ -22,6 +24,9 @@ export class SidenavListComponent implements OnInit {
 
   public onToggleSidenav = () => {
     this.sidenavToggle.emit();
+  }
+  PAA(){
+    this.router.navigate(['WAPI/PAA/Adquisiciones']);
   }
 }
 

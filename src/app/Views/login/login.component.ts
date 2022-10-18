@@ -26,7 +26,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  async onLogin() {
+  onLogin() {
+    this.router.navigate(['WAPI/Home']);
    // let isSuccessful = await this.apiAuth.LoginByTokenAsync(this.loginForm);
     // if (isSuccessful) {
     //   this.router.navigate(['/EvaluateProject']);
