@@ -124,21 +124,31 @@ a:active {
       text-align: center;
     }
   
-  
+  h1{
+    color: #185564;
+  }
   
     .button {
       text-transform: uppercase;
-      letter-spacing: 0.15em;
-      border: none;
-      font-size: 0.875rem;
-      color: #ffffff;
-      font-weight: bold;
-      background-color: #185564;
-      width: 100%;
-      padding: 0.5rem 1rem;
+      //letter-spacing: 0.15em;
+      padding: 1rem 1rem;
+      border-color: #185564;
+      border: 2px solid #185564;
+      color: #185564;
       border-radius: 1.5rem;
+      font-weight: bold;
+      font-size: 100%;
+      align-items: center;
+      line-height: 0px;
+      margin-bottom: 8%;
+      width: 100%;
     }
-  
+    .btn:hover{
+      cursor: pointer;
+      transition-duration: 0.3s;
+      color: white;
+      background-color:#185564;
+    }
     .container { 
       display: flex;
       /* align-items por defecto tiene el valor `stretch` */
