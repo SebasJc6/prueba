@@ -18,6 +18,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 import { editCounterpartI } from 'src/app/Models/ModelsPAA/modificatioRequest/counterpart/counterpart-interface';
 import { apropiacionIni, cadenasPresupuestales, cadenasPresupuestalesI, codsUNSPSC, getDataI, MODIFICACION, RequerimentDataI, requerimiento } from 'src/app/Models/ModelsPAA/Requeriment/RequerimentApproved.interface';
+import jwt_decode from "jwt-decode";
 
 
 export interface smallTable {
@@ -144,7 +145,8 @@ export class ModificationRequestComponent implements OnInit {
   //Aquí se guarda la informacion importante del requerimiento aprovado que se guardará en temporal
   RequerimentToSave = {} as RequerimentDataI;
 
-  ArrayRequerimentApproved: postDataModReqI[] = [];
+  //Objeto con la informacion de acceso del Usuario
+  AccessUser: string = '';
 
   constructor(
     private serviceFiles: FilesService,
@@ -175,6 +177,14 @@ export class ModificationRequestComponent implements OnInit {
     if (fromStorage) {      
       this.getNewRequeriment();
     }
+
+    //Obtener token para manejar los roles
+    const Token: string = sessionStorage.getItem('token') || '';
+    const tokenInfo: any  =  this.decodeToken(Token);
+    
+    const TokenAccess = JSON.parse(tokenInfo.access);
+    this.AccessUser = TokenAccess[0].RolesDto[0].Rol;
+    console.log(this.AccessUser);
   }
 
   getRequestAndProject(id_project: number, id_request: number) {
@@ -1095,6 +1105,16 @@ export class ModificationRequestComponent implements OnInit {
 
   }
 
+
+  /**decodifica el token */
+  decodeToken(token: string) {
+    try{
+      return jwt_decode(token)
+    }catch(Error){
+      return null;
+    }
+  }
+  
 
   //Metodo para llamar alertas
   openSnackBar(title:string, message: string, type:string, message2?: string) {

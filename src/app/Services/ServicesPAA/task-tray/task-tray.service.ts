@@ -11,18 +11,23 @@ import { filterTaskTrayI, getTaskTrayI } from 'src/app/Models/ModelsPAA/task-tra
 })
 export class TaskTrayService {
   readonly Url: string= environment.baseUrl.logic;
+  
+  constructor(private http: HttpClient) { }
+  
   token = sessionStorage.getItem('token');
 
   headers: HttpHeaders = new HttpHeaders({
     Authorization: 'Bearer ' + this.token,
   });
-  constructor(private http: HttpClient) { }
 
   getTaskTray(formPage: filterTaskTrayI): Observable<getTaskTrayI> {
     let dir = `${this.Url}BandejaTareas?Fecha=${formPage.Fecha}&CodigoProyecto=
     ${formPage.CodigoProyecto}&NumeroRequerimiento=${formPage.NumeroRequerimiento}&CantidadAjustes=
     ${formPage.CantidadAjustes}&page=${formPage.page}&take=${formPage.take}&columna=
     ${formPage.columna}&ascending=${formPage.ascending}`;
-    return this.http.get<getTaskTrayI>(dir,{ headers: this.headers });
+
+    console.log(this.token);
+    
+    return this.http.get<getTaskTrayI>(dir, { headers: this.headers });
   }
 }

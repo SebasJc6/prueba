@@ -1,13 +1,13 @@
 <div class="navbar">
     <div class="top">
         <!-- <mat-icon class="iconRol" matTooltip="Cambiar rol">group</mat-icon> -->
-        <mat-icon [inline]='true' matTooltip="Cerrar Sesion">exit_to_app</mat-icon>
+        <mat-icon [inline]='true' (click)="logOut()" matTooltip="Cerrar Sesion">exit_to_app</mat-icon>
     </div>
     
     <div class="user">
         <mat-icon style="color: white;" >person</mat-icon>        
 
-        <h3 class="name"><strong>Pepito Perez </strong> </h3>
+        <h3 class="name"><strong>{{UserName}}</strong> </h3>
 
         <!-- <h4 class="mail"> <strong>admin</strong> </h4> -->
        

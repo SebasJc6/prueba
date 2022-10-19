@@ -321,7 +321,7 @@
         <p matTooltip="Campo para justificar el motivo de la modificación">Justificación de la modificación</p>
 
         <mat-form-field hintLabel="Maximo 3000 caracteres" appearance="outline">
-            <textarea matInput #input maxlength="3000" [(ngModel)]="JustificationText" rows="8" placeholder="Se requiere modificar" [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true"></textarea>
+            <textarea matInput #input maxlength="3000" [(ngModel)]="JustificationText" rows="8" placeholder="Se requiere modificar" [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '' || AccessUser === 'Revisor') ? false : true"></textarea>
             <mat-hint align="end">{{input.value.length || 0}}/3000</mat-hint>
         </mat-form-field>
 

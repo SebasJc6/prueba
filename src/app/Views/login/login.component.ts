@@ -30,6 +30,8 @@ export class LoginComponent implements OnInit {
     private snackBar: MatSnackBar,) { }
 
   ngOnInit(): void {
+    sessionStorage.removeItem('token');
+
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       pwd: new FormControl('', [Validators.required, Validators.minLength(6)]),
@@ -43,17 +45,18 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       console.log(this.loginForm.value);
       // let isSuccessful =
+      sessionStorage.removeItem('token');
        this.ServicesAuth.login(this.loginForm.value).subscribe(dataToken => {
-        console.log('dataToken',dataToken);
-        this.dataToken = dataToken;
+        console.log('dataToken: ',dataToken.accessToken);
+        this.dataToken = dataToken;        
         sessionStorage.setItem('token', this.dataToken.accessToken);
         const tokenInfo: any  =  this.decodeToken(this.dataToken.accessToken);
-        console.log('tokenInfo',tokenInfo);
+        // console.log('tokenInfo',tokenInfo);
         let access = JSON.parse(tokenInfo.access);
-        console.log('access',access);
+        // console.log('access',access);
         this.router.navigate(['WAPI/Home']);      
       }, error => {
-        console.log('error', error);
+        // console.log('error', error);
         this.openSnackBar('Error', 'Usuario o contraseña incorrectos', 'error');
       });
     }
