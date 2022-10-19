@@ -8,7 +8,6 @@ import { merge, Observable, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { dataTableProjectI, filterProjectI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
-import { Data } from 'src/models/paa-data';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';

@@ -47,28 +47,25 @@ export class LoginComponent implements OnInit {
         console.log('dataToken',dataToken);
         this.dataToken = dataToken;
         sessionStorage.setItem('token', this.dataToken.accessToken);
-        const tokenInfo  =  this.deocdeToken(this.dataToken.accessToken);
+        const tokenInfo  =  this.decodeToken(this.dataToken.accessToken);
         console.log('tokenInfo',tokenInfo);
+        // let acc = tokenInfo.access;
+        // let access = JSON.parse(acc);
         this.router.navigate(['WAPI/Home']);      
       }, error => {
         console.log('error', error);
         this.openSnackBar('Error', 'Usuario o contraseña incorrectos', 'error');
       });
-      // if (isSuccessful) {
-      //   this.router.navigate(['WAPI/Home']);
-      // } else {
-      //   alert('Usuario o contraseña incorrectos');
-      // }
     }
 
   }
-  deocdeToken(token: string) {
+  /**decodifica el token */
+  decodeToken(token: string) {
     try{
       return jwt_decode(token)
     }catch(Error){
       return null;
     }
-
   }
  
   //Metodo para llamar alertas

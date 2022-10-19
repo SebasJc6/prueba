@@ -121,6 +121,7 @@ export class PropertiesRequirementComponent implements OnInit {
   dataClasificacion = new Array()
   dataCodigos = new Array()
   reviewsUp = new Array()
+  reviewsUpTemporal = new Array()
   dependencieDes = new FormControl('');
   idPerfil = 0
   formVerify = {} as verifyDataSaveI;
@@ -1291,38 +1292,58 @@ export class PropertiesRequirementComponent implements OnInit {
 
     }
     if (type == 'Revisar') {
-      console.log('Revisar', this.proRequirementeForm.controls.reviews.value)
-      console.log('dataTableRevisiones', this.dataTableRevisiones)
-      let rev = JSON.stringify(this.dataTableRevisiones)
-      console.log('rev', rev)
-      //this.reviewsUp = JSON.parse(rev)
-      this.reviewsUp.forEach((element: any) => {
-        element.revision_ID = element.solicitudRevID
-        delete element.solicitudRevID
-        delete element.area
-        delete element.usuario
-        delete element.concepto
-        delete element.observacion
-        delete element.fechaRevision
-      })
-      console.log('reviews', this.reviewsUp)
-      this.loading = false;
-      let putReviews = {} as putUpdateReviewsI
-      putReviews.modificacion_ID = +this.dataRequirementID
-      putReviews.revisiones = [this.reviewsUp]
-      console.log('putReviews', putReviews)
-      console.log('this.dataTableRevisiones', this.dataTableRevisiones)
+      //   console.log('Revisar', this.proRequirementeForm.controls.reviews.value)
+      //   console.log('dataTableRevisiones', this.dataTableRevisiones)
+      //   //let rev = JSON.stringify(this.dataTableRevisiones)
+      //  // console.log('rev', rev)
+      //   //this.reviewsUp = JSON.parse(rev)
+      //   // this.reviewsUp.forEach((element: any) => {
+      //   //   delete element.solicitudRevID
+      //   //   delete element.area
+      //   //   delete element.usuario
+      //   //   delete element.concepto
+      //   //   delete element.observacion
+      //   //   delete element.fechaRevision
+      //   // })
+      //   console.log('reviews', this.reviewsUp)
+      //   this.loading = false;
+      //   let putReviews = {} as putUpdateReviewsI
+      //   putReviews.modificacion_ID = +this.dataRequirementID
+      //   putReviews.revisiones = [this.reviewsUp]
+      //   console.log('putReviews', putReviews)
+      //   console.log('this.dataTableRevisiones', this.dataTableRevisiones)
+      console.log('this.reviewsUpTemporal revisado', this.reviewsUpTemporal)
+
     }
 
   }
-  showOptions(event: any, objectReviews:any) {
+  showOptions(event: any, objectReview: any) {
+    // objectReviews.forEach((element: any) => {
+    //   element.revision_ID = element.solicitudRevID
+    //   element.revisado = event.checked
+    //   delete element.solicitudRevID
+    //   delete element.area
+    //   delete element.usuario
+    //   delete element.concepto
+    //   delete element.observacion
+    //   delete element.fechaRevision
+    // })
+    console.log('this.reviewsUp 1', this.reviewsUp)
+    
+    let objectReviews = objectReview
     objectReviews.revisado = event.checked
+    delete objectReviews.area
+    delete objectReviews.usuario
+    delete objectReviews.concepto
+    delete objectReviews.observacion
+    delete objectReviews.fechaRevision
+    console.log('this.reviewsUp 2', this.reviewsUp)
 
     objectReviews
     console.log('event', event, 'idReviews', objectReviews)
 
-    this.reviewsUp.push(objectReviews)
-    console.log('this.reviewsUp', this.reviewsUp)
+    this.reviewsUpTemporal.push(objectReviews)
+    console.log('this.reviewsUpTemporal', this.reviewsUpTemporal)
   }
 
   versionActual(event: any) {

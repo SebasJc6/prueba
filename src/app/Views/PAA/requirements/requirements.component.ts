@@ -8,8 +8,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { dataTableRequerimentI, filterRequerimentI } from 'src/app/Models/ModelsPAA/Requeriment/Requeriment.interface';
 import { RequerimentService } from 'src/app/Services/ServicesPAA/Requeriment/requeriment.service';
-import { Data } from 'src/models/paa-data';
-import { RequerimientosService } from 'src/services/requerimientos/requerimientos.service';
 
 
 
@@ -175,7 +173,7 @@ export class RequirementsComponent implements OnInit {
   }
 
 
-  resumenejecucion(contact: Data) {
+  resumenejecucion(contact: any) {
     let route = '../abstract';
     this.router.navigate([route], { queryParams: { id: contact.numrequired } });
   }

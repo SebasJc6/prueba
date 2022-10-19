@@ -10,11 +10,13 @@ import { getAbstractI } from 'src/app/Models/ModelsPAA/Abstract/abstract';
 })
 export class AbstractService {
   readonly Url: string= environment.baseUrl.logic;
+
   token = sessionStorage.getItem('token');
 
   headers: HttpHeaders = new HttpHeaders({
     Authorization: 'Bearer ' + this.token,
   });
+  
   constructor(private http: HttpClient) { }
 
   getAbstract(projectId: string): Observable<getAbstractI> {
