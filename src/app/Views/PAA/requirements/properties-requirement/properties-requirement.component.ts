@@ -10,7 +10,7 @@ import { concat, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { postDataModificationsI, postDataModifRequerimentsI, postDataModReqI, postModificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { dataSourceClasificacionesI, dataSourceRevisionesI, getAllAuxiliarDataI, getAllUNSPSCDataI, getInfoToCreateReqDataI, saveDataEditDatosI, requerimientoI, saveDataEditI, verifyDatacompleteI, verifyDataSaveI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
-import { deleteReviewsI, postReviewsI, putUpdateReviewsI, reviewsI } from 'src/app/Models/ModelsPAA/propertiesRequirement/Reviews/reviews.interface';
+import { deleteReviewsI, postReviewsI, putUpdateReviewsI, reviewsI, revisionesI } from 'src/app/Models/ModelsPAA/propertiesRequirement/Reviews/reviews.interface';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
 import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
@@ -1292,58 +1292,49 @@ export class PropertiesRequirementComponent implements OnInit {
 
     }
     if (type == 'Revisar') {
-      //   console.log('Revisar', this.proRequirementeForm.controls.reviews.value)
-      //   console.log('dataTableRevisiones', this.dataTableRevisiones)
-      //   //let rev = JSON.stringify(this.dataTableRevisiones)
-      //  // console.log('rev', rev)
-      //   //this.reviewsUp = JSON.parse(rev)
-      //   // this.reviewsUp.forEach((element: any) => {
-      //   //   delete element.solicitudRevID
-      //   //   delete element.area
-      //   //   delete element.usuario
-      //   //   delete element.concepto
-      //   //   delete element.observacion
-      //   //   delete element.fechaRevision
-      //   // })
-      //   console.log('reviews', this.reviewsUp)
-      //   this.loading = false;
-      //   let putReviews = {} as putUpdateReviewsI
-      //   putReviews.modificacion_ID = +this.dataRequirementID
-      //   putReviews.revisiones = [this.reviewsUp]
-      //   console.log('putReviews', putReviews)
-      //   console.log('this.dataTableRevisiones', this.dataTableRevisiones)
+
       console.log('this.reviewsUpTemporal revisado', this.reviewsUpTemporal)
+
+      let putUpdateReviews = {} as putUpdateReviewsI
+      putUpdateReviews.modificacion_ID = +this.dataRequirementID
+      putUpdateReviews.revisiones = [this.reviewsUpTemporal]
+      console.log('putUpdateReviews', putUpdateReviews)
+      this.serviceReviews.putUpdateReviews(putUpdateReviews).subscribe((data: any) => {
+        console.log('data', data)
+        if (data.status != 200) {
+          this.openSnackBar('ERROR', data.Message, 'error')
+        }
+        this.getAllReviews(+this.dataRequirementID)
+        this.loading = false;
+      });
 
     }
 
   }
-  showOptions(event: any, objectReview: any) {
-    // objectReviews.forEach((element: any) => {
-    //   element.revision_ID = element.solicitudRevID
-    //   element.revisado = event.checked
-    //   delete element.solicitudRevID
-    //   delete element.area
-    //   delete element.usuario
-    //   delete element.concepto
-    //   delete element.observacion
-    //   delete element.fechaRevision
-    // })
+  showOptions(revisado: any, objectReview: any) {
     console.log('this.reviewsUp 1', this.reviewsUp)
-    
-    let objectReviews = objectReview
-    objectReviews.revisado = event.checked
-    delete objectReviews.area
-    delete objectReviews.usuario
-    delete objectReviews.concepto
-    delete objectReviews.observacion
-    delete objectReviews.fechaRevision
-    console.log('this.reviewsUp 2', this.reviewsUp)
 
-    objectReviews
-    console.log('event', event, 'idReviews', objectReviews)
+    let objectReviews = {} as revisionesI
+    objectReviews.revisado = revisado
+    objectReviews.revision_ID = objectReview
+    //console.log( 'objectReviews', objectReviews)    
+    if (this.reviewsUpTemporal.length > 0) {
+      this.reviewsUpTemporal.forEach((element: any) => {
+        let index = this.reviewsUpTemporal.findIndex((x: any) => x.revision_ID === objectReviews.revision_ID);
+        if (index >= 0) {
+          this.reviewsUpTemporal.splice(index, 1);
+        }
+        this.reviewsUpTemporal.unshift(objectReviews)
+      });
+    } else {
+      // this.reviewsUpTemporal.unshift(objectReviews)
+      this.reviewsUpTemporal.push(objectReviews)
+    }
 
-    this.reviewsUpTemporal.push(objectReviews)
+
     console.log('this.reviewsUpTemporal', this.reviewsUpTemporal)
+
+
   }
 
   versionActual(event: any) {
