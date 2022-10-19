@@ -47,10 +47,10 @@ export class LoginComponent implements OnInit {
         console.log('dataToken',dataToken);
         this.dataToken = dataToken;
         sessionStorage.setItem('token', this.dataToken.accessToken);
-        const tokenInfo  =  this.decodeToken(this.dataToken.accessToken);
+        const tokenInfo: any  =  this.decodeToken(this.dataToken.accessToken);
         console.log('tokenInfo',tokenInfo);
-        // let acc = tokenInfo.access;
-        // let access = JSON.parse(acc);
+        let access = JSON.parse(tokenInfo.access);
+        console.log('access',access);
         this.router.navigate(['WAPI/Home']);      
       }, error => {
         console.log('error', error);
