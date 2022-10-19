@@ -19,22 +19,22 @@ export class ReviewsService {
   constructor(private http: HttpClient) { }
 
   getAllReviews(Modificacion_ID: number): Observable<getAllReviewsI> {
-    let dir = this.logicUrl + '/Revisiones/Modificacion/' + Modificacion_ID
+    let dir = this.logicUrl + 'Revisiones/Modificacion/' + Modificacion_ID
     return this.http.get<getAllReviewsI>(dir, { headers: this.headers });
   }
 
   postReviews(form: postReviewsI): Observable<any> {
-    let dir = this.logicUrl + '/Revisiones/Create/Modificacion'
+    let dir = this.logicUrl + 'Revisiones/Create/Modificacion'
     return this.http.post<any>(dir, form, { headers: this.headers });
   }
 
   putUpdateReviews(form: putUpdateReviewsI): Observable<any> {
-    let dir = this.logicUrl + '/Revisiones/Update/Modificacion'
+    let dir = this.logicUrl + 'Revisiones/Update/Modificacion'
     return this.http.put<any>(dir, form, { headers: this.headers });
   }
 
   putGetReviews(form: putGetReviewsI): Observable<any> {
-    let dir = this.logicUrl + '/Revisiones/Enviar/Solicitud'
+    let dir = this.logicUrl + 'Revisiones/Enviar/Solicitud'
     return this.http.put<any>(dir, form, { headers: this.headers });
   }
 

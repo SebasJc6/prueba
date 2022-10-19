@@ -37,6 +37,10 @@ export interface putUpdateReviewsI {
     modificacion_ID: number,
     revisiones: [any]
 }
+export interface revisionesI{
+    revision_ID: number,
+    revisado: boolean,
+}
 export interface putGetReviewsI {
     idSolicitud: number,
     idProject: number,

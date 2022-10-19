@@ -774,7 +774,7 @@
                                             <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
                                                 Revisión
                                             <td mat-cell *matCellDef="let element">
-                                                <mat-checkbox [checked]="element.revision" (change)="showOptions($event,element)" ></mat-checkbox>
+                                                <mat-checkbox [checked]="element.revision" (change)="showOptions($event.checked,element.revision_ID)" ></mat-checkbox>
                                             </td>
                                         </ng-container>
 
