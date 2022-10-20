@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { getFilesI } from 'src/app/Models/ModelsPAA/Files/Files.interface';
 import { environment } from 'src/environments/environment';
+import { AuthenticationService } from '../../Authentication/authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +12,16 @@ import { environment } from 'src/environments/environment';
 export class FilesService {
 
   url: string = environment.baseUrl.logic + 'Files/';
-  token = sessionStorage.getItem('token');
 
-  headers: HttpHeaders = new HttpHeaders({
-    Authorization: 'Bearer ' + this.token,
-  });
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthenticationService) { }
 
   getAllFiles(idProject:number,idRequets: number): Observable<getFilesI>{
+
+    const headers: HttpHeaders = new HttpHeaders({
+      Authorization: 'Bearer ' + this.authService.getCookie('token'),
+    });
+
     let dir = this.url + idProject + '/'+idRequets + '/Files'
-    return this.http.get<getFilesI>(dir,{ headers: this.headers });
+    return this.http.get<getFilesI>(dir,{ headers: headers });
   }
 }

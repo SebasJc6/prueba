@@ -53,12 +53,16 @@
                     <button mat-button class="menu-button" [routerLink]="['PAA/Adquisiciones']" (click)="onToggleSidenav()">
                         <span>PAA</span>
                     </button>
-                    <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeTareas']">
-                        <span>Bandeja de tareas</span>
-                    </button>
-                    <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeSolicitudes']">
-                        <span>Modificaciones solicitadas</span>
-                    </button>
+                    <div *ngIf="AccessUser !== 'Revisor'">
+                        <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeTareas']">
+                            <span>Bandeja de tareas</span>
+                        </button>
+                    </div>
+                    <div *ngIf="AccessUser !== 'Revisor'">
+                        <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeSolicitudes']">
+                            <span>Modificaciones solicitadas</span>
+                        </button>
+                    </div>
                 </mat-expansion-panel>
                 
 

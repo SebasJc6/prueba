@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router,
     private ServicesAuth: AuthenticationService,
-    private snackBar: MatSnackBar,) { }
+    private snackBar: MatSnackBar, private authService: AuthenticationService) { }
 
   ngOnInit(): void {
     sessionStorage.removeItem('token');
@@ -41,15 +41,15 @@ export class LoginComponent implements OnInit {
   public myError = (controlName: string, errorName: string) => {
     return this.loginForm.controls[controlName].hasError(errorName);
   }
+
   onLogin() {
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
+      // console.log(this.loginForm.value);
       // let isSuccessful =
-      sessionStorage.removeItem('token');
        this.ServicesAuth.login(this.loginForm.value).subscribe(dataToken => {
-        console.log('dataToken: ',dataToken.accessToken);
-        this.dataToken = dataToken;        
-        sessionStorage.setItem('token', this.dataToken.accessToken);
+        // console.log('dataToken: ',dataToken.accessToken);
+        this.dataToken = dataToken;
+        this.authService.setCookie('token', this.dataToken.accessToken);
         const tokenInfo: any  =  this.decodeToken(this.dataToken.accessToken);
         // console.log('tokenInfo',tokenInfo);
         let access = JSON.parse(tokenInfo.access);
@@ -60,8 +60,9 @@ export class LoginComponent implements OnInit {
         this.openSnackBar('Error', 'Usuario o contraseña incorrectos', 'error');
       });
     }
-
   }
+
+  
   /**decodifica el token */
   decodeToken(token: string) {
     try{

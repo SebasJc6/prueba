@@ -182,6 +182,7 @@ export class RequirementsComponent implements OnInit {
   regresar() {
     this.router.navigate(['/WAPI/PAA/Adquisiciones'])
   }
+  
   propertiesRequirement(requirementId: number) {
     this.router.navigate(['/WAPI/PAA/PropiedadesRequerimiento/' + this.dataProjectID + '/0/' + requirementId+ '/Vista'])
   }

@@ -4,20 +4,15 @@ import { Observable } from 'rxjs';
 import { getRequerimentsByProjectI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { filterDataRequerimentI, filterRequerimentI, getDataRequerimentI } from 'src/app/Models/ModelsPAA/Requeriment/Requeriment.interface';
 import { environment } from 'src/environments/environment';
+import { AuthenticationService } from '../../Authentication/authentication.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RequerimentService {
   url: string = environment.baseUrl.logic + 'Proyecto/';
-  token = sessionStorage.getItem('token');
 
-  headers: HttpHeaders = new HttpHeaders({
-    Authorization: 'Bearer ' + this.token,
-  });
-  constructor(private http: HttpClient) { }
-
-
+  constructor(private http: HttpClient, private authService: AuthenticationService) { }
 
   // getRequerimentsByProject(projectId: number): Observable<getRequerimentsByProjectI> {
   //   let dir = this.url + projectId + '/Requerimientos';
@@ -25,6 +20,11 @@ export class RequerimentService {
   // }
 
   getRequerimentsByProject(projectId: number, formFilter: filterRequerimentI): Observable<getRequerimentsByProjectI> {
+
+    const headers: HttpHeaders = new HttpHeaders({
+      Authorization: 'Bearer ' + this.authService.getCookie('token'),
+    });
+
     let dir = this.url + projectId +
       '/Requerimientos?NumeroRequerimiento=' + formFilter.NumeroRequerimiento +
       '&DependenciaDestino=' + formFilter.DependenciaDestino +
@@ -35,15 +35,20 @@ export class RequerimentService {
       '&columna=' + formFilter.columna +
       '&ascending=' + formFilter.ascending;
 
-    return this.http.get<getRequerimentsByProjectI>(dir,{ headers: this.headers });
+    return this.http.get<getRequerimentsByProjectI>(dir,{ headers: headers });
   }
 
   getDataRequeriment(projectId: number, formFilter: filterDataRequerimentI): Observable<getDataRequerimentI> {
+
+    const headers: HttpHeaders = new HttpHeaders({
+      Authorization: 'Bearer ' + this.authService.getCookie('token'),
+    });
+
     let dir = this.url + projectId +
       '/DataRequerimientos?page=' + formFilter.page +
       '&take=' + formFilter.take +
       '&NumeroRequerimiento=' + formFilter.NumeroRequerimiento +
       '&Descripcion=' + formFilter.Descripcion;
-    return this.http.get<getDataRequerimentI>(dir,{ headers: this.headers });
+    return this.http.get<getDataRequerimentI>(dir,{ headers: headers });
   }
 }

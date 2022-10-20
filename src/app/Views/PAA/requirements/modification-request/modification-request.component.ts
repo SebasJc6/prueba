@@ -19,6 +19,7 @@ import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 import { editCounterpartI } from 'src/app/Models/ModelsPAA/modificatioRequest/counterpart/counterpart-interface';
 import { apropiacionIni, cadenasPresupuestales, cadenasPresupuestalesI, codsUNSPSC, getDataI, MODIFICACION, RequerimentDataI, requerimiento } from 'src/app/Models/ModelsPAA/Requeriment/RequerimentApproved.interface';
 import jwt_decode from "jwt-decode";
+import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 
 
 export interface smallTable {
@@ -153,7 +154,8 @@ export class ModificationRequestComponent implements OnInit {
     private activeRoute: ActivatedRoute,
     public router: Router, public dialog: MatDialog,
     public serviceModRequest: ModificationRequestService,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private authService: AuthenticationService) { }
 
 
   ngOnInit(): void {
@@ -179,7 +181,7 @@ export class ModificationRequestComponent implements OnInit {
     }
 
     //Obtener token para manejar los roles
-    const Token: string = sessionStorage.getItem('token') || '';
+    const Token: string = this.authService.getCookie('token');
     const tokenInfo: any  =  this.decodeToken(Token);
     
     const TokenAccess = JSON.parse(tokenInfo.access);

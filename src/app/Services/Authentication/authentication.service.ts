@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 import { loginI, tokenI } from 'src/app/Models/Authentication/authentication.interface';
 import { environment } from 'src/environments/environment';
 
@@ -9,10 +10,22 @@ import { environment } from 'src/environments/environment';
 export class AuthenticationService {
   urlAuth = environment.baseUrl.auth;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,  private cookie: CookieService) { }
 
   login(form: loginI){
     let dir = this.urlAuth + 'auth/login';
     return this.http.post<tokenI>(dir, form);
+  }
+
+  getCookie(name: string) {
+    return this.cookie.get(name);
+  }
+
+  setCookie(name: string, value: string) {
+    this.cookie.set(name, value);
+  }
+
+  rmCookie() {
+    this.cookie.deleteAll();
   }
 }

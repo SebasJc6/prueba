@@ -3,6 +3,7 @@ import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/cor
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import jwt_decode from "jwt-decode";
+import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 
 
 @Component({
@@ -14,17 +15,23 @@ export class SidenavListComponent implements OnInit {
 
   @Output() public sidenavToggle = new EventEmitter();
 
-
-
   constructor(private observer: BreakpointObserver,
-    private router: Router,) { }
+    private router: Router, private authService: AuthenticationService) { }
 
   UserName: string = '';
 
+  //Objeto con la informacion de acceso del Usuario
+  AccessUser: string = '';
+
   ngOnInit(): void {
-    const Token: string = sessionStorage.getItem('token') || '';
+    const Token: string = this.authService.getCookie('token');
     const tokenInfo: any  =  this.decodeToken(Token);
     this.UserName = tokenInfo.name;
+
+    //Obtener token para manejar los roles
+    const TokenAccess = JSON.parse(tokenInfo.access);
+    this.AccessUser = TokenAccess[0].RolesDto[0].Rol;
+    console.log(this.AccessUser);
   }
 
   public onToggleSidenav = () => {
@@ -32,9 +39,10 @@ export class SidenavListComponent implements OnInit {
   }
 
   logOut() {
-    sessionStorage.removeItem('token');
+    this.authService.rmCookie();
     this.router.navigate([`/`]);
   }
+  
 
   /**decodifica el token */
   decodeToken(token: string) {
