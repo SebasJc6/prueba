@@ -1193,7 +1193,6 @@ export class PropertiesRequirementComponent implements OnInit {
           return;
 
         }
-        console.log('this.dataTableClasificacion', this.dataTableClasificacion)
         this.dataTableClasificaciones.push(this.dataTableClasificacion)
         var stringToStore = JSON.stringify(this.dataTableClasificaciones);
         ProChartStorage.setItem("dataTableClacificaciones", stringToStore);
