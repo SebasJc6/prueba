@@ -1,5 +1,5 @@
 <div mat-dialog-title class="flex-container">
-    <button mat-button class="close-icon" [mat-dialog-close]="true"> 
+    <button mat-button class="close-icon" [mat-dialog-close]="false"> 
         <mat-icon>close</mat-icon> 
     </button> 
 </div>
@@ -9,21 +9,25 @@
     <div class="card">
         <img class="logo" src="assets/img/danger.png">
         <h1 class="title" style="color: rgb(255, 208, 0);" mat-dialog-title>{{data.title}}</h1>
-        <div class="warningInput" style="margin-left: -4.2%;" mat-dialog-content>
+        
+        <div class="warningInput" style="margin-left: -4.5%;" mat-dialog-content>
           <p>{{data.message}}</p>
         </div>
+
         <div class="warningInput">
-            <mat-form-field  appearance="fill">
-                <textarea class="contDataArea" rows="4" placeholder="Longitud 250"></textarea>
-            </mat-form-field>
+            <!-- <mat-form-field > -->
+                <textarea [(ngModel)]="Comentarios" class="contDataArea" rows="4" placeholder="Longitud 250"></textarea>
+            <!-- </mat-form-field> -->
         </div>
-          <div class="warningInput" style="margin-left: -4.2%;" mat-dialog-content>
+
+        <div class="warningInput" style="margin-left: -4.5%;  margin-top: 0.6%;" mat-dialog-content>
             <p>{{data.message2}}</p>
-          </div>
+        </div>
+
         <div class="buttons" mat-dialog-actions>
-            <button mat-button class="butonWarningInput btn" [mat-dialog-close]="data.value" cdkFocusInitial>APROBAR</button>
-            <button mat-button class="butonWarningInput btn" [mat-dialog-close]="data.value">SOLICITAR AJUSTES</button>
-            <button mat-button class="butonWarningInput btn" [mat-dialog-close]="data.value">RECHAZAR</button>
+            <button mat-button class="butonWarningInput btn" (click)="closeDialog(1)" cdkFocusInitial>APROBAR</button>
+            <button mat-button class="butonWarningInput btn" (click)="closeDialog(2)">SOLICITAR AJUSTES</button>
+            <button mat-button class="butonWarningInput btn" (click)="closeDialog(3)">RECHAZAR</button>
             <!-- <button mat-button class="butonWarningInput btn" [mat-dialog-close]="data.value">CANCELAR</button> -->
         </div>
     </div>
