@@ -877,7 +877,7 @@ export class PropertiesRequirementComponent implements OnInit {
         item.mgA_ID = item.mga.mgA_ID
         item.pospre_ID = item.pospre.pospre_ID
         item.actividad_ID = item.actividad.actividad_ID
-        item.auxiliar_ID = item.auxiliar
+        item.auxiliar_ID = item.auxiliar == null ? null : item.auxiliar.auxiliar_ID
         item.fuente_ID = item.fuente.fuente_ID
         delete item.mga
         delete item.pospre
@@ -934,7 +934,7 @@ export class PropertiesRequirementComponent implements OnInit {
       this.formVerify.codsUNSPSC = this.dataCodigos
       // console.log('this. dataCodigos  dataCodigos', this.dataCodigos)
       this.formVerify.apropiacionInicial = this.proRequirementeForm.controls.initialAppro.value
-      //  console.log('this.formVerify', this.formVerify)
+        console.log('this.formVerify', this.formVerify)
 
       if (this.typePage == 'Nuevo') {
         this.serviceProRequirement.postVerifyDataSaveI(this.formVerify).subscribe(dataResponse => {
@@ -992,11 +992,11 @@ export class PropertiesRequirementComponent implements OnInit {
             this.loading = false
 
           } else {
-            this.openSnackBar('Error', dataResponse.message, 'error');
+            this.openSnackBar('Error', dataResponse.message && JSON.stringify(dataResponse.data), 'error');
           }
         }, err => {
           //  console.log('dataResponse', err)
-          this.openSnackBar('Error', JSON.stringify(err.error.Data), 'error');
+          this.openSnackBar('Error', JSON.stringify(err.error.data), 'error');
         })
 
       }
