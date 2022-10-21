@@ -2,6 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -17,6 +18,7 @@ import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/prope
 import { ReviewsService } from 'src/app/Services/ServicesPAA/propertiesRequirement/reviews/reviews.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 import { v4 as uuid } from 'uuid';
+import { BudgetModificationComponent } from './budget-modification/budget-modification.component';
 
 
 
@@ -252,6 +254,7 @@ export class PropertiesRequirementComponent implements OnInit {
     private formbuilder: FormBuilder,
     private currencyPipe: CurrencyPipe,
     private snackBar: MatSnackBar,
+    public dialog: MatDialog,
   ) { }
 
   ngAfterViewInit() {
@@ -1357,7 +1360,14 @@ export class PropertiesRequirementComponent implements OnInit {
     });
   }
 
-
+openBudgetModification(element:any){
+  console.log('element clasificacion', element)
+  const dialogRef = this.dialog.open(BudgetModificationComponent, {
+    width: '800px',
+    height: '500px',
+    data: this.dataProjectID,
+  });
+}
 }
 
 var ProChartStorage = {

@@ -61,6 +61,7 @@ import { AlertsPopUpComponent } from './Templates/alerts-pop-up/alerts-pop-up.co
 import { LoginComponent } from './Views/login/login.component';
 import { SpinnerComponent } from './Templates/spinner/spinner.component';
 import { CDPComponent } from './Views/PAA/requirements/cdp/cdp.component';
+import { BudgetModificationComponent } from './Views/PAA/requirements/properties-requirement/budget-modification/budget-modification.component';
 import { AuthInterceptorService } from './Services/Authentication/Interceptor/auth-interceptor.service';
 
 
@@ -121,7 +122,8 @@ const materialModules = [
     AlertsPopUpComponent,
     LoginComponent,
     SpinnerComponent,
-    CDPComponent
+    CDPComponent,
+    BudgetModificationComponent
 
   ],
   imports: [
