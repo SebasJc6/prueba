@@ -50,15 +50,17 @@
                             <span class="title">Plan anual de adquisisiones (PAA)</span>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
-                    <button mat-button class="menu-button" [routerLink]="['PAA/Adquisiciones']" (click)="onToggleSidenav()">
-                        <span>PAA</span>
-                    </button>
+                    <div>
+                        <button mat-button class="menu-button" [routerLink]="['PAA/Adquisiciones']" (click)="onToggleSidenav()">
+                            <span>PAA</span>
+                        </button>
+                    </div>
                     <div *ngIf="AccessUser !== 'Revisor'">
                         <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeTareas']">
                             <span>Bandeja de tareas</span>
                         </button>
                     </div>
-                    <div *ngIf="AccessUser !== 'Revisor'">
+                    <div>
                         <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeSolicitudes']">
                             <span>Modificaciones solicitadas</span>
                         </button>

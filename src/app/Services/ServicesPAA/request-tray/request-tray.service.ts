@@ -16,15 +16,10 @@ export class RequestTrayService {
   constructor(private http: HttpClient, private authService: AuthenticationService) { }
 
   getRequestTray(formPage: filterRequestTrayI): Observable<getRequestTrayI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = `${this.Url}BandejaModificacion?NumeroSolicitud=${formPage.NumeroSolicitud}&Vigencia=
     ${formPage.Vigencia}&FechaPresentacion=${formPage.FechaPresentacion}&CodigoProyecto=${formPage.CodigoProyecto}&NombreProyecto=${formPage.NombreProyecto}&Version=${formPage.Version}&Solicitante=${formPage.Solicitante}&Estado=${formPage.Estado}&FechaAprobacion_rechazo=${formPage.FechaAprobacion_rechazo}&page=${formPage.page}&take=${formPage.take}&columna=${formPage.columna}&ascending=${formPage.ascending}`;    
 
-    return this.http.get<getRequestTrayI>(dir,{ headers: headers });
+    return this.http.get<getRequestTrayI>(dir);
   }
 
 }

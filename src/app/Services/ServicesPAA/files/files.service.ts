@@ -13,15 +13,10 @@ export class FilesService {
 
   url: string = environment.baseUrl.logic + 'Files/';
 
-  constructor(private http: HttpClient, private authService: AuthenticationService) { }
+  constructor(private http: HttpClient) { }
 
   getAllFiles(idProject:number,idRequets: number): Observable<getFilesI>{
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.url + idProject + '/'+idRequets + '/Files'
-    return this.http.get<getFilesI>(dir,{ headers: headers });
+    return this.http.get<getFilesI>(dir);
   }
 }

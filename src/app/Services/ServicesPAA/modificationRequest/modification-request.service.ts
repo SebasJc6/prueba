@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { filterModificationRequestI, getModificationRequestByRequesI, getModificationRequestI, modificationRequestI, postModificationRequestI, postModificRequestCountersI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { getDataI } from 'src/app/Models/ModelsPAA/Requeriment/RequerimentApproved.interface';
 import { AuthenticationService } from '../../Authentication/authentication.service';
+import { AuthInterceptorService } from '../../Authentication/Interceptor/auth-interceptor.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,43 +15,23 @@ export class ModificationRequestService {
 
   readonly Url: string= environment.baseUrl.logic ;
 
-  constructor(private http: HttpClient, private authService: AuthenticationService) {}
+  constructor(private http: HttpClient, private authService: AuthenticationService, private authInterceptor: AuthInterceptorService) {}
 
   getModificationRequest(idProject: number): Observable<getModificationRequestI>{
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.Url + 'Proyecto/' + idProject + '/SolicitudMod';
-    return this.http.get<getModificationRequestI>(dir,{ headers: headers });
+    return this.http.get<getModificationRequestI>(dir);
   }
 
   getModificationRequestByRequest(idProject:number,idRequets: number ): Observable<getModificationRequestI>{
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.Url + 'Proyecto/' + idProject + '/SolicitudMod/' + idRequets;
-    return this.http.get<getModificationRequestI>(dir,{ headers: headers });
+    return this.http.get<getModificationRequestI>(dir);
   }
 
   getModification(): Observable<getModificationRequestI>{
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
-    return this.http.get<getModificationRequestI>(this.Url,{ headers: headers });
+    return this.http.get<getModificationRequestI>(this.Url);
   }
 
   getModificationRequestByRequestId(idRequets: number,formFilter: filterModificationRequestI): Observable<getModificationRequestByRequesI>{
-    
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.Url  + 'SolicitudMod/' +idRequets + '/Modificaciones/'
     '?page=' + formFilter.page +
     '&take=' + formFilter.take 
@@ -68,80 +49,45 @@ export class ModificationRequestService {
     // '&ValorDisminuye=' + formFilter.ValorDisminuye +
     // '&NuevoSaldoApropiacion=' + formFilter.NuevoSaldoApropiacion +
     // '&ModalidadSeleccion=' + formFilter.ModalidadSeleccion ;    
-    return this.http.get<getModificationRequestByRequesI>(dir,{ headers: headers });
+    return this.http.get<getModificationRequestByRequesI>(dir);
   }
 
   //Funcionalidad de guardar
   postModificationRequestSave(dataSave: postModificationRequestI): Observable<any> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = `${this.Url}SolicitudMod/Guardar`;
-    return this.http.post(dir, dataSave,{ headers: headers });
+    return this.http.post(dir, dataSave);
   }
   putModificationRequestSave(dataSave: postModificationRequestI): Observable<any> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = `${this.Url}SolicitudMod/Guardar`;
-    return this.http.put(dir, dataSave,{ headers: headers });
+    return this.http.put(dir, dataSave);
   }
 
   //Funcionalidad de enviar
   putModificationRequestSend(dataSave: any): Observable<any> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = `${this.Url}SolicitudMod/Enviar`;
-    return this.http.put(dir, dataSave,{ headers: headers });
+    return this.http.put(dir, dataSave);
   }
   
 
   deleteModificationRequest(idRequets: number ): Observable<any>{
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = `${this.Url}SolicitudMod/${idRequets}`;
-    return this.http.delete(dir,{ headers: headers });
+    return this.http.delete(dir);
   }
 
 
   importFile(body: any, file: FormData): Observable<any> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = `${this.Url}/SolicitudMod/ImportFile?ProjectId=${body.ProjectId}&Observacion=${body.Observacion}`;
-    return this.http.post(dir, file,{ headers: headers });
+    return this.http.post(dir, file);
   }
 
 
   exportFile(projectId: string, requestId: string): Observable<any> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = `${this.Url}/SolicitudMod/ExportFile?ProyectoId=${projectId}&SolicitudId=${requestId}`;
-    return this.http.get(dir, {responseType: 'blob', headers: headers});
+    return this.http.get(dir, {responseType: 'blob'});
   }
 
   getRequerimentApproved(idRequest: string, idRequeriment: number): Observable<any> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = `${this.Url}/Proyecto/${idRequest}/Requerimiento/${idRequeriment}`;
-    return this.http.get<any>(dir,{ headers: headers });
+    return this.http.get<any>(dir);
   }
 }

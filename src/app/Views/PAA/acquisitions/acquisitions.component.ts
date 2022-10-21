@@ -218,14 +218,14 @@ export class AcquisitionsComponent implements OnInit {
     this.serviceProject.patchExecutionProject(proyectoID).subscribe(data => {
       this.getAllProjects(this.filterProjects);
       this.isApproved = true;
-      console.log(data)
+      // console.log(data)
     })
   }
   changeStatus(proyectoID: number) {   
     this.serviceProject.patchStatusProject(proyectoID).subscribe(data => {
       this.getAllProjects(this.filterProjects);
       this.isApproved = true;
-      console.log(data)
+      // console.log(data)
     })
   }
 

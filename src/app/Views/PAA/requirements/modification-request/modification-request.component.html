@@ -320,7 +320,7 @@
     <div class="justification">
         <p matTooltip="Campo para justificar el motivo de la modificación">Justificación de la modificación</p>
 
-        <mat-form-field hintLabel="Maximo 3000 caracteres" appearance="outline">
+        <mat-form-field hintLabel="Máximo 3000 caracteres" appearance="outline">
             <textarea matInput #input maxlength="3000" [(ngModel)]="JustificationText" rows="8" placeholder="Se requiere modificar" [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '' || AccessUser === 'Revisor') ? false : true"></textarea>
             <mat-hint align="end">{{input.value.length || 0}}/3000</mat-hint>
         </mat-form-field>
@@ -396,15 +396,20 @@
 </div>
 
     <mat-card-actions>
-        <button class="buton btn" mat-button mat-icon-button [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true" (click)="guardar()">
-            Guardar
-        </button>
-        <button class="buton btn" mat-button mat-icon-button (click)="enviar()">
-            Enviar
-        </button>
-        <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
-            Cancelar
-        </button>
+            <button class="buton btn" mat-button mat-icon-button [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true" (click)="guardar()">
+                Guardar
+            </button>
+            <button class="buton btn" mat-button mat-icon-button (click)="enviar()">
+                Enviar
+            </button>
+        <!-- <div> -->
+            <button class="buton btn" mat-button mat-icon-button (click)="enviarRecisiones()">
+                Enviar Revisiones
+            </button>
+        <!--</div> -->
+            <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
+                Cancelar
+            </button>
     </mat-card-actions>
 
 </div>

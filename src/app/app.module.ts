@@ -1,7 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CurrencyPipe, HashLocationStrategy, LocationStrategy } from '@angular/common';
 
@@ -61,6 +61,7 @@ import { AlertsPopUpComponent } from './Templates/alerts-pop-up/alerts-pop-up.co
 import { LoginComponent } from './Views/login/login.component';
 import { SpinnerComponent } from './Templates/spinner/spinner.component';
 import { CDPComponent } from './Views/PAA/requirements/cdp/cdp.component';
+import { AuthInterceptorService } from './Services/Authentication/Interceptor/auth-interceptor.service';
 
 
 const materialModules = [
@@ -139,6 +140,7 @@ const materialModules = [
       AlertsPopUpComponent,
       CurrencyPipe,
       { provide: LocationStrategy, useClass: HashLocationStrategy},
+      {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true},
     ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

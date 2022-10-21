@@ -12,23 +12,14 @@ export class ProjectService {
 
   readonly url: string = environment.baseUrl.logic + 'Proyecto';
 
-  constructor(private http: HttpClient, private authService: AuthenticationService) { }
+  constructor(private http: HttpClient) { }
 
   getAllProjects(): Observable<getProjectI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.url;
-    return this.http.get<getProjectI>(dir,{ headers: headers });
+    return this.http.get<getProjectI>(dir);
   }
+
   getAllProjectsFilter(formFilter: filterProjectI): Observable<getProjectI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.url +
       '?DependenciaOrigen=' + formFilter.DependenciaOrigen +
       '&CodigoProyecto=' + formFilter.CodigoProyecto +
@@ -38,35 +29,21 @@ export class ProjectService {
       '&take=' + formFilter.take +
       '&columna=' + formFilter.columna +
       '&ascending=' + formFilter.ascending;
-    return this.http.get<any>(dir, { headers: headers });
+    return this.http.get<any>(dir);
   }
+
   getProjectById(projectId: number): Observable<getProjectByIdI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.url + '/' + projectId;
-    return this.http.get<getProjectByIdI>(dir,{ headers: headers });
+    return this.http.get<getProjectByIdI>(dir);
   }
 
   patchExecutionProject(projectId: number): Observable<statusI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.url + '/Ejecucion/' + projectId;
-    return this.http.patch<statusI>(dir,{ headers: headers });
+    return this.http.patch<statusI>(dir, null);
   }
 
   patchStatusProject(projectId: number): Observable<statusI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.url + '/Estado/' + projectId;
-    return this.http.patch<statusI>(dir,{ headers: headers });
+    return this.http.patch<statusI>(dir, null);
   }
 }

@@ -77,7 +77,7 @@ export class TaskTrayComponent implements OnInit {
     this.filterTaskTray.ascending = this.filterForm.get('ascending')?.value || false;
 
     this.taskTrayService.getTaskTray(filterTaskTray).subscribe(request => {      
-      console.log('rrequest',request)
+      // console.log('rrequest',request)
       this.dataSource = request.data.items;
       this.numberPage = request.data.page;
       this.numberPages = request.data.pages;
@@ -90,7 +90,7 @@ export class TaskTrayComponent implements OnInit {
 
   //Funcionalidad del botón Requerimiento
   chargeRequeriment(idRequeriment: number) {
-    console.log(idRequeriment);
+    // console.log(idRequeriment);
     
   }
 

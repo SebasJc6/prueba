@@ -12,7 +12,7 @@ import { AuthenticationService } from '../../Authentication/authentication.servi
 export class RequerimentService {
   url: string = environment.baseUrl.logic + 'Proyecto/';
 
-  constructor(private http: HttpClient, private authService: AuthenticationService) { }
+  constructor(private http: HttpClient) { }
 
   // getRequerimentsByProject(projectId: number): Observable<getRequerimentsByProjectI> {
   //   let dir = this.url + projectId + '/Requerimientos';
@@ -20,10 +20,6 @@ export class RequerimentService {
   // }
 
   getRequerimentsByProject(projectId: number, formFilter: filterRequerimentI): Observable<getRequerimentsByProjectI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
 
     let dir = this.url + projectId +
       '/Requerimientos?NumeroRequerimiento=' + formFilter.NumeroRequerimiento +
@@ -35,20 +31,15 @@ export class RequerimentService {
       '&columna=' + formFilter.columna +
       '&ascending=' + formFilter.ascending;
 
-    return this.http.get<getRequerimentsByProjectI>(dir,{ headers: headers });
+    return this.http.get<getRequerimentsByProjectI>(dir);
   }
 
   getDataRequeriment(projectId: number, formFilter: filterDataRequerimentI): Observable<getDataRequerimentI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.url + projectId +
       '/DataRequerimientos?page=' + formFilter.page +
       '&take=' + formFilter.take +
       '&NumeroRequerimiento=' + formFilter.NumeroRequerimiento +
       '&Descripcion=' + formFilter.Descripcion;
-    return this.http.get<getDataRequerimentI>(dir,{ headers: headers });
+    return this.http.get<getDataRequerimentI>(dir);
   }
 }

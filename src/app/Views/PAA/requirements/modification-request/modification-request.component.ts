@@ -1073,6 +1073,12 @@ export class ModificationRequestComponent implements OnInit {
   }
 
 
+  //Enviar revisiones
+  enviarRecisiones() {
+    
+  }
+
+
   //Boton cancelar
   cancel() {    
     this.CounterpartsDelete = [];

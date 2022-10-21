@@ -3,7 +3,6 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { getAbstractI } from 'src/app/Models/ModelsPAA/Abstract/abstract';
-import { AuthenticationService } from '../../Authentication/authentication.service';
 
 
 @Injectable({
@@ -12,15 +11,10 @@ import { AuthenticationService } from '../../Authentication/authentication.servi
 export class AbstractService {
   readonly Url: string= environment.baseUrl.logic;
   
-  constructor(private http: HttpClient, private authService: AuthenticationService) { }
+  constructor(private http: HttpClient) { }
 
   getAbstract(projectId: string): Observable<getAbstractI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = `${this.Url}Proyecto/${projectId}/Resumen`;
-    return this.http.get<getAbstractI>(dir,{ headers: headers });
+    return this.http.get<getAbstractI>(dir);
   }
 }

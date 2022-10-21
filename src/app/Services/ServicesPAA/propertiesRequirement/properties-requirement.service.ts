@@ -14,242 +14,123 @@ export class PropertiesRequirementService {
   logicUrl: string = environment.baseUrl.logic;
   genericUrl: string = environment.baseUrl.generic;
 
-  constructor(private http: HttpClient, private authService: AuthenticationService) { }
+  constructor(private http: HttpClient) { }
 
   getInfoToCreateReq(projectId: number): Observable<getInfoToCreateReqI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.logicUrl + 'proyecto/' + projectId + '/GetInfoToCreateReq'
-    return this.http.get<getInfoToCreateReqI>(dir,{ headers: headers });
+    return this.http.get<getInfoToCreateReqI>(dir);
   }
 
   getAllDependencies(): Observable<getAllDependenciesI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.genericUrl + 'Dependencia'
-    return this.http.get<getAllDependenciesI>(dir,{ headers: headers });
+    return this.http.get<getAllDependenciesI>(dir);
   }
 
   getDependenceElastic(value: string): Observable<getAllDependenciesI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.genericUrl + 'Dependencia/Elastic?cod=' + value
-    return this.http.get<getAllDependenciesI>(dir,{ headers: headers });
+    return this.http.get<getAllDependenciesI>(dir);
   }
 
   getAllSelectionMode(): Observable<getAllSelectionModeI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.genericUrl + 'ModalidadDeSeleccion'
-    return this.http.get<getAllSelectionModeI>(dir,{ headers: headers });
+    return this.http.get<getAllSelectionModeI>(dir);
   }
 
   getSelectionModeElastic(value: string): Observable<getAllSelectionModeI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.genericUrl + 'ModalidadDeSeleccion/Elastic?cod=' + value
-    return this.http.get<getAllSelectionModeI>(dir,{ headers: headers });
+    return this.http.get<getAllSelectionModeI>(dir);
   }
   getAllContractualAction(): Observable<getAllContractualActionI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.genericUrl + 'Actuacion'
-    return this.http.get<getAllContractualActionI>(dir,{ headers: headers });
+    return this.http.get<getAllContractualActionI>(dir);
   }
 
   getAllContacType(): Observable<getAllContacTypeI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.genericUrl + 'TipoContrato'
-    return this.http.get<getAllContacTypeI>(dir,{ headers: headers })
+    return this.http.get<getAllContacTypeI>(dir)
   }
 
   getAllProfile(): Observable<getAllProfileI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.genericUrl + 'Perfil'
-    return this.http.get<getAllProfileI>(dir,{ headers: headers })
+    return this.http.get<getAllProfileI>(dir)
   }
 
   getAuxiliarElastic(value: string): Observable<getAllAuxiliarI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.genericUrl + 'Auxiliar/Elastic?cod=' + value
-    return this.http.get<getAllAuxiliarI>(dir,{ headers: headers })
+    return this.http.get<getAllAuxiliarI>(dir)
   }
 
   getAuxiliarByProject(projectId: number): Observable<getAllAuxiliarI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.logicUrl + 'Proyecto/' + projectId + '/Auxiliares'
-    return this.http.get<getAllAuxiliarI>(dir,{ headers: headers })
+    return this.http.get<getAllAuxiliarI>(dir)
   }
 
   getFuentesElastic(value: string): Observable<getAllFuentesI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.genericUrl + 'Fuente/Elastic?cod=' + value
-    return this.http.get<getAllFuentesI>(dir,{ headers: headers })
+    return this.http.get<getAllFuentesI>(dir)
   }
 
   getFuentesByProject(projectId: number): Observable<getAllFuentesI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.logicUrl + 'Proyecto/' + projectId + '/FuentesComplete'
-    return this.http.get<getAllFuentesI>(dir,{ headers: headers })
+    return this.http.get<getAllFuentesI>(dir)
   }
 
   getAllActivities(projectId: number): Observable<getAllActivitiesI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.logicUrl + 'proyecto/' + projectId + '/Actividades'
-    return this.http.get<getAllActivitiesI>(dir,{ headers: headers })
+    return this.http.get<getAllActivitiesI>(dir)
   }
 
   getMGAElastic(value: string): Observable<getAllMGAI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.genericUrl + 'MGA/Elastic?cod=' + value
-    return this.http.get<getAllMGAI>(dir,{ headers: headers })
+    return this.http.get<getAllMGAI>(dir)
   }
 
   getPOSPREElastic(value: string): Observable<getAllPOSPREI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.genericUrl + 'POSPRE/Elastic?cod=' + value
-    return this.http.get<getAllPOSPREI>(dir,{ headers: headers })
+    return this.http.get<getAllPOSPREI>(dir)
   }
 
   getUNSPSCElastic(value: string): Observable<getAllUNSPSCI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.genericUrl + 'UNSPSC/Elastic?cod=' + value
-    return this.http.get<getAllUNSPSCI>(dir,{ headers: headers })
+    return this.http.get<getAllUNSPSCI>(dir)
   }
 
   getAllReviewsArea(): Observable<getAllReviewsAreaI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.logicUrl + 'AreaRevision'
-    return this.http.get<getAllReviewsAreaI>(dir,{ headers: headers })
+    return this.http.get<getAllReviewsAreaI>(dir)
   }
 
   getAllConcepts(): Observable<getConceptsI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.logicUrl + 'AreaRevision/Conceptos'
-    return this.http.get<getConceptsI>(dir,{ headers: headers })
+    return this.http.get<getConceptsI>(dir)
   }
 
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number): Observable<getDataTemporalI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.logicUrl + 'Solicitud/' + requestId + '/Proyecto/' + projectId + '/Temporal/' + reqTempId
-    return this.http.get<getDataTemporalI>(dir,{ headers: headers })
+    return this.http.get<getDataTemporalI>(dir)
   }
   getDataAprobad(projectId: number, requerimetId: number): Observable<getDataAprobadaI> {
 
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.logicUrl + '/Proyecto/' + projectId + '/Requerimiento/' + requerimetId
-    return this.http.get<getDataAprobadaI>(dir,{ headers: headers })
+    return this.http.get<getDataAprobadaI>(dir)
   }
 
   verifyNumReq(projectId: number, numReq: number): Observable<verifyReqI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.logicUrl + 'Requerimiento/Verify/' + numReq + '?ProyectId=' + projectId
-    return this.http.get<verifyReqI>(dir,{ headers: headers })
+    return this.http.get<verifyReqI>(dir)
   }
 
   verifyRangeSararial(perfilId: number, value: number): Observable<verifyReqI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.genericUrl + 'RangoSalarialPerfil/Validate?perfilId=' + perfilId + '&value=' + value
-    return this.http.get<verifyReqI>(dir,{ headers: headers })
+    return this.http.get<verifyReqI>(dir)
   }
   postVerifyDataSaveI(form: verifyDataSaveI): Observable<responseVerifyDataSaveI> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = this.logicUrl + 'Requerimiento/Verify'
-    return this.http.post<responseVerifyDataSaveI>(dir, form,{ headers: headers })
+    return this.http.post<responseVerifyDataSaveI>(dir, form)
   }
 
   putModificationRequestSend(form: saveDataEditI): Observable<any> {
-
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + this.authService.getCookie('token'),
-    });
-
     let dir = `${this.logicUrl}SolicitudMod/Guardar`;
-    return this.http.put(dir, form,{ headers: headers });
+    return this.http.put(dir, form);
   }
 }
