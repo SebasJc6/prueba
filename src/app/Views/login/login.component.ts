@@ -50,9 +50,9 @@ export class LoginComponent implements OnInit {
         // console.log('dataToken: ',dataToken.accessToken);
         this.dataToken = dataToken;
         this.authService.setCookie('token', this.dataToken.accessToken);
-        const tokenInfo: any  =  this.decodeToken(this.dataToken.accessToken);
+        // const tokenInfo: any  =  this.decodeToken(this.dataToken.accessToken);
         // console.log('tokenInfo',tokenInfo);
-        let access = JSON.parse(tokenInfo.access);
+        //let access = JSON.parse(tokenInfo.access);
         // console.log('access',access);
         this.router.navigate(['WAPI/Home']);      
       }, error => {
@@ -63,14 +63,14 @@ export class LoginComponent implements OnInit {
   }
 
   
-  /**decodifica el token */
-  decodeToken(token: string) {
-    try{
-      return jwt_decode(token)
-    }catch(Error){
-      return null;
-    }
-  }
+  // /**decodifica el token */
+  // decodeToken(token: string) {
+  //   try{
+  //     return jwt_decode(token)
+  //   }catch(Error){
+  //     return null;
+  //   }
+  // }
  
   //Metodo para llamar alertas
   openSnackBar(title: string, message: string, type: string) {

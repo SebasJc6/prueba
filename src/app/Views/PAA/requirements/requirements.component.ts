@@ -7,14 +7,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { dataTableRequerimentI, filterRequerimentI } from 'src/app/Models/ModelsPAA/Requeriment/Requeriment.interface';
+import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { RequerimentService } from 'src/app/Services/ServicesPAA/Requeriment/requeriment.service';
-
-
-
-const ELEMENT_DATA: dataTableRequerimentI[] = [
-  { requerimientoId: 1, numeroRequerimiento: 1, dependenciaDestino: '022100', descripcion: '001-022100_7791 Prestar el sevicio de tranporte de personal en la secretaria Distrital de Salud', estado: 'Aprobado' }
-];
-
 
 @Component({
   selector: 'app-requirements',
@@ -33,9 +27,13 @@ export class RequirementsComponent implements OnInit {
   constructor(
     public serviceRequeriment: RequerimentService,
     public router: Router,
-    private activeRoute: ActivatedRoute,) {
+    private activeRoute: ActivatedRoute,
+    private authService: AuthenticationService,) {
 
   }
+
+  //Objeto con la informacion de acceso del Usuario
+  AccessUser: string = '';
 
   filterRequertiments = {} as filterRequerimentI;
   paginationForm = new FormGroup({
@@ -82,6 +80,7 @@ export class RequirementsComponent implements OnInit {
     // console.log(+this.dataProjectID)
     this.getRequerimentsByProject(+this.dataProjectID, this.filterRequertiments);
 
+    this.AccessUser = this.authService.getRolUser();
   }
 
   getPagination() {

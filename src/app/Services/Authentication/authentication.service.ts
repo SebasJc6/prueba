@@ -4,6 +4,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { loginI, tokenI } from 'src/app/Models/Authentication/authentication.interface';
 import { environment } from 'src/environments/environment';
 
+import jwt_decode from "jwt-decode";
+
 @Injectable({
   providedIn: 'root'
 })
@@ -27,5 +29,20 @@ export class AuthenticationService {
 
   rmCookie() {
     this.cookie.deleteAll();
+  }
+
+  getRolUser(): string {
+    const tokenInfo: any  =  this.decodeToken(this.cookie.get('token'));
+    const TokenAccess = JSON.parse(tokenInfo.access);
+    return TokenAccess[0].RolesDto[0].Rol;
+  }
+
+  /**decodifica el token */
+  decodeToken(token: string) {
+    try{
+      return jwt_decode(token)
+    }catch(Error){
+      return null;
+    }
   }
 }

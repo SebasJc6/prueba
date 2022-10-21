@@ -13,14 +13,12 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
+import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
+
 export interface ChipColor {
   name: string;
   color: ThemePalette;
 }
-const ELEMENT_DATA: dataTableProjectI[] = [
-  { proyectoID: 1, codigoProyecto: 7791, nombre: 'IVC', estadoDesc: 'En Ejecucion', dependenciaOrigen: 'Servicios de salud y Aseguramiento', valorAsignado: 120000000, valorTotal: 80000000 }
-];
-
 
 @Component({
   selector: 'app-acquisitions',
@@ -68,7 +66,7 @@ export class AcquisitionsComponent implements OnInit {
 
   constructor(
     private serviceProject: ProjectService, 
-    public router: Router) {
+    public router: Router, private authService: AuthenticationService,) {
 
   }
   filterProjects = {} as filterProjectI;
@@ -86,6 +84,9 @@ export class AcquisitionsComponent implements OnInit {
     ascending: new FormControl(false)
   })
 
+  //Objeto con la informacion de acceso del Usuario
+  AccessUser: string = '';
+
   ngAfterViewInit() {
     if (this.isApproved === true) {
       this.tooltip = 'Ejecutar'
@@ -100,6 +101,8 @@ export class AcquisitionsComponent implements OnInit {
     this.filterProjects.page = "1";
     this.filterProjects.take = 20;
     this.getAllProjects(this.filterProjects);
+
+    this.AccessUser = this.authService.getRolUser();
   }
 
   getAllProjects(filterProjects: filterProjectI) {

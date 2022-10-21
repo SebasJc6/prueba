@@ -172,12 +172,12 @@
               <mat-icon mat-icon-button class="btnActions" (click)="openAbstract(element.proyectoID)"
                 matTooltip="Resumen Ejecución">insert_drive_file
               </mat-icon>&nbsp;
-              <mat-icon mat-icon-button matTooltip="{{tooltip}}" [disabled]="!disabledExecute ? true : null" [ngClass]="{
+              <mat-icon *ngIf="AccessUser == 'Referente_Planeacion'" mat-icon-button matTooltip="{{tooltip}}" [disabled]="!disabledExecute ? true : null" [ngClass]="{
               'btnExecution': element.estadoDesc == 'En Ejecución',
               'btnActions' : element.estadoDesc == 'Aprobado' || 'Cerrado' || 'Anteproyecto'}"
                 (click)="changeExecution(element.proyectoID)">
                 pan_tool_alt</mat-icon>&nbsp;
-              <mat-icon mat-icon-button [ngClass]="{
+              <mat-icon *ngIf="AccessUser == 'Referente_Planeacion'" mat-icon-button [ngClass]="{
               'btnExecution': element.estadoDesc == 'Cerrado',
               'btnActions' : element.estadoDesc == 'En Ejecución'|| 'Aprobado' || 'Cerrado' || 'Anteproyecto'}"
                 matTooltip="Detener Ejecucion" (click)="changeStatus(element.proyectoID)">close</mat-icon>

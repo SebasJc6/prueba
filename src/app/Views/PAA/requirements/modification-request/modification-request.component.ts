@@ -155,7 +155,7 @@ export class ModificationRequestComponent implements OnInit {
     public router: Router, public dialog: MatDialog,
     public serviceModRequest: ModificationRequestService,
     private snackBar: MatSnackBar,
-    private authService: AuthenticationService) { }
+    private authService: AuthenticationService,) { }
 
 
   ngOnInit(): void {
@@ -181,11 +181,7 @@ export class ModificationRequestComponent implements OnInit {
     }
 
     //Obtener token para manejar los roles
-    const Token: string = this.authService.getCookie('token');
-    const tokenInfo: any  =  this.decodeToken(Token);
-    
-    const TokenAccess = JSON.parse(tokenInfo.access);
-    this.AccessUser = TokenAccess[0].RolesDto[0].Rol;
+    this.AccessUser = this.authService.getRolUser();
     console.log(this.AccessUser);
   }
 
@@ -1080,14 +1076,14 @@ export class ModificationRequestComponent implements OnInit {
 
 
   //Boton cancelar
-  cancel() {    
+  cancel() {
     this.CounterpartsDelete = [];
     this.RequerimentsDelete = [];
     ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
     ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
     ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
     ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
-    if (this.StatusRequest == 'Modificacion') {
+    if (this.StatusRequest === 'Modificacion' && this.AccessUser !== 'Revisor') {
       this.serviceModRequest.deleteModificationRequest(Number(this.dataSolicitudModID)).subscribe(res => {
         // console.log(res.status);
         if (res.status == 200) {
@@ -1113,16 +1109,6 @@ export class ModificationRequestComponent implements OnInit {
 
   }
 
-
-  /**decodifica el token */
-  decodeToken(token: string) {
-    try{
-      return jwt_decode(token)
-    }catch(Error){
-      return null;
-    }
-  }
-  
 
   //Metodo para llamar alertas
   openSnackBar(title:string, message: string, type:string, message2?: string) {

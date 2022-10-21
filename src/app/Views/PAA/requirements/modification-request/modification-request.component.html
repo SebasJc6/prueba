@@ -21,13 +21,13 @@
 
     <div class="ActionsUp">
         <div class="btnUpAction">
-            <button class="buton btn" mat-button mat-icon-button [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true" (click)="newRequeriment()">
+            <button *ngIf="AccessUser === 'Referente_PAA'" class="buton btn" mat-button mat-icon-button [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true" (click)="newRequeriment()">
                 Nuevo
             </button>
-            <button class="buton btn" mat-button mat-icon-button [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true" (click)="Addrequirement()">
+            <button *ngIf="AccessUser === 'Referente_PAA'" class="buton btn" mat-button mat-icon-button [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true" (click)="Addrequirement()">
                 Modificar
             </button>
-            <button class="buton btn" mat-button mat-icon-button [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true" (click)="Addcounterpart()">
+            <button *ngIf="AccessUser === 'Referente_PAA'" class="buton btn" mat-button mat-icon-button [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true" (click)="Addcounterpart()">
                 Contrapartida
             </button>
             <button class="buton btn" mat-button mat-icon-button (click)="ResumenModificacion()">
@@ -36,7 +36,7 @@
             <span class="btnExcel">
                 <button mat-button  (click)="exportFile()">Exportar<img class="imgExcel" src="../../../../assets/img/excel.jpg"></button>
             </span>
-            <span class="btngImport">
+            <span *ngIf="AccessUser === 'Referente_Planeacion'" class="btngImport">
                 <button type="button" mat-raised-button (click)="fileInput.click()">Importar<img class="imgImport" src="../../../../assets/img/import.png"></button>
                 <input type="file" hidden (change)="getFile($event)" #fileInput [disabled]="(dataSolicitudModID !== '0') ? true : false">
             </span>
@@ -273,7 +273,7 @@
                             'btnExecution' : element.modificacion_ID == null,
                             'btnActions' : element.modificacion_ID != null}" mat-icon-button  matTooltip="{{element.isContrapartida ? 'Editar Contrapartida' : 'Editar Requerimiemto'}}" (click)="editRecord(element)">edit</mat-icon></button>
                         
-                        <button mat-icon-button (click)="removeDataTbl(element)" [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true"><mat-icon mat-icon-button class="btnActions" matTooltip="Eliminar">delete</mat-icon></button>
+                        <button *ngIf="AccessUser === 'Referente_PAA'" mat-icon-button (click)="removeDataTbl(element)" [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true"><mat-icon mat-icon-button class="btnActions" matTooltip="Eliminar">delete</mat-icon></button>
                     </div>
                 </td>
             <tr>
@@ -321,7 +321,7 @@
         <p matTooltip="Campo para justificar el motivo de la modificación">Justificación de la modificación</p>
 
         <mat-form-field hintLabel="Máximo 3000 caracteres" appearance="outline">
-            <textarea matInput #input maxlength="3000" [(ngModel)]="JustificationText" rows="8" placeholder="Se requiere modificar" [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '' || AccessUser === 'Revisor') ? false : true"></textarea>
+            <textarea matInput #input maxlength="3000" [(ngModel)]="JustificationText" rows="8" placeholder="Se requiere modificar" [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') && AccessUser === 'Referente_PAA' ? false : true"></textarea>
             <mat-hint align="end">{{input.value.length || 0}}/3000</mat-hint>
         </mat-form-field>
 
@@ -396,14 +396,14 @@
 </div>
 
     <mat-card-actions>
-            <button class="buton btn" mat-button mat-icon-button [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true" (click)="guardar()">
+            <button *ngIf="AccessUser == 'Referente_PAA'" class="buton btn" mat-button mat-icon-button [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true" (click)="guardar()">
                 Guardar
             </button>
-            <button class="buton btn" mat-button mat-icon-button (click)="enviar()">
+            <button *ngIf="AccessUser == 'Referente_PAA'" class="buton btn" mat-button mat-icon-button (click)="enviar()">
                 Enviar
             </button>
         <!-- <div> -->
-            <button class="buton btn" mat-button mat-icon-button (click)="enviarRecisiones()">
+            <button *ngIf="AccessUser == 'Referente_Planeacion'" class="buton btn" mat-button mat-icon-button (click)="enviarRecisiones()">
                 Enviar Revisiones
             </button>
         <!--</div> -->

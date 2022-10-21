@@ -55,7 +55,7 @@
                             <span>PAA</span>
                         </button>
                     </div>
-                    <div *ngIf="AccessUser !== 'Revisor'">
+                    <div *ngIf="AccessUser === 'Referente_PAA'">
                         <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeTareas']">
                             <span>Bandeja de tareas</span>
                         </button>
