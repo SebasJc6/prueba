@@ -633,7 +633,7 @@ export class PropertiesRequirementComponent implements OnInit {
       if (this.AccessUser == 'Revisor') {
         let dataReviews = dataTemp
         if (dataReviews != null) {
-          //   console.log('dataApro', dataApro)
+             console.log('dataApro', dataReviews)
           // this.dataRequirementNum = dataReviews.requerimiento.numeroRequerimiento.toString();
 
           this.versionReviewForm.setValue({
@@ -668,7 +668,7 @@ export class PropertiesRequirementComponent implements OnInit {
           this.dataSourceClasificacionesRew = new MatTableDataSource(this.cadenasPresupuestalesVerRew)
 
           this.codigosVerRew = dataReviews.codsUNSPSC
-          this.dataSourceCodigosAct = new MatTableDataSource(this.codigosVerRew);
+          this.dataSourceCodigosRew = new MatTableDataSource(this.codigosVerRew);
         } else if (dataReviews == null) {
           // //   console.log('Message', dataAprobad.Message)
           // this.openSnackBar('Error', dataReviews.Message, 'error')
