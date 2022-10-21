@@ -10,7 +10,7 @@
   <!-- <img class="img" src="assets/img/Slider_jornadas_Epid.png" width="25%"> -->
 
   <mat-card-content>
-    <h1><strong>INICIAR SESION</strong></h1>
+    <h1><strong>INICIAR SESIÓN</strong></h1>
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()" novalidate fxLayout="column wrap" fxLayoutAlign="center center"
       fxLayoutGap="10px">
       <mat-form-field>
@@ -23,11 +23,11 @@
         <mat-label>Contraseña</mat-label>
         <input type="password" matInput formControlName="pwd" />
         <mat-error *ngIf="myError('pwd', 'required')">Contraseña requerida</mat-error>
-        <mat-error *ngIf="myError('pwd', 'minLength')">Minimo 6 caracteres</mat-error>
+        <mat-error *ngIf="myError('pwd', 'minLength')">Mínimo 6 caracteres</mat-error>
       </mat-form-field>
 
       <button  class="button btn" type="submit" mat-raised-button>
-        INICIAR SESION
+        INICIAR SESIÓN
       </button>
     </form>
 

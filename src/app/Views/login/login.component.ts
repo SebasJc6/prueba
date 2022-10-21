@@ -4,7 +4,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
-import jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'app-login',
