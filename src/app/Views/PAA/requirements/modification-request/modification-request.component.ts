@@ -20,6 +20,7 @@ import { editCounterpartI } from 'src/app/Models/ModelsPAA/modificatioRequest/co
 import { apropiacionIni, cadenasPresupuestales, cadenasPresupuestalesI, codsUNSPSC, getDataI, MODIFICACION, RequerimentDataI, requerimiento } from 'src/app/Models/ModelsPAA/Requeriment/RequerimentApproved.interface';
 import jwt_decode from "jwt-decode";
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
+import { AlertsPopUpComponent } from 'src/app/Templates/alerts-pop-up/alerts-pop-up.component';
 
 
 export interface smallTable {
@@ -152,6 +153,9 @@ export class ModificationRequestComponent implements OnInit {
   //Propiedad con el es estado del proyecto
   ProjectState: string = '';
 
+  //Propiedad para guardar la informacion a enviar en revisiones
+  Revisiones = {} as RevisionSend;
+
   constructor(
     private serviceFiles: FilesService,
     private activeRoute: ActivatedRoute,
@@ -185,7 +189,7 @@ export class ModificationRequestComponent implements OnInit {
 
     //Obtener token para manejar los roles
     this.AccessUser = this.authService.getRolUser();
-    console.log(this.AccessUser);
+    // console.log(this.AccessUser);
   }
 
   getRequestAndProject(id_project: number, id_request: number) {
@@ -1064,7 +1068,7 @@ export class ModificationRequestComponent implements OnInit {
             this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
           }
         }, error => {
-          console.log('Hubo un error ', error);
+          // console.log('Hubo un error ', error);
           
         });
     } else {
@@ -1075,7 +1079,7 @@ export class ModificationRequestComponent implements OnInit {
 
   //Enviar revisiones
   enviarRecisiones() {
-    console.log(this.ProjectState);
+    // console.log(this.ProjectState);
     if (this.ProjectState === 'Anteproyecto') {
       const Revisiones: RevisionSend = {
         accion: 1,
@@ -1085,7 +1089,7 @@ export class ModificationRequestComponent implements OnInit {
       }
 
       this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
-        console.log(res);
+        // console.log(res);
         if (res.status == 200) {
           this.openSnackBar('Éxito al Enviar', `Revisiones en Solicitud de Modificación Enviadas con éxito.`, 'success');
           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
@@ -1096,8 +1100,27 @@ export class ModificationRequestComponent implements OnInit {
         // console.log(error);
       });
     } else {
+      // this.openDialog('Advertencia', 'Ingrese los comentarios de su revisión', 'warningInput', 'Seleccione el estado de la modificación con su revisión.')
       //TODO: Implementar funcionalidad cuando el proyecto no esté en Anteproyecto
     }
+  }
+
+
+  //Alerta PopUp
+  openDialog(title: string, message: string, type: string, message2: string): void {
+    const dialogRef = this.dialog.open(AlertsPopUpComponent, {
+      width: '1000px',
+      height: '500px',
+      data: {title: title, message: message, type: type, message2: message2},
+    });
+ 
+     dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+        
+      }
+       
+     });
   }
 
 
@@ -1118,7 +1141,7 @@ export class ModificationRequestComponent implements OnInit {
           ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
         }
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
     } else if(ProChartStorage.getItem(`estado${this.dataSolicitudModID}`) == null || this.StatusRequest === '') {            
       this.router.navigate([`/WAPI/PAA/Requerimientos/${this.dataProjectID}`]);

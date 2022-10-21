@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { AlertData } from 'src/app/Views/PAA/task-tray/task-tray.component';
 
 @Component({
@@ -10,12 +11,22 @@ import { AlertData } from 'src/app/Views/PAA/task-tray/task-tray.component';
 export class AlertsPopUpComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<AlertsPopUpComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: AlertData) { }
+    @Inject(MAT_DIALOG_DATA) public data: AlertData) { dialogRef.disableClose = true; }
 
+  
+  Comentarios: string = '';
+  
   ngOnInit(): void {
   }
 
-  onNoClick(): void {
-    this.dialogRef.close();
+  closeDialog(accion: number){
+    const Revisiones: RevisionSend = {
+      accion: accion,
+      comentarios: this.Comentarios,
+      idProject: 0,
+      idSolicitud: 0
+    }
+
+    this.dialogRef.close(Revisiones);
   }
 }

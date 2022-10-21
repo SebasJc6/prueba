@@ -203,9 +203,9 @@
     <button class="buton btn" mat-button mat-icon-button (click)="regresar()">
       REGRESAR
     </button>
-    <button *ngIf="AccessUser == 'Referente_PAA'" class="buton btn" mat-button mat-icon-button (click)="modificatioRequest()">
+    <button *ngIf="AccessUser !== 'Revisor'" class="buton btn" mat-button mat-icon-button (click)="modificatioRequest()">
       <span>SOLICITAR MODIFICACIÓN</span>
     </button>
   </mat-card-actions>
-  
+
 </div>
