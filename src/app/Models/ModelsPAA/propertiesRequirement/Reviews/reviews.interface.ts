@@ -35,7 +35,7 @@ export interface reviewsI{
 
 export interface putUpdateReviewsI {
     modificacion_ID: number,
-    revisiones: [any]
+    revisiones: revisionesI[]
 }
 export interface revisionesI{
     revision_ID: number,
@@ -49,5 +49,5 @@ export interface putGetReviewsI {
 }
 export interface deleteReviewsI {
     modificacion_ID: number,
-    revisiones: any
+    revisiones: number[]
 }

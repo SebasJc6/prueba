@@ -230,7 +230,7 @@ export class PropertiesRequirementComponent implements OnInit {
     valor2Act: new FormControl({ value: 60000000, disabled: true }),
     valorTotalAct: new FormControl({ value: 120000000, disabled: true })
   })
-  
+
   versionReviewForm = new FormGroup({
     codigoProRew: new FormControl({ value: 0, disabled: true }),
     dependenciaOriRew: new FormControl({ value: '', disabled: true }),
@@ -350,10 +350,10 @@ export class PropertiesRequirementComponent implements OnInit {
       this.viewVersion = true;
       this.viewActionCancel = true;
     } else {
-      this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);    
+      this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
     }
     if (this.AccessUser == 'Revisor') {
-      
+
       this.viewsBtnReviews = true;
       this.viewsReviews = true;
     } else {
@@ -630,12 +630,12 @@ export class PropertiesRequirementComponent implements OnInit {
 
       this.reqID = dataTemp.requerimiento.requerimiento_ID
       //  console.log('dataTemporal', dataTemp)
-      if(this.AccessUser == 'Revisor'){
+      if (this.AccessUser == 'Revisor') {
         let dataReviews = dataTemp
         if (dataReviews != null) {
           //   console.log('dataApro', dataApro)
-         // this.dataRequirementNum = dataReviews.requerimiento.numeroRequerimiento.toString();
-  
+          // this.dataRequirementNum = dataReviews.requerimiento.numeroRequerimiento.toString();
+
           this.versionReviewForm.setValue({
             codigoProRew: dataReviews.proyecto.codigoProyecto,
             dependenciaOriRew: dataReviews.proyecto.dependenciaOrigen,
@@ -654,7 +654,7 @@ export class PropertiesRequirementComponent implements OnInit {
             valorHonMesRew: dataReviews.requerimiento.honorarios.toString(),
             cantidadContRew: dataReviews.requerimiento.cantidadDeContratos,
             descripcionRew: dataReviews.requerimiento.descripcion,
-  
+
             vigencia0Rew: dataReviews.apropiacionInicial.anioV0,
             valor0Rew: dataReviews.apropiacionInicial.valor0,
             vigencia1Rew: dataReviews.apropiacionInicial.anioV1,
@@ -663,18 +663,18 @@ export class PropertiesRequirementComponent implements OnInit {
             valor2Rew: dataReviews.apropiacionInicial.valor2,
             valorTotalRew: dataReviews.apropiacionInicial.valorTotal
           })
-  
-          this.cadenasPresupuestalesVerRew= dataReviews.cadenasPresupuestales
+
+          this.cadenasPresupuestalesVerRew = dataReviews.cadenasPresupuestales
           this.dataSourceClasificacionesRew = new MatTableDataSource(this.cadenasPresupuestalesVerRew)
-  
-          this.codigosVerRew= dataReviews.codsUNSPSC
+
+          this.codigosVerRew = dataReviews.codsUNSPSC
           this.dataSourceCodigosAct = new MatTableDataSource(this.codigosVerRew);
         } else if (dataReviews == null) {
           // //   console.log('Message', dataAprobad.Message)
           // this.openSnackBar('Error', dataReviews.Message, 'error')
           // this.viewVersion = false
         }
-      }else{
+      } else {
         if (dataTemp != null) {
           this.proRequirementeForm.controls.infoBasicaForm.setValue({
             numeroReq: dataTemp.requerimiento.numeroRequerimiento,
@@ -705,11 +705,11 @@ export class PropertiesRequirementComponent implements OnInit {
           this.errorMesContrato = false
           this.errorDuratioMes = false
           this.errorMesSeleccion = false
-  
+
           this.formEditRequirement = true
           this.dependencieId = dataTemp.requerimiento.dependenciaDestino.dependencia_ID.toString()
           this.selcModeId = dataTemp.requerimiento.modalidadSeleccion.modalidad_Sel_ID.toString()
-  
+
           this.dataTableClasificaciones = dataTemp.cadenasPresupuestales
           this.cadenasPresupuestalesTemporal = dataTemp.cadenasPresupuestales
           var stringToStoreCla = JSON.stringify(this.cadenasPresupuestalesTemporal);
@@ -728,7 +728,7 @@ export class PropertiesRequirementComponent implements OnInit {
           ProChartStorage.setItem("dataTableCodigos", stringToStoreCod);
           var fromStorageCod = ProChartStorage.getItem("dataTableCodigos");
           this.reloadDataTbl(fromStorageCod, 'codigos');
-  
+
           this.proRequirementeForm.controls.initialAppro.setValue({
             apropIni_ID: dataTemp.apropiacionInicial.apropIni_ID,
             vigencia0: dataTemp.apropiacionInicial.anioV0,
@@ -740,10 +740,10 @@ export class PropertiesRequirementComponent implements OnInit {
             valorTotal: dataTemp.apropiacionInicial.valorTotal
           })
         } else {
-  
+
         }
       }
-    
+
 
 
     })
@@ -957,7 +957,7 @@ export class PropertiesRequirementComponent implements OnInit {
           }
         }, err => {
           // console.log('dataResponse', err)
-          this.openSnackBar('Error', JSON.stringify(err.error.Data), 'error');
+          this.openSnackBar('Error', JSON.stringify(err.error.data), 'error');
         })
       } else {
         //  console.log('formModificationRequest', this.formModificationRequest)
@@ -1353,7 +1353,7 @@ export class PropertiesRequirementComponent implements OnInit {
       reviews.observacion = this.reviews.controls.observaciones.value || ''
       reviews.area_ID = this.reviews.controls.area.value.area_ID || 0
       reviewsData.revisiones = [reviews]
-       console.log('reviewsData', reviewsData)
+      console.log('reviewsData', reviewsData)
       this.serviceReviews.postReviews(reviewsData).subscribe((data: any) => {
         console.log('data', data)
         if (data.status != 200) {
@@ -1393,16 +1393,20 @@ export class PropertiesRequirementComponent implements OnInit {
     }
     if (type == 'Revisar') {
 
-      //  console.log('this.reviewsUpTemporal revisado', this.reviewsUpTemporal)
+      console.log('this.reviewsUpTemporal revisado', this.reviewsUpTemporal)
 
       let putUpdateReviews = {} as putUpdateReviewsI
       putUpdateReviews.modificacion_ID = +this.dataRequirementID
-      putUpdateReviews.revisiones = [this.reviewsUpTemporal]
-      // console.log('putUpdateReviews', putUpdateReviews)
+      putUpdateReviews.revisiones = this.reviewsUpTemporal
+      console.log('putUpdateReviews', putUpdateReviews)
       this.serviceReviews.putUpdateReviews(putUpdateReviews).subscribe((data: any) => {
-        //    console.log('data', data)
+        console.log('data', data)
         if (data.status != 200) {
           this.openSnackBar('ERROR', data.message, 'error')
+        }
+        if(data.status == 200){
+          this.openSnackBar('Revisado correctamente', data.message, 'success')
+
         }
         this.getAllReviews(+this.dataRequirementID)
         this.loading = false;
