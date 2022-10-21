@@ -29,7 +29,6 @@ const routes: Routes = [
       {
         path: 'PAA',
         children: [
-          { path: '', redirectTo: '/Adquisiciones', pathMatch: 'full' },
           { path: 'Adquisiciones', component: AcquisitionsComponent },
           { path: 'BandejaDeTareas', component: TaskTrayComponent },
           { path: 'BandejaDeSolicitudes', component: RequestTrayComponent },

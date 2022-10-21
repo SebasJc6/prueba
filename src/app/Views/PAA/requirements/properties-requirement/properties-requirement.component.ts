@@ -12,6 +12,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { postDataModificationsI, postDataModifRequerimentsI, postDataModReqI, postModificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { dataSourceClasificacionesI, dataSourceRevisionesI, getAllAuxiliarDataI, getAllUNSPSCDataI, getInfoToCreateReqDataI, saveDataEditDatosI, requerimientoI, saveDataEditI, verifyDatacompleteI, verifyDataSaveI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
 import { deleteReviewsI, postReviewsI, putUpdateReviewsI, reviewsI, revisionesI } from 'src/app/Models/ModelsPAA/propertiesRequirement/Reviews/reviews.interface';
+import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
 import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
@@ -115,8 +116,10 @@ export class PropertiesRequirementComponent implements OnInit {
   dataTableClasificaciones = new Array();
   cadenasPresupuestalesTemporal = new Array();
   cadenasPresupuestalesVerAct = new Array();
+  cadenasPresupuestalesVerRew = new Array();
   codigosTemporal = new Array();
   codigosVerAct = new Array();
+  codigosVerRew = new Array();
   dataTableClasificacion: any;
   dataTableRevisiones = new Array();
   dataTableRevision: any;
@@ -192,11 +195,12 @@ export class PropertiesRequirementComponent implements OnInit {
       valor2: new FormControl({ value: 60000000, disabled: true }),
       valorTotal: new FormControl({ value: 120000000, disabled: true })
     }),
-    reviews: this.formbuilder.group({
-      area: new FormControl(),
-      concepto: new FormControl(),
-      observaciones: new FormControl(),
-    })
+
+  })
+  reviews = new FormGroup({
+    area: new FormControl(),
+    concepto: new FormControl(),
+    observaciones: new FormControl(),
   })
 
   versionActualForm = new FormGroup({
@@ -226,23 +230,58 @@ export class PropertiesRequirementComponent implements OnInit {
     valor2Act: new FormControl({ value: 60000000, disabled: true }),
     valorTotalAct: new FormControl({ value: 120000000, disabled: true })
   })
+  
+  versionReviewForm = new FormGroup({
+    codigoProRew: new FormControl({ value: 0, disabled: true }),
+    dependenciaOriRew: new FormControl({ value: '', disabled: true }),
+    numeroReqRew: new FormControl({ value: '', disabled: true }),
+    dependenciaDesRew: new FormControl({ value: {}, disabled: true }),
+    mesSeleccionRew: new FormControl({ value: '', disabled: true }),
+    mesOfertasRew: new FormControl({ value: '', disabled: true }),
+    mesContratoRew: new FormControl({ value: '', disabled: true }),
+    duracionMesRew: new FormControl({ value: 0, disabled: true }),
+    duracionDiasRew: new FormControl({ value: 0, disabled: true }),
+    modalidadSelRew: new FormControl({ value: {}, disabled: true }),
+    actuacionContRew: new FormControl({ value: 0, disabled: true }),
+    numeroContRew: new FormControl({ value: '', disabled: true }),
+    tipoContRew: new FormControl({ value: 0, disabled: true }),
+    perfilRew: new FormControl({ value: 0, disabled: true }),
+    valorHonMesRew: new FormControl({ value: '', disabled: true }),
+    cantidadContRew: new FormControl({ value: 0, disabled: true }),
+    descripcionRew: new FormControl({ value: '', disabled: true }),
+
+    vigencia0Rew: new FormControl({ value: 2020, disabled: true }),
+    valor0Rew: new FormControl({ value: 20000000, disabled: true }),
+    vigencia1Rew: new FormControl({ value: 2021, disabled: true }),
+    valor1Rew: new FormControl({ value: 40000000, disabled: true }),
+    vigencia2Rew: new FormControl({ value: 2022, disabled: true }),
+    valor2Rew: new FormControl({ value: 60000000, disabled: true }),
+    valorTotalRew: new FormControl({ value: 120000000, disabled: true })
+  })
   submitted = false;
   public selectedIndex = 0;
   //INFORMACION PARA LA TABLA CLASIFICACION PRESUPUESTAL
   displayedColumns: string[] = ['mes', 'anioVigRecursos', 'auxiliar', 'detalleFuente', 'actividad', 'meta', 'fuente', 'fuenteMSPS', 'MGA', 'pospre', 'apropiacionDisponible', 'aumento', 'disminucion', 'apropiacionDefinitiva', 'compromisos', 'giros', 'acciones'];
   displayedColumnsAct: string[] = ['mes', 'anioVigRecursos', 'auxiliar', 'detalleFuente', 'actividad', 'meta', 'fuente', 'fuenteMSPS', 'MGA', 'pospre', 'apropiacionDisponible', 'aumento', 'disminucion', 'apropiacionDefinitiva', 'compromisos', 'giros'];
+  displayedColumnsRew: string[] = ['mes', 'anioVigRecursos', 'auxiliar', 'detalleFuente', 'actividad', 'meta', 'fuente', 'fuenteMSPS', 'MGA', 'pospre', 'apropiacionDisponible', 'aumento', 'disminucion', 'apropiacionDefinitiva', 'compromisos', 'giros'];
   //INFORMACION PARA LA TABLA CODIGOS UNSPSC
   codigosColumns: string[] = ['codigoUNSPSC', 'descripcion', 'eliminar'];
   codigosColumnsAct: string[] = ['codigoUNSPSC', 'descripcion'];
+  codigosColumnsRew: string[] = ['codigoUNSPSC', 'descripcion'];
   //INFORMACION PARA LA TABLA REVICIONES
   revisionesColumns: string[] = ['fecha', 'usuario', 'area', 'concepto', 'observacion', 'revision', 'eliminar'];
-
-
+  //Objeto con la informacion de acceso del Usuario
+  AccessUser: string = '';
+  viewsReviews: boolean = false;
+  viewsBtnReviews: boolean = false;
+  viewVersionReview: boolean = false;
   dataSourceCodigos!: MatTableDataSource<getAllUNSPSCDataI>;
   dataSourceCodigosAct!: MatTableDataSource<getAllUNSPSCDataI>;
   dataSourceClasificaciones!: MatTableDataSource<dataSourceClasificacionesI>;
   dataSourceClasificacionesAct!: MatTableDataSource<dataSourceClasificacionesI>;
   dataSourceRevisiones!: MatTableDataSource<dataSourceRevisionesI>;
+  dataSourceClasificacionesRew!: MatTableDataSource<dataSourceClasificacionesI>;
+  dataSourceCodigosRew!: MatTableDataSource<getAllUNSPSCDataI>;
 
   constructor(
     public serviceProject: ProjectService,
@@ -255,6 +294,7 @@ export class PropertiesRequirementComponent implements OnInit {
     private currencyPipe: CurrencyPipe,
     private snackBar: MatSnackBar,
     public dialog: MatDialog,
+    private authService: AuthenticationService,
   ) { }
 
   ngAfterViewInit() {
@@ -290,6 +330,10 @@ export class PropertiesRequirementComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //Obtener token para manejar los roles
+    this.AccessUser = this.authService.getRolUser();
+    console.log(this.AccessUser);
+
     // this.loading = true;
     this.ngAfterViewInit();
     this.uploadDropdownLists();
@@ -306,11 +350,16 @@ export class PropertiesRequirementComponent implements OnInit {
       this.viewVersion = true;
       this.viewActionCancel = true;
     } else {
-      this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
+      this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);    
+    }
+    if (this.AccessUser == 'Revisor') {
+      
+      this.viewsBtnReviews = true;
+      this.viewsReviews = true;
+    } else {
       this.viewVersionMod = true;
       this.errorNumReq = false;
       this.errorVerifyNumReq = false;
-
     }
     this.getAllReviews(+this.dataRequirementID);
   }
@@ -348,7 +397,7 @@ export class PropertiesRequirementComponent implements OnInit {
   //
 
   valueRequired() {
-    this.proRequirementeForm.controls.reviews.controls.observaciones.valueChanges.pipe(
+    this.reviews.controls.observaciones.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
       this.errorObservaciones = value.length > 0 ? false : true;
@@ -555,7 +604,7 @@ export class PropertiesRequirementComponent implements OnInit {
       distinctUntilChanged()
     ).subscribe(val => {
       this.idPerfil = val;
-      console.log('idPerfil', this.idPerfil);
+      //console.log('idPerfil', this.idPerfil);
     })
   }
   verifyRangeSararial() {
@@ -577,87 +626,135 @@ export class PropertiesRequirementComponent implements OnInit {
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number) {
     this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
-      console.log('dataTemp', dataTemp)
+      //  console.log('dataTemp', dataTemp)
 
       this.reqID = dataTemp.requerimiento.requerimiento_ID
-      console.log('dataTemporal', dataTemp)
-      if (dataTemp != null) {
-        this.proRequirementeForm.controls.infoBasicaForm.setValue({
-          numeroReq: dataTemp.requerimiento.numeroRequerimiento,
-          dependenciaDes: dataTemp.requerimiento.dependenciaDestino,
-          mesSeleccion: dataTemp.requerimiento.mesEstimadoInicioSeleccion.toString(),
-          // mesSeleccion:'1',
-          mesOfertas: dataTemp.requerimiento.mesEstimadoPresentacion.toString(),
-          mesContrato: dataTemp.requerimiento.mesEstmadoInicioEjecucion.toString(),
-          duracionMes: dataTemp.requerimiento.duracionMes,
-          duracionDias: dataTemp.requerimiento.duracionDias,
-          modalidadSel: dataTemp.requerimiento.modalidadSeleccion,
-          actuacionCont: dataTemp.requerimiento.actuacion.actuacion_ID,
-          numeroCont: dataTemp.requerimiento.numeroDeContrato || '',
-          tipoCont: dataTemp.requerimiento.tipoContrato.tipoContrato_ID,
-          perfil: dataTemp.requerimiento.perfil.perfil_ID,
-          valorHonMes: dataTemp.requerimiento.honorarios.toString() || '',
-          cantidadCont: dataTemp.requerimiento.cantidadDeContratos || '',
-          descripcion: dataTemp.requerimiento.descripcion,
-          codigoPro: dataTemp.proyecto.codigoProyecto,
-          dependenciaOri: dataTemp.proyecto.dependenciaOrigen
-        })
-        this.onSelectionChange(dataTemp.requerimiento.actuacion.actuacion_ID, 'actContractual')
-        this.errorNumReq = false
-        this.errorVerifyNumReq = false
-        this.errorDependencia = false
-        this.errorMesSeleccion = false
-        this.errorMesOferta = false
-        this.errorMesContrato = false
-        this.errorDuratioMes = false
-        this.errorMesSeleccion = false
-
-        this.formEditRequirement = true
-        this.dependencieId = dataTemp.requerimiento.dependenciaDestino.dependencia_ID.toString()
-        this.selcModeId = dataTemp.requerimiento.modalidadSeleccion.modalidad_Sel_ID.toString()
-
-        this.dataTableClasificaciones = dataTemp.cadenasPresupuestales
-        this.cadenasPresupuestalesTemporal = dataTemp.cadenasPresupuestales
-        var stringToStoreCla = JSON.stringify(this.cadenasPresupuestalesTemporal);
-        ProChartStorage.setItem("dataTableClacificaciones", stringToStoreCla);
-        var fromStorageCla = ProChartStorage.getItem("dataTableClacificaciones");
-        this.reloadDataTbl(fromStorageCla, 'clasificaciones');
-        console.log('this.dataTableClasificaciones', this.dataTableClasificaciones)
-        // this.codigosTemporal = dataTemp.codsUNSPSC 
-        // let codTem = this.codigosTemporal.forEach(element => {
-        //   return JSON.parse(element.unspsc.codUNSPSC +element.unspsc.descripcion+element.unspsc.descripcion )
-        // });
-        this.dataTableCodigos = dataTemp.codsUNSPSC
-        this.codigosTemporal = dataTemp.codsUNSPSC
-        console.log('codigosTemporal', this.codigosTemporal)
-        var stringToStoreCod = JSON.stringify(this.codigosTemporal);
-        ProChartStorage.setItem("dataTableCodigos", stringToStoreCod);
-        var fromStorageCod = ProChartStorage.getItem("dataTableCodigos");
-        this.reloadDataTbl(fromStorageCod, 'codigos');
-
-        this.proRequirementeForm.controls.initialAppro.setValue({
-          apropIni_ID: dataTemp.apropiacionInicial.apropIni_ID,
-          vigencia0: dataTemp.apropiacionInicial.anioV0,
-          valor0: dataTemp.apropiacionInicial.valor0,
-          vigencia1: dataTemp.apropiacionInicial.anioV1,
-          valor1: dataTemp.apropiacionInicial.valor1,
-          vigencia2: dataTemp.apropiacionInicial.anioV2,
-          valor2: dataTemp.apropiacionInicial.valor2,
-          valorTotal: dataTemp.apropiacionInicial.valorTotal
-        })
-      } else {
-
+      //  console.log('dataTemporal', dataTemp)
+      if(this.AccessUser == 'Revisor'){
+        let dataReviews = dataTemp
+        if (dataReviews != null) {
+          //   console.log('dataApro', dataApro)
+         // this.dataRequirementNum = dataReviews.requerimiento.numeroRequerimiento.toString();
+  
+          this.versionReviewForm.setValue({
+            codigoProRew: dataReviews.proyecto.codigoProyecto,
+            dependenciaOriRew: dataReviews.proyecto.dependenciaOrigen,
+            numeroReqRew: dataReviews.requerimiento.numeroRequerimiento.toString(),
+            dependenciaDesRew: dataReviews.requerimiento.dependenciaDestino,
+            mesSeleccionRew: dataReviews.requerimiento.mesEstimadoInicioSeleccion.toString(),
+            mesOfertasRew: dataReviews.requerimiento.mesEstimadoPresentacion.toString(),
+            mesContratoRew: dataReviews.requerimiento.mesEstmadoInicioEjecucion.toString(),
+            duracionMesRew: dataReviews.requerimiento.duracionMes,
+            duracionDiasRew: dataReviews.requerimiento.duracionDias,
+            modalidadSelRew: dataReviews.requerimiento.modalidadSeleccion,
+            actuacionContRew: dataReviews.requerimiento.actuacion.actuacion_ID,
+            numeroContRew: dataReviews.requerimiento.numeroDeContrato,
+            tipoContRew: dataReviews.requerimiento.tipoContrato.tipoContrato_ID,
+            perfilRew: dataReviews.requerimiento.perfil.perfil_ID,
+            valorHonMesRew: dataReviews.requerimiento.honorarios.toString(),
+            cantidadContRew: dataReviews.requerimiento.cantidadDeContratos,
+            descripcionRew: dataReviews.requerimiento.descripcion,
+  
+            vigencia0Rew: dataReviews.apropiacionInicial.anioV0,
+            valor0Rew: dataReviews.apropiacionInicial.valor0,
+            vigencia1Rew: dataReviews.apropiacionInicial.anioV1,
+            valor1Rew: dataReviews.apropiacionInicial.valor1,
+            vigencia2Rew: dataReviews.apropiacionInicial.anioV2,
+            valor2Rew: dataReviews.apropiacionInicial.valor2,
+            valorTotalRew: dataReviews.apropiacionInicial.valorTotal
+          })
+  
+          this.cadenasPresupuestalesVerRew= dataReviews.cadenasPresupuestales
+          this.dataSourceClasificacionesRew = new MatTableDataSource(this.cadenasPresupuestalesVerRew)
+  
+          this.codigosVerRew= dataReviews.codsUNSPSC
+          this.dataSourceCodigosAct = new MatTableDataSource(this.codigosVerRew);
+        } else if (dataReviews == null) {
+          // //   console.log('Message', dataAprobad.Message)
+          // this.openSnackBar('Error', dataReviews.Message, 'error')
+          // this.viewVersion = false
+        }
+      }else{
+        if (dataTemp != null) {
+          this.proRequirementeForm.controls.infoBasicaForm.setValue({
+            numeroReq: dataTemp.requerimiento.numeroRequerimiento,
+            dependenciaDes: dataTemp.requerimiento.dependenciaDestino,
+            mesSeleccion: dataTemp.requerimiento.mesEstimadoInicioSeleccion.toString(),
+            // mesSeleccion:'1',
+            mesOfertas: dataTemp.requerimiento.mesEstimadoPresentacion.toString(),
+            mesContrato: dataTemp.requerimiento.mesEstmadoInicioEjecucion.toString(),
+            duracionMes: dataTemp.requerimiento.duracionMes,
+            duracionDias: dataTemp.requerimiento.duracionDias,
+            modalidadSel: dataTemp.requerimiento.modalidadSeleccion,
+            actuacionCont: dataTemp.requerimiento.actuacion.actuacion_ID,
+            numeroCont: dataTemp.requerimiento.numeroDeContrato || '',
+            tipoCont: dataTemp.requerimiento.tipoContrato.tipoContrato_ID,
+            perfil: dataTemp.requerimiento.perfil.perfil_ID,
+            valorHonMes: dataTemp.requerimiento.honorarios.toString() || '',
+            cantidadCont: dataTemp.requerimiento.cantidadDeContratos || '',
+            descripcion: dataTemp.requerimiento.descripcion,
+            codigoPro: dataTemp.proyecto.codigoProyecto,
+            dependenciaOri: dataTemp.proyecto.dependenciaOrigen
+          })
+          this.onSelectionChange(dataTemp.requerimiento.actuacion.actuacion_ID, 'actContractual')
+          this.errorNumReq = false
+          this.errorVerifyNumReq = false
+          this.errorDependencia = false
+          this.errorMesSeleccion = false
+          this.errorMesOferta = false
+          this.errorMesContrato = false
+          this.errorDuratioMes = false
+          this.errorMesSeleccion = false
+  
+          this.formEditRequirement = true
+          this.dependencieId = dataTemp.requerimiento.dependenciaDestino.dependencia_ID.toString()
+          this.selcModeId = dataTemp.requerimiento.modalidadSeleccion.modalidad_Sel_ID.toString()
+  
+          this.dataTableClasificaciones = dataTemp.cadenasPresupuestales
+          this.cadenasPresupuestalesTemporal = dataTemp.cadenasPresupuestales
+          var stringToStoreCla = JSON.stringify(this.cadenasPresupuestalesTemporal);
+          ProChartStorage.setItem("dataTableClacificaciones", stringToStoreCla);
+          var fromStorageCla = ProChartStorage.getItem("dataTableClacificaciones");
+          this.reloadDataTbl(fromStorageCla, 'clasificaciones');
+          // console.log('this.dataTableClasificaciones', this.dataTableClasificaciones)
+          // this.codigosTemporal = dataTemp.codsUNSPSC 
+          // let codTem = this.codigosTemporal.forEach(element => {
+          //   return JSON.parse(element.unspsc.codUNSPSC +element.unspsc.descripcion+element.unspsc.descripcion )
+          // });
+          this.dataTableCodigos = dataTemp.codsUNSPSC
+          this.codigosTemporal = dataTemp.codsUNSPSC
+          //  console.log('codigosTemporal', this.codigosTemporal)
+          var stringToStoreCod = JSON.stringify(this.codigosTemporal);
+          ProChartStorage.setItem("dataTableCodigos", stringToStoreCod);
+          var fromStorageCod = ProChartStorage.getItem("dataTableCodigos");
+          this.reloadDataTbl(fromStorageCod, 'codigos');
+  
+          this.proRequirementeForm.controls.initialAppro.setValue({
+            apropIni_ID: dataTemp.apropiacionInicial.apropIni_ID,
+            vigencia0: dataTemp.apropiacionInicial.anioV0,
+            valor0: dataTemp.apropiacionInicial.valor0,
+            vigencia1: dataTemp.apropiacionInicial.anioV1,
+            valor1: dataTemp.apropiacionInicial.valor1,
+            vigencia2: dataTemp.apropiacionInicial.anioV2,
+            valor2: dataTemp.apropiacionInicial.valor2,
+            valorTotal: dataTemp.apropiacionInicial.valorTotal
+          })
+        } else {
+  
+        }
       }
+    
 
 
     })
   }
+
   getDataAprobad(projectId: number, requerimetId: number) {
     this.serviceProRequirement.getDataAprobad(projectId, requerimetId).subscribe(dataAprobad => {
       let dataApro = dataAprobad.data
-      console.log('dataAprobad', dataAprobad)
+      // console.log('dataAprobad', dataAprobad)
       if (dataAprobad.data != null) {
-        console.log('dataApro', dataApro)
+        //   console.log('dataApro', dataApro)
         this.dataRequirementNum = dataApro.requerimiento.numeroRequerimiento.toString();
 
         this.versionActualForm.setValue({
@@ -694,7 +791,7 @@ export class PropertiesRequirementComponent implements OnInit {
         this.codigosVerAct = dataApro.codsUNSPSC
         this.dataSourceCodigosAct = new MatTableDataSource(this.codigosVerAct);
       } else if (dataAprobad.data == null) {
-        console.log('Message', dataAprobad.Message)
+        //   console.log('Message', dataAprobad.Message)
         this.openSnackBar('Error', dataAprobad.Message, 'error')
         this.viewVersion = false
       }
@@ -749,7 +846,7 @@ export class PropertiesRequirementComponent implements OnInit {
       this.errorDescripcionCont = true;
     } else {
 
-      console.log('this.proRequirementeForm.value', this.proRequirementeForm.value)
+      //  console.log('this.proRequirementeForm.value', this.proRequirementeForm.value)
       this.formVerifyComplete['infoBasica'] = this.proRequirementeForm.controls.infoBasicaForm.value
 
       // if (this.formEditRequirement = true) {
@@ -773,7 +870,7 @@ export class PropertiesRequirementComponent implements OnInit {
       //  console.log('this.dataClasificacion', this.dataClasificacion)
       this.dataClasificacion.forEach((item: any) => {
         // if(this.formEditRequirement = true){
-        console.log('dataClasificacion', item)
+        //    console.log('dataClasificacion', item)
         // }
         item.anioVigRecursos = item.anioVigRecursos
         item.proj_ID = +this.dataProjectID
@@ -789,15 +886,15 @@ export class PropertiesRequirementComponent implements OnInit {
         delete item.fuente
         delete item.uuid
       })
-      console.log('this.dataClasificacion', this.dataClasificacion)
+      //  console.log('this.dataClasificacion', this.dataClasificacion)
       this.dataCodigos.forEach((item: any) => {
-        console.log('this.item', item)
+        //   console.log('this.item', item)
         item.unspsC_ID = item.unspsC_ID || item.unspsc.unspsC_ID
         delete item.unspsc
         delete item.descripcion
         delete item.codigoUNSPSC
       })
-      console.log('this.dataCodigos arr', this.dataCodigos)
+      // console.log('this.dataCodigos arr', this.dataCodigos)
 
       let requerimientoForm = {} as requerimientoI
       if (this.typePage == 'nuevo') {
@@ -835,15 +932,15 @@ export class PropertiesRequirementComponent implements OnInit {
 
       this.formVerify.cadenasPresupuestales = this.dataClasificacion
       this.formVerify.codsUNSPSC = this.dataCodigos
-      console.log('this. dataCodigos  dataCodigos', this.dataCodigos)
+      // console.log('this. dataCodigos  dataCodigos', this.dataCodigos)
       this.formVerify.apropiacionInicial = this.proRequirementeForm.controls.initialAppro.value
-      console.log('this.formVerify', this.formVerify)
+      //  console.log('this.formVerify', this.formVerify)
 
       if (this.typePage == 'Nuevo') {
         this.serviceProRequirement.postVerifyDataSaveI(this.formVerify).subscribe(dataResponse => {
           //console.log('dataResponse', dataResponse)
           if (dataResponse.status == 200) {
-            console.log('formVerifyComplete', this.formVerifyComplete)
+            // console.log('formVerifyComplete', this.formVerifyComplete)
             var stringToStoreCom = JSON.stringify(this.formVerifyComplete);
             ProChartStorage.setItem("formVerifyComplete", stringToStoreCom);
             var stringToStore = JSON.stringify(this.formVerify);
@@ -855,15 +952,15 @@ export class PropertiesRequirementComponent implements OnInit {
             this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
             this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
           } else {
-            console.log('dataResponse', dataResponse)
+            // console.log('dataResponse', dataResponse)
             this.openSnackBar('Error', dataResponse.message, 'error');
           }
         }, err => {
-          console.log('dataResponse', err)
+          // console.log('dataResponse', err)
           this.openSnackBar('Error', JSON.stringify(err.error.Data), 'error');
         })
       } else {
-        console.log('formModificationRequest', this.formModificationRequest)
+        //  console.log('formModificationRequest', this.formModificationRequest)
 
         this.formModificationRequest.idProyecto = +this.dataProjectID
         this.formModificationRequest.observacion = 'se edito requerimiento'
@@ -884,10 +981,10 @@ export class PropertiesRequirementComponent implements OnInit {
         this.formModificationRequest.deleteContraIDs = []
 
 
-        console.log('this.dataRequirementID ', this.dataRequirementID)
-        console.log('formModificationRequest', this.formModificationRequest)
+        // console.log('this.dataRequirementID ', this.dataRequirementID)
+        // console.log('formModificationRequest', this.formModificationRequest)
         this.serviceProRequirement.putModificationRequestSend(this.formModificationRequest).subscribe(dataResponse => {
-          console.log('dataResponse', dataResponse)
+          // console.log('dataResponse', dataResponse)
           if (dataResponse.status == 200) {
             this.loading = true
             this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
@@ -898,7 +995,7 @@ export class PropertiesRequirementComponent implements OnInit {
             this.openSnackBar('Error', dataResponse.message, 'error');
           }
         }, err => {
-          console.log('dataResponse', err)
+          //  console.log('dataResponse', err)
           this.openSnackBar('Error', JSON.stringify(err.error.Data), 'error');
         })
 
@@ -1123,11 +1220,11 @@ export class PropertiesRequirementComponent implements OnInit {
       }
     }
     if (type == 'revisiones') {
-      if (this.proRequirementeForm.controls.reviews.controls['area'].value == '' || this.proRequirementeForm.controls.reviews.controls['area'].value == null) {
+      if (this.reviews.controls['area'].value == '' || this.reviews.controls['area'].value == null) {
         this.errorArea = true;
-      } else if (this.proRequirementeForm.controls.reviews.controls['concepto'].value == '' || this.proRequirementeForm.controls.reviews.controls['concepto'].value == null) {
+      } else if (this.reviews.controls['concepto'].value == '' || this.reviews.controls['concepto'].value == null) {
         this.errorConcepto = true;
-      } else if (this.proRequirementeForm.controls.reviews.controls['observaciones'].value == '' || this.proRequirementeForm.controls.reviews.controls['observaciones'].value == null) {
+      } else if (this.reviews.controls['observaciones'].value == '' || this.reviews.controls['observaciones'].value == null) {
         this.errorObservaciones = true;
       } else {
         moment.locale("es");
@@ -1135,9 +1232,9 @@ export class PropertiesRequirementComponent implements OnInit {
         let dataRevision = {} as dataSourceRevisionesI
         dataRevision.fecha = moment(fechaActual).format("DD-MM-YYYY");;
         dataRevision.usuario = 'Ususario Prueba';
-        dataRevision.area = this.proRequirementeForm.controls.reviews.controls.area.value;
-        dataRevision.concepto = this.proRequirementeForm.controls.reviews.controls.concepto.value;
-        dataRevision.observacion = this.proRequirementeForm.controls.reviews.controls.observaciones.value || '';
+        dataRevision.area = this.reviews.controls.area.value;
+        dataRevision.concepto = this.reviews.controls.concepto.value;
+        dataRevision.observacion = this.reviews.controls.observaciones.value || '';
         dataRevision.revision = false;
         this.dataTableRevision = dataRevision;
         this.dataTableRevision['uuid'] = uuid();
@@ -1149,14 +1246,14 @@ export class PropertiesRequirementComponent implements OnInit {
           return;
         }
         let dtl = this.dataTableRevision
-        console.log('this.dtl 1', dtl)
+        // console.log('this.dtl 1', dtl)
 
         this.dataTableRevisiones.push(dtl);
         var stringToStoredtl = JSON.stringify(this.dataTableRevisiones);
         ProChartStorage.setItem("dataTableRevisiones", stringToStoredtl);
         var fromStoragedtl = ProChartStorage.getItem("dataTableRevisiones");
         this.reloadDataTbl(fromStoragedtl, 'revisiones');
-        console.log('this.dtl 2', dtl)
+        //  console.log('this.dtl 2', dtl)
         return;
       }
     }
@@ -1235,7 +1332,7 @@ export class PropertiesRequirementComponent implements OnInit {
     this.serviceReviews.getAllReviews(Modificacion_ID).subscribe((data: any) => {
       this.dataTableRevisiones = data.data.items;
       this.dataSourceRevisiones = new MatTableDataSource(this.dataTableRevisiones)
-      console.log('this.dataSourceRevisiones', this.dataTableRevisiones)
+      // console.log('this.dataSourceRevisiones', this.dataTableRevisiones)
       // console.log('data revisiones', data)
       // var stringToStore = JSON.stringify(this.dataTableRevisiones);
       // ProChartStorage.setItem("dataTableRevisiones", stringToStore);
@@ -1246,21 +1343,21 @@ export class PropertiesRequirementComponent implements OnInit {
     this.loading = true;
 
     if (type == 'Agregar') {
-      console.log('Agregar', this.proRequirementeForm.controls.reviews.value)
+      console.log('Agregar', this.reviews.value)
       let reviewsData = {} as postReviewsI
 
       reviewsData.modificacion_ID = +this.dataRequirementID
       let reviews = {} as reviewsI
       reviews.revisado = false
-      reviews.concepto = this.proRequirementeForm.controls.reviews.controls.concepto.value || ''
-      reviews.observacion = this.proRequirementeForm.controls.reviews.controls.observaciones.value || ''
-      reviews.area_ID = this.proRequirementeForm.controls.reviews.controls.area.value.area_ID || 0
+      reviews.concepto = this.reviews.controls.concepto.value || ''
+      reviews.observacion = this.reviews.controls.observaciones.value || ''
+      reviews.area_ID = this.reviews.controls.area.value.area_ID || 0
       reviewsData.revisiones = [reviews]
-      // console.log('reviewsData', reviewsData)
+       console.log('reviewsData', reviewsData)
       this.serviceReviews.postReviews(reviewsData).subscribe((data: any) => {
-        // console.log('data', data)
+        console.log('data', data)
         if (data.status != 200) {
-          this.openSnackBar('ERROR', data.Message, 'error')
+          this.openSnackBar('ERROR', data.message, 'error')
           this.loading = false;
 
         } else {
@@ -1279,12 +1376,12 @@ export class PropertiesRequirementComponent implements OnInit {
       reviewsDelete.revisiones = [idReviews]
       // console.log('reviewsDelete', reviewsDelete)
       this.serviceReviews.deleteReviews(reviewsDelete).subscribe((data: any) => {
-        console.log('data', data)
+        //   console.log('data', data)
         // if(data.Status != 200){
         //   this.openSnackBar('ERROR', data.Message, 'error')
         // }else
         if (data.status != 200) {
-          this.openSnackBar('ERROR', data.Message, 'error')
+          this.openSnackBar('ERROR', data.message, 'error')
         }
 
         this.getAllReviews(+this.dataRequirementID)
@@ -1296,16 +1393,16 @@ export class PropertiesRequirementComponent implements OnInit {
     }
     if (type == 'Revisar') {
 
-      console.log('this.reviewsUpTemporal revisado', this.reviewsUpTemporal)
+      //  console.log('this.reviewsUpTemporal revisado', this.reviewsUpTemporal)
 
       let putUpdateReviews = {} as putUpdateReviewsI
       putUpdateReviews.modificacion_ID = +this.dataRequirementID
       putUpdateReviews.revisiones = [this.reviewsUpTemporal]
-      console.log('putUpdateReviews', putUpdateReviews)
+      // console.log('putUpdateReviews', putUpdateReviews)
       this.serviceReviews.putUpdateReviews(putUpdateReviews).subscribe((data: any) => {
-        console.log('data', data)
+        //    console.log('data', data)
         if (data.status != 200) {
-          this.openSnackBar('ERROR', data.Message, 'error')
+          this.openSnackBar('ERROR', data.message, 'error')
         }
         this.getAllReviews(+this.dataRequirementID)
         this.loading = false;
@@ -1315,7 +1412,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
   }
   showOptions(revisado: any, objectReview: any) {
-    console.log('this.reviewsUp 1', this.reviewsUp)
+    //  console.log('this.reviewsUp 1', this.reviewsUp)
 
     let objectReviews = {} as revisionesI
     objectReviews.revisado = revisado
@@ -1335,14 +1432,14 @@ export class PropertiesRequirementComponent implements OnInit {
     }
 
 
-    console.log('this.reviewsUpTemporal', this.reviewsUpTemporal)
+    // console.log('this.reviewsUpTemporal', this.reviewsUpTemporal)
 
 
   }
 
   versionActual(event: any) {
     // obtenemos el index del tab
-    console.log(event.index);
+    // console.log(event.index);
     // actualizamos el index seleccionado
     this.selectedIndex = event.index;
     if (event.index == 1) {
@@ -1360,14 +1457,14 @@ export class PropertiesRequirementComponent implements OnInit {
     });
   }
 
-openBudgetModification(element:any){
-  console.log('element clasificacion', element)
-  const dialogRef = this.dialog.open(BudgetModificationComponent, {
-    width: '800px',
-    height: '500px',
-    data: this.dataProjectID,
-  });
-}
+  openBudgetModification(element: any) {
+    // console.log('element clasificacion', element)
+    const dialogRef = this.dialog.open(BudgetModificationComponent, {
+      width: '800px',
+      height: '500px',
+      data: this.dataProjectID,
+    });
+  }
 }
 
 var ProChartStorage = {
