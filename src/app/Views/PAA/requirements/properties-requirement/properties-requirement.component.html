@@ -281,7 +281,7 @@
                                         <p class="tltData">Auxiliar</p>
                                         <mat-select formControlName="auxiliar" class="contDataSelect"
                                             (valueChange)="onSelectionChange($event , 'auxiliar')">
-                                            <mat-option [value]="item.auxiliar_ID" *ngFor="let item of listAuxiliar">
+                                            <mat-option [value]="item" *ngFor="let item of listAuxiliar">
                                                 {{item.codigoAuxiliar}} </mat-option>
                                         </mat-select>
                                         <mat-error *ngIf="errorAux">
