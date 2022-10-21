@@ -18,6 +18,7 @@ export interface modificationRequestI {
   proyecto_COD: number,
   numero_Modificacion: number,
   nombreProyecto: string,
+  proyecto_Estado: string,
   datos: ModificationRequestByRequestIdI,
   observacion: string,
   archivos: archivosI
@@ -198,4 +199,13 @@ export interface postModificRequestCounterpartI {
   descripcion: string,
   valorAumenta: number,
   valorDisminuye: number
+}
+
+
+//Enviar Revisiones
+export interface RevisionSend {
+  idSolicitud: number,
+  idProject: number,
+  comentarios: string,
+  accion: number
 }

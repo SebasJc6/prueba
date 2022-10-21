@@ -8,7 +8,7 @@ import { CounterpartComponent } from './counterpart/counterpart.component';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
-import { archivosI, dateTableModificationI, filterModificationRequestI, getModificationRequestI, postDataModifApropiacionInicialI, postDataModifCadenasPresI, postDataModificationsI, postDataModifRequerimentsI, postDataModReqI, postModificationRequestI, postModificRequestCounterpartI, postModificRequestCountersI, putModificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
+import { archivosI, dateTableModificationI, filterModificationRequestI, getModificationRequestI, postDataModifApropiacionInicialI, postDataModifCadenasPresI, postDataModificationsI, postDataModifRequerimentsI, postDataModReqI, postModificationRequestI, postModificRequestCounterpartI, postModificRequestCountersI, putModificationRequestI, RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { AddrequirementsComponent } from './add-requeriments/add-requeriments.component';
 import { elementAt, ObservedValueUnionFromArray } from 'rxjs';
 import { FilesService } from 'src/app/Services/ServicesPAA/files/files.service';
@@ -146,8 +146,11 @@ export class ModificationRequestComponent implements OnInit {
   //Aquí se guarda la informacion importante del requerimiento aprovado que se guardará en temporal
   RequerimentToSave = {} as RequerimentDataI;
 
-  //Objeto con la informacion de acceso del Usuario
+  //Propiedad con el Rol del Usuario
   AccessUser: string = '';
+
+  //Propiedad con el es estado del proyecto
+  ProjectState: string = '';
 
   constructor(
     private serviceFiles: FilesService,
@@ -198,6 +201,7 @@ export class ModificationRequestComponent implements OnInit {
       this.codProject = data.data.proyecto_COD;
       this.numModification = data.data.numero_Modificacion;
       this.nomProject = data.data.nombreProyecto;
+      this.ProjectState = data.data.proyecto_Estado;
       // console.log(data.data.observacion)
     })
   }
@@ -905,10 +909,10 @@ export class ModificationRequestComponent implements OnInit {
       postDataSave.observacion = this.JustificationText;
       
        this.serviceModRequest.postModificationRequestSave(postDataSave).subscribe(res => {
-         console.log(res);
+        //  console.log(res);
         
         if(res.status == 200) { 
-          this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
+          this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada con éxito.`, 'success');
           //Elimación de los registros en LocalStorage
           ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
@@ -968,7 +972,7 @@ export class ModificationRequestComponent implements OnInit {
       this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
         
         if(res.status == 200) {
-          this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada.`, 'success');
+          this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
           //Elimación de los registros en LocalStorage
           ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
@@ -1034,7 +1038,7 @@ export class ModificationRequestComponent implements OnInit {
           // console.log(res);
           
           if(res.status == 200) {
-            this.openSnackBar('Éxito al Enviar', `Solicitud de Modificación Enviada.`, 'success');
+            this.openSnackBar('Éxito al Enviar', `Solicitud de Modificación N° ${res.data.idSolicitud} Enviada con éxito.`, 'success');
             //Elimación de los registros en LocalStorage
             ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
             ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
@@ -1071,7 +1075,29 @@ export class ModificationRequestComponent implements OnInit {
 
   //Enviar revisiones
   enviarRecisiones() {
-    
+    console.log(this.ProjectState);
+    if (this.ProjectState === 'Anteproyecto') {
+      const Revisiones: RevisionSend = {
+        accion: 1,
+        comentarios: '',
+        idProject: Number(this.dataProjectID),
+        idSolicitud: Number(this.dataSolicitudModID)
+      }
+
+      this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
+        console.log(res);
+        if (res.status == 200) {
+          this.openSnackBar('Éxito al Enviar', `Revisiones en Solicitud de Modificación Enviadas con éxito.`, 'success');
+          this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+        } else if (res.status == 400) {
+          this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
+        }
+      }, error => {
+        // console.log(error);
+      });
+    } else {
+      //TODO: Implementar funcionalidad cuando el proyecto no esté en Anteproyecto
+    }
   }
 
 

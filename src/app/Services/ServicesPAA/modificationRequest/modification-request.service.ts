@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
-import { filterModificationRequestI, getModificationRequestByRequesI, getModificationRequestI, modificationRequestI, postModificationRequestI, postModificRequestCountersI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
+import { filterModificationRequestI, getModificationRequestByRequesI, getModificationRequestI, modificationRequestI, postModificationRequestI, postModificRequestCountersI, RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { getDataI } from 'src/app/Models/ModelsPAA/Requeriment/RequerimentApproved.interface';
 import { AuthenticationService } from '../../Authentication/authentication.service';
 import { AuthInterceptorService } from '../../Authentication/Interceptor/auth-interceptor.service';
@@ -89,5 +89,10 @@ export class ModificationRequestService {
   getRequerimentApproved(idRequest: string, idRequeriment: number): Observable<any> {
     let dir = `${this.Url}/Proyecto/${idRequest}/Requerimiento/${idRequeriment}`;
     return this.http.get<any>(dir);
+  }
+
+  putRevisionesEnviar(body: RevisionSend): Observable<any> {
+    let dir = `${this.Url}Revisiones/Enviar/Solicitud`;
+    return this.http.put(dir, body);
   }
 }

@@ -33,7 +33,7 @@ export class ProjectService {
   }
 
   getProjectById(projectId: number): Observable<getProjectByIdI> {
-    let dir = this.url + '/' + projectId;
+    let dir = `${this.url}/${projectId}/Resumen`;
     return this.http.get<getProjectByIdI>(dir);
   }
 
