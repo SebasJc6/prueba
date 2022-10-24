@@ -8,6 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { dataTableRequerimentI, filterRequerimentI } from 'src/app/Models/ModelsPAA/Requeriment/Requeriment.interface';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
+import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { RequerimentService } from 'src/app/Services/ServicesPAA/Requeriment/requeriment.service';
 
 @Component({
@@ -28,9 +29,8 @@ export class RequirementsComponent implements OnInit {
     public serviceRequeriment: RequerimentService,
     public router: Router,
     private activeRoute: ActivatedRoute,
-    private authService: AuthenticationService,) {
-
-  }
+    private authService: AuthenticationService,
+    private serviceModRequest: ModificationRequestService,) { }
 
   //Objeto con la informacion de acceso del Usuario
   AccessUser: string = '';
@@ -71,16 +71,28 @@ export class RequirementsComponent implements OnInit {
 
   dataSource!: MatTableDataSource<dataTableRequerimentI>;
 
+  //Propiedad con el es estado del proyecto
+  ProjectState: string = '';
+
   ngOnInit(): void {
     this.filterRequertiments.page = "1";
     this.filterRequertiments.take = 20;
     // this.getPagination();
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('data') || '';
 
+    //Se obtiene el estado del Proyecto
+    this.getStatusProject(Number(this.dataProjectID));
+
     // console.log(+this.dataProjectID)
     this.getRequerimentsByProject(+this.dataProjectID, this.filterRequertiments);
 
     this.AccessUser = this.authService.getRolUser();
+  }
+
+  getStatusProject(projectId: number) {
+    this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
+      this.ProjectState = data.data.proyecto_Estado;
+    });
   }
 
   getPagination() {
