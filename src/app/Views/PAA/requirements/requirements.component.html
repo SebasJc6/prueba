@@ -203,7 +203,7 @@
     <button class="buton btn" mat-button mat-icon-button (click)="regresar()">
       REGRESAR
     </button>
-    <button *ngIf="AccessUser !== 'Revisor'" class="buton btn" mat-button mat-icon-button (click)="modificatioRequest()">
+    <button *ngIf="AccessUser !== 'Revisor'" class="buton btn" [disabled]="(ProjectState === 'Anteproyecto' || ProjectState === 'En Ejecución') ? false : true" mat-button mat-icon-button (click)="modificatioRequest()">
       <span>SOLICITAR MODIFICACIÓN</span>
     </button>
   </mat-card-actions>

@@ -1099,9 +1099,10 @@ export class ModificationRequestComponent implements OnInit {
       }, error => {
         // console.log(error);
       });
-    } else {
+    } else if(this.ProjectState === 'En Ejecución'){
       this.openDialog('Advertencia', 'Ingrese los comentarios de su revisión', 'warningInput', 'Seleccione el estado de la modificación con su revisión.')
-      //TODO: Implementar funcionalidad cuando el proyecto no esté en Anteproyecto
+    } else {
+      this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `El Proyecto debe estar en estado "Anteproyecto" ó "En Ejecución".`);
     }
   }
 
