@@ -14,6 +14,7 @@ import { ThemePalette } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 export interface ChipColor {
   name: string;
@@ -66,7 +67,8 @@ export class AcquisitionsComponent implements OnInit {
 
   constructor(
     private serviceProject: ProjectService, 
-    public router: Router, private authService: AuthenticationService,) {
+    public router: Router, private authService: AuthenticationService,
+    private spinner: NgxSpinnerService,) {
 
   }
   filterProjects = {} as filterProjectI;
@@ -120,6 +122,7 @@ export class AcquisitionsComponent implements OnInit {
     this.filterProjects.ascending = this.filterForm.get('ascending')?.value || false;
 
     //console.log(filterProjects)
+    this.spinner.show();
     this.serviceProject.getAllProjectsFilter(filterProjects).subscribe(data => {
       this.viewProjects = data
       // console.log(this.viewProjects.data.items)
@@ -137,7 +140,10 @@ export class AcquisitionsComponent implements OnInit {
         this.colorChip = 'closeChips'
       }
 
-    })
+      this.spinner.hide();
+    }, error => {
+      this.spinner.hide();
+    });
 
   }
 

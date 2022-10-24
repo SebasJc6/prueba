@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { filterTaskTrayI, itemsTaskTrayI } from 'src/app/Models/ModelsPAA/task-tray/task-tray';
 import { TaskTrayService } from 'src/app/Services/ServicesPAA/task-tray/task-tray.service';
 import { AlertsPopUpComponent } from 'src/app/Templates/alerts-pop-up/alerts-pop-up.component';
@@ -27,7 +28,8 @@ export class TaskTrayComponent implements OnInit {
   constructor(private snackBar: MatSnackBar, 
     public dialog: MatDialog, 
     private taskTrayService: TaskTrayService,
-    public router: Router,) { }
+    public router: Router,
+    private spinner: NgxSpinnerService,) { }
 
   //INFORMACION PARA LA TABLA CLASIFICACION PRESUPUESTAL
   displayedColumns: string[] = ['fecha', 'codProject', 'numRequeriment', 'cantAjust', 'requeriment'];
@@ -76,6 +78,7 @@ export class TaskTrayComponent implements OnInit {
     this.filterTaskTray.columna = this.filterForm.get('columna')?.value || '';
     this.filterTaskTray.ascending = this.filterForm.get('ascending')?.value || false;
 
+    this.spinner.show();
     this.taskTrayService.getTaskTray(filterTaskTray).subscribe(request => {      
       // console.log('rrequest',request)
       this.dataSource = request.data.items;
@@ -85,15 +88,13 @@ export class TaskTrayComponent implements OnInit {
         take: filterTaskTray.take,
         page: filterTaskTray.page
       });
+      this.spinner.hide();
+    }, error => {
+      this.spinner.hide();
     });
   }
 
-  //Funcionalidad del botón Requerimiento
-  chargeRequeriment(idRequeriment: number) {
-    // console.log(idRequeriment);
-    
-  }
-
+  
   //FILTRO
   openFilter() {
     this.viewFilter = false;
@@ -129,8 +130,8 @@ export class TaskTrayComponent implements OnInit {
       this.getTaskTray(this.filterTaskTray);
     }
   }
-
-
+  
+  
   prevPage() {
     if (this.numberPage > 1) {
       this.numberPage--;
@@ -150,40 +151,41 @@ export class TaskTrayComponent implements OnInit {
     this.filterTaskTray.page = this.numberPage.toString();
     this.getTaskTray(this.filterTaskTray);
   }
-
+  
   //Metodo para llamar alertas
   //  openSnackBar(title:string, message: string, type:string) {
-  //    this.snackBar.openFromComponent(AlertsComponent, {
-  //      data:{title,message,type},
-  //      horizontalPosition: 'center',
-  //      verticalPosition: 'top',
-  //      panelClass: [type],
-  //    });
-  //  }
-
+    //    this.snackBar.openFromComponent(AlertsComponent, {
+      //      data:{title,message,type},
+      //      horizontalPosition: 'center',
+      //      verticalPosition: 'top',
+      //      panelClass: [type],
+      //    });
+      //  }
+      
   cargaAlert(){
     // this.openDialog('Advertencia', 'Ingrese los comentarios de su revisión', 'warningInput', 'Seleccione el estado de la modificación con su revisión.')
-
+    
     // this.openSnackBar('Envío exitoso','Modificación reportada con exito', 'success');
     // this.openSnackBar('Lo sentimos','No se puede completar la operación porque faltan campos por ingresar. Te invitamos a completar la información para poder continuar.', 'error');
     // this.openSnackBar('Advertencia','Para generar el  reporte dirijase a la pantalla de gestion de PAA. ', 'warning');
   }
-
+  
   // openDialog(title: string, message: string, type: string, message2: string): void {
   //   const dialogRef = this.dialog.open(AlertsPopUpComponent, {
-  //     width: '1000px',
-  //     height: '500px',
-  //     data: {title: title, message: message, type: type, message2: message2},
-  //   });
-
-  //    dialogRef.afterClosed().subscribe(result => {
+    //     width: '1000px',
+    //     height: '500px',
+    //     data: {title: title, message: message, type: type, message2: message2},
+    //   });
+    
+    //    dialogRef.afterClosed().subscribe(result => {
   //      console.log('The dialog was closed');
   //      this.value = result;
   //    });
   // }
-
+  
+  //Funcionalidad del botón Requerimiento
   propertiesRequirement(numReq: number,projectId:number,solId:number) {
     this.router.navigate(['/WAPI/PAA/PropiedadesRequerimiento/' + projectId + '/'+solId+'/' + numReq+ '/Revision'])
   }
-
+  
 }

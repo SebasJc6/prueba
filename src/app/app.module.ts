@@ -63,6 +63,12 @@ import { SpinnerComponent } from './Templates/spinner/spinner.component';
 import { CDPComponent } from './Views/PAA/requirements/cdp/cdp.component';
 import { BudgetModificationComponent } from './Views/PAA/requirements/properties-requirement/budget-modification/budget-modification.component';
 import { AuthInterceptorService } from './Services/Authentication/Interceptor/auth-interceptor.service';
+import { NgxSpinnerModule } from 'ngx-spinner';
+
+//Interface Spinner
+interface NgxSpinnerConfig {
+  type?: string;
+}
 
 
 const materialModules = [
@@ -135,6 +141,7 @@ const materialModules = [
     HttpClientModule,
     // angular material
     materialModules,
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
 
   ],
   providers:

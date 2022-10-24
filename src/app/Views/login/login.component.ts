@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 
@@ -26,7 +27,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router,
     private ServicesAuth: AuthenticationService,
-    private snackBar: MatSnackBar, private authService: AuthenticationService) { }
+    private snackBar: MatSnackBar, private authService: AuthenticationService,
+    private spinner: NgxSpinnerService,) { }
 
   ngOnInit(): void {
     sessionStorage.removeItem('token');
@@ -45,6 +47,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       // console.log(this.loginForm.value);
       // let isSuccessful =
+      this.spinner.show();
        this.ServicesAuth.login(this.loginForm.value).subscribe(dataToken => {
         // console.log('dataToken: ',dataToken.accessToken);
         this.dataToken = dataToken;
@@ -54,8 +57,10 @@ export class LoginComponent implements OnInit {
         //let access = JSON.parse(tokenInfo.access);
         // console.log('access',access);
         this.router.navigate(['WAPI/Home']);      
+        this.spinner.hide();
       }, error => {
         // console.log('error', error);
+        this.spinner.hide();
         this.openSnackBar('Error', 'Usuario o contraseña incorrectos', 'error');
       });
     }

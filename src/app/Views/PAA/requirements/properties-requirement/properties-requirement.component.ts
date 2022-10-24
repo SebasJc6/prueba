@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { concat, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { postDataModificationsI, postDataModifRequerimentsI, postDataModReqI, postModificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
@@ -295,6 +296,7 @@ export class PropertiesRequirementComponent implements OnInit {
     private snackBar: MatSnackBar,
     public dialog: MatDialog,
     private authService: AuthenticationService,
+    private spinner: NgxSpinnerService,
   ) { }
 
   ngAfterViewInit() {
@@ -455,6 +457,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
   }
   getInfoToCreateReq(projectId: number) {
+    this.spinner.show();
     this.serviceProRequirement.getInfoToCreateReq(projectId).subscribe((dataProject) => {
       ////console.log(data)
       this.getInfoToProject = dataProject.data;
@@ -464,6 +467,9 @@ export class PropertiesRequirementComponent implements OnInit {
       this.proRequirementeForm.controls.infoBasicaForm.controls['codigoPro'].setValue(this.codProject);
       this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaOri'].setValue(this.dependenciaRec);
       ////console.log(this.nomProject, this.codProject)
+      this.spinner.hide();
+    }, error => {
+      this.spinner.hide();
     })
   }
 
@@ -983,6 +989,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
         // console.log('this.dataRequirementID ', this.dataRequirementID)
         // console.log('formModificationRequest', this.formModificationRequest)
+        this.spinner.show();
         this.serviceProRequirement.putModificationRequestSend(this.formModificationRequest).subscribe(dataResponse => {
           // console.log('dataResponse', dataResponse)
           if (dataResponse.status == 200) {
@@ -994,9 +1001,11 @@ export class PropertiesRequirementComponent implements OnInit {
           } else {
             this.openSnackBar('Error', dataResponse.message && JSON.stringify(dataResponse.data), 'error');
           }
+          this.spinner.hide();
         }, err => {
           //  console.log('dataResponse', err)
           this.openSnackBar('Error', JSON.stringify(err.error.data), 'error');
+          this.spinner.hide();
         })
 
       }
@@ -1354,6 +1363,7 @@ export class PropertiesRequirementComponent implements OnInit {
       reviews.area_ID = this.reviews.controls.area.value.area_ID || 0
       reviewsData.revisiones = [reviews]
       console.log('reviewsData', reviewsData)
+      this.spinner.show();
       this.serviceReviews.postReviews(reviewsData).subscribe((data: any) => {
         console.log('data', data)
         if (data.status != 200) {
@@ -1363,8 +1373,10 @@ export class PropertiesRequirementComponent implements OnInit {
         } else {
           this.getAllReviews(+this.dataRequirementID)
           this.loading = false;
-
         }
+        this.spinner.hide();
+      }, error => {
+        this.spinner.hide();
       });
 
     }
@@ -1375,6 +1387,7 @@ export class PropertiesRequirementComponent implements OnInit {
       reviewsDelete.modificacion_ID = +this.dataRequirementID
       reviewsDelete.revisiones = [idReviews]
       // console.log('reviewsDelete', reviewsDelete)
+      this.spinner.show();
       this.serviceReviews.deleteReviews(reviewsDelete).subscribe((data: any) => {
         //   console.log('data', data)
         // if(data.Status != 200){
@@ -1387,7 +1400,9 @@ export class PropertiesRequirementComponent implements OnInit {
         this.getAllReviews(+this.dataRequirementID)
 
         this.loading = false;
-
+        this.spinner.hide();
+      }, error => {
+        this.spinner.hide();
       });
 
     }
@@ -1399,6 +1414,7 @@ export class PropertiesRequirementComponent implements OnInit {
       putUpdateReviews.modificacion_ID = +this.dataRequirementID
       putUpdateReviews.revisiones = this.reviewsUpTemporal
       console.log('putUpdateReviews', putUpdateReviews)
+      this.spinner.show();
       this.serviceReviews.putUpdateReviews(putUpdateReviews).subscribe((data: any) => {
         console.log('data', data)
         if (data.status != 200) {
@@ -1410,6 +1426,9 @@ export class PropertiesRequirementComponent implements OnInit {
         }
         this.getAllReviews(+this.dataRequirementID)
         this.loading = false;
+        this.spinner.hide();
+      }, error => {
+        this.spinner.hide();
       });
 
     }

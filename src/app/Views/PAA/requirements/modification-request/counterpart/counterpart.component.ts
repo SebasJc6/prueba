@@ -5,6 +5,7 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { CounterpartInterface, editCounterpartI } from 'src/app/Models/ModelsPAA/modificatioRequest/counterpart/counterpart-interface';
 import { dateTableModificationI, postModificRequestCounterpartI, putModificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
@@ -24,8 +25,8 @@ export class CounterpartComponent implements OnInit {
     private snackBar: MatSnackBar,
     public serviceModRequest: ModificationRequestService,
     public dialogRef: MatDialogRef<CounterpartComponent>,
-    @Inject(MAT_DIALOG_DATA) public dataCounterparts: any,) 
-    { dialogRef.disableClose = true;}
+    @Inject(MAT_DIALOG_DATA) public dataCounterparts: any,
+    private spinner: NgxSpinnerService,) { dialogRef.disableClose = true;}
 
   //Arreglo que guarda la información del proyecto para mostrar en la lista desplegable
   states: CounterpartInterface[] = [];
@@ -52,13 +53,14 @@ export class CounterpartComponent implements OnInit {
     this.getCounterpartF(this.dataCounterparts.id_request);
     this.getSourcesTemporal();
     this.cargarDataEdit();
-    
   }
 
   //Función que trae la información del proyecto de la Api
   getCounterpartF(idRequest: string) {
     this.counterpartSubscription = this.serviceCounterpar.getCounterpartFRequest(idRequest).subscribe(request => {
       this.states = request.data;
+    }, error => {
+
     });
   }
 
@@ -73,9 +75,13 @@ export class CounterpartComponent implements OnInit {
         return objectsFromStorage.indexOf(item) === index;
       });
       if (objectsFromStorage.length > 0) {
+        // this.spinner.show();
         this.counterpartSubscription = this.serviceCounterpar.postFuentesGetList(listIdSource).subscribe(res => {
           this.SourcesGet = res.data;
           //console.log(res);
+          // this.spinner.hide();
+        }, error => {
+          // this.spinner.hide();
         });
 
         //TODO: Revisar esta parte
@@ -130,15 +136,17 @@ export class CounterpartComponent implements OnInit {
   
   
         //Validar esta parte
+        this.spinner.show();
         this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
           if (res.status == 200) {
             this.openSnackBar('Éxito al Guardar', `Contrapartida Actualizada.`, 'success');
             this.router.navigate([`/WAPI/PAA/SolicitudModificacion/${this.dataCounterparts.id_project}/${res.data.idSolicitud}`]);
             this.dialogRef.close();
           }
+          this.spinner.hide();
         }, error => {
-          console.log(error);
-          
+          // console.log(error);
+          this.spinner.hide();
         });
       }else {
         this.counterpart.fuente_ID = this.counterpartForm.value.fuentes || '';
