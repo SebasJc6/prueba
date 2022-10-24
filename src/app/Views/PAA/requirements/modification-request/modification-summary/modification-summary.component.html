@@ -9,7 +9,7 @@
           <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
             &nbsp;>&nbsp;Requerimientos
           </a>
-          <a class="href" [routerLink]="['/WAPI/PAA/SolicitudModificacion/', dataProjectID]">
+          <a class="href" [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudModID]">
           &nbsp;>&nbsp;Solicitud de modificación
           </a>
           <a class="href selected" [routerLink]="['/WAPI/PAA/ResumenModificacion/', dataProjectID]">

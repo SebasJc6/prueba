@@ -831,7 +831,7 @@ export class ModificationRequestComponent implements OnInit {
       // console.log(res);
       this.manageExcelFile(res, fileName);
     }, error => {
-      this.openSnackBar('Lo sentimos', `Error en Servidor`, 'error', `Ocurrió un error interno en el servidor.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     })
   }
 
@@ -960,7 +960,9 @@ export class ModificationRequestComponent implements OnInit {
           // ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
           // this.ArrayDataStorage = [];
           // this.reloadDataTbl();
-        }
+        } else {
+          this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      }
        });
     } else {
       let putDataSave = {} as putModificationRequestI;
@@ -1015,7 +1017,9 @@ export class ModificationRequestComponent implements OnInit {
           // ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
           // this.ArrayDataStorage = [];
           // this.reloadDataTbl();
-        }        
+        }else {
+          this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+        }
       });
     }
   }
@@ -1068,9 +1072,8 @@ export class ModificationRequestComponent implements OnInit {
             this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
           }
         }, error => {
-          // console.log('Hubo un error ', error);
-          
-        });
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      });
     } else {
       this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe estar en estado "En Modificación" ó "En Ajuste" para ser enviada.`);
     }
@@ -1097,7 +1100,7 @@ export class ModificationRequestComponent implements OnInit {
           this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
         }
       }, error => {
-        // console.log(error);
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
       });
     } else if(this.ProjectState === 'En Ejecución'){
       this.openDialog('Advertencia', 'Ingrese los comentarios de su revisión', 'warningInput', 'Seleccione el estado de la modificación con su revisión.')
@@ -1134,7 +1137,7 @@ export class ModificationRequestComponent implements OnInit {
           this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
         }
       }, error => {
-        // console.log(error);
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
       });
       }
      });
@@ -1158,7 +1161,7 @@ export class ModificationRequestComponent implements OnInit {
           ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
         }
       }, error => {
-        // console.log(error);
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
       });
     } else if(ProChartStorage.getItem(`estado${this.dataSolicitudModID}`) == null || this.StatusRequest === '') {            
       this.router.navigate([`/WAPI/PAA/Requerimientos/${this.dataProjectID}`]);
