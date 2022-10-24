@@ -1100,7 +1100,7 @@ export class ModificationRequestComponent implements OnInit {
         // console.log(error);
       });
     } else {
-      // this.openDialog('Advertencia', 'Ingrese los comentarios de su revisión', 'warningInput', 'Seleccione el estado de la modificación con su revisión.')
+      this.openDialog('Advertencia', 'Ingrese los comentarios de su revisión', 'warningInput', 'Seleccione el estado de la modificación con su revisión.')
       //TODO: Implementar funcionalidad cuando el proyecto no esté en Anteproyecto
     }
   }
@@ -1114,12 +1114,28 @@ export class ModificationRequestComponent implements OnInit {
       data: {title: title, message: message, type: type, message2: message2},
     });
  
-     dialogRef.afterClosed().subscribe(result => {
+     dialogRef.afterClosed().subscribe((result: RevisionSend) => {
       if (result) {
-        console.log(result);
-        
+        // console.log(result);
+        const Revisiones: RevisionSend = {
+        accion: result.accion,
+        comentarios: result.comentarios,
+        idProject: Number(this.dataProjectID),
+        idSolicitud: Number(this.dataSolicitudModID)
       }
-       
+
+      this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
+        // console.log(res);
+        if (res.status == 200) {
+          this.openSnackBar('Éxito al Enviar', `Revisiones en Solicitud de Modificación Enviadas con éxito.`, 'success');
+          this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+        } else if (res.status == 400) {
+          this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
+        }
+      }, error => {
+        // console.log(error);
+      });
+      }
      });
   }
 
