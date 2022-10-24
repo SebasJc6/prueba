@@ -1,99 +1,119 @@
-<div class="navbar">
-    <div class="top">
-        <!-- <mat-icon class="iconRol" matTooltip="Cambiar rol">group</mat-icon> -->
-        <mat-icon [inline]='true' (click)="logOut()" matTooltip="Cerrar Sesion">exit_to_app</mat-icon>
-    </div>
-    
-    <div class="user">
-        <mat-icon style="color: white;" >person</mat-icon>        
+<mat-sidenav-container class="container">
+    <mat-sidenav #sidebar mode='side'>
+        <!-- <app-sidenav-list></app-sidenav-list> -->
 
-        <h3 class="name"><strong>{{UserName}}</strong> </h3>
+        <div class="navbar">
+            <div class="top">
+                <!-- <mat-icon class="iconRol" matTooltip="Cambiar rol">group</mat-icon> -->
+                <mat-icon [inline]='true' (click)="logOut()" matTooltip="Cerrar Sesion">exit_to_app</mat-icon>
+            </div>
 
-        <!-- <h4 class="mail"> <strong>admin</strong> </h4> -->
-       
-    </div>
-    <div class="menu">
-        <div class="menu-head">
-            <span></span>
+            <div class="user">
+                <mat-icon style="color: white;">person</mat-icon>
+
+                <h3 class="name"><strong>{{UserName}}</strong> </h3>
+
+                <!-- <h4 class="mail"> <strong>admin</strong> </h4> -->
+
+            </div>
+            <div class="menu">
+                <div class="menu-head">
+                    <span></span>
+                </div>
+                <div class="menu-item">
+                    <mat-accordion multi>
+                        <mat-expansion-panel class="menu-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    <img src="assets/img/PDD.png" alt="PDD">
+                                    <span class="title">Plan de desarrollo (PDD)</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <button mat-button class="menu-button" [routerLink]="['']">
+                                <span>Empy</span>
+                            </button>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel class="menu-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    <img src="assets/img/PROYECTO.png" alt="PROYECTO">
+                                    <span class="title">Proyecto</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <button mat-button class="menu-button" [routerLink]="['']">
+                                <span>Empy</span>
+                            </button>
+                        </mat-expansion-panel>
+
+
+                        <mat-expansion-panel class="menu-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    <img src="assets/img/PAA.png" alt="PAA">
+                                    <span class="title">Plan anual de adquisisiones (PAA)</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div>
+                                <button mat-button class="menu-button" [routerLink]="['PAA/Adquisiciones']" (click)="sidebar.toggle()">
+                                    <span>PAA</span>
+                                </button>
+                            </div>
+                            <div *ngIf="AccessUser === 'Referente_PAA'">
+                                <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeTareas']" (click)="sidebar.toggle()">
+                                    <span>Bandeja de tareas</span>
+                                </button>
+                            </div>
+                            <div>
+                                <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeSolicitudes']" (click)="sidebar.toggle()">
+                                    <span>Modificaciones solicitadas</span>
+                                </button>
+                            </div>
+                        </mat-expansion-panel>
+
+
+                        <mat-expansion-panel class="menu-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    <img src="assets/img/POAI.png" alt="POAI">
+                                    <span class="title">Plan operativo de inversiones (POAI)</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <button mat-button class="menu-button" [routerLink]="['']">
+                                <span>Empy</span>
+                            </button>
+                        </mat-expansion-panel>
+
+
+                        <mat-expansion-panel class="menu-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    <img src="assets/img/SEGAPLAN.png" alt="SEGAPLAN">
+                                    <span class="title">Seguimiento plan de desarrolo (SEGAPLAN)</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <button mat-button class="menu-button" [routerLink]="['']">
+                                <span>Empy</span>
+                            </button>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+                </div>
+            </div>
         </div>
-        <div class="menu-item">
-            <mat-accordion multi>
-                <mat-expansion-panel class="menu-panel">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <img src="assets/img/PDD.png" alt="PDD">
-                            <span class="title">Plan de desarrollo (PDD)</span>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <button mat-button class="menu-button" [routerLink]="['']">
-                        <span>Empy</span>
-                    </button>
-                </mat-expansion-panel>
-                
-                <mat-expansion-panel class="menu-panel">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <img src="assets/img/PROYECTO.png" alt="PROYECTO">
-                            <span class="title">Proyecto</span>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <button mat-button class="menu-button" [routerLink]="['']">
-                        <span>Empy</span>
-                    </button>
-                </mat-expansion-panel>
-                
-
-                <mat-expansion-panel class="menu-panel">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <img src="assets/img/PAA.png" alt="PAA">
-                            <span class="title">Plan anual de adquisisiones (PAA)</span>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <div>
-                        <button mat-button class="menu-button" [routerLink]="['PAA/Adquisiciones']" (click)="onToggleSidenav()">
-                            <span>PAA</span>
-                        </button>
-                    </div>
-                    <div *ngIf="AccessUser === 'Referente_PAA'">
-                        <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeTareas']">
-                            <span>Bandeja de tareas</span>
-                        </button>
-                    </div>
-                    <div>
-                        <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeSolicitudes']">
-                            <span>Modificaciones solicitadas</span>
-                        </button>
-                    </div>
-                </mat-expansion-panel>
-                
-
-                <mat-expansion-panel class="menu-panel">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <img src="assets/img/POAI.png" alt="POAI">
-                            <span class="title">Plan operativo de inversiones (POAI)</span>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <button mat-button class="menu-button" [routerLink]="['']">
-                        <span>Empy</span>
-                    </button>
-                </mat-expansion-panel>
-                
-
-                <mat-expansion-panel class="menu-panel">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <img src="assets/img/SEGAPLAN.png" alt="SEGAPLAN">
-                            <span class="title">Seguimiento plan de desarrolo (SEGAPLAN)</span>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <button mat-button class="menu-button" [routerLink]="['']">
-                        <span>Empy</span>
-                    </button>
-                </mat-expansion-panel>
-            </mat-accordion>
-
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div class="content">
+            <div class="toolbar">
+                <mat-toolbar>
+                    <app-header (click)="sidebar.toggle()"></app-header>
+                </mat-toolbar>
+            </div>
+            <div class="main">
+                <router-outlet></router-outlet>
+            </div>
         </div>
-    </div>
-</div>
+        <app-footer></app-footer>
+
+    </mat-sidenav-content>
+</mat-sidenav-container>

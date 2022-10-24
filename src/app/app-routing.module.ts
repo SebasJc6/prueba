@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { SidenavListComponent } from './Templates/sidenav-list/sidenav-list.component';
 import { DashboardComponent } from './Views/dashboard/dashboard.component';
 
 import { HomeComponent } from './Views/home/home.component';
@@ -23,7 +24,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/Login', pathMatch: 'full' },
   { path: 'Login', component: LoginComponent },
   {
-    path: 'WAPI', component: DashboardComponent,
+    path: 'WAPI', component: SidenavListComponent,
     children: [
       { path: 'Home', component: HomeComponent },
       {
