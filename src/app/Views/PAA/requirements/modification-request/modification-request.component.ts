@@ -21,6 +21,7 @@ import { apropiacionIni, cadenasPresupuestales, cadenasPresupuestalesI, codsUNSP
 import jwt_decode from "jwt-decode";
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { AlertsPopUpComponent } from 'src/app/Templates/alerts-pop-up/alerts-pop-up.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 export interface smallTable {
@@ -162,7 +163,8 @@ export class ModificationRequestComponent implements OnInit {
     public router: Router, public dialog: MatDialog,
     public serviceModRequest: ModificationRequestService,
     private snackBar: MatSnackBar,
-    private authService: AuthenticationService,) { }
+    private authService: AuthenticationService,
+    private spinner: NgxSpinnerService,) { }
 
 
   ngOnInit(): void {
@@ -190,6 +192,7 @@ export class ModificationRequestComponent implements OnInit {
     //Obtener token para manejar los roles
     this.AccessUser = this.authService.getRolUser();
     // console.log(this.AccessUser);
+    // this.spinner.hide();
   }
 
   getRequestAndProject(id_project: number, id_request: number) {
@@ -197,17 +200,23 @@ export class ModificationRequestComponent implements OnInit {
       if (res.data.observacion) {
         this.JustificationText = res.data.observacion;
       }
-    })
+    }, error => {
+
+    });
   }
 
   getModificationRequet(projectId: number) {
+    this.spinner.show();
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
       this.codProject = data.data.proyecto_COD;
       this.numModification = data.data.numero_Modificacion;
       this.nomProject = data.data.nombreProyecto;
       this.ProjectState = data.data.proyecto_Estado;
       // console.log(data.data.observacion)
-    })
+      this.spinner.hide();
+    }, error => {
+      this.spinner.hide();
+    });
   }
 
   getModificationRequestByRequestId(requestId: number, filterForm: filterModificationRequestI) {
@@ -226,6 +235,8 @@ export class ModificationRequestComponent implements OnInit {
 
       let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
       this.reloadDataTbl(fromStorage);
+    }, error => {
+
     });
   }
 
@@ -234,6 +245,8 @@ export class ModificationRequestComponent implements OnInit {
       // console.log(data)
       this.viewsFiles = data.data;
       this.dataSourceAttachedFiles = new MatTableDataSource(this.viewsFiles);
+    }, error => {
+
     })
   }
 
@@ -283,13 +296,17 @@ export class ModificationRequestComponent implements OnInit {
             }
           });
           this.ArrayDataStorage.unshift(element);                    
+            // this.spinner.show();
             this.serviceModRequest.getRequerimentApproved(this.dataProjectID, element.requerimientoID).subscribe(data  => {
               this.dataRequerimentApproved = [];
               this.dataRequerimentApproved.push(data);   
               this.getRequeriment();
+              this.spinner.hide();
+            }, error => {
+              // this.spinner.hide();
             });
 
-            this.addDataTbl();
+            // this.addDataTbl();
           });
         }
     });
@@ -308,90 +325,90 @@ export class ModificationRequestComponent implements OnInit {
     this.dataRequerimentApproved.forEach(element => {
         project_Id = element.data.proyecto.proj_ID;
 
-            requeriment.actuacion_Id = element.data.requerimiento.actuacion.actuacion_ID;
-            requeriment.cantidadDeContratos = element.data.requerimiento.cantidadDeContratos;
-            requeriment.dependenciaDestino_Id = element.data.requerimiento.dependenciaDestino.dependencia_ID;
-            requeriment.descripcion = element.data.requerimiento.descripcion;
-            requeriment.duracionDias = element.data.requerimiento.duracionDias;
-            requeriment.duracionMes = element.data.requerimiento.duracionMes;
-            requeriment.honorarios = element.data.requerimiento.honorarios;
-            requeriment.mesEstimadoInicioSeleccion = element.data.requerimiento.mesEstimadoInicioSeleccion;
-            requeriment.mesEstimadoPresentacion = element.data.requerimiento.mesEstimadoPresentacion;
-            requeriment.mesEstmadoInicioEjecucion = element.data.requerimiento.mesEstmadoInicioEjecucion;
-            requeriment.modalidadSeleccion_Id = element.data.requerimiento.modalidadSeleccion.modalidad_Sel_ID;
-            requeriment.numeroDeContrato = element.data.requerimiento.numeroDeContrato;
-            requeriment.numeroModificacion = element.data.requerimiento.numeroModificacion;
-            requeriment.numeroRequerimiento = element.data.requerimiento.numeroRequerimiento;
-            requeriment.perfil_Id = element.data.requerimiento.perfil.perfil_ID;
-            requeriment.req_ID = element.data.requerimiento.req_ID;
-            requeriment.tipoContrato_Id = element.data.requerimiento.tipoContrato.tipoContrato_ID;
-            requeriment.version = element.data.requerimiento.version;
+        requeriment.actuacion_Id = element.data.requerimiento.actuacion.actuacion_ID;
+        requeriment.cantidadDeContratos = element.data.requerimiento.cantidadDeContratos;
+        requeriment.dependenciaDestino_Id = element.data.requerimiento.dependenciaDestino.dependencia_ID;
+        requeriment.descripcion = element.data.requerimiento.descripcion;
+        requeriment.duracionDias = element.data.requerimiento.duracionDias;
+        requeriment.duracionMes = element.data.requerimiento.duracionMes;
+        requeriment.honorarios = element.data.requerimiento.honorarios;
+        requeriment.mesEstimadoInicioSeleccion = element.data.requerimiento.mesEstimadoInicioSeleccion;
+        requeriment.mesEstimadoPresentacion = element.data.requerimiento.mesEstimadoPresentacion;
+        requeriment.mesEstmadoInicioEjecucion = element.data.requerimiento.mesEstmadoInicioEjecucion;
+        requeriment.modalidadSeleccion_Id = element.data.requerimiento.modalidadSeleccion.modalidad_Sel_ID;
+        requeriment.numeroDeContrato = element.data.requerimiento.numeroDeContrato;
+        requeriment.numeroModificacion = element.data.requerimiento.numeroModificacion;
+        requeriment.numeroRequerimiento = element.data.requerimiento.numeroRequerimiento;
+        requeriment.perfil_Id = element.data.requerimiento.perfil.perfil_ID;
+        requeriment.req_ID = element.data.requerimiento.req_ID;
+        requeriment.tipoContrato_Id = element.data.requerimiento.tipoContrato.tipoContrato_ID;
+        requeriment.version = element.data.requerimiento.version;
 
-            apropiacionInicial.anioV0 = element.data.apropiacionInicial.anioV0;
-            apropiacionInicial.anioV1 = element.data.apropiacionInicial.anioV1;
-            apropiacionInicial.anioV2 = element.data.apropiacionInicial.anioV2;
-            apropiacionInicial.apropIni_ID = element.data.apropiacionInicial.apropIni_ID;
-            apropiacionInicial.valor0 = element.data.apropiacionInicial.valor0;
-            apropiacionInicial.valor1 = element.data.apropiacionInicial.valor1;
-            apropiacionInicial.valor2 = element.data.apropiacionInicial.valor2;
-            apropiacionInicial.valorTotal = element.data.apropiacionInicial.valorTotal;
+        apropiacionInicial.anioV0 = element.data.apropiacionInicial.anioV0;
+        apropiacionInicial.anioV1 = element.data.apropiacionInicial.anioV1;
+        apropiacionInicial.anioV2 = element.data.apropiacionInicial.anioV2;
+        apropiacionInicial.apropIni_ID = element.data.apropiacionInicial.apropIni_ID;
+        apropiacionInicial.valor0 = element.data.apropiacionInicial.valor0;
+        apropiacionInicial.valor1 = element.data.apropiacionInicial.valor1;
+        apropiacionInicial.valor2 = element.data.apropiacionInicial.valor2;
+        apropiacionInicial.valorTotal = element.data.apropiacionInicial.valorTotal;
 
-            element.data.codsUNSPSC.map(elem => {
-              let  codigosUNS = {} as codsUNSPSC;
-              codigosUNS.unspsC_ID = elem.unspsC_ID;
-              codigosUNSPSC.unshift(codigosUNS);
-            });
-            element.data.cadenasPresupuestales.map(elem => {
-              let cadenasPres = {} as postDataModifCadenasPresI;
-              cadenasPres.actividad_ID = elem.actividad.actividad_ID;
-              cadenasPres.anioVigRecursos = elem.anioVigRecursos;
-              cadenasPres.apropiacionDefinitiva = elem.apropiacionDefinitiva;
-              cadenasPres.apropiacionDisponible = elem.apropiacionDisponible;
-              cadenasPres.aumento = elem.aumento;
-              cadenasPres.auxiliar_ID = elem.auxiliar.auxiliar_ID;
-              cadenasPres.compromisos = elem.compromisos;
-              cadenasPres.disminucion = elem.disminucion;
-              cadenasPres.fuente_ID = elem.fuente.fuente_ID;
-              cadenasPres.giros = elem.giros;
-              cadenasPres.mes = elem.mes;
-              cadenasPres.mgA_ID = elem.mga.mgA_ID;
-              cadenasPres.pospre_ID = elem.pospre.pospre_ID;
-              cadenasPres.proj_ID = elem.project_ID;
-              cadenasPres.requerimiento_ID = elem.requerimiento_ID;
+        element.data.codsUNSPSC.map(elem => {
+          let  codigosUNS = {} as codsUNSPSC;
+          codigosUNS.unspsC_ID = elem.unspsC_ID;
+          codigosUNSPSC.unshift(codigosUNS);
+        });
+        element.data.cadenasPresupuestales.map(elem => {
+          let cadenasPres = {} as postDataModifCadenasPresI;
+          cadenasPres.actividad_ID = elem.actividad.actividad_ID;
+          cadenasPres.anioVigRecursos = elem.anioVigRecursos;
+          cadenasPres.apropiacionDefinitiva = elem.apropiacionDefinitiva;
+          cadenasPres.apropiacionDisponible = elem.apropiacionDisponible;
+          cadenasPres.aumento = elem.aumento;
+          cadenasPres.auxiliar_ID = elem.auxiliar.auxiliar_ID;
+          cadenasPres.compromisos = elem.compromisos;
+          cadenasPres.disminucion = elem.disminucion;
+          cadenasPres.fuente_ID = elem.fuente.fuente_ID;
+          cadenasPres.giros = elem.giros;
+          cadenasPres.mes = elem.mes;
+          cadenasPres.mgA_ID = elem.mga.mgA_ID;
+          cadenasPres.pospre_ID = elem.pospre.pospre_ID;
+          cadenasPres.proj_ID = elem.project_ID;
+          cadenasPres.requerimiento_ID = elem.requerimiento_ID;
 
-              cadenasPresupuestales.unshift(cadenasPres)
-            });
+          cadenasPresupuestales.unshift(cadenasPres)
+        });
 
-            let modificacion: postDataModificationsI = {
-              proj_ID: project_Id,
-              requerimiento: requeriment,
-              cadenasPresupuestales: cadenasPresupuestales,
-              apropiacionInicial: apropiacionInicial,
-              codsUNSPSC: codigosUNSPSC
+        let modificacion: postDataModificationsI = {
+          proj_ID: project_Id,
+          requerimiento: requeriment,
+          cadenasPresupuestales: cadenasPresupuestales,
+          apropiacionInicial: apropiacionInicial,
+          codsUNSPSC: codigosUNSPSC
+        }
+
+        datosRequeriment = {
+          modificacion_ID: 0,
+          accion: 2,
+          modificacion: modificacion
+        }
+
+        if (this.ArrayDatos.length > 0) {
+          this.ArrayDatos.forEach(item => {
+            let index = this.ArrayDatos.findIndex((x: any) => x.modificacion.requerimiento.req_ID === datosRequeriment.modificacion.requerimiento.req_ID);
+            if (index >= 0) {
+              this.ArrayDatos.splice(index, 1);
             }
-
-            datosRequeriment = {
-              modificacion_ID: 0,
-              accion: 2,
-              modificacion: modificacion
-            }
-
-            if (this.ArrayDatos.length > 0) {
-              this.ArrayDatos.forEach(item => {
-                let index = this.ArrayDatos.findIndex((x: any) => x.modificacion.requerimiento.req_ID === datosRequeriment.modificacion.requerimiento.req_ID);
-                if (index >= 0) {
-                  this.ArrayDatos.splice(index, 1);
-                }
-                this.ArrayDatos.unshift(datosRequeriment);
-              });
-
-            } else {
-              this.ArrayDatos.unshift(datosRequeriment);
-            }
-            
-            let stringToStore = JSON.stringify(this.ArrayDatos);
-            ProChartStorage.setItem(`arrayDatos${this.dataSolicitudModID}`, stringToStore);
+            this.ArrayDatos.unshift(datosRequeriment);
           });
+
+        } else {
+          this.ArrayDatos.unshift(datosRequeriment);
+        }
+        
+        let stringToStore = JSON.stringify(this.ArrayDatos);
+        ProChartStorage.setItem(`arrayDatos${this.dataSolicitudModID}`, stringToStore);
+      });
   }
 
   newRequeriment() {
@@ -777,6 +794,7 @@ export class ModificationRequestComponent implements OnInit {
         const FILE = new FormData();
         FILE.append('file', this.fileTmp.file);
         
+        this.spinner.show();
         this.serviceModRequest.importFile(body, FILE).subscribe(res => {
           let message = res.Message;
           let status = res.status;
@@ -808,6 +826,7 @@ export class ModificationRequestComponent implements OnInit {
             this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
             this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           }
+          this.spinner.hide();
         }, error => {
           let status = error.error.Status;
           let message = error.error.Message;
@@ -820,6 +839,7 @@ export class ModificationRequestComponent implements OnInit {
           if (status == 422) {
             this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
           }
+          this.spinner.hide();
         });
       }
     }
@@ -827,10 +847,12 @@ export class ModificationRequestComponent implements OnInit {
 
   exportFile() {
     const fileName = `Reporte_${Math.random()}.xlsx`;
+    this.spinner.show();
     this.serviceModRequest.exportFile(this.dataProjectID, this.dataSolicitudModID).subscribe(res => {
       // console.log(res);
       this.manageExcelFile(res, fileName);
     }, error => {
+      this.spinner.hide();
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     })
   }
@@ -846,6 +868,7 @@ export class ModificationRequestComponent implements OnInit {
     downloadLink.href = filePath;
     downloadLink.setAttribute('download', fileName);
     document.body.appendChild(downloadLink);
+    this.spinner.hide();
     downloadLink.click();
     this.openSnackBar('Éxito al Exportar', `${fileName}. Descargado correctamente.`, 'success');
   }
@@ -889,7 +912,6 @@ export class ModificationRequestComponent implements OnInit {
 
   //Botón Guardar
   guardar() {
-
     let arrayDataSave: postDataModReqI[] = [];
     let fromStorageArrayData = ProChartStorage.getItem(`arrayDatos${this.dataSolicitudModID}`);
     if (fromStorageArrayData != null) {
@@ -912,9 +934,9 @@ export class ModificationRequestComponent implements OnInit {
       postDataSave.idProyecto = Number(this.dataProjectID);
       postDataSave.observacion = this.JustificationText;
       
+       this.spinner.show();
        this.serviceModRequest.postModificationRequestSave(postDataSave).subscribe(res => {
         //  console.log(res);
-        
         if(res.status == 200) { 
           this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada con éxito.`, 'success');
           //Elimación de los registros en LocalStorage
@@ -946,6 +968,7 @@ export class ModificationRequestComponent implements OnInit {
           this.ArrayDataStorage = [];
           this.reloadDataTbl();
         }
+        this.spinner.hide();
        }, error => {
         //  console.log(error);
 
@@ -962,7 +985,9 @@ export class ModificationRequestComponent implements OnInit {
           // this.reloadDataTbl();
         } else {
           this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
-      }
+        }
+
+        this.spinner.hide();
        });
     } else {
       let putDataSave = {} as putModificationRequestI;
@@ -975,8 +1000,8 @@ export class ModificationRequestComponent implements OnInit {
       putDataSave.deleteContraIDs = this.CounterpartsDelete;
       
       
+      this.spinner.show();
       this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
-        
         if(res.status == 200) {
           this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
           //Elimación de los registros en LocalStorage
@@ -1003,6 +1028,7 @@ export class ModificationRequestComponent implements OnInit {
           });
           this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
         }
+        this.spinner.hide();
       }, error => {
         // console.log('Hubo un error ', error);
 
@@ -1020,6 +1046,7 @@ export class ModificationRequestComponent implements OnInit {
         }else {
           this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
         }
+        this.spinner.hide();
       });
     }
   }
@@ -1042,38 +1069,40 @@ export class ModificationRequestComponent implements OnInit {
         idSolicitud: this.dataSolicitudModID
       }
         
-        this.serviceModRequest.putModificationRequestSend(sendData).subscribe(res => {
-          // console.log(res);
-          
-          if(res.status == 200) {
-            this.openSnackBar('Éxito al Enviar', `Solicitud de Modificación N° ${res.data.idSolicitud} Enviada con éxito.`, 'success');
-            //Elimación de los registros en LocalStorage
-            ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-            ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
-            ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
-            ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
-            ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
-            this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
-          } else if (res.status == 404) {
-            let Data: string[] = [];
-            Data = Object.values(res.Data);
-            let erorsMessages = '';
-            Data.map(item => {
-              erorsMessages += item + '. ';
-            });
-            this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
-          } else if (res.Status == 404) {
-            let Data: string[] = [];
-            Data = Object.values(res.Data);
-            let erorsMessages = '';
-            Data.map(item => {
-              erorsMessages += item + '. ';
-            });
-            this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
-          }
-        }, error => {
-        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
-      });
+      this.spinner.show();
+      this.serviceModRequest.putModificationRequestSend(sendData).subscribe(res => {
+        // console.log(res);
+        if(res.status == 200) {
+          this.openSnackBar('Éxito al Enviar', `Solicitud de Modificación N° ${res.data.idSolicitud} Enviada con éxito.`, 'success');
+          //Elimación de los registros en LocalStorage
+          ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
+          this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+        } else if (res.status == 404) {
+          let Data: string[] = [];
+          Data = Object.values(res.Data);
+          let erorsMessages = '';
+          Data.map(item => {
+            erorsMessages += item + '. ';
+          });
+          this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
+        } else if (res.Status == 404) {
+          let Data: string[] = [];
+          Data = Object.values(res.Data);
+          let erorsMessages = '';
+          Data.map(item => {
+            erorsMessages += item + '. ';
+          });
+          this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
+        }
+        this.spinner.hide();
+      }, error => {
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.spinner.hide();
+     });
     } else {
       this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe estar en estado "En Modificación" ó "En Ajuste" para ser enviada.`);
     }
@@ -1091,6 +1120,7 @@ export class ModificationRequestComponent implements OnInit {
         idSolicitud: Number(this.dataSolicitudModID)
       }
 
+      this.spinner.show();
       this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
         // console.log(res);
         if (res.status == 200) {
@@ -1099,8 +1129,10 @@ export class ModificationRequestComponent implements OnInit {
         } else if (res.status == 400) {
           this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
         }
+        this.spinner.hide();
       }, error => {
         this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+        this.spinner.hide();
       });
     } else if(this.ProjectState === 'En Ejecución'){
       this.openDialog('Advertencia', 'Ingrese los comentarios de su revisión', 'warningInput', 'Seleccione el estado de la modificación con su revisión.')
@@ -1128,6 +1160,7 @@ export class ModificationRequestComponent implements OnInit {
         idSolicitud: Number(this.dataSolicitudModID)
       }
 
+      this.spinner.show();
       this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
         // console.log(res);
         if (res.status == 200) {
@@ -1136,7 +1169,9 @@ export class ModificationRequestComponent implements OnInit {
         } else if (res.status == 400) {
           this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
         }
+        this.spinner.hide();
       }, error => {
+        this.spinner.hide();
         this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
       });
       }
@@ -1153,6 +1188,7 @@ export class ModificationRequestComponent implements OnInit {
     ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
     ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
     if (this.StatusRequest === 'Modificacion' && this.AccessUser !== 'Revisor') {
+      this.spinner.show();
       this.serviceModRequest.deleteModificationRequest(Number(this.dataSolicitudModID)).subscribe(res => {
         // console.log(res.status);
         if (res.status == 200) {
@@ -1160,7 +1196,9 @@ export class ModificationRequestComponent implements OnInit {
           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
         }
+        this.spinner.hide();
       }, error => {
+        this.spinner.hide();
         this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
       });
     } else if(ProChartStorage.getItem(`estado${this.dataSolicitudModID}`) == null || this.StatusRequest === '') {            
