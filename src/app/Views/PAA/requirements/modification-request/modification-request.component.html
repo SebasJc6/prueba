@@ -34,6 +34,9 @@
             <button class="buton btn" mat-button mat-icon-button (click)="ResumenModificacion()">
                 Resumen
             </button>
+            <button class="Fil" #btnFiltrar mat-button (click)="openFilter()" *ngIf="viewFilter">
+                Filtrar
+            </button>
             <span class="btnExcel">
                 <button mat-button  (click)="exportFile()">Exportar<img class="imgExcel" src="../../../../assets/img/excel.jpg"></button>
             </span>
@@ -57,9 +60,8 @@
                 </div>
             </div>
         </form>
-        <!-- <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">
-            Filtrar
-        </button>
+
+        <!-- Opción filtrar -->
         <mat-card *ngIf="!viewFilter">
             <div class="close">
                 <button mat-icon-button (click)="closeFilter()" color="warn">
@@ -77,10 +79,13 @@
                         <div class="filter">
                             <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
                                 <mat-radio-button value="NumeroRequerimiento">Número de requerimiento</mat-radio-button>
-                                <mat-radio-button value="DependenciaDestino">Dependencia destino de recursos
-                                </mat-radio-button>
+                                <mat-radio-button value="DependenciaDestino">Dependencia destino de recursos</mat-radio-button>
                                 <mat-radio-button value="Descripcion">Descripción</mat-radio-button>
-                                <mat-radio-button value="Estado">Estado</mat-radio-button>
+                                <mat-radio-button value="ModalidadSeleccion">ModalidadSeleccion</mat-radio-button>
+                                <mat-radio-button value="ActuacionContractual">ActuacionContractual</mat-radio-button>
+                                <mat-radio-button value="NumeroContrato">NumeroContrato</mat-radio-button>
+                                <mat-radio-button value="TipoContrato">TipoContrato</mat-radio-button>
+                                <mat-radio-button value="Perfil">Perfil</mat-radio-button>
                             </mat-radio-group>
                         </div>
                         <mat-divider></mat-divider>
@@ -97,17 +102,37 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div class="form">
-                            <mat-form-field appearance="outline">
+                            <mat-form-field style="width: 10%;" appearance="outline">
                                 <mat-label>Número de requerimiento</mat-label>
                                 <input matInput formControlName="NumeroRequerimiento" type="number">
                             </mat-form-field>
-                            <mat-form-field style="width: 15%;" appearance="outline">
+                            <mat-form-field style="width: 10%;" appearance="outline">
                                 <mat-label>Dependencia destino de recursos</mat-label>
                                 <input matInput formControlName="DependenciaDestino" type="number">
                             </mat-form-field>
-                            <mat-form-field style="width: 30%;" appearance="outline">
+                            <mat-form-field style="width: 25%;" appearance="outline">
                                 <mat-label>Descripción</mat-label>
                                 <input matInput formControlName="Descripcion">
+                            </mat-form-field>
+                            <mat-form-field style="width: 20%;" appearance="outline">
+                                <mat-label>Modalidad de Selección</mat-label>
+                                <input matInput formControlName="ModalidadSeleccion">
+                            </mat-form-field>
+                            <mat-form-field style="width: 15%;" appearance="outline">
+                                <mat-label>Actuacion Contractual</mat-label>
+                                <input matInput formControlName="ActuacionContractual">
+                            </mat-form-field>
+                            <mat-form-field style="width: 10%;" appearance="outline">
+                                <mat-label>Numero Contrato</mat-label>
+                                <input matInput formControlName="NumeroContrato">
+                            </mat-form-field>
+                            <mat-form-field style="width: 20%;" appearance="outline">
+                                <mat-label>Tipo Contrato</mat-label>
+                                <input matInput formControlName="TipoContrato">
+                            </mat-form-field>
+                            <mat-form-field style="width: 15%;" appearance="outline">
+                                <mat-label>Perfil</mat-label>
+                                <input matInput formControlName="Perfil">
                             </mat-form-field>
                           
                         </div>
@@ -118,10 +143,8 @@
                     Filtrar
                 </button>
             </div>
-
-
-        </mat-card> -->
-
+        </mat-card>
+        <!-- /Opción Filtrar -->
 
     </div>
 
@@ -290,11 +313,11 @@
     </div>
 
     <div class="pagination " [formGroup]="paginationForm">
-        <!-- <mat-form-field class="take" appearance="legacy" matTooltip="Items por pagina">
+        <mat-form-field class="take" appearance="legacy" matTooltip="Items por pagina">
           <mat-select formControlName="take" (selectionChange)="getPagination()">
             <mat-option [value]="Item" *ngFor="let Item of pageSizeOptions">{{Item}}</mat-option>
           </mat-select>
-        </mat-form-field> -->
+        </mat-form-field>
         <a (click)="firstPage()">
             <mat-icon matTooltip="Primer pagina">first_page</mat-icon>
         </a>
