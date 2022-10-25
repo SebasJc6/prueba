@@ -890,6 +890,7 @@ export class ModificationRequestComponent implements OnInit {
   }
 
   onFileUpload() {
+    this.spinner.show();
     this.blockSave = 'Guardando archivo...';
 
     console.log('result fileName', this.fileName, 'base64File', this.base64File)
@@ -905,52 +906,55 @@ export class ModificationRequestComponent implements OnInit {
     formPost.archivos = [fileData]
     console.log('formPost', formPost)
     this.serviceFiles.postFile(formPost).subscribe(res => {
-      console.log('res', res)
+      // console.log('res', res)
       this.blockSave = 'Archivo Guardado.';
       this.openSnackBar('Éxito al Guardar', `Archivo Guardado.`, 'success');
-      this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
       this.blockSave = '';
-
+      this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
+      this.spinner.hide();
     }, error => {
-      console.log('error', error)
+      this.spinner.hide();
+      // console.log('error', error)
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     })
 
-
-    // this.uploadFile.fileName = this.fileName;
-    //     this.uploadFile.publicationAccepted = JSON.parse(result);
-    //     this.uploadFile.file = this.base64File;
-    //     if (this.uploadFile.fileName == '') {
-    //       alert('Debe seleccionar un archivo');
-    //     } else {
-    //       this.apiFile.upFile(this.uploadFile).subscribe(data => {
-    //         this.dataTable();
-    //         this.blockSave = ' Archivo subido correctamente';
-    //       })
-    //     }
-
   }
   getAllFiles(idProject: number, idRequets: number) {
+  //  this.spinner.show();
     this.serviceFiles.getAllFiles(idProject, idRequets).subscribe((data) => {
-      console.log('getAllFiles', data)
+      //console.log('getAllFiles', data)
       this.viewsFiles = data.data;
       this.dataSourceAttachedFiles = new MatTableDataSource(this.viewsFiles);
+    //  this.spinner.hide();
+    }, error => {
+   //   this.spinner.hide();
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     })
   }
   deleteFile(blobName: string) {
-    console.log('blobName delete', blobName)
+    this.spinner.show();
+    // console.log('blobName delete', blobName)
     this.serviceFiles.deleteFile(blobName).subscribe((data) => {
       console.log('deleteFile', data)
       this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
+      this.spinner.hide();
+    }, error => {
+      this.spinner.hide();
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     })
   }
   dowloadFile(blobName: string) {
-    console.log('blobName dowload', blobName)
+    this.spinner.show();
+    // console.log('blobName dowload', blobName)
     this.serviceFiles.dowloadFile(blobName).subscribe((dataFile) => {
-      console.log('dowloadFile', dataFile)
+      // console.log('dowloadFile', dataFile)
       this.dataFiles = dataFile;
       this.downloadPdf(this.dataFiles.fileAsBase64, this.dataFiles.fileName);
       // this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
+      this.spinner.hide();
+    }, error => {
+      this.spinner.hide();
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     })
   }
   downloadPdf(base64String: string, fileName: string) {
