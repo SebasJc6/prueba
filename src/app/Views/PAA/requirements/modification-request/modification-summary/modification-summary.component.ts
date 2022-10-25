@@ -90,17 +90,17 @@ export class ModificationSummaryComponent implements OnInit {
 
   getSummary(solModId: number, fuenteId: number, pageSummary: pageModificationSummaryI) {
     this.spinner.show();
-    this.summaryService.getSummary(solModId, fuenteId, pageSummary).subscribe(request => {
-      this.dataSource = request.data.items;
-      this.Increases = request.data.calculados[0].valor;
-      this.Decreases = request.data.calculados[1].valor;
-      this.Gap = request.data.calculados[2].valor;
-      this.numberPage = request.data.page;
-      this.numberPages = request.data.pages;
-      this.paginationForm.setValue({
-        take: pageSummary.take,
-        page: pageSummary.page
-      });
+    this.summaryService.getSummary(solModId, fuenteId, pageSummary).subscribe(request => {      
+        this.dataSource = request.data.items;
+        this.Increases = request.data.calculados[0].valor;
+        this.Decreases = request.data.calculados[1].valor;
+        this.Gap = request.data.calculados[2].valor;
+        this.numberPage = request.data.page;
+        this.numberPages = request.data.pages;
+        this.paginationForm.setValue({
+          take: pageSummary.take,
+          page: pageSummary.page
+        });
       this.spinner.hide();
     }, error => {
       this.spinner.hide();

@@ -29,7 +29,8 @@
        <div class="contTxt input">
         <p class="tltData">Fuente de los recursos</p>
         <mat-select class="contDataSelect" [(ngModel)]="selectedValueSource" (selectionChange)="selectSource()">
-            <mat-option *ngFor="let state of states" [value]="state.fuente_ID">{{state.descripcion}}</mat-option>
+          <mat-option [value]="0">Ver Todo</mat-option>
+          <mat-option *ngFor="let state of states" [value]="state.fuente_ID">{{state.descripcion}}</mat-option>
         </mat-select>
        </div>
 

@@ -181,8 +181,6 @@ export class ModificationRequestComponent implements OnInit {
 
     //Obtener token para manejar los roles
     this.AccessUser = this.authService.getRolUser();
-    // console.log(this.AccessUser);
-    // this.spinner.hide();
   }
 
 
@@ -230,7 +228,6 @@ export class ModificationRequestComponent implements OnInit {
     this.spinner.show();
     this.serviceModRequest.getModificationRequestByRequestId(requestId, filterForm).subscribe((data) => {
       this.viewsModificationRequest = data;
-console.log(data.data);
 
       this.ArrayDataTable = this.viewsModificationRequest.data.items;
       this.dataSourcePrin = new MatTableDataSource(this.viewsModificationRequest.data.items);
@@ -984,6 +981,8 @@ console.log(data.data);
     link.download = `${fileName}.pdf`
     link.click();
   }
+
+
   //Botón Guardar
   guardar() {
     let arrayDataSave: postDataModReqI[] = [];
@@ -1044,9 +1043,20 @@ console.log(data.data);
         }
         this.spinner.hide();
       }, error => {
-        //  console.log(error);
 
         if (error.status == 400) {
+          let Data: string[] = [];
+          Data = Object.values(error.error.data);
+          let erorsMessages = '';
+          Data.map(item => {
+            erorsMessages += item + '. ';
+          });
+          this.openSnackBar('Lo sentimos', error.error.Message, 'error', erorsMessages);
+          // ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
+          // this.ArrayDataStorage = [];
+          // this.reloadDataTbl();
+          // this.spinner.hide();
+        } else if (error.Status == 400) {
           let Data: string[] = [];
           Data = Object.values(error.error.Data);
           let erorsMessages = '';
@@ -1057,6 +1067,7 @@ console.log(data.data);
           // ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
           // this.ArrayDataStorage = [];
           // this.reloadDataTbl();
+          // this.spinner.hide();
         } else {
           this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
         }
