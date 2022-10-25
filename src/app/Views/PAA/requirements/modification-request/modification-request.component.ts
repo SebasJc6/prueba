@@ -23,16 +23,8 @@ import { AuthenticationService } from 'src/app/Services/Authentication/authentic
 import { AlertsPopUpComponent } from 'src/app/Templates/alerts-pop-up/alerts-pop-up.component';
 import { fileDataI, postFileI, tagsI } from 'src/app/Models/ModelsPAA/Files/Files.interface';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MatButton } from '@angular/material/button';
 
-
-export interface smallTable {
-  formato: string,
-  // fotocopia:              stri
-}
-const ELEMENT_DATA: smallTable[] = [
-  { formato: 'Formato XXXXX' },
-  { formato: 'Fotocopia CC' }
-]
 
 @Component({
   selector: 'app-modification-request',
@@ -77,19 +69,14 @@ export class ModificationRequestComponent implements OnInit {
     NumeroRequerimiento: new FormControl(),
     DependenciaDestino: new FormControl(''),
     Descripcion: new FormControl(''),
+    ModalidadSeleccion: new FormControl(''),
     ActuacionContractual: new FormControl(''),
     NumeroContrato: new FormControl(''),
     TipoContrato: new FormControl(''),
     Perfil: new FormControl(''),
-    Honorarios: new FormControl(),
-    SaldoRequerimiento: new FormControl(),
-    ValorAumenta: new FormControl(),
-    ValorDisminuye: new FormControl(),
-    NuevoSaldoApropiacion: new FormControl(),
-    ModalidadSeleccion: new FormControl(''),
     columna: new FormControl(''),
     ascending: new FormControl(false)
-  })
+  });
   paginationForm = new FormGroup({
     page: new FormControl(),
     take: new FormControl()
@@ -158,6 +145,8 @@ export class ModificationRequestComponent implements OnInit {
   //Propiedad para guardar la informacion a enviar en revisiones
   Revisiones = {} as RevisionSend;
 
+  @ViewChild('btnFiltrar') btnFiltrar!: MatButton;
+
   constructor(
     private serviceFiles: FilesService,
     private activeRoute: ActivatedRoute,
@@ -196,6 +185,12 @@ export class ModificationRequestComponent implements OnInit {
     // this.spinner.hide();
   }
 
+
+  ngAfterViewInit() {
+    this.btnFiltrar.focus();
+ }
+
+
   getRequestAndProject(id_project: number, id_request: number) {
     this.serviceModRequest.getModificationRequestByRequest(id_project, id_request).subscribe(res => {
       if (res.data.observacion) {
@@ -221,13 +216,30 @@ export class ModificationRequestComponent implements OnInit {
   }
 
   getModificationRequestByRequestId(requestId: number, filterForm: filterModificationRequestI) {
+    this.filterModificationRequest.NumeroRequerimiento = this.filterForm.value.NumeroRequerimiento || '';
+    this.filterModificationRequest.DependenciaDestino = this.filterForm.get('DependenciaDestino')?.value || '';
+    this.filterModificationRequest.Descripcion = this.filterForm.get('Descripcion')?.value || '';
+    this.filterModificationRequest.ModalidadSeleccion = this.filterForm.get('ModalidadSeleccion')?.value || '';
+    this.filterModificationRequest.ActuacionContractual = this.filterForm.get('ActuacionContractual')?.value || '';
+    this.filterModificationRequest.NumeroContrato = this.filterForm.get('NumeroContrato')?.value || '';
+    this.filterModificationRequest.TipoContrato = this.filterForm.get('TipoContrato')?.value || '';
+    this.filterModificationRequest.Perfil = this.filterForm.get('Perfil')?.value || '';
+    this.filterModificationRequest.columna = this.filterForm.get('columna')?.value || '';
+    this.filterModificationRequest.ascending = this.filterForm.get('ascending')?.value || false;
+
+    this.spinner.show();
     this.serviceModRequest.getModificationRequestByRequestId(requestId, filterForm).subscribe((data) => {
       this.viewsModificationRequest = data;
+console.log(data.data);
 
       this.ArrayDataTable = this.viewsModificationRequest.data.items;
       this.dataSourcePrin = new MatTableDataSource(this.viewsModificationRequest.data.items);
       this.numberPages = this.viewsModificationRequest.data.pages;
       this.numberPage = this.viewsModificationRequest.data.page;
+      this.paginationForm.setValue({
+        take: filterForm.take,
+        page: filterForm.page
+      });
       this.viewsCalReq = this.viewsModificationRequest.data.calculados[0].valor;
       this.viewsCalAum = this.viewsModificationRequest.data.calculados[1].valor;
       this.viewsCalDis = this.viewsModificationRequest.data.calculados[2].valor;
@@ -237,7 +249,7 @@ export class ModificationRequestComponent implements OnInit {
       let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
       this.reloadDataTbl(fromStorage);
     }, error => {
-
+      this.spinner.hide();
     });
   }
 
@@ -430,7 +442,7 @@ export class ModificationRequestComponent implements OnInit {
 
         let counterpart = {} as dateTableModificationI;
         counterpart.isContrapartida = true;
-        counterpart.fuenteId = result.fuente_ID;
+        counterpart.fuente = result.fuente_ID;
         counterpart.descripcion = result.descripcion;
         counterpart.valorAumenta = result.valorAumenta || 0;
         counterpart.valorDisminuye = result.valorDisminuye || 0;
@@ -479,6 +491,7 @@ export class ModificationRequestComponent implements OnInit {
     }
 
     this.dataSourcePrin = new MatTableDataSource(this.ArrayDataStorage.concat(this.ArrayDataTable));
+    this.spinner.hide();
   }
 
 
@@ -649,7 +662,7 @@ export class ModificationRequestComponent implements OnInit {
 
     let clasificaciones: any[] = objectsFromStorage.clasificaciones;
     clasificaciones.map(item => {
-      dataTable.fuenteId = item.fuente_ID;
+      dataTable.fuente = item.fuente_ID;
     });
 
     this.ArrayDataStorage.unshift(dataTable);
@@ -662,8 +675,8 @@ export class ModificationRequestComponent implements OnInit {
   getCodeSources() {
     let ArrayCodesSources: number[] = [];
     this.ArrayDataStorage.map(item => {
-      if (item.fuenteId) {
-        ArrayCodesSources.push(item.fuenteId);
+      if (item.fuente) {
+        ArrayCodesSources.push(item.fuente);
       }
     });
 
@@ -685,7 +698,7 @@ export class ModificationRequestComponent implements OnInit {
           modificacion_ID: element.modificacion_ID,
           contrapartida: {
             descripcion: element.descripcion,
-            fuente_ID: element.fuenteId,
+            fuente_ID: element.fuente,
             valorAumenta: element.valorAumenta,
             valorDisminuye: element.valorDisminuye
           }
@@ -711,7 +724,7 @@ export class ModificationRequestComponent implements OnInit {
     //console.log(this.paginationForm.value);
     this.filterModificationRequest.page = this.paginationForm.get('page')?.value;
     this.filterModificationRequest.take = this.paginationForm.get('take')?.value;
-    this.getModificationRequestByRequestId(+this.dataSolicitudModID, this.filterModificationRequest);
+    this.getModificationRequestByRequestId(Number(this.dataSolicitudModID), this.filterModificationRequest);
   }
 
   openFilter() {
@@ -724,10 +737,17 @@ export class ModificationRequestComponent implements OnInit {
   getFilter() {
     //console.log(this.filterForm.value)
     this.filterModificationRequest.NumeroRequerimiento = this.filterForm.value.NumeroRequerimiento || '';
+    this.filterModificationRequest.DependenciaDestino = this.filterForm.get('DependenciaDestino')?.value || '';
     this.filterModificationRequest.Descripcion = this.filterForm.get('Descripcion')?.value || '';
+    this.filterModificationRequest.ModalidadSeleccion = this.filterForm.get('ModalidadSeleccion')?.value || '';
+    this.filterModificationRequest.ActuacionContractual = this.filterForm.get('ActuacionContractual')?.value || '';
+    this.filterModificationRequest.NumeroContrato = this.filterForm.get('NumeroContrato')?.value || '';
+    this.filterModificationRequest.TipoContrato = this.filterForm.get('TipoContrato')?.value || '';
+    this.filterModificationRequest.Perfil = this.filterForm.get('Perfil')?.value || '';
+    this.filterModificationRequest.columna = this.filterForm.get('columna')?.value || '';
+    this.filterModificationRequest.ascending = this.filterForm.get('ascending')?.value || false;
 
-    this.getModificationRequestByRequestId(+this.dataSolicitudModID, this.filterModificationRequest);
-
+    this.getModificationRequestByRequestId(Number(this.dataSolicitudModID), this.filterModificationRequest);
     this.closeFilter();
   }
 
@@ -735,7 +755,7 @@ export class ModificationRequestComponent implements OnInit {
     if (this.numberPage < this.numberPages) {
       this.numberPage++;
       this.filterModificationRequest.page = this.numberPage.toString();
-      this.getModificationRequestByRequestId(+this.dataSolicitudModID, this.filterModificationRequest);
+      this.getModificationRequestByRequestId(Number(this.dataSolicitudModID), this.filterModificationRequest);
     }
   }
 
