@@ -577,7 +577,7 @@ export class PropertiesRequirementComponent implements OnInit {
     })
   }
   getAllReviewsArea() {
-    this.serviceProRequirement.getAllReviewsArea().subscribe(dataReviews => {
+    this.serviceProRequirement.getAllReviewsArea(+this.dataProjectID).subscribe(dataReviews => {
       this.allReviewsArea = dataReviews.data
       // //console.log('dataReviews',dataReviews.data)
 
@@ -632,7 +632,7 @@ export class PropertiesRequirementComponent implements OnInit {
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number) {
     this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
-      //  console.log('dataTemp', dataTemp)
+       console.log('dataTemp', dataTemp)
 
       this.reqID = dataTemp.requerimiento.requerimiento_ID
       //  console.log('dataTemporal', dataTemp)
