@@ -230,6 +230,7 @@ export class ModificationRequestComponent implements OnInit {
     this.spinner.show();
     this.serviceModRequest.getModificationRequestByRequestId(requestId, filterForm).subscribe((data) => {
       this.viewsModificationRequest = data;
+console.log(data.data);
 
       this.ArrayDataTable = this.viewsModificationRequest.data.items;
       this.dataSourcePrin = new MatTableDataSource(this.viewsModificationRequest.data.items);
@@ -247,7 +248,6 @@ export class ModificationRequestComponent implements OnInit {
 
       let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
       this.reloadDataTbl(fromStorage);
-      this.spinner.hide();
     }, error => {
       this.spinner.hide();
     });
@@ -442,7 +442,7 @@ export class ModificationRequestComponent implements OnInit {
 
         let counterpart = {} as dateTableModificationI;
         counterpart.isContrapartida = true;
-        counterpart.fuenteId = result.fuente_ID;
+        counterpart.fuente = result.fuente_ID;
         counterpart.descripcion = result.descripcion;
         counterpart.valorAumenta = result.valorAumenta || 0;
         counterpart.valorDisminuye = result.valorDisminuye || 0;
@@ -491,6 +491,7 @@ export class ModificationRequestComponent implements OnInit {
     }
 
     this.dataSourcePrin = new MatTableDataSource(this.ArrayDataStorage.concat(this.ArrayDataTable));
+    this.spinner.hide();
   }
 
 
@@ -661,7 +662,7 @@ export class ModificationRequestComponent implements OnInit {
 
     let clasificaciones: any[] = objectsFromStorage.clasificaciones;
     clasificaciones.map(item => {
-      dataTable.fuenteId = item.fuente_ID;
+      dataTable.fuente = item.fuente_ID;
     });
 
     this.ArrayDataStorage.unshift(dataTable);
@@ -674,8 +675,8 @@ export class ModificationRequestComponent implements OnInit {
   getCodeSources() {
     let ArrayCodesSources: number[] = [];
     this.ArrayDataStorage.map(item => {
-      if (item.fuenteId) {
-        ArrayCodesSources.push(item.fuenteId);
+      if (item.fuente) {
+        ArrayCodesSources.push(item.fuente);
       }
     });
 
@@ -697,7 +698,7 @@ export class ModificationRequestComponent implements OnInit {
           modificacion_ID: element.modificacion_ID,
           contrapartida: {
             descripcion: element.descripcion,
-            fuente_ID: element.fuenteId,
+            fuente_ID: element.fuente,
             valorAumenta: element.valorAumenta,
             valorDisminuye: element.valorDisminuye
           }

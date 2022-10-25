@@ -45,8 +45,6 @@ export class ModificationRequestService {
     '&take=' + formFilter.take +
     '&columna=' + formFilter.columna +
     '&ascending=' + formFilter.ascending;
-    console.log(dir);
-    
     return this.http.get<getModificationRequestByRequesI>(dir);
   }
 

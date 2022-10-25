@@ -34,7 +34,7 @@ export interface ModificationRequestByRequestIdI {
 }
 
 export interface dateTableModificationI {
-  fuenteId: number,
+  fuente: number,
   modificacion_ID: number,
   isContrapartida: boolean,
   numeroRequerimiento: number,
