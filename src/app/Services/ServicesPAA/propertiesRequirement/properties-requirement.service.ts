@@ -95,8 +95,8 @@ export class PropertiesRequirementService {
     return this.http.get<getAllUNSPSCI>(dir)
   }
 
-  getAllReviewsArea(): Observable<getAllReviewsAreaI> {
-    let dir = this.logicUrl + 'AreaRevision'
+  getAllReviewsArea(value: number): Observable<getAllReviewsAreaI> {
+    let dir = this.logicUrl + 'AreaRevision/ProjectId?ProjectId=' + value
     return this.http.get<getAllReviewsAreaI>(dir)
   }
 
