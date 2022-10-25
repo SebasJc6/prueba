@@ -37,7 +37,9 @@
                 (click)="Addcounterpart()">
                 Contrapartida
             </button>
-            <button class="buton btn" mat-button mat-icon-button (click)="ResumenModificacion()">
+            <button class="buton btn" mat-button mat-icon-button
+            [disabled]="(dataSolicitudModID !== '0') ? false : true"
+            (click)="ResumenModificacion()">
                 Resumen
             </button>
             <button class="Fil" #btnFiltrar mat-button (click)="openFilter()" *ngIf="viewFilter">

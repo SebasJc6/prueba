@@ -1,0 +1,39 @@
+<div mat-dialog-title class="flex-container">
+    <button mat-button class="close-icon" [mat-dialog-close]="false"> 
+        <mat-icon>close</mat-icon> 
+    </button> 
+</div>
+
+<!-- VE X: POP UP IMPORT EXCEL (Solicitud Modificación) -->
+<div>
+    <div class="card">
+        <h1 class="title" style="color: rgb(5, 148, 0);" mat-dialog-title>Importar Excel</h1>
+        
+        <div class="warningInput" style="margin-left: -4.5%;" mat-dialog-content>
+          <p>Importe un archivo aquí:</p>
+        </div>
+
+        <div class="warningInput">
+            <span class="btngImport">
+                <button type="button" mat-raised-button (click)="fileInput.click()">Importar<img class="imgImport"
+                        src="../../../../assets/img/import.png"></button>
+                <input type="file" hidden (change)="getFile($event)" #fileInput>
+            </span>
+        </div>
+
+        <div class="warningInput" style="margin-left: -4.5%;  margin-top: 0.6%;" mat-dialog-content>
+            <p>Ingrese la Justificación aquí: </p>
+        </div>
+
+        <div class="warningInput">
+            <!-- <mat-form-field > -->
+                <textarea [(ngModel)]="Justificacion" matInput #input maxlength="3000" class="contDataArea" rows="8" placeholder="Longitud 3000"></textarea>
+            <!-- </mat-form-field> -->
+        </div>
+
+        <div class="buttons" mat-dialog-actions>
+            <button mat-button class="butonWarningInput btn" (click)="importFile()" cdkFocusInitial>IMPORTAR</button>
+            <button mat-button class="butonWarningInput btn" [mat-dialog-close]="false">CANCELAR</button>
+        </div>
+    </div>
+</div>

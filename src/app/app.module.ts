@@ -64,11 +64,7 @@ import { CDPComponent } from './Views/PAA/requirements/cdp/cdp.component';
 import { BudgetModificationComponent } from './Views/PAA/requirements/properties-requirement/budget-modification/budget-modification.component';
 import { AuthInterceptorService } from './Services/Authentication/Interceptor/auth-interceptor.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
-
-//Interface Spinner
-interface NgxSpinnerConfig {
-  type?: string;
-}
+import { PopUpImportComponent } from './Views/PAA/requirements/modification-request/pop-up-import/pop-up-import.component';
 
 
 const materialModules = [
@@ -129,7 +125,8 @@ const materialModules = [
     LoginComponent,
     SpinnerComponent,
     CDPComponent,
-    BudgetModificationComponent
+    BudgetModificationComponent,
+    PopUpImportComponent
 
   ],
   imports: [
@@ -147,6 +144,7 @@ const materialModules = [
   providers:
     [
       AlertsPopUpComponent,
+      PopUpImportComponent,
       CurrencyPipe,
       { provide: LocationStrategy, useClass: HashLocationStrategy},
       {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true},
