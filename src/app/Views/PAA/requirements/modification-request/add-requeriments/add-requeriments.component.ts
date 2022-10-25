@@ -4,6 +4,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { dateTableModificationI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { addRequirementEdit, dataTableDataRequerimentI, filterDataRequerimentI } from 'src/app/Models/ModelsPAA/Requeriment/Requeriment.interface';
 import { RequerimentService } from 'src/app/Services/ServicesPAA/Requeriment/requeriment.service';
@@ -31,7 +32,8 @@ export class AddrequirementsComponent implements OnInit {
     public serviceRequeriment: RequerimentService,
     public dialogRef: MatDialogRef<AddrequirementsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
-  ) { dialogRef.disableClose = true; }
+    private spinner: NgxSpinnerService,) { dialogRef.disableClose = true; }
+    
   pageSizeOptions: number[] = [3, 6, 12];
   paginationForm = new FormGroup({
     page: new FormControl(),
@@ -66,6 +68,7 @@ export class AddrequirementsComponent implements OnInit {
   getDataRequeriment(projectId: number, filterDataRequertiments: filterDataRequerimentI) {
     this.filterDataRequertiments.NumeroRequerimiento = this.filterForm.get('NumeroRequerimiento')?.value || '';
     this.filterDataRequertiments.Descripcion = this.filterForm.get('Descripcion')?.value || '';
+    // this.spinner.show();
     this.serviceRequeriment.getDataRequeriment(projectId, filterDataRequertiments).subscribe((data) => {
       this.viewDataRequeriment = data;
       this.numberPages = this.viewDataRequeriment.data.pages;
@@ -74,10 +77,13 @@ export class AddrequirementsComponent implements OnInit {
       this.paginationForm.setValue({
         take: filterDataRequertiments.take,
         page: filterDataRequertiments.page
-      })
+      });
       this.dataSource = new MatTableDataSource(this.viewDataRequeriment.data.items);
       // console.log(data.data)
-    })
+      // this.spinner.hide();
+    }, error => {
+      // this.spinner.hide();
+    });
   }
   getPagination() {
     //console.log(this.paginationForm.value);

@@ -22,6 +22,7 @@ import jwt_decode from "jwt-decode";
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { AlertsPopUpComponent } from 'src/app/Templates/alerts-pop-up/alerts-pop-up.component';
 import { fileDataI, postFileI, tagsI } from 'src/app/Models/ModelsPAA/Files/Files.interface';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 export interface smallTable {
@@ -163,7 +164,8 @@ export class ModificationRequestComponent implements OnInit {
     public router: Router, public dialog: MatDialog,
     public serviceModRequest: ModificationRequestService,
     private snackBar: MatSnackBar,
-    private authService: AuthenticationService,) { }
+    private authService: AuthenticationService,
+    private spinner: NgxSpinnerService,) { }
 
 
   ngOnInit(): void {
@@ -191,6 +193,7 @@ export class ModificationRequestComponent implements OnInit {
     //Obtener token para manejar los roles
     this.AccessUser = this.authService.getRolUser();
     // console.log(this.AccessUser);
+    // this.spinner.hide();
   }
 
   getRequestAndProject(id_project: number, id_request: number) {
@@ -198,17 +201,23 @@ export class ModificationRequestComponent implements OnInit {
       if (res.data.observacion) {
         this.JustificationText = res.data.observacion;
       }
-    })
+    }, error => {
+
+    });
   }
 
   getModificationRequet(projectId: number) {
+    this.spinner.show();
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
       this.codProject = data.data.proyecto_COD;
       this.numModification = data.data.numero_Modificacion;
       this.nomProject = data.data.nombreProyecto;
       this.ProjectState = data.data.proyecto_Estado;
       // console.log(data.data.observacion)
-    })
+      this.spinner.hide();
+    }, error => {
+      this.spinner.hide();
+    });
   }
 
   getModificationRequestByRequestId(requestId: number, filterForm: filterModificationRequestI) {
@@ -227,10 +236,11 @@ export class ModificationRequestComponent implements OnInit {
 
       let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
       this.reloadDataTbl(fromStorage);
+    }, error => {
+
     });
   }
 
- 
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -278,14 +288,20 @@ export class ModificationRequestComponent implements OnInit {
             }
           });
           this.ArrayDataStorage.unshift(element);
+          // this.spinner.show();
           this.serviceModRequest.getRequerimentApproved(this.dataProjectID, element.requerimientoID).subscribe(data => {
             this.dataRequerimentApproved = [];
             this.dataRequerimentApproved.push(data);
             this.getRequeriment();
+            this.spinner.hide();
+          }, error => {
+            // this.spinner.hide();
           });
 
-          this.addDataTbl();
+          // this.addDataTbl();
         });
+
+        this.addDataTbl();
       }
     });
   }
@@ -761,6 +777,8 @@ export class ModificationRequestComponent implements OnInit {
         const FILE = new FormData();
         FILE.append('file', this.fileTmp.file);
 
+
+        this.spinner.show();
         this.serviceModRequest.importFile(body, FILE).subscribe(res => {
           let message = res.Message;
           let status = res.status;
@@ -792,6 +810,7 @@ export class ModificationRequestComponent implements OnInit {
             this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
             this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           }
+          this.spinner.hide();
         }, error => {
           let status = error.error.Status;
           let message = error.error.Message;
@@ -804,6 +823,7 @@ export class ModificationRequestComponent implements OnInit {
           if (status == 422) {
             this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
           }
+          this.spinner.hide();
         });
       }
     }
@@ -811,10 +831,12 @@ export class ModificationRequestComponent implements OnInit {
 
   exportFile() {
     const fileName = `Reporte_${Math.random()}.xlsx`;
+    this.spinner.show();
     this.serviceModRequest.exportFile(this.dataProjectID, this.dataSolicitudModID).subscribe(res => {
       // console.log(res);
       this.manageExcelFile(res, fileName);
     }, error => {
+      this.spinner.hide();
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     })
   }
@@ -830,6 +852,7 @@ export class ModificationRequestComponent implements OnInit {
     downloadLink.href = filePath;
     downloadLink.setAttribute('download', fileName);
     document.body.appendChild(downloadLink);
+    this.spinner.hide();
     downloadLink.click();
     this.openSnackBar('Éxito al Exportar', `${fileName}. Descargado correctamente.`, 'success');
   }
@@ -875,13 +898,13 @@ export class ModificationRequestComponent implements OnInit {
     fileData.fileAsBase64 = this.base64File;
 
     let formPost = {} as postFileI
-    let tags= {} as tagsI;
+    let tags = {} as tagsI;
     tags.idProject = +this.dataProjectID;
     tags.idSol = +this.dataSolicitudModID;
     formPost.tags = tags;
     formPost.archivos = [fileData]
     console.log('formPost', formPost)
-     this.serviceFiles.postFile(formPost).subscribe(res => {
+    this.serviceFiles.postFile(formPost).subscribe(res => {
       console.log('res', res)
       this.blockSave = 'Archivo Guardado.';
       this.openSnackBar('Éxito al Guardar', `Archivo Guardado.`, 'success');
@@ -909,28 +932,28 @@ export class ModificationRequestComponent implements OnInit {
   }
   getAllFiles(idProject: number, idRequets: number) {
     this.serviceFiles.getAllFiles(idProject, idRequets).subscribe((data) => {
-       console.log('getAllFiles',data)
+      console.log('getAllFiles', data)
       this.viewsFiles = data.data;
       this.dataSourceAttachedFiles = new MatTableDataSource(this.viewsFiles);
     })
   }
-  deleteFile(blobName:string){
-    console.log('blobName delete',blobName)
+  deleteFile(blobName: string) {
+    console.log('blobName delete', blobName)
     this.serviceFiles.deleteFile(blobName).subscribe((data) => {
-      console.log('deleteFile',data)
+      console.log('deleteFile', data)
       this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
     })
   }
-  dowloadFile(blobName:string){
-    console.log('blobName dowload',blobName)
+  dowloadFile(blobName: string) {
+    console.log('blobName dowload', blobName)
     this.serviceFiles.dowloadFile(blobName).subscribe((dataFile) => {
-      console.log('dowloadFile',dataFile)
+      console.log('dowloadFile', dataFile)
       this.dataFiles = dataFile;
-    this.downloadPdf(this.dataFiles.fileAsBase64,this.dataFiles.fileName);
+      this.downloadPdf(this.dataFiles.fileAsBase64, this.dataFiles.fileName);
       // this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
     })
   }
-  downloadPdf(base64String:string, fileName:string) {
+  downloadPdf(base64String: string, fileName: string) {
     const source = `data:application/pdf;base64,${base64String}`;
     const link = document.createElement("a");
     link.href = source;
@@ -939,7 +962,6 @@ export class ModificationRequestComponent implements OnInit {
   }
   //Botón Guardar
   guardar() {
-
     let arrayDataSave: postDataModReqI[] = [];
     let fromStorageArrayData = ProChartStorage.getItem(`arrayDatos${this.dataSolicitudModID}`);
     if (fromStorageArrayData != null) {
@@ -962,9 +984,9 @@ export class ModificationRequestComponent implements OnInit {
       postDataSave.idProyecto = Number(this.dataProjectID);
       postDataSave.observacion = this.JustificationText;
 
+      this.spinner.show();
       this.serviceModRequest.postModificationRequestSave(postDataSave).subscribe(res => {
         //  console.log(res);
-
         if (res.status == 200) {
           this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada con éxito.`, 'success');
           //Elimación de los registros en LocalStorage
@@ -996,6 +1018,7 @@ export class ModificationRequestComponent implements OnInit {
           this.ArrayDataStorage = [];
           this.reloadDataTbl();
         }
+        this.spinner.hide();
       }, error => {
         //  console.log(error);
 
@@ -1013,6 +1036,8 @@ export class ModificationRequestComponent implements OnInit {
         } else {
           this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
         }
+
+        this.spinner.hide();
       });
     } else {
       let putDataSave = {} as putModificationRequestI;
@@ -1025,8 +1050,8 @@ export class ModificationRequestComponent implements OnInit {
       putDataSave.deleteContraIDs = this.CounterpartsDelete;
 
 
+      this.spinner.show();
       this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
-
         if (res.status == 200) {
           this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
           //Elimación de los registros en LocalStorage
@@ -1053,6 +1078,7 @@ export class ModificationRequestComponent implements OnInit {
           });
           this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
         }
+        this.spinner.hide();
       }, error => {
         // console.log('Hubo un error ', error);
 
@@ -1070,6 +1096,7 @@ export class ModificationRequestComponent implements OnInit {
         } else {
           this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
         }
+        this.spinner.hide();
       });
     }
   }
@@ -1092,9 +1119,9 @@ export class ModificationRequestComponent implements OnInit {
         idSolicitud: this.dataSolicitudModID
       }
 
+      this.spinner.show();
       this.serviceModRequest.putModificationRequestSend(sendData).subscribe(res => {
         // console.log(res);
-
         if (res.status == 200) {
           this.openSnackBar('Éxito al Enviar', `Solicitud de Modificación N° ${res.data.idSolicitud} Enviada con éxito.`, 'success');
           //Elimación de los registros en LocalStorage
@@ -1121,8 +1148,10 @@ export class ModificationRequestComponent implements OnInit {
           });
           this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
         }
+        this.spinner.hide();
       }, error => {
         this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+        this.spinner.hide();
       });
     } else {
       this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe estar en estado "En Modificación" ó "En Ajuste" para ser enviada.`);
@@ -1141,6 +1170,7 @@ export class ModificationRequestComponent implements OnInit {
         idSolicitud: Number(this.dataSolicitudModID)
       }
 
+      this.spinner.show();
       this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
         // console.log(res);
         if (res.status == 200) {
@@ -1149,8 +1179,10 @@ export class ModificationRequestComponent implements OnInit {
         } else if (res.status == 400) {
           this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
         }
+        this.spinner.hide();
       }, error => {
         this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+        this.spinner.hide();
       });
     } else if (this.ProjectState === 'En Ejecución') {
       this.openDialog('Advertencia', 'Ingrese los comentarios de su revisión', 'warningInput', 'Seleccione el estado de la modificación con su revisión.')
@@ -1178,6 +1210,7 @@ export class ModificationRequestComponent implements OnInit {
           idSolicitud: Number(this.dataSolicitudModID)
         }
 
+        this.spinner.show();
         this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
           // console.log(res);
           if (res.status == 200) {
@@ -1186,7 +1219,9 @@ export class ModificationRequestComponent implements OnInit {
           } else if (res.status == 400) {
             this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
           }
+          this.spinner.hide();
         }, error => {
+          this.spinner.hide();
           this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
         });
       }
@@ -1203,6 +1238,7 @@ export class ModificationRequestComponent implements OnInit {
     ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
     ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
     if (this.StatusRequest === 'Modificacion' && this.AccessUser !== 'Revisor') {
+      this.spinner.show();
       this.serviceModRequest.deleteModificationRequest(Number(this.dataSolicitudModID)).subscribe(res => {
         // console.log(res.status);
         if (res.status == 200) {
@@ -1210,7 +1246,9 @@ export class ModificationRequestComponent implements OnInit {
           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
         }
+        this.spinner.hide();
       }, error => {
+        this.spinner.hide();
         this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
       });
     } else if (ProChartStorage.getItem(`estado${this.dataSolicitudModID}`) == null || this.StatusRequest === '') {

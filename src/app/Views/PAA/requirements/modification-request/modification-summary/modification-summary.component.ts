@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { itemsModificationSummaryI, pageModificationSummaryI } from 'src/app/Models/ModelsPAA/modificatioRequest/modification-summary/modification-summary';
 import { Sources } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
@@ -18,7 +19,8 @@ export class ModificationSummaryComponent implements OnInit {
   constructor(  public router: Router,
     private summaryService: ModificationSummaryService,
     private activeRoute: ActivatedRoute,
-    private serviceModRequest: ModificationRequestService) { }
+    private serviceModRequest: ModificationRequestService,
+    private spinner: NgxSpinnerService,) { }
   
     dataProjectID: string = '';
     dataSolicitudModID: string = '';
@@ -81,10 +83,13 @@ export class ModificationSummaryComponent implements OnInit {
   getSources(dataSolicitudModID: string) {
     this.summaryService.getSourcesRequest(dataSolicitudModID).subscribe(request => {
       this.states = request.data;
+    }, error => {
+
     });
   }
 
   getSummary(solModId: number, fuenteId: number, pageSummary: pageModificationSummaryI) {
+    this.spinner.show();
     this.summaryService.getSummary(solModId, fuenteId, pageSummary).subscribe(request => {
       this.dataSource = request.data.items;
       this.Increases = request.data.calculados[0].valor;
@@ -96,6 +101,9 @@ export class ModificationSummaryComponent implements OnInit {
         take: pageSummary.take,
         page: pageSummary.page
       });
+      this.spinner.hide();
+    }, error => {
+      this.spinner.hide();
     });
   }
 
@@ -104,6 +112,8 @@ export class ModificationSummaryComponent implements OnInit {
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
       this.codProject = data.data.proyecto_COD;
       this.nomProject = data.data.nombreProyecto;
+    }, error => {
+
     });
   }
 

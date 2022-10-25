@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 
 @Component({
@@ -13,7 +14,8 @@ export class CDPComponent implements OnInit {
 
   constructor( private activeRoute: ActivatedRoute,
     public router: Router,
-    private serviceModRequest: ModificationRequestService,) { }
+    private serviceModRequest: ModificationRequestService,
+    private spinner: NgxSpinnerService,) { }
 
   displayedColumns: string[] = [
     'Vigencia',
@@ -58,9 +60,13 @@ export class CDPComponent implements OnInit {
 
   //Obtener la información del proyecto para mostrar en miga de pan
   getModificationRequet(projectId: number) {
+    this.spinner.show();
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
       this.codProject = data.data.proyecto_COD;
       this.nomProject = data.data.nombreProyecto;
+      this.spinner.hide();
+    }, error => {
+      this.spinner.hide();
     });
   }
 

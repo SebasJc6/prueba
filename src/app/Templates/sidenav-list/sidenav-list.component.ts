@@ -3,6 +3,7 @@ import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/cor
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import jwt_decode from "jwt-decode";
+import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 
 
@@ -16,7 +17,8 @@ export class SidenavListComponent implements OnInit {
   @Output() public sidenavToggle = new EventEmitter();
 
   constructor(private observer: BreakpointObserver,
-    private router: Router, private authService: AuthenticationService) { }
+    private router: Router, private authService: AuthenticationService,
+    private spinner: NgxSpinnerService,) { }
 
   UserName: string = '';
 
@@ -40,7 +42,11 @@ export class SidenavListComponent implements OnInit {
 
   logOut() {
     this.authService.rmCookie();
-    this.router.navigate([`/`]);
+    this.spinner.show();
+    setTimeout(() => {
+      this.router.navigate([`/`]);
+      this.spinner.hide();
+    }, 1700);
   }
   
 

@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { dataAbstractI, responsibleAbstractI } from 'src/app/Models/ModelsPAA/Abstract/abstract';
 import { ProjectByIdI, responsableI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { AbstractService } from 'src/app/Services/ServicesPAA/Abstract/abstract.service';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
-
-
 
 
 @Component({
@@ -19,7 +18,7 @@ export class AbstractComponent implements OnInit {
     public serviceAbsctract: AbstractService,
     public router: Router,
     private activeRoute: ActivatedRoute,
-  ) { }
+    private spinner: NgxSpinnerService,) { }
 
   dataProjectID = '';
 
@@ -40,9 +39,13 @@ export class AbstractComponent implements OnInit {
   }
 
   getAbstract(projectId: string) {
+    this.spinner.show();
     this.serviceAbsctract.getAbstract(projectId).subscribe(request => {
       this.abstractData = request.data;
       this.responsibleAbstractData = request.data.responsable;
+      this.spinner.hide();
+    }, error => {
+      this.spinner.hide();
     });
   }
 
