@@ -17,7 +17,13 @@
             <span class="btngImport">
                 <button type="button" mat-raised-button (click)="fileInput.click()">Importar<img class="imgImport"
                         src="../../../../assets/img/import.png"></button>
-                <input type="file" hidden (change)="getFile($event)" #fileInput>
+                <input type="file" hidden 
+                    accept="application/xlsx"
+                    (change)="getFile($event)" #fileInput>
+            </span>
+
+            <span *ngIf="fileName != ''">
+                <p style="margin-top: 1%;">- {{fileName}}</p>
             </span>
         </div>
 
@@ -27,9 +33,15 @@
 
         <div class="warningInput">
             <!-- <mat-form-field > -->
-                <textarea [(ngModel)]="Justificacion" matInput #input maxlength="3000" class="contDataArea" rows="8" placeholder="Longitud 3000"></textarea>
-            <!-- </mat-form-field> -->
+                <textarea [(ngModel)]="Justificacion" matInput #input 
+                    maxlength="3000" 
+                    class="contDataArea" 
+                    rows="8" 
+                    placeholder="Se requiere modificar">
+                </textarea>
+                <!-- </mat-form-field> -->
         </div>
+        <mat-hint>{{input.value.length || 0}}/3000</mat-hint>
 
         <div class="buttons" mat-dialog-actions>
             <button mat-button class="butonWarningInput btn" (click)="importFile()" cdkFocusInitial>IMPORTAR</button>
