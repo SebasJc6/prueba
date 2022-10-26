@@ -6,6 +6,7 @@ import { filterModificationRequestI, getModificationRequestByRequesI, getModific
 import { getDataI } from 'src/app/Models/ModelsPAA/Requeriment/RequerimentApproved.interface';
 import { AuthenticationService } from '../../Authentication/authentication.service';
 import { AuthInterceptorService } from '../../Authentication/Interceptor/auth-interceptor.service';
+import { ImportBody } from 'src/app/Views/PAA/requirements/modification-request/pop-up-import/pop-up-import.component';
 
 @Injectable({
   providedIn: 'root'
@@ -71,9 +72,11 @@ export class ModificationRequestService {
   }
 
 
-  importFile(body: any, file: FormData): Observable<any> {
-    let dir = `${this.Url}/SolicitudMod/ImportFile?ProjectId=${body.ProjectId}&Observacion=${body.Observacion}`;
-    return this.http.post(dir, file);
+  importFile(id_project: number, info: any): Observable<any> {
+    let dir = `${this.Url}/SolicitudMod/ImportFile?projectId=${id_project}`;
+    console.log(info);
+    
+    return this.http.post(dir, info);
   }
 
 
