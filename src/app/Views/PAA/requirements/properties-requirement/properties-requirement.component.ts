@@ -353,6 +353,7 @@ export class PropertiesRequirementComponent implements OnInit {
       this.viewActionCancel = true;
     } else {
       this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
+      this.viewVersionMod = true;
     }
     if (this.AccessUser == 'Revisor') {
       this.viewsBtnReviews = true;
