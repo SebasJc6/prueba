@@ -33,9 +33,15 @@
 
         <div class="warningInput">
             <!-- <mat-form-field > -->
-                <textarea [(ngModel)]="Justificacion" matInput #input maxlength="3000" class="contDataArea" rows="8" placeholder="Longitud 3000"></textarea>
-            <!-- </mat-form-field> -->
+                <textarea [(ngModel)]="Justificacion" matInput #input 
+                    maxlength="3000" 
+                    class="contDataArea" 
+                    rows="8" 
+                    placeholder="Se requiere modificar">
+                </textarea>
+                <!-- </mat-form-field> -->
         </div>
+        <mat-hint>{{input.value.length || 0}}/3000</mat-hint>
 
         <div class="buttons" mat-dialog-actions>
             <button mat-button class="butonWarningInput btn" (click)="importFile()" cdkFocusInitial>IMPORTAR</button>

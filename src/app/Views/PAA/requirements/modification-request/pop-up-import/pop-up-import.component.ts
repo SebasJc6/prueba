@@ -45,22 +45,12 @@ export class PopUpImportComponent implements OnInit {
       if (type === 'xlsx') {
         if (this.Justificacion !== '') {
           
-          // let blob = new Blob([this.fileTmp.file], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-
           let FILE = new FormData();
           FILE.append('File', this.fileTmp.file);
-          
-          // console.log(this.fileTmp);
-          let File = this.fileTmp.file;
-          const body: any = {
-            Observacion: this.Justificacion,
-            File: FILE
-          };
+          FILE.append('Observacion', this.Justificacion);
 
-          console.log(FILE);
-          
           this.spinner.show();
-          this.serviceModRequest.importFile(this.dataProjectID, body).subscribe(res => {
+          this.serviceModRequest.importFile(this.dataProjectID, FILE).subscribe(res => {
 
             let message = res.Message;
             let status = res.status;
@@ -95,20 +85,24 @@ export class PopUpImportComponent implements OnInit {
             this.dialogRef.close();
             this.spinner.hide();
           }, error => {
-            console.log(error);
-            
+            // console.log(error);
            let status = error.error.status;
 
            if (status == 422) {
              let message = error.error.message;
-             let errorData: string[] = Object.values(error.error.data);
+             if (error.error.data) {
+               let errorData: string[] = Object.values(error.error.data);
+               errorData.map(item => {
+                 erorsMessages += item + '. ';
+                });
+              }
              let erorsMessages = '';
-             errorData.map(item => {
-               erorsMessages += item + '. ';
-             });
              this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
+           } else if (status == 500) {
+              this.openSnackBar('Lo sentimos', 'El documento Importado no cumple con los criterios de aceptación.', 'error');
+           } else {
+              this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
            }
-
             this.spinner.hide();
           });
         } else {

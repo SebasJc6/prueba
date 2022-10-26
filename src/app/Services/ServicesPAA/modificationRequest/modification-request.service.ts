@@ -74,8 +74,6 @@ export class ModificationRequestService {
 
   importFile(id_project: number, info: any): Observable<any> {
     let dir = `${this.Url}/SolicitudMod/ImportFile?projectId=${id_project}`;
-    console.log(info);
-    
     return this.http.post(dir, info);
   }
 
