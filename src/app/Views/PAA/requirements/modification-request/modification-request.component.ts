@@ -191,6 +191,7 @@ export class ModificationRequestComponent implements OnInit {
 
 
   getRequestAndProject(id_project: number, id_request: number) {
+    this.spinner.show();
     this.serviceModRequest.getModificationRequestByRequest(id_project, id_request).subscribe(res => {
       if (res.data !== null ) {
         this.JustificationText = res.data.observacion;
@@ -198,6 +199,7 @@ export class ModificationRequestComponent implements OnInit {
       this.openSnackBar('Lo sentimos', `Error en la Solicitud de Modificación.`, 'error', `Solicitud de Modificación no Existe.`);
         this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
       }
+      this.spinner.hide();
     }, error => {
 
     });
@@ -1173,7 +1175,7 @@ export class ModificationRequestComponent implements OnInit {
       this.serviceModRequest.putModificationRequestSend(sendData).subscribe(res => {
         // console.log(res);
         if (res.status == 200) {
-          this.openSnackBar('Éxito al Enviar', `Solicitud de Modificación N° ${res.data.idSolicitud} Enviada con éxito.`, 'success');
+          this.openSnackBar('Éxito al Enviar', `Solicitud de Modificación N° ${res.data.numSolicitud} Enviada con éxito.`, 'success');
           //Elimación de los registros en LocalStorage
           ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
