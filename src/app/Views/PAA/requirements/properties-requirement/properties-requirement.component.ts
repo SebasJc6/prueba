@@ -355,11 +355,9 @@ export class PropertiesRequirementComponent implements OnInit {
       this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
     }
     if (this.AccessUser == 'Revisor') {
-
       this.viewsBtnReviews = true;
       this.viewsReviews = true;
     } else {
-      this.viewVersionMod = true;
       this.errorNumReq = false;
       this.errorVerifyNumReq = false;
     }
