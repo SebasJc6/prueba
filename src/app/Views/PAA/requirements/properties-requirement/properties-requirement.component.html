@@ -681,6 +681,143 @@
                         </mat-accordion>
                     </mat-expansion-panel>
 
+                      <!-- SECCION REVISIONES -->
+                      <mat-expansion-panel class="menu-panel" *ngIf="viewsSeccionReviews">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <span class="title">Revisiones</span>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <!-- FORMULARIO REVISIONES -->
+                        <mat-card class="colorCard1">
+
+                            <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
+                            <div class="formCont">
+                                <div *ngIf="viewsFormReviews" >
+                                    <form [formGroup]="reviews" (ngSubmit)="addDataTbl('revisiones')">
+                                        <div class="tablaCont">
+                                            <div class="contTxt label2">
+                                                <p class="tltData">Área</p>
+                                                <mat-select formControlName="area" class="contDataSelect"
+                                                    (valueChange)="onSelectionChange($event , 'areaRevicion')"
+                                                    [displayWith]="displayFnArea">
+                                                    <mat-option [value]="item" *ngFor="let item of allReviewsArea">
+                                                        {{item.nombre}}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="errorArea">
+                                                    Campo <strong>Obligatorio</strong>
+                                                </mat-error>
+                                            </div>
+                                            <div class="contTxt label2">
+                                                <p class="tltData">Concepto</p>
+                                                <mat-select class="contDataSelect" formControlName="concepto"
+                                                    (valueChange)="onSelectionChange($event , 'conceptoRevicion')">
+                                                    <mat-option *ngFor="let item of allConcepts" [value]="item">{{item}}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="errorConcepto">
+                                                    Campo <strong>Obligatorio</strong>
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="tablaCont">
+                                            <div style="width: 96.5%;" class="contTxt">
+                                                <p class="tltData">Observaciones</p>
+                                                <input class="contData" formControlName="observaciones"
+                                                    (valueChange)="onSelectionChange($event , 'observacionRevicion')">
+                                                <mat-error *ngIf="errorObservaciones">
+                                                    Campo <strong>Obligatorio</strong>
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <!-- BOTON AÑADIR REGISTRO A LA TABLA REVISIONES -->
+                                        <mat-card-actions class="btnCard">
+                                            <!-- <button class="buton2 btn" mat-button mat-icon-button   (click)="addDataTbl('revisiones')"> -->
+                                            <button class="buton2 btn" mat-button mat-icon-button
+                                                (click)="btnReviews(0,'Agregar')">
+                                                AÑADIR
+                                            </button>
+                                        </mat-card-actions>
+                                    </form>
+                                </div>
+
+
+
+                                <!-- TABLA REVISIONES -->
+                                <div [ngClass]="{'tableReviews' : statusReq != 'Modificacion'|| 'Revision' ,
+                                'tbleRew' : statusReq == 'Revision' }">
+                                    <table mat-table [dataSource]="dataSourceRevisiones" class="mat-elevation-z8"
+                                        matSort>
+
+                                        <ng-container matColumnDef="fecha">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Fecha
+                                            <td mat-cell *matCellDef="let element">{{ element.fecha ||
+                                                element.fechaRevision}}</td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="usuario">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Usuario
+                                            <td mat-cell *matCellDef="let element">{{ element.usuario}}</td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="area">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Área
+                                            <td mat-cell *matCellDef="let element">{{ element.area.nombre ||
+                                                element.area}}</td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="concepto">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Concepto
+                                            <td mat-cell *matCellDef="let element">{{ element.concepto}}</td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="observacion">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Observación
+                                            <td mat-cell *matCellDef="let element">{{ element.observacion}}</td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="revision">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Revisión
+                                            <td mat-cell *matCellDef="let element">
+                                                <mat-checkbox [checked]="element.revision"
+                                                    (change)="showOptions($event.checked,element.revision_ID)">
+                                                </mat-checkbox>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="eliminar">
+                                            <tr>
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="Acc">
+                                                    Eliminar
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <div style="text-align: center;">
+                                                        <mat-icon mat-icon-button class="btnActions"
+                                                            matTooltip="Eliminar"
+                                                            (click)="btnReviews(element.revision_ID,'Delete')">
+                                                            delete</mat-icon>
+                                                    </div>
+                                                </td>
+                                            <tr>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="revisionesColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: revisionesColumns"></tr>
+                                    </table>
+                                </div>
+                                <!-- FIN TABLA -->
+                            </div>
+                        </mat-card>
+                    </mat-expansion-panel>
                 </mat-accordion>
 
                 <!-- SECCION DE BOTONES DE ACCION -->

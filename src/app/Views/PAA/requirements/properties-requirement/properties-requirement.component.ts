@@ -361,6 +361,8 @@ export class PropertiesRequirementComponent implements OnInit {
         this.viewVersionMod = true;
         this.viewsReviews = false;
         this.errorVerifyNumReq = false;
+        this.viewsSeccionReviews = true;
+        this.viewsFormReviews = false;
       }
     } else if (this.typePage == 'Editar') {
       if (this.AccessUser == 'Referente_PAA') {
@@ -396,6 +398,7 @@ export class PropertiesRequirementComponent implements OnInit {
           this.errorVerifyNumReq = false;
         }
       } else if (this.AccessUser == 'Revisor') {
+        this.getAllReviews(+this.dataRequirementID)
         this.getDataConsulta(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
         this.viewVersionMod = false;
         this.viewsReviews = true;
@@ -654,11 +657,11 @@ export class PropertiesRequirementComponent implements OnInit {
     })
   }
   getAllReviewsArea() {
-        this.serviceProRequirement.getAllReviewsArea(+this.dataProjectID).subscribe(dataReviews => {
-          this.allReviewsArea = dataReviews.data
-         console.log('dataReviews',dataReviews.data)
-        })
-      
+    this.serviceProRequirement.getAllReviewsArea(+this.dataProjectID).subscribe(dataReviews => {
+      this.allReviewsArea = dataReviews.data
+      console.log('dataReviews', dataReviews.data)
+    })
+
   }
   getAllConcepts() {
     this.serviceProRequirement.getAllConcepts().subscribe(dataConcept => {
