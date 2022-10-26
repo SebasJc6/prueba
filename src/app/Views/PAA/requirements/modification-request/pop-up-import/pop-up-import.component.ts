@@ -90,13 +90,13 @@ export class PopUpImportComponent implements OnInit {
 
            if (status == 422) {
              let message = error.error.message;
+             let erorsMessages = '';
              if (error.error.data) {
                let errorData: string[] = Object.values(error.error.data);
                errorData.map(item => {
                  erorsMessages += item + '. ';
                 });
               }
-             let erorsMessages = '';
              this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
            } else if (status == 500) {
               this.openSnackBar('Lo sentimos', 'El documento Importado no cumple con los criterios de aceptación.', 'error');

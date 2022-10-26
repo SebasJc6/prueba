@@ -192,8 +192,11 @@ export class ModificationRequestComponent implements OnInit {
 
   getRequestAndProject(id_project: number, id_request: number) {
     this.serviceModRequest.getModificationRequestByRequest(id_project, id_request).subscribe(res => {
-      if (res.data.observacion) {
+      if (res.data !== null ) {
         this.JustificationText = res.data.observacion;
+      } else if (this.dataSolicitudModID !== '0') {
+      this.openSnackBar('Lo sentimos', `Error en la Solicitud de Modificación.`, 'error', `Solicitud de Modificación no Existe.`);
+        this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
       }
     }, error => {
 
@@ -228,24 +231,27 @@ export class ModificationRequestComponent implements OnInit {
 
     this.spinner.show();
     this.serviceModRequest.getModificationRequestByRequestId(requestId, filterForm).subscribe((data) => {
-      this.viewsModificationRequest = data;
+      if (data.data !== null ) {
+        this.viewsModificationRequest = data;
+        this.ArrayDataTable = this.viewsModificationRequest.data.items;
+        this.dataSourcePrin = new MatTableDataSource(this.viewsModificationRequest.data.items);
+        this.numberPages = this.viewsModificationRequest.data.pages;
+        this.numberPage = this.viewsModificationRequest.data.page;
+        this.paginationForm.setValue({
+          take: filterForm.take,
+          page: filterForm.page
+        });
+        this.viewsCalReq = this.viewsModificationRequest.data.calculados[0].valor;
+        this.viewsCalAum = this.viewsModificationRequest.data.calculados[1].valor;
+        this.viewsCalDis = this.viewsModificationRequest.data.calculados[2].valor;
+        this.viewsCalApr = this.viewsModificationRequest.data.calculados[3].valor;
+        // console.log(this.viewsModificationRequest)
 
-      this.ArrayDataTable = this.viewsModificationRequest.data.items;
-      this.dataSourcePrin = new MatTableDataSource(this.viewsModificationRequest.data.items);
-      this.numberPages = this.viewsModificationRequest.data.pages;
-      this.numberPage = this.viewsModificationRequest.data.page;
-      this.paginationForm.setValue({
-        take: filterForm.take,
-        page: filterForm.page
-      });
-      this.viewsCalReq = this.viewsModificationRequest.data.calculados[0].valor;
-      this.viewsCalAum = this.viewsModificationRequest.data.calculados[1].valor;
-      this.viewsCalDis = this.viewsModificationRequest.data.calculados[2].valor;
-      this.viewsCalApr = this.viewsModificationRequest.data.calculados[3].valor;
-      // console.log(this.viewsModificationRequest)
+        let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
+        this.reloadDataTbl(fromStorage);
+      } else {
 
-      let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
-      this.reloadDataTbl(fromStorage);
+      }
     }, error => {
       this.spinner.hide();
     });

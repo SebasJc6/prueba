@@ -46,12 +46,20 @@
                 Filtrar
             </button>
             <span class="btnExcel">
-                <button mat-button (click)="exportFile()">Exportar<img class="imgExcel"
-                        src="../../../../assets/img/excel.jpg"></button>
+                <button mat-button 
+                    [disabled]="(dataSolicitudModID !== '0') ? false : true"
+                    (click)="exportFile()">
+                        Exportar
+                    <img class="imgExcel" src="../../../../assets/img/excel.jpg">
+                </button>
             </span>
             <span *ngIf="AccessUser === 'Referente_Planeacion'" class="btngImport">
-                <button type="button" mat-raised-button (click)="openChargeFile()">Importar<img class="imgImport"
-                        src="../../../../assets/img/import.png"></button>
+                <button type="button" mat-raised-button 
+                    (click)="openChargeFile()"
+                    [disabled]="(dataSolicitudModID == '0') ? false : true">
+                        Importar
+                    <img class="imgImport" src="../../../../assets/img/import.png">
+                </button>
                 <!-- <input type="file" hidden (change)="getFile($event)" #fileInput
                     [disabled]="(dataSolicitudModID !== '0') ? true : false"> -->
             </span>
