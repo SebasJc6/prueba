@@ -290,7 +290,7 @@ export interface responseVerifyDataSaveI {
 }
 export interface getDataAprobadaI {
     status: number,
-    Message: string,
+    message: string,
     title: string,
     data: getDataTemporalI
 }

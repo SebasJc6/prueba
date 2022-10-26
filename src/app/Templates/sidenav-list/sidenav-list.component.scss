@@ -79,7 +79,15 @@ mat-icon {
         color: white;
     }
 }
-
+.rol{
+    display: flex;
+    text-align: center;
+    font-weight: 800;
+    margin-left: 10%;
+   .rolName{
+        font-size: 12px;
+    }
+}
 .menu-head {
     color: #185564;
     text-transform: uppercase;

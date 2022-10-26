@@ -96,7 +96,7 @@ export class PropertiesRequirementService {
   }
 
   getAllReviewsArea(value: number): Observable<getAllReviewsAreaI> {
-    let dir = this.logicUrl + 'AreaRevision/ProjectId?ProjectId=' + value
+    let dir = this.logicUrl + 'AreaRevision/' + value + '/Active'
     return this.http.get<getAllReviewsAreaI>(dir)
   }
 
