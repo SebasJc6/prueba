@@ -24,6 +24,7 @@ import { AlertsPopUpComponent } from 'src/app/Templates/alerts-pop-up/alerts-pop
 import { fileDataI, postFileI, tagsI } from 'src/app/Models/ModelsPAA/Files/Files.interface';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatButton } from '@angular/material/button';
+import { PopUpImportComponent } from './pop-up-import/pop-up-import.component';
 
 
 @Component({
@@ -191,8 +192,11 @@ export class ModificationRequestComponent implements OnInit {
 
   getRequestAndProject(id_project: number, id_request: number) {
     this.serviceModRequest.getModificationRequestByRequest(id_project, id_request).subscribe(res => {
-      if (res.data.observacion) {
+      if (res.data !== null ) {
         this.JustificationText = res.data.observacion;
+      } else if (this.dataSolicitudModID !== '0') {
+      this.openSnackBar('Lo sentimos', `Error en la Solicitud de Modificación.`, 'error', `Solicitud de Modificación no Existe.`);
+        this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
       }
     }, error => {
 
@@ -227,24 +231,27 @@ export class ModificationRequestComponent implements OnInit {
 
     this.spinner.show();
     this.serviceModRequest.getModificationRequestByRequestId(requestId, filterForm).subscribe((data) => {
-      this.viewsModificationRequest = data;
+      if (data.data !== null ) {
+        this.viewsModificationRequest = data;
+        this.ArrayDataTable = this.viewsModificationRequest.data.items;
+        this.dataSourcePrin = new MatTableDataSource(this.viewsModificationRequest.data.items);
+        this.numberPages = this.viewsModificationRequest.data.pages;
+        this.numberPage = this.viewsModificationRequest.data.page;
+        this.paginationForm.setValue({
+          take: filterForm.take,
+          page: filterForm.page
+        });
+        this.viewsCalReq = this.viewsModificationRequest.data.calculados[0].valor;
+        this.viewsCalAum = this.viewsModificationRequest.data.calculados[1].valor;
+        this.viewsCalDis = this.viewsModificationRequest.data.calculados[2].valor;
+        this.viewsCalApr = this.viewsModificationRequest.data.calculados[3].valor;
+        // console.log(this.viewsModificationRequest)
 
-      this.ArrayDataTable = this.viewsModificationRequest.data.items;
-      this.dataSourcePrin = new MatTableDataSource(this.viewsModificationRequest.data.items);
-      this.numberPages = this.viewsModificationRequest.data.pages;
-      this.numberPage = this.viewsModificationRequest.data.page;
-      this.paginationForm.setValue({
-        take: filterForm.take,
-        page: filterForm.page
-      });
-      this.viewsCalReq = this.viewsModificationRequest.data.calculados[0].valor;
-      this.viewsCalAum = this.viewsModificationRequest.data.calculados[1].valor;
-      this.viewsCalDis = this.viewsModificationRequest.data.calculados[2].valor;
-      this.viewsCalApr = this.viewsModificationRequest.data.calculados[3].valor;
-      // console.log(this.viewsModificationRequest)
+        let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
+        this.reloadDataTbl(fromStorage);
+      } else {
 
-      let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
-      this.reloadDataTbl(fromStorage);
+      }
     }, error => {
       this.spinner.hide();
     });
@@ -777,74 +784,82 @@ export class ModificationRequestComponent implements OnInit {
 
 
 
-  getFile(event: any) {
-    const [file] = event.target.files;
-
-    if (file != null) {
-      this.fileTmp = {
-        file: file,
-        fileName: file.name
-      }
-      const type = this.fileTmp.fileName.split('.').pop();
-      if (type === 'xlsx') {
-        const body = {
-          ProjectId: this.dataProjectID,
-          Observacion: 'Observation'
-        };
-        const FILE = new FormData();
-        FILE.append('file', this.fileTmp.file);
-
-
-        this.spinner.show();
-        this.serviceModRequest.importFile(body, FILE).subscribe(res => {
-          let message = res.Message;
-          let status = res.status;
-          let Status = res.Status;
-          let Data: string[] = [];
-
-
-          if (status == 404) {
-            Data = Object.values(res.Data);
-          } else if (status == 200) {
-            this.idSolicitudImport = res.data.idSolicitud;
-          } else if (Status == 404) {
-            Data = Object.values(res.Data);
-          }
-
-          let erorsMessages = '';
-          Data.map(item => {
-            erorsMessages += item + '. ';
-          });
-
-          if (status == 404) {
-            this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
-          } else if (status == 200) {
-            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
-            this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
-          } else if (Status == 404) {
-            this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
-          } else if (Status == 200) {
-            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
-            this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
-          }
-          this.spinner.hide();
-        }, error => {
-          let status = error.error.Status;
-          let message = error.error.Message;
-          let errorData: string[] = Object.values(error.error.Data);
-          let erorsMessages = '';
-          errorData.map(item => {
-            erorsMessages += item + '. ';
-          });
-
-          if (status == 422) {
-            this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
-          }
-          this.spinner.hide();
-        });
-      }
-    }
+  openChargeFile() {
+    const dialogRef = this.dialog.open(PopUpImportComponent, {
+      width: '1000px',
+      height: '500px',
+      data: this.dataProjectID,
+    });
   }
+
+  // getFile(event: any) {
+  //   const [file] = event.target.files;
+
+  //   if (file != null) {
+  //     this.fileTmp = {
+  //       file: file,
+  //       fileName: file.name
+  //     }
+  //     const type = this.fileTmp.fileName.split('.').pop();
+  //     if (type === 'xlsx') {
+  //       const body = {
+  //         ProjectId: this.dataProjectID,
+  //         Observacion: 'Observation'
+  //       };
+  //       const FILE = new FormData();
+  //       FILE.append('file', this.fileTmp.file);
+
+
+  //       this.spinner.show();
+  //       this.serviceModRequest.importFile(body, FILE).subscribe(res => {
+  //         let message = res.Message;
+  //         let status = res.status;
+  //         let Status = res.Status;
+  //         let Data: string[] = [];
+
+
+  //         if (status == 404) {
+  //           Data = Object.values(res.Data);
+  //         } else if (status == 200) {
+  //           this.idSolicitudImport = res.data.idSolicitud;
+  //         } else if (Status == 404) {
+  //           Data = Object.values(res.Data);
+  //         }
+
+  //         let erorsMessages = '';
+  //         Data.map(item => {
+  //           erorsMessages += item + '. ';
+  //         });
+
+  //         if (status == 404) {
+  //           this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
+  //         } else if (status == 200) {
+  //           this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
+  //           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+  //         } else if (Status == 404) {
+  //           this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
+  //         } else if (Status == 200) {
+  //           this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
+  //           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+  //         }
+  //         this.spinner.hide();
+  //       }, error => {
+  //         let status = error.error.Status;
+  //         let message = error.error.Message;
+  //         let errorData: string[] = Object.values(error.error.Data);
+  //         let erorsMessages = '';
+  //         errorData.map(item => {
+  //           erorsMessages += item + '. ';
+  //         });
+
+  //         if (status == 422) {
+  //           this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
+  //         }
+  //         this.spinner.hide();
+  //       });
+  //     }
+  //   }
+  // }
 
   exportFile() {
     const fileName = `Reporte_${Math.random()}.xlsx`;

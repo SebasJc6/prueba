@@ -7,7 +7,7 @@
 <!-- VE X: POP UP IMPORT EXCEL (Solicitud Modificación) -->
 <div>
     <div class="card">
-        <h1 class="title" style="color: rgb(5, 148, 0);" mat-dialog-title>Importar Excel</h1>
+        <h1 class="title" style="color: #185564;" mat-dialog-title>IMPORTAR EXCEL</h1>
         
         <div class="warningInput" style="margin-left: -4.5%;" mat-dialog-content>
           <p>Importe un archivo aquí:</p>
@@ -17,7 +17,13 @@
             <span class="btngImport">
                 <button type="button" mat-raised-button (click)="fileInput.click()">Importar<img class="imgImport"
                         src="../../../../assets/img/import.png"></button>
-                <input type="file" hidden (change)="getFile($event)" #fileInput>
+                <input type="file" hidden 
+                    accept="application/xlsx"
+                    (change)="getFile($event)" #fileInput>
+            </span>
+
+            <span *ngIf="fileName != ''">
+                <p style="margin-top: 1%;">- {{fileName}}</p>
             </span>
         </div>
 
@@ -27,9 +33,15 @@
 
         <div class="warningInput">
             <!-- <mat-form-field > -->
-                <textarea [(ngModel)]="Justificacion" matInput #input maxlength="3000" class="contDataArea" rows="8" placeholder="Longitud 3000"></textarea>
-            <!-- </mat-form-field> -->
+                <textarea [(ngModel)]="Justificacion" matInput #input 
+                    maxlength="3000" 
+                    class="contDataArea" 
+                    rows="8" 
+                    placeholder="Se requiere modificar">
+                </textarea>
+                <!-- </mat-form-field> -->
         </div>
+        <mat-hint>{{input.value.length || 0}}/3000</mat-hint>
 
         <div class="buttons" mat-dialog-actions>
             <button mat-button class="butonWarningInput btn" (click)="importFile()" cdkFocusInitial>IMPORTAR</button>
