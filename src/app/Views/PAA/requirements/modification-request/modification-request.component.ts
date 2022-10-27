@@ -1191,6 +1191,8 @@ export class ModificationRequestComponent implements OnInit {
             this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           } else if (res.status == 400) {
             this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
+          } else if (res.status == 404) {
+            this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
           }
           this.spinner.hide();
         }, error => {
