@@ -217,7 +217,7 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Descripción (Objeto del contrato)</p>
-                                        <textarea class="contDataArea" matInput #input maxlength="3000" formControlName="descripcion"></textarea>
+                                        <textarea class="contDataArea"  #input maxlength="3000" formControlName="descripcion"></textarea>
                                         <mat-hint align="end">{{input.value.length || 0}}/3000</mat-hint>
                                         <mat-error *ngIf="errorDescripcionCont">
                                             Campo <strong>Obligatorio</strong>
