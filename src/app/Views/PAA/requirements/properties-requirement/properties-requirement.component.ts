@@ -352,6 +352,7 @@ export class PropertiesRequirementComponent implements OnInit {
     if (this.typePage == 'Vista') {
       this.viewBtnVersion = false;
       this.viewVersion = true;
+      this.viewActionCancel = true;
       this.getDataAprobad(+this.dataProjectID, +this.dataRequirementID);
     } else if (this.typePage == 'Nuevo') {
       if (this.AccessUser != 'Revisor') {
@@ -879,11 +880,6 @@ export class PropertiesRequirementComponent implements OnInit {
     let idsCodigos = this.dataTableCodigos.map((item) => {
       return item.unspsC_ID = item.unspsC_ID
     })
-
-    //     //console.log('form value', this.proRequirementeForm.value)
-    // //console.log('this.proRequirementeForm.controls.infoBasicaForm.value.descripcion',this.proRequirementeForm.controls.infoBasicaForm.value.descripcion)
-    // //console.log('this.proRequirementeForm.controls.infoBasicaForm.controls[descripcion].value',this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value)
-    //    return
     if (this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].value == null) {
       this.errorNumReq = true;
     } if (this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == null) {
@@ -907,20 +903,9 @@ export class PropertiesRequirementComponent implements OnInit {
     } if (this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == null) {
       this.errorDescripcionCont = true;
     } else {
-
-      //  console.log('this.proRequirementeForm.value', this.proRequirementeForm.value)
       this.formVerifyComplete['infoBasica'] = this.proRequirementeForm.controls.infoBasicaForm.value
 
-      // if (this.formEditRequirement = true) {
-      //   this.dataCodigos = this.codigosTemporal
-      //   this.dataClasificacion = this.cadenasPresupuestalesTemporal
-      //   this.formVerifyComplete['clasificaciones'] = this.cadenasPresupuestalesTemporal
-      //   this.formVerifyComplete['codigos'] = this.codigosTemporal
-      // } else {
-      //   this.dataCodigos = this.dataTableCodigos
-      //   this.dataClasificacion = this.dataTableClasificaciones
 
-      // }
 
       let dtaCla = ProChartStorage.getItem('dataTableClacificaciones')
       this.dataClasificacion = JSON.parse(dtaCla || '[]')
@@ -931,9 +916,6 @@ export class PropertiesRequirementComponent implements OnInit {
 
       //  console.log('this.dataClasificacion', this.dataClasificacion)
       this.dataClasificacion.forEach((item: any) => {
-        // if(this.formEditRequirement = true){
-        //    console.log('dataClasificacion', item)
-        // }
         item.anioVigRecursos = item.anioVigRecursos
         item.proj_ID = +this.dataProjectID
         item.mgA_ID = item.mga.mgA_ID
@@ -1025,7 +1007,7 @@ export class PropertiesRequirementComponent implements OnInit {
         //  console.log('formModificationRequest', this.formModificationRequest)
 
         this.formModificationRequest.idProyecto = +this.dataProjectID
-        this.formModificationRequest.observacion = '' 
+        this.formModificationRequest.observacion = 'editRequeriment'
         let saveDataEditDatos = {} as saveDataEditDatosI
         saveDataEditDatos.modificacion_ID = +this.dataRequirementID
 
