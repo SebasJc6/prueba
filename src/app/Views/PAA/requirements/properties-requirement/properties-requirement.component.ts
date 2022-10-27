@@ -434,27 +434,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
     }
-    // if (this.typePage == 'Nuevo') {
-    //   this.dataRequirementNum = this.dataRequirementID;
-    //   this.viewVersionMod = true;
-    // } else if (this.typePage == 'Vista') {
-    //   this.getDataAprobad(+this.dataProjectID, +this.dataRequirementID);
-    //   this.viewBtnVersion = false;
-    //   this.viewVersionMod = false;
-    //   this.viewVersion = true;
-    //   this.viewActionCancel = true;
-    // } else if (this.typePage == 'Editar')  {
-    //   this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
-    //   this.viewVersionMod = true;
-    //   this.viewsReviews = false;
-    // }
-    // if (this.AccessUser == 'Revisor') {
-    //   this.viewsBtnReviews = true;
-    // } else {
-    //   this.errorNumReq = false;
-    //   this.errorVerifyNumReq = false;
-    // }
-    // this.getAllReviews(+this.dataRequirementID);
+   
   }
 
   currencyInput() {
@@ -468,26 +448,6 @@ export class PropertiesRequirementComponent implements OnInit {
     });
   }
 
-  //exampole
-
-  // public validation_msgs = {
-  //   'auxiliar': [
-  //     { type: 'invalidAutocompleteAuxiliar', message: 'Contact name not recognized. Click one of the autocomplete options.' },
-  //     { type: 'required', message: 'auxiliar is required.' }
-  //   ],
-  //   'phoneLabelAutocompleteControl': [
-  //     { type: 'invalidAutocompleteString', message: 'Phone label not recognized. Click one of the autocomplete options.' },
-  //     { type: 'required', message: 'Phone label is required.' }
-  //   ]
-  // }
-  // private _filterContacts(codigoAuxiliar: string): getAllAuxiliarDataI[] {
-  //   if (codigoAuxiliar === '') {
-  //     return this.allAuxiliar.slice()
-  //   }
-  //   const filterValue = codigoAuxiliar.toLowerCase()
-  //   return this.allAuxiliar.filter(option => option.codigoAuxiliar.toLowerCase().includes(filterValue))
-  // }
-  //
 
   valueRequired() {
     this.reviews.controls.observaciones.valueChanges.pipe(
@@ -681,20 +641,23 @@ export class PropertiesRequirementComponent implements OnInit {
     })
   }
   verifyNumReq() {
-    this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].valueChanges.pipe(
-      distinctUntilChanged()
-    ).subscribe(val => {
-      this.serviceProRequirement.verifyNumReq(+this.dataProjectID, val).subscribe(data => {
-        this.errorNumReq = false
-        if (data.data == false) {
-          this.errorVerifyNumReq = true
-          this.msjVerifyNumReq = data.title
-        } else {
-          this.errorVerifyNumReq = false
-          this.msjVerifyNumReq = ''
-        }
+    if (this.typePage == 'Nuevo') {
+      this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].valueChanges.pipe(
+        distinctUntilChanged()
+      ).subscribe(val => {
+        this.serviceProRequirement.verifyNumReq(+this.dataProjectID, val).subscribe(data => {
+          this.errorNumReq = false
+          if (data.data == false) {
+            this.errorVerifyNumReq = true
+            this.msjVerifyNumReq = data.title
+          } else {
+            this.errorVerifyNumReq = false
+            this.msjVerifyNumReq = ''
+          }
+        })
       })
-    })
+    }
+   
   }
   valuePerfil() {
     this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].valueChanges.pipe(
@@ -1062,7 +1025,7 @@ export class PropertiesRequirementComponent implements OnInit {
         //  console.log('formModificationRequest', this.formModificationRequest)
 
         this.formModificationRequest.idProyecto = +this.dataProjectID
-        this.formModificationRequest.observacion = 'se edito requerimiento'
+        this.formModificationRequest.observacion = '' 
         let saveDataEditDatos = {} as saveDataEditDatosI
         saveDataEditDatos.modificacion_ID = +this.dataRequirementID
 
