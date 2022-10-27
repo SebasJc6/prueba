@@ -19,6 +19,7 @@ export interface modificationRequestI {
   numero_Modificacion: number,
   nombreProyecto: string,
   proyecto_Estado: string,
+  solicitud_Estado: string,
   datos: ModificationRequestByRequestIdI,
   observacion: string,
   archivos: archivosI

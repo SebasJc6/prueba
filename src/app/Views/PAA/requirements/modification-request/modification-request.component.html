@@ -23,17 +23,17 @@
     <div class="ActionsUp">
         <div class="btnUpAction">
             <button *ngIf="AccessUser === 'Referente_PAA'" class="buton btn" mat-button mat-icon-button
-                [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true"
+                [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true"
                 (click)="newRequeriment()">
                 Nuevo
             </button>
             <button *ngIf="AccessUser === 'Referente_PAA'" class="buton btn" mat-button mat-icon-button
-                [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true"
+                [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true"
                 (click)="Addrequirement()">
                 Modificar
             </button>
             <button *ngIf="AccessUser === 'Referente_PAA'" class="buton btn" mat-button mat-icon-button
-                [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true"
+                [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true"
                 (click)="Addcounterpart()">
                 Contrapartida
             </button>
@@ -331,7 +331,7 @@
 
                             <button *ngIf="AccessUser === 'Referente_PAA'" mat-icon-button
                                 (click)="removeDataTbl(element)"
-                                [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true">
+                                [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true">
                                 <mat-icon mat-icon-button class="btnActions" matTooltip="Eliminar">delete</mat-icon>
                             </button>
                         </div>
@@ -383,7 +383,7 @@
         <mat-form-field hintLabel="Máximo 3000 caracteres" appearance="outline">
             <textarea matInput #input maxlength="3000" [(ngModel)]="JustificationText" rows="8"
                 placeholder="Se requiere modificar"
-                [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') && AccessUser === 'Referente_PAA' ? false : true"></textarea>
+                [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') && AccessUser === 'Referente_PAA' ? false : true"></textarea>
             <mat-hint align="end">{{input.value.length || 0}}/3000</mat-hint>
         </mat-form-field>
 
@@ -412,7 +412,7 @@
             &nbsp;<strong>{{ blockSave }}</strong>
             <input 
                 type="file" accept="application/pdf"
-                [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true"
+                [disabled]="((StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') && dataSolicitudModID != '0') ? false : true"
                 class="file-input" (change)="onFileSelected($event)" #fileUpload />
         </div>
 
@@ -431,7 +431,7 @@
                         <mat-icon mat-icon-button 
                             *ngIf="AccessUser == 'Referente_PAA'" mat-icon-button 
                             class="btnActions"
-                            [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true"
+                            [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true"
                             matTooltip="Elimina el archivo adjunto" 
                             (click)="deleteFile(element.blobName)">delete 
                         </mat-icon>
@@ -485,7 +485,7 @@
 
     <mat-card-actions>
         <button *ngIf="AccessUser == 'Referente_PAA'" class="buton btn" mat-button mat-icon-button
-            [disabled]="(StatusRequest == 'Modificacion' || StatusRequest == 'Ajuste' || StatusRequest == '') ? false : true"
+            [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true"
             (click)="guardar()">
             Guardar
         </button>

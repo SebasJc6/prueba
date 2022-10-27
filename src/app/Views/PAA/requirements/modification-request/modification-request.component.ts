@@ -163,8 +163,7 @@ export class ModificationRequestComponent implements OnInit {
     this.filterModificationRequest.take = 20;
     this.dataSolicitudModID = this.activeRoute.snapshot.paramMap.get('idSol') || '';
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
-    this.getModificationRequet(+this.dataProjectID);
-    this.StatusRequest = ProChartStorage.getItem(`estado${this.dataSolicitudModID}`) || '';
+    this.getModificationRequet(Number(this.dataProjectID), Number(this.dataSolicitudModID));
     if (this.dataSolicitudModID != '0') {
       this.getModificationRequestByRequestId(+this.dataSolicitudModID, this.filterModificationRequest);
       this.getRequestAndProject(Number(this.dataProjectID), Number(this.dataSolicitudModID));
@@ -205,14 +204,14 @@ export class ModificationRequestComponent implements OnInit {
     });
   }
 
-  getModificationRequet(projectId: number) {
+  getModificationRequet(projectId: number, requestID: number) {
     this.spinner.show();
-    this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
+    this.serviceModRequest.getModificationRequestByRequest(projectId, requestID).subscribe((data) => {
       this.codProject = data.data.proyecto_COD;
       this.numModification = data.data.numero_Modificacion;
       this.nomProject = data.data.nombreProyecto;
       this.ProjectState = data.data.proyecto_Estado;
-      // console.log(data.data.observacion)
+      this.StatusRequest = data.data.solicitud_Estado || '';
       this.spinner.hide();
     }, error => {
       this.spinner.hide();
@@ -1033,7 +1032,6 @@ export class ModificationRequestComponent implements OnInit {
           ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
         } else if (res.status == 404) {
 
@@ -1087,7 +1085,7 @@ export class ModificationRequestComponent implements OnInit {
       this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe guardar o eliminar los requerimientos nuevos.`);
     } else if (fromStorageCounters !== null) {
       this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe guardar o eliminar las contrapartidas nuevas.`);
-    } else if (this.StatusRequest == 'Modificacion' || this.StatusRequest == 'Ajuste') {
+    } else if (this.StatusRequest == 'En Modificación' || this.StatusRequest == 'En Ajuste') {
 
       let sendData = {
         idProyecto: this.dataProjectID,
@@ -1104,7 +1102,6 @@ export class ModificationRequestComponent implements OnInit {
           ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
         } else if (res.status == 404) {
           let Data: string[] = [];
@@ -1211,32 +1208,30 @@ export class ModificationRequestComponent implements OnInit {
     ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
     ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
     ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
-    if (this.StatusRequest === 'Modificacion' && this.AccessUser !== 'Revisor') {
+    if (this.StatusRequest === 'En Modificación' && this.AccessUser !== 'Revisor') {
       this.spinner.show();
       this.serviceModRequest.deleteModificationRequest(Number(this.dataSolicitudModID)).subscribe(res => {
         // console.log(res.status);
         if (res.status == 200) {
           this.openSnackBar('Acciones Canceladas', `Solicitud de Modificación Eliminada.`, 'success');
           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
-          ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
         }
         this.spinner.hide();
       }, error => {
         this.spinner.hide();
         this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
       });
-    } else if (ProChartStorage.getItem(`estado${this.dataSolicitudModID}`) == null || this.StatusRequest === '') {
+    } else if (this.StatusRequest == null || this.StatusRequest === '') {
       this.router.navigate([`/WAPI/PAA/Requerimientos/${this.dataProjectID}`]);
-    } else if (this.StatusRequest == 'Revision') {
+    } else if (this.StatusRequest == 'En Revisión') {
       this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
-    } else if (this.StatusRequest == 'Ajuste') {
+    } else if (this.StatusRequest == 'En Ajuste') {
       this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
     } else if (this.StatusRequest == 'Aprobada') {
       this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
     } else if (this.StatusRequest == 'Rechazada') {
       this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
     }
-    ProChartStorage.removeItem(`estado${this.dataSolicitudModID}`);
 
   }
 
