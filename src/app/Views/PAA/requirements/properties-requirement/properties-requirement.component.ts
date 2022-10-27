@@ -271,6 +271,7 @@ export class PropertiesRequirementComponent implements OnInit {
   codigosColumnsRew: string[] = ['codigoUNSPSC', 'descripcion'];
   //INFORMACION PARA LA TABLA REVICIONES
   revisionesColumns: string[] = ['fecha', 'usuario', 'area', 'concepto', 'observacion', 'revision', 'eliminar'];
+  revisionesColumnsView: string[] = ['fecha', 'usuario', 'area', 'concepto', 'observacion'];
   //Objeto con la informacion de acceso del Usuario
   AccessUser: string = '';
   viewsReviews: boolean = false;
@@ -278,12 +279,15 @@ export class PropertiesRequirementComponent implements OnInit {
   viewsSeccionReviews: boolean = false;
   viewsFormReviews: boolean = false;
   viewVersionReview: boolean = false;
+  viewTableReviews: boolean = false;
+  viewTableReviewsEdit: boolean = false;
   statusReq: string = '';
   dataSourceCodigos!: MatTableDataSource<getAllUNSPSCDataI>;
   dataSourceCodigosAct!: MatTableDataSource<getAllUNSPSCDataI>;
   dataSourceClasificaciones!: MatTableDataSource<dataSourceClasificacionesI>;
   dataSourceClasificacionesAct!: MatTableDataSource<dataSourceClasificacionesI>;
   dataSourceRevisiones!: MatTableDataSource<dataSourceRevisionesI>;
+  dataSourceRevisionesView!: MatTableDataSource<dataSourceRevisionesI>;
   dataSourceClasificacionesRew!: MatTableDataSource<dataSourceClasificacionesI>;
   dataSourceCodigosRew!: MatTableDataSource<getAllUNSPSCDataI>;
 
@@ -357,12 +361,15 @@ export class PropertiesRequirementComponent implements OnInit {
       }
     } else if (this.typePage == 'Ajuste') {
       if (this.AccessUser == 'Referente_PAA') {
+        this.getAllReviews(+this.dataRequirementID)
         this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
         this.viewVersionMod = true;
         this.viewsReviews = false;
         this.errorVerifyNumReq = false;
         this.viewsSeccionReviews = true;
         this.viewsFormReviews = false;
+        this.viewTableReviewsEdit = false;
+        this.viewTableReviews = true;
       }
     } else if (this.typePage == 'Editar') {
       if (this.AccessUser == 'Referente_PAA') {
@@ -408,12 +415,16 @@ export class PropertiesRequirementComponent implements OnInit {
         } else if (this.statusReq == 'Revision') {
           this.viewsSeccionReviews = true;
           this.viewsFormReviews = true;
+          this.viewTableReviewsEdit = true;
+          this.viewTableReviews = false;
           this.getAllReviewsArea();
 
         }
         else {
           this.viewsSeccionReviews = true;
           this.viewsFormReviews = false;
+          this.viewTableReviewsEdit = true;
+          this.viewTableReviews = false;
         }
         this.viewVersionMod = false;
         this.viewsReviews = true;
@@ -1395,39 +1406,19 @@ export class PropertiesRequirementComponent implements OnInit {
         this.reloadDataTbl(stringToStore, 'codigos');
       }
     }
-    // if (type == 'revisiones') {
-    //   //console.log('clasificaciones', valueToFind)
-
-    //   var fromStorage = ProChartStorage.getItem("dataTableCodigos");
-    //   var objectsFromStorage = JSON.parse(fromStorage || '')
-    //   var toFind = objectsFromStorage.filter(function (obj: any) {
-    //     return obj.unspsC_ID == valueToFind;
-    //   });
-    //   // find the index of the item to delete
-    //   var index = objectsFromStorage.findIndex((x: any) => x.unspsC_ID === valueToFind);
-    //   if (index >= 0) {
-    //     this.dataTableCodigos.splice(index, 1);
-    //     //  //console.log('arreglo rem,ove',this.dataTableCodigos)
-    //     objectsFromStorage.splice(index, 1);
-    //     var stringToStore = JSON.stringify(objectsFromStorage);
-    //     ProChartStorage.setItem("dataTableCodigos", stringToStore);
-    //     this.reloadDataTbl(stringToStore, 'revisiones');
-    //   }
-    // }
-
-
   }
 
 
   getAllReviews(Modificacion_ID: number) {
+
     this.serviceReviews.getAllReviews(Modificacion_ID).subscribe((data: any) => {
       this.dataTableRevisiones = data.data.items;
-      this.dataSourceRevisiones = new MatTableDataSource(this.dataTableRevisiones)
-      // console.log('this.dataSourceRevisiones', this.dataTableRevisiones)
-      // console.log('data revisiones', data)
-      // var stringToStore = JSON.stringify(this.dataTableRevisiones);
-      // ProChartStorage.setItem("dataTableRevisiones", stringToStore);
-      // this.reloadDataTbl(stringToStore, 'revisiones');
+      console.log('this.dataTableRevisiones', this.dataTableRevisiones)
+      if (this.viewTableReviews == true) {
+        this.dataSourceRevisionesView = new MatTableDataSource(this.dataTableRevisiones)
+      } else if (this.viewTableReviewsEdit == true) {
+        this.dataSourceRevisiones = new MatTableDataSource(this.dataTableRevisiones)
+      }
     });
   }
   btnReviews(idReviews: number, type: string) {

@@ -746,7 +746,7 @@
 
                                 <!-- TABLA REVISIONES -->
                                 <div [ngClass]="{'tableReviews' : statusReq != 'Modificacion'|| 'Revision' ,
-                                'tbleRew' : statusReq == 'Revision' }">
+                                'tbleRew' : statusReq == 'Revision' }" *ngIf="viewTableReviewsEdit">
                                     <table mat-table [dataSource]="dataSourceRevisiones" class="mat-elevation-z8"
                                         matSort>
 
@@ -812,6 +812,48 @@
 
                                         <tr mat-header-row *matHeaderRowDef="revisionesColumns"></tr>
                                         <tr mat-row *matRowDef="let row; columns: revisionesColumns"></tr>
+                                    </table>
+                                </div>
+                                <!-- FIN TABLA -->
+                                <!-- TABLA REVISIONES -->
+                                <div class="tableReviews" *ngIf="viewTableReviews">
+                                    <table mat-table [dataSource]="dataSourceRevisionesView" class="mat-elevation-z8"
+                                        matSort>
+
+                                        <ng-container matColumnDef="fecha">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Fecha
+                                            <td mat-cell *matCellDef="let element">{{ element.fecha ||
+                                                element.fechaRevision}}</td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="usuario">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Usuario
+                                            <td mat-cell *matCellDef="let element">{{ element.usuario}}</td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="area">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Área
+                                            <td mat-cell *matCellDef="let element">{{ element.area.nombre ||
+                                                element.area}}</td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="concepto">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Concepto
+                                            <td mat-cell *matCellDef="let element">{{ element.concepto}}</td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="observacion">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Observación
+                                            <td mat-cell *matCellDef="let element">{{ element.observacion}}</td>
+                                        </ng-container>                                      
+
+                                        <tr mat-header-row *matHeaderRowDef="revisionesColumnsView"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: revisionesColumnsView"></tr>
                                     </table>
                                 </div>
                                 <!-- FIN TABLA -->
