@@ -483,7 +483,6 @@ export class ModificationRequestComponent implements OnInit {
   }
 
   addDataTbl() {
-    //console.log('addclasPresFina', this.proRequirementeForm.controls.clasPresFinaForm.value)
     let stringToStore = JSON.stringify(this.ArrayDataStorage);
     ProChartStorage.setItem(`dataTableItems${this.dataSolicitudModID}`, stringToStore);
     let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
@@ -614,9 +613,6 @@ export class ModificationRequestComponent implements OnInit {
     let fromStorage = ProChartStorage.getItem(`formVerify`);
     let objectsFromStorage = JSON.parse(fromStorage || '');
 
-    // console.log(objectsFromStorage);
-    //this.ArrayDataStorage.push(objectsFromStorage.requerimiento);
-    //this.reloadDataTbl();
     let fromStorageData = ProChartStorage.getItem(`arrayDatos${this.dataSolicitudModID}`);
     if (fromStorageData != null) {
       let objectsFromStorageData = JSON.parse(fromStorageData || '');
@@ -672,7 +668,6 @@ export class ModificationRequestComponent implements OnInit {
     });
 
     this.ArrayDataStorage.unshift(dataTable);
-    //console.log(this.ArrayDataStorage);
 
     ProChartStorage.removeItem('formVerifyComplete');
     this.addDataTbl();
@@ -710,7 +705,6 @@ export class ModificationRequestComponent implements OnInit {
           }
         };
 
-        // console.log(element);
         let stringToStore = JSON.stringify(CounterpartEdit);
         ProChartStorage.setItem(`CounterpartEdit${this.dataSolicitudModID}`, stringToStore);
         this.Addcounterpart();
@@ -718,7 +712,6 @@ export class ModificationRequestComponent implements OnInit {
 
     } else {
       if (element.modificacion_ID) {
-        // console.log(element);
         this.ID_REQUERIMIENTO = element.modificacion_ID;
         this.router.navigate([`/WAPI/PAA/PropiedadesRequerimiento/${this.dataProjectID}/${this.dataSolicitudModID}/${this.ID_REQUERIMIENTO}/Editar`]);
       }
@@ -727,7 +720,6 @@ export class ModificationRequestComponent implements OnInit {
 
 
   getPagination() {
-    //console.log(this.paginationForm.value);
     this.filterModificationRequest.page = this.paginationForm.get('page')?.value;
     this.filterModificationRequest.take = this.paginationForm.get('take')?.value;
     this.getModificationRequestByRequestId(Number(this.dataSolicitudModID), this.filterModificationRequest);
@@ -741,7 +733,6 @@ export class ModificationRequestComponent implements OnInit {
   }
 
   getFilter() {
-    //console.log(this.filterForm.value)
     this.filterModificationRequest.NumeroRequerimiento = this.filterForm.value.NumeroRequerimiento || '';
     this.filterModificationRequest.DependenciaDestino = this.filterForm.get('DependenciaDestino')?.value || '';
     this.filterModificationRequest.Descripcion = this.filterForm.get('Descripcion')?.value || '';
@@ -785,7 +776,6 @@ export class ModificationRequestComponent implements OnInit {
   }
 
 
-
   openChargeFile() {
     const dialogRef = this.dialog.open(PopUpImportComponent, {
       width: '1000px',
@@ -794,77 +784,10 @@ export class ModificationRequestComponent implements OnInit {
     });
   }
 
-  // getFile(event: any) {
-  //   const [file] = event.target.files;
-
-  //   if (file != null) {
-  //     this.fileTmp = {
-  //       file: file,
-  //       fileName: file.name
-  //     }
-  //     const type = this.fileTmp.fileName.split('.').pop();
-  //     if (type === 'xlsx') {
-  //       const body = {
-  //         ProjectId: this.dataProjectID,
-  //         Observacion: 'Observation'
-  //       };
-  //       const FILE = new FormData();
-  //       FILE.append('file', this.fileTmp.file);
-
-
-  //       this.spinner.show();
-  //       this.serviceModRequest.importFile(body, FILE).subscribe(res => {
-  //         let message = res.Message;
-  //         let status = res.status;
-  //         let Status = res.Status;
-  //         let Data: string[] = [];
-
-
-  //         if (status == 404) {
-  //           Data = Object.values(res.Data);
-  //         } else if (status == 200) {
-  //           this.idSolicitudImport = res.data.idSolicitud;
-  //         } else if (Status == 404) {
-  //           Data = Object.values(res.Data);
-  //         }
-
-  //         let erorsMessages = '';
-  //         Data.map(item => {
-  //           erorsMessages += item + '. ';
-  //         });
-
-  //         if (status == 404) {
-  //           this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
-  //         } else if (status == 200) {
-  //           this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
-  //           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
-  //         } else if (Status == 404) {
-  //           this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
-  //         } else if (Status == 200) {
-  //           this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
-  //           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
-  //         }
-  //         this.spinner.hide();
-  //       }, error => {
-  //         let status = error.error.Status;
-  //         let message = error.error.Message;
-  //         let errorData: string[] = Object.values(error.error.Data);
-  //         let erorsMessages = '';
-  //         errorData.map(item => {
-  //           erorsMessages += item + '. ';
-  //         });
-
-  //         if (status == 422) {
-  //           this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
-  //         }
-  //         this.spinner.hide();
-  //       });
-  //     }
-  //   }
-  // }
 
   exportFile() {
-    const fileName = `Reporte_${Math.random()}.xlsx`;
+    let fecha = new Date();
+    const fileName = `Reporte Solicitud Modificación_${this.codProject} (${fecha.toISOString()}).xlsx`;
     this.spinner.show();
     this.serviceModRequest.exportFile(this.dataProjectID, this.dataSolicitudModID).subscribe(res => {
       // console.log(res);
@@ -1213,7 +1136,6 @@ export class ModificationRequestComponent implements OnInit {
 
   //Enviar revisiones
   enviarRecisiones() {
-    // console.log(this.ProjectState);
     if (this.ProjectState === 'Anteproyecto') {
       const Revisiones: RevisionSend = {
         accion: 1,
@@ -1226,7 +1148,7 @@ export class ModificationRequestComponent implements OnInit {
       this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
         // console.log(res);
         if (res.status == 200) {
-          this.openSnackBar('Éxito al Enviar', `Revisiones en Solicitud de Modificación Enviadas con éxito.`, 'success');
+          this.openSnackBar('Éxito al Enviar', `Revisiones de la Solicitud de Modificación Enviadas con éxito.`, 'success');
           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
         } else if (res.status == 400) {
           this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
@@ -1336,7 +1258,6 @@ var ProChartStorage = {
     return localStorage.getItem(key);
   },
   setItem: function (key: any, value: any) {
-    // console.log("prochart setItem")
     localStorage.setItem(key, value);
   },
   removeItem: function (key: any) {
