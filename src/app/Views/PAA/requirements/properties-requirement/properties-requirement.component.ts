@@ -1466,7 +1466,7 @@ export class PropertiesRequirementComponent implements OnInit {
       }, error => {
         this.spinner.hide();
       });
-
+      this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
     }
 
   }
