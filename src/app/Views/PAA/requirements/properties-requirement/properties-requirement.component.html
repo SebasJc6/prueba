@@ -746,8 +746,8 @@
 
 
                                 <!-- TABLA REVISIONES -->
-                                <div [ngClass]="{'tableReviews' : statusReq != 'Modificacion'|| 'Revision' ,
-                                'tbleRew' : statusReq == 'Revision' }" *ngIf="viewTableReviewsEdit">
+                                <div [ngClass]="{'tableReviews' : statusReq != 'En Modificación'|| 'En Revisión' ,
+                                'tbleRew' : statusReq == 'En Revisión' }" *ngIf="viewTableReviewsEdit">
                                     <table mat-table [dataSource]="dataSourceRevisiones" class="mat-elevation-z8"
                                         matSort>
 
@@ -1349,8 +1349,8 @@
 
 
                                 <!-- TABLA REVISIONES -->
-                                <div [ngClass]="{'tableReviews' : statusReq != 'Modificacion'|| 'Revision' ,
-                                'tbleRew' : statusReq == 'Revision' }">
+                                <div [ngClass]="{'tableReviews' : statusReq != 'En Modificación'|| 'En Revisión' ,
+                                'tbleRew' : statusReq == 'En Revisión' }">
                                     <table mat-table [dataSource]="dataSourceRevisiones" class="mat-elevation-z8"
                                         matSort>
 

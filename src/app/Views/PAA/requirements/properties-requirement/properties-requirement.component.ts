@@ -336,6 +336,15 @@ export class PropertiesRequirementComponent implements OnInit {
     this.verifyRangeSararial();
     this.valuePerfil();
   }
+  getModificationRequet(projectId: number, requestID: number) {
+    this.spinner.show();
+    this.serviceModRequest.getModificationRequestByRequest(projectId, requestID).subscribe((data) => {
+      this.statusReq = data.data.solicitud_Estado || '';
+      this.spinner.hide();
+    }, error => {
+      this.spinner.hide();
+    });
+  }
 
   ngOnInit(): void {
     //Obtener token para manejar los roles
@@ -347,7 +356,12 @@ export class PropertiesRequirementComponent implements OnInit {
     this.uploadDropdownLists();
     this.currencyInput();
     this.valueRequired();
-    this.statusReq = ProChartStorage.getItem(`estado${this.dataSolicitudID}`) || '';
+
+    //this.statusReq = ProChartStorage.getItem(`estado${this.dataSolicitudID}`) || '';
+    this.getModificationRequet(+this.dataProjectID, +this.dataSolicitudID);
+   
+
+
     console.log('statusReq', this.statusReq);
     if (this.typePage == 'Vista') {
       this.viewBtnVersion = false;
@@ -360,7 +374,7 @@ export class PropertiesRequirementComponent implements OnInit {
         this.viewBtnVersion = false;
         this.viewVersionMod = true;
       }
-    } else if (this.typePage == 'Ajuste') {
+    } else if (this.typePage == 'En Ajuste') {
       if (this.AccessUser == 'Referente_PAA') {
         this.getAllReviews(+this.dataRequirementID)
         this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
@@ -374,19 +388,19 @@ export class PropertiesRequirementComponent implements OnInit {
       }
     } else if (this.typePage == 'Editar') {
       if (this.AccessUser == 'Referente_PAA') {
-        if (this.statusReq == 'Revision') {
+        if (this.statusReq == 'En Revisión') {
           this.getDataConsulta(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
           this.viewVersionMod = false;
           this.viewsReviews = true;
           this.errorVerifyNumReq = false;
         }
-        if (this.statusReq == 'Modificacion' || this.statusReq == 'Ajuste') {
+        if (this.statusReq == 'En Modificación' || this.statusReq == 'En Ajuste') {
           this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
           this.viewVersionMod = true;
           this.viewsReviews = false;
           this.errorVerifyNumReq = false;
         }
-        if (this.statusReq == 'Aprobada' || this.statusReq == 'Rechazado') {
+        if (this.statusReq == 'Aprobada' || this.statusReq == 'Rechazada') {
           this.getDataConsulta(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
           this.viewVersionMod = false;
           this.viewsReviews = true;
@@ -394,7 +408,7 @@ export class PropertiesRequirementComponent implements OnInit {
         }
 
       } else if (this.AccessUser == 'Referente_Planeacion') {
-        if (this.statusReq == 'Modificacion') {
+        if (this.statusReq == 'En Modificación') {
           this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
           this.viewVersionMod = true;
           this.viewsReviews = false;
@@ -411,9 +425,9 @@ export class PropertiesRequirementComponent implements OnInit {
         this.viewVersionMod = false;
         this.viewsReviews = true;
         this.errorVerifyNumReq = false;
-        if (this.statusReq == 'Modificacion') {
+        if (this.statusReq == 'En Modificación') {
           this.viewsSeccionReviews = false;
-        } else if (this.statusReq == 'Revision') {
+        } else if (this.statusReq == 'En Revisión') {
           this.viewsSeccionReviews = true;
           this.viewsFormReviews = true;
           this.viewTableReviewsEdit = true;
