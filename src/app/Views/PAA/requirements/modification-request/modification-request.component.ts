@@ -1187,7 +1187,7 @@ export class ModificationRequestComponent implements OnInit {
         this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
           // console.log(res);
           if (res.status == 200) {
-            this.openSnackBar('Éxito al Enviar', `Revisiones en Solicitud de Modificación Enviadas con éxito.`, 'success');
+            this.openSnackBar('Éxito al Enviar', `Revisiones de la Solicitud de Modificación Enviadas con éxito.`, 'success');
             this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           } else if (res.status == 400) {
             this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
