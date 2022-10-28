@@ -412,9 +412,12 @@
             &nbsp;<strong>{{ blockSave }}</strong>
             <input 
                 type="file" accept="application/pdf"
-                [disabled]="((StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') && dataSolicitudModID != '0') ? false : true"
+                disabled
                 class="file-input" (change)="onFileSelected($event)" #fileUpload />
         </div>
+
+        <!-- Pasar a la parte de Disabled -->
+        <!-- [disabled]="((StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? false : true" -->
 
 
     </div>
