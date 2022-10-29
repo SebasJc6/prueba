@@ -21,12 +21,11 @@ import { apropiacionIni, cadenasPresupuestales, cadenasPresupuestalesI, codsUNSP
 import jwt_decode from "jwt-decode";
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { AlertsPopUpComponent } from 'src/app/Templates/alerts-pop-up/alerts-pop-up.component';
-import { fileDataI, postFileI, tagsI } from 'src/app/Models/ModelsPAA/Files/Files.interface';
+import { fileDataI, postFileI, tagsI, viewTableFilesI } from 'src/app/Models/ModelsPAA/Files/Files.interface';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatButton } from '@angular/material/button';
 import { PopUpImportComponent } from './pop-up-import/pop-up-import.component';
-
-
+import { v4 as uuid } from 'uuid';
 @Component({
   selector: 'app-modification-request',
   templateUrl: './modification-request.component.html',
@@ -64,6 +63,7 @@ export class ModificationRequestComponent implements OnInit {
   viewsCalDis: any;
   viewsCalApr: any;
   viewsFiles: any;
+  rtnFile: boolean = false;
 
   filterModificationRequest = {} as filterModificationRequestI;
   filterForm = new FormGroup({
@@ -88,6 +88,7 @@ export class ModificationRequestComponent implements OnInit {
   numberTake: number = 0;
   pageSizeOptions: number[] = [5, 10, 15, 20];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  arrayFile = new Array();
 
   dataSourcePrin!: MatTableDataSource<dateTableModificationI>;
   dataSourceAttachedFiles!: MatTableDataSource<archivosI>;
@@ -111,7 +112,6 @@ export class ModificationRequestComponent implements OnInit {
   ArrayDatos: postDataModReqI[] = [];
   CounterpartsDelete: number[] = [];
   RequerimentsDelete: number[] = [];
-
   //Aqui se guarda el archivo a importar
   private fileTmp: any;
 
@@ -186,16 +186,16 @@ export class ModificationRequestComponent implements OnInit {
 
   ngAfterViewInit() {
     this.btnFiltrar.focus();
- }
+  }
 
 
   getRequestAndProject(id_project: number, id_request: number) {
     this.spinner.show();
     this.serviceModRequest.getModificationRequestByRequest(id_project, id_request).subscribe(res => {
-      if (res.data !== null ) {
+      if (res.data !== null) {
         this.JustificationText = res.data.observacion;
       } else if (this.dataSolicitudModID !== '0') {
-      this.openSnackBar('Lo sentimos', `Error en la Solicitud de Modificación.`, 'error', `Solicitud de Modificación no Existe.`);
+        this.openSnackBar('Lo sentimos', `Error en la Solicitud de Modificación.`, 'error', `Solicitud de Modificación no Existe.`);
         this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
       }
       this.spinner.hide();
@@ -232,7 +232,7 @@ export class ModificationRequestComponent implements OnInit {
 
     this.spinner.show();
     this.serviceModRequest.getModificationRequestByRequestId(requestId, filterForm).subscribe((data) => {
-      if (data.data !== null ) {
+      if (data.data !== null) {
         this.viewsModificationRequest = data;
         this.ArrayDataTable = this.viewsModificationRequest.data.items;
         this.dataSourcePrin = new MatTableDataSource(this.viewsModificationRequest.data.items);
@@ -839,79 +839,159 @@ export class ModificationRequestComponent implements OnInit {
     this.extraerBase64(captureFile).then((archivo: any) => {
       this.fileName = archivo.nameFile;
       this.base64File = archivo.base;
-      this.blockSave = this.fileName;
-      console.log('archivo', archivo)
-      this.onFileUpload();
+      // this.blockSave = this.fileName;
+      // console.log('archivo', archivo)
+      // this.onFileUpload();
+      this.loadTableFiles();
     })
+
+  }
+  loadTableFiles() {
+    let viewTableFiles = {} as viewTableFilesI;
+
+    if (this.dataSolicitudModID == '0') {
+      viewTableFiles.blobName = uuid();
+      viewTableFiles.fileName = this.fileName;
+      viewTableFiles.fileAsBase64 = this.base64File;
+      // this.arrayFile.forEach(element => {
+      //   if (element.fileName == this.fileName) {
+      //     this.openSnackBar('Error al Subir Archivo', `El archivo ${this.fileName} ya existe.`, 'error');
+      //     this.blockSave = '';
+      //     return
+      //   }
+      // });
+      this.arrayFile.push(viewTableFiles);
+    } else {
+      if (this.viewsFiles.length > 0) {
+        console.log('this.viewsFiles fileName', this.fileName)
+        if (this.fileName == '') {
+          console.log('ENTRO A ACTUALIZAR TABLE')
+          this.viewsFiles.forEach((element: any) => {
+            let inFiles: any = []
+            inFiles.blobName = element.blobName;
+            inFiles.fileName = element.fileName;
+            inFiles.fileAsBase64 = '';
+            this.arrayFile.push(inFiles);
+          });
+        } else {
+          console.log('ENTRO A AGREGAR TABLE en datatable existente')
+          viewTableFiles.blobName = uuid();
+          viewTableFiles.fileName = this.fileName;
+          viewTableFiles.fileAsBase64 = this.base64File;
+          this.arrayFile.push(viewTableFiles);
+        }
+        //this.arrayFile.push(viewTableFiles);
+      } else {
+        console.log('ENTRO A AGREGAR TABLE')
+        viewTableFiles.blobName = uuid();
+        viewTableFiles.fileName = this.fileName;
+        viewTableFiles.fileAsBase64 = this.base64File;
+        this.arrayFile.push(viewTableFiles);
+      }
+
+    }
+
+    //let newfile = this.viewTableFiles
+    this.dataSourceAttachedFiles = new MatTableDataSource(this.arrayFile);
+    console.log('arrayFile', this.arrayFile)
   }
 
-  onFileUpload() {
-    this.spinner.show();
-    this.blockSave = 'Guardando archivo...';
+  addFiles(idSol: number) {
+    console.log('addFiles idSol', idSol)
+    console.log('addFiles this.arrayFile', this.arrayFile)
 
-    console.log('result fileName', this.fileName, 'base64File', this.base64File)
-    let fileData = {} as fileDataI
-    fileData.fileName = this.fileName;
-    fileData.fileAsBase64 = this.base64File;
 
+    let files: any = [];
+    this.arrayFile.forEach(element => {
+      let file = {} as fileDataI;
+      file.fileName = element.fileName;
+      file.fileAsBase64 = element.fileAsBase64;
+      files.push(file);
+    });
+    // if (+this.dataSolicitudModID != 0) {
+    //   files.forEach((element:any) => {
+    //     if (element.fileAsBase64) {
+    //       delete element.fileAsBase64;
+    //       delete element.fileName;
+    //       delete element.blobName;
+    //      }
+    //   });
+    //   console.log('files', files)
+    //   this.rtnFile = false
+    // }
+    console.log('addFiles files', files)
     let formPost = {} as postFileI
     let tags = {} as tagsI;
     tags.idProject = +this.dataProjectID;
-    tags.idSol = +this.dataSolicitudModID;
+    tags.idSol = idSol;
     formPost.tags = tags;
-    formPost.archivos = [fileData]
-    console.log('formPost', formPost)
+    formPost.archivos = files
+    console.log('addFiles formPost', formPost)
+
     this.serviceFiles.postFile(formPost).subscribe(res => {
-      // console.log('res', res)
-      this.blockSave = 'Archivo Guardado.';
-      this.openSnackBar('Éxito al Guardar', `Archivo Guardado.`, 'success');
-      this.blockSave = '';
-      this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
-      this.spinner.hide();
+      console.log('res', res)
+      if (res.status == 200) {
+        this.openSnackBar('Éxito al Guardar', `Archivos Guardado.`, 'success');
+        this.rtnFile = true;
+      } else {
+        this.openSnackBar('Lo sentimos', `Error al guardar archivos`, 'error', res.message);
+        this.rtnFile = false;
+      }
     }, error => {
       this.spinner.hide();
-      // console.log('error', error)
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', error.message);
+      this.rtnFile = false;
     })
-
+    return this.rtnFile;
   }
   getAllFiles(idProject: number, idRequets: number) {
-  //  this.spinner.show();
+    //  this.spinner.show();
     this.serviceFiles.getAllFiles(idProject, idRequets).subscribe((data) => {
-      //console.log('getAllFiles', data)
+      console.log('getAllFiles', data)
       this.viewsFiles = data.data;
-      this.dataSourceAttachedFiles = new MatTableDataSource(this.viewsFiles);
-    //  this.spinner.hide();
+      this.loadTableFiles();
+      //  this.spinner.hide();
     }, error => {
-   //   this.spinner.hide();
+      //   this.spinner.hide();
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     })
   }
-  deleteFile(blobName: string) {
+  deleteFile(File: any) {
     this.spinner.show();
+    if (File.fileAsBase64 == '') {
+      this.serviceFiles.deleteFile(File.blobName).subscribe((data) => {
+        console.log('deleteFile', data)
+        this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
+        this.spinner.hide();
+      }, error => {
+        this.spinner.hide();
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      })
+    }else{
+
+    }
     // console.log('blobName delete', blobName)
-    this.serviceFiles.deleteFile(blobName).subscribe((data) => {
-      console.log('deleteFile', data)
-      this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
-      this.spinner.hide();
-    }, error => {
-      this.spinner.hide();
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
-    })
+  
   }
-  dowloadFile(blobName: string) {
+  dowloadFile(File: any) {
     this.spinner.show();
-    // console.log('blobName dowload', blobName)
-    this.serviceFiles.dowloadFile(blobName).subscribe((dataFile) => {
-      // console.log('dowloadFile', dataFile)
-      this.dataFiles = dataFile;
-      this.downloadPdf(this.dataFiles.fileAsBase64, this.dataFiles.fileName);
-      // this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
+    if (File.fileAsBase64 == '') {
+      // console.log('blobName dowload', blobName)
+      this.serviceFiles.dowloadFile(File.blobName).subscribe((dataFile) => {
+        // console.log('dowloadFile', dataFile)
+        this.dataFiles = dataFile;
+        this.downloadPdf(this.dataFiles.fileAsBase64, this.dataFiles.fileName);
+        // this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
+        this.spinner.hide();
+      }, error => {
+        this.spinner.hide();
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      })
+    } else {
+      this.downloadPdf(File.fileAsBase64, File.fileName);
       this.spinner.hide();
-    }, error => {
-      this.spinner.hide();
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
-    })
+    }
+
   }
   downloadPdf(base64String: string, fileName: string) {
     const source = `data:application/pdf;base64,${base64String}`;
@@ -948,14 +1028,24 @@ export class ModificationRequestComponent implements OnInit {
 
       this.spinner.show();
       this.serviceModRequest.postModificationRequestSave(postDataSave).subscribe(res => {
-        //  console.log(res);
+        //console.log(res);
+        let idSolicitud = res.data.idSolicitud;
+
         if (res.status == 200) {
-          this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada con éxito.`, 'success');
-          //Elimación de los registros en LocalStorage
-          ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
-          this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+       //guardar archivos
+       let filesUp: boolean = this.addFiles(idSolicitud);
+       //console.log('files return', filesUp);
+       if (filesUp == true) {
+         this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+         //Elimación de los registros en LocalStorage
+         ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
+         ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
+         ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
+         this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+       } else {
+         console.log('error al guardar archivos');
+         return
+       }
 
         } else if (res.Status == 404) {
           let Data: string[] = [];
@@ -1026,13 +1116,23 @@ export class ModificationRequestComponent implements OnInit {
 
       this.spinner.show();
       this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
+        let idSolicitud = res.data.idSolicitud;
+
         if (res.status == 200) {
-          this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
-          //Elimación de los registros en LocalStorage
-          ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
-          this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+          //guardar archivos
+          let filesUp: boolean = this.addFiles(idSolicitud);
+          //console.log('files return', filesUp);
+          if (filesUp == true) {
+            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+            //Elimación de los registros en LocalStorage
+            ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
+            ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
+            ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
+            this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+          } else {
+            console.log('error al guardar archivos');
+          }
+
         } else if (res.status == 404) {
 
           let Data: string[] = [];

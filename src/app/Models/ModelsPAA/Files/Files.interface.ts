@@ -23,3 +23,8 @@ export interface fileDataI{
     fileName: string,
     fileAsBase64: string
 }
+export interface viewTableFilesI{
+    blobName: string,
+    fileName: string,
+    fileAsBase64: string
+}
