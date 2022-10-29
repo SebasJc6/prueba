@@ -133,6 +133,7 @@ export class PropertiesRequirementComponent implements OnInit {
   formVerify = {} as verifyDataSaveI;
   formVerifyComplete = {} as verifyDatacompleteI;
   formModificationRequest = {} as saveDataEditI
+  viewErrorDiaMax: boolean = false;
   cantMeses: any[] = [
     //  { idMes: '0', nameMes: ' ' },
     { idMes: '1', nameMes: 'Enero' },
@@ -317,7 +318,6 @@ export class PropertiesRequirementComponent implements OnInit {
     //   console.log('aprobado')
     //   this.getDataAprobad(+this.dataProjectID, +this.dataRequirementID);
     // } else
-
   }
   uploadDropdownLists() {
     this.getDependenciesByCod();
@@ -335,16 +335,9 @@ export class PropertiesRequirementComponent implements OnInit {
     this.verifyNumReq();
     this.verifyRangeSararial();
     this.valuePerfil();
+
   }
-  getModificationRequet(projectId: number, requestID: number) {
-    this.spinner.show();
-    this.serviceModRequest.getModificationRequestByRequest(projectId, requestID).subscribe((data) => {
-      this.statusReq = data.data.solicitud_Estado || '';
-      this.spinner.hide();
-    }, error => {
-      this.spinner.hide();
-    });
-  }
+
 
   ngOnInit(): void {
     //Obtener token para manejar los roles
@@ -358,98 +351,102 @@ export class PropertiesRequirementComponent implements OnInit {
     this.valueRequired();
 
     //this.statusReq = ProChartStorage.getItem(`estado${this.dataSolicitudID}`) || '';
-    this.getModificationRequet(+this.dataProjectID, +this.dataSolicitudID);
-   
 
-
-    console.log('statusReq', this.statusReq);
-    if (this.typePage == 'Vista') {
-      this.viewBtnVersion = false;
-      this.viewVersion = true;
-      this.viewActionCancel = true;
-      this.getDataAprobad(+this.dataProjectID, +this.dataRequirementID);
-    } else if (this.typePage == 'Nuevo') {
-      if (this.AccessUser != 'Revisor') {
-        this.dataRequirementNum = this.dataRequirementID;
+    this.serviceModRequest.getModificationRequestByRequest(+this.dataProjectID, +this.dataSolicitudID).subscribe((data) => {
+      
+      this.statusReq = data.data.solicitud_Estado || '';
+     
+      if (this.typePage == 'Vista') {
         this.viewBtnVersion = false;
-        this.viewVersionMod = true;
-      }
-    } else if (this.typePage == 'En Ajuste') {
-      if (this.AccessUser == 'Referente_PAA') {
-        this.getAllReviews(+this.dataRequirementID)
-        this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
-        this.viewVersionMod = true;
-        this.viewsReviews = false;
-        this.errorVerifyNumReq = false;
-        this.viewsSeccionReviews = true;
-        this.viewsFormReviews = false;
-        this.viewTableReviewsEdit = false;
-        this.viewTableReviews = true;
-      }
-    } else if (this.typePage == 'Editar') {
-      if (this.AccessUser == 'Referente_PAA') {
-        if (this.statusReq == 'En Revisión') {
-          this.getDataConsulta(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
-          this.viewVersionMod = false;
-          this.viewsReviews = true;
-          this.errorVerifyNumReq = false;
+        this.viewVersion = true;
+        this.viewActionCancel = true;
+        this.getDataAprobad(+this.dataProjectID, +this.dataRequirementID);
+      } else if (this.typePage == 'Nuevo') {
+        if (this.AccessUser != 'Revisor') {
+          this.dataRequirementNum = this.dataRequirementID;
+          this.viewBtnVersion = false;
+          this.viewVersionMod = true;
         }
-        if (this.statusReq == 'En Modificación' || this.statusReq == 'En Ajuste') {
+      } else if (this.typePage == 'En Ajuste') {
+        if (this.AccessUser == 'Referente_PAA') {
+          this.getAllReviews(+this.dataRequirementID)
           this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
           this.viewVersionMod = true;
           this.viewsReviews = false;
           this.errorVerifyNumReq = false;
-        }
-        if (this.statusReq == 'Aprobada' || this.statusReq == 'Rechazada') {
-          this.getDataConsulta(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
-          this.viewVersionMod = false;
-          this.viewsReviews = true;
-          this.errorVerifyNumReq = false;
-        }
-
-      } else if (this.AccessUser == 'Referente_Planeacion') {
-        if (this.statusReq == 'En Modificación') {
-          this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
-          this.viewVersionMod = true;
-          this.viewsReviews = false;
-          this.errorVerifyNumReq = false;
-        } else {
-          this.getDataConsulta(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
-          this.viewVersionMod = false;
-          this.viewsReviews = true;
-          this.errorVerifyNumReq = false;
-        }
-      } else if (this.AccessUser == 'Revisor') {
-        this.getAllReviews(+this.dataRequirementID)
-        this.getDataConsulta(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
-        this.viewVersionMod = false;
-        this.viewsReviews = true;
-        this.errorVerifyNumReq = false;
-        if (this.statusReq == 'En Modificación') {
-          this.viewsSeccionReviews = false;
-        } else if (this.statusReq == 'En Revisión') {
-          this.viewsSeccionReviews = true;
-          this.viewsFormReviews = true;
-          this.viewTableReviewsEdit = true;
-          this.viewTableReviews = false;
-          this.getAllReviewsArea();
-
-        }
-        else {
           this.viewsSeccionReviews = true;
           this.viewsFormReviews = false;
-          this.viewTableReviewsEdit = true;
-          this.viewTableReviews = false;
+          this.viewTableReviewsEdit = false;
+          this.viewTableReviews = true;
         }
-        this.viewVersionMod = false;
-        this.viewsReviews = true;
-        this.errorVerifyNumReq = false;
+      } else if (this.typePage == 'Editar') {
+        if (this.AccessUser == 'Referente_PAA') {
+          if (this.statusReq == 'En Revisión') {
+            this.getDataConsulta(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
+            this.viewVersionMod = false;
+            this.viewsReviews = true;
+            this.errorVerifyNumReq = false;
+          }
+          if (this.statusReq == 'En Modificación' || this.statusReq == 'En Ajuste') {
+            console.log('En Modificación', this.statusReq)
+            this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
+            this.viewVersionMod = true;
+            this.viewsReviews = false;
+            this.errorVerifyNumReq = false;
+          }
+          if (this.statusReq == 'Aprobada' || this.statusReq == 'Rechazada') {
+            this.getDataConsulta(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
+            this.viewVersionMod = false;
+            this.viewsReviews = true;
+            this.errorVerifyNumReq = false;
+          }
+
+        } else if (this.AccessUser == 'Referente_Planeacion') {
+          if (this.statusReq == 'En Modificación') {
+            this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
+            this.viewVersionMod = true;
+            this.viewsReviews = false;
+            this.errorVerifyNumReq = false;
+          } else {
+            this.getDataConsulta(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
+            this.viewVersionMod = false;
+            this.viewsReviews = true;
+            this.errorVerifyNumReq = false;
+          }
+        } else if (this.AccessUser == 'Revisor') {
+          this.getAllReviews(+this.dataRequirementID)
+          this.getDataConsulta(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
+          this.viewVersionMod = false;
+          this.viewsReviews = true;
+          this.errorVerifyNumReq = false;
+          if (this.statusReq == 'En Modificación') {
+            this.viewsSeccionReviews = false;
+          } else if (this.statusReq == 'En Revisión') {
+            this.viewsSeccionReviews = true;
+            this.viewsFormReviews = true;
+            this.viewTableReviewsEdit = true;
+            this.viewTableReviews = false;
+            this.getAllReviewsArea();
+
+          }
+          else {
+            this.viewsSeccionReviews = true;
+            this.viewsFormReviews = false;
+            this.viewTableReviewsEdit = true;
+            this.viewTableReviews = false;
+          }
+          this.viewVersionMod = false;
+          this.viewsReviews = true;
+          this.errorVerifyNumReq = false;
+        }
+
+
+
       }
+    });
 
 
 
-    }
-   
   }
 
   currencyInput() {
@@ -499,6 +496,11 @@ export class PropertiesRequirementComponent implements OnInit {
       distinctUntilChanged(),
     ).subscribe(value => {
       this.errorDurationDia = false
+      this.viewErrorDiaMax = false
+
+      if (value > 29) {
+        this.viewErrorDiaMax = true
+      }
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.modalidadSel.valueChanges.pipe(
       distinctUntilChanged(),
@@ -520,6 +522,7 @@ export class PropertiesRequirementComponent implements OnInit {
     ).subscribe(value => {
       this.errorDescripcionCont = false
     })
+
 
   }
   getInfoToCreateReq(projectId: number) {
@@ -672,7 +675,7 @@ export class PropertiesRequirementComponent implements OnInit {
         })
       })
     }
-   
+
   }
   valuePerfil() {
     this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].valueChanges.pipe(
