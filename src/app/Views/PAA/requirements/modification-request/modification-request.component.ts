@@ -102,6 +102,7 @@ export class ModificationRequestComponent implements OnInit {
   base64File: string = '';
   blockSave: string = '';
   dataFiles: any;
+  useNewFile: boolean = false;
   //Propiedad para guardar contrapartidas y requerimientos que se muestran en la tabla
   ArrayDataStorage: dateTableModificationI[] = [];
   ArrayDataTable: dateTableModificationI[] = [];
@@ -843,6 +844,7 @@ export class ModificationRequestComponent implements OnInit {
       // console.log('archivo', archivo)
       // this.onFileUpload();
       this.loadTableFiles();
+      this.useNewFile = true;
     })
 
   }
@@ -889,11 +891,17 @@ export class ModificationRequestComponent implements OnInit {
         //this.arrayFile.push(viewTableFiles);
       } else {
         console.log('ENTRO A AGREGAR TABLE')
-        viewTableFiles.blobName = uuid();
-        viewTableFiles.fileName = this.fileName;
-        viewTableFiles.fileAsBase64 = this.base64File;
-        this.arrayFile.push(viewTableFiles);
+        if (this.base64File != '') {
+          viewTableFiles.blobName = uuid();
+          viewTableFiles.fileName = this.fileName;
+          viewTableFiles.fileAsBase64 = this.base64File;
+          this.arrayFile.push(viewTableFiles);
+        }
+
         this.dataSourceAttachedFiles = new MatTableDataSource(this.arrayFile);
+
+
+
 
       }
 
@@ -965,6 +973,7 @@ export class ModificationRequestComponent implements OnInit {
   }
   deleteFile(File: any) {
     this.spinner.show();
+    var index = this.arrayFile.findIndex((x: any) => x.blobName === File.blobName);
 
     if (File.fileAsBase64 == '') {
       var toFind = this.arrayFile.filter(function (obj: any) {
@@ -972,6 +981,8 @@ export class ModificationRequestComponent implements OnInit {
       });
       this.serviceFiles.deleteFile(toFind[0].blobName).subscribe((data) => {
         console.log('deleteFile', data)
+        this.arrayFile.splice(index, 1);
+        this.dataSourceAttachedFiles = new MatTableDataSource(this.arrayFile);
         this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
         this.spinner.hide();
       }, error => {
@@ -979,7 +990,6 @@ export class ModificationRequestComponent implements OnInit {
         this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
       })
     } else {
-      var index = this.arrayFile.findIndex((x: any) => x.blobName === File.blobName);
       console.log('index', index)
       this.arrayFile.splice(index, 1);
       this.dataSourceAttachedFiles = new MatTableDataSource(this.arrayFile);
@@ -1048,19 +1058,29 @@ export class ModificationRequestComponent implements OnInit {
 
         if (res.status == 200) {
           //guardar archivos
-          let filesUp: boolean = this.addFiles(idSolicitud);
+          let filesUp: boolean = this.rtnFile
           //console.log('files return', filesUp);
-          if (filesUp == true) {
-            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
-            //Elimación de los registros en LocalStorage
-            ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-            ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
-            ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
-            this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
-          } else {
-            console.log('error al guardar archivos');
-            return
+          this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+          //Elimación de los registros en LocalStorage
+          ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
+          if (this.useNewFile == true) {
+            this.addFiles(idSolicitud);
           }
+          this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+
+          // if (filesUp == true) {
+          //   this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+          //   //Elimación de los registros en LocalStorage
+          //   ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
+          //   ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
+          //   ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
+          //   this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+          // } else {
+          //   console.log('error al guardar archivos');
+          //   return
+          // }
 
         } else if (res.Status == 404) {
           let Data: string[] = [];
@@ -1135,18 +1155,19 @@ export class ModificationRequestComponent implements OnInit {
 
         if (res.status == 200) {
           //guardar archivos
-          let filesUp: boolean = this.addFiles(idSolicitud);
+          let filesUp: boolean = this.rtnFile
           //console.log('files return', filesUp);
-          if (filesUp == true) {
-            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
-            //Elimación de los registros en LocalStorage
-            ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-            ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
-            ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
-            this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
-          } else {
-            console.log('error al guardar archivos');
+          this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+          //Elimación de los registros en LocalStorage
+          ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
+          if (this.useNewFile == true) {
+            this.addFiles(idSolicitud);
           }
+
+          this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+
 
         } else if (res.status == 404) {
 
