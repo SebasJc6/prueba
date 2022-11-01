@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { VigilantSessionsGuard } from './Services/Authentication/Guards/vigilant-sessions.guard';
 import { SidenavListComponent } from './Templates/sidenav-list/sidenav-list.component';
 import { DashboardComponent } from './Views/dashboard/dashboard.component';
 
@@ -25,20 +26,21 @@ const routes: Routes = [
   { path: 'Login', component: LoginComponent },
   {
     path: 'WAPI', component: SidenavListComponent,
+    canActivate: [VigilantSessionsGuard],
     children: [
-      { path: 'Home', component: HomeComponent },
+      { path: 'Home', component: HomeComponent, canActivate: [VigilantSessionsGuard] },
       {
         path: 'PAA',
         children: [
-          { path: 'Adquisiciones', component: AcquisitionsComponent },
-          { path: 'BandejaDeTareas', component: TaskTrayComponent },
-          { path: 'BandejaDeSolicitudes', component: RequestTrayComponent },
-          { path: 'Requerimientos/:data', component: RequirementsComponent },
-          { path: 'PropiedadesRequerimiento/:idPro/:idSol/:idReq/:type', component: PropertiesRequirementComponent },
-          { path: 'Resumen/:data', component: AbstractComponent },
-          { path: 'CDP/:idPro/:idReq', component: CDPComponent },
-          { path: 'SolicitudModificacion/:idPro/:idSol', component: ModificationRequestComponent },
-          { path: 'ResumenModificacion/:idPro/:idSol', component: ModificationSummaryComponent }
+          { path: 'Adquisiciones', component: AcquisitionsComponent, canActivate: [VigilantSessionsGuard] },
+          { path: 'BandejaDeTareas', component: TaskTrayComponent, canActivate: [VigilantSessionsGuard] },
+          { path: 'BandejaDeSolicitudes', component: RequestTrayComponent, canActivate: [VigilantSessionsGuard] },
+          { path: 'Requerimientos/:data', component: RequirementsComponent, canActivate: [VigilantSessionsGuard] },
+          { path: 'PropiedadesRequerimiento/:idPro/:idSol/:idReq/:type', component: PropertiesRequirementComponent, canActivate: [VigilantSessionsGuard] },
+          { path: 'Resumen/:data', component: AbstractComponent, canActivate: [VigilantSessionsGuard] },
+          { path: 'CDP/:idPro/:idReq', component: CDPComponent, canActivate: [VigilantSessionsGuard] },
+          { path: 'SolicitudModificacion/:idPro/:idSol', component: ModificationRequestComponent, canActivate: [VigilantSessionsGuard] },
+          { path: 'ResumenModificacion/:idPro/:idSol', component: ModificationSummaryComponent, canActivate: [VigilantSessionsGuard] }
         ]
       }
     ]
