@@ -865,6 +865,8 @@ export class ModificationRequestComponent implements OnInit {
       //   }
       // });
       this.arrayFile.push(viewTableFiles);
+      this.dataSourceAttachedFiles = new MatTableDataSource(this.arrayFile);
+
     } else {
       if (this.viewsFiles.length > 0) {
         console.log('this.viewsFiles fileName', this.fileName)
@@ -1060,7 +1062,10 @@ export class ModificationRequestComponent implements OnInit {
           //guardar archivos
           let filesUp: boolean = this.rtnFile
           //console.log('files return', filesUp);
+          setTimeout(() => {
+            this.spinner.hide();
           this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+          }, 4000);
           //Elimación de los registros en LocalStorage
           ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
@@ -1093,6 +1098,7 @@ export class ModificationRequestComponent implements OnInit {
           ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
           this.ArrayDataStorage = [];
           this.reloadDataTbl();
+          this.spinner.hide();
         } else if (res.status == 404) {
           let Data: string[] = [];
           Data = Object.values(res.data);
@@ -1104,6 +1110,8 @@ export class ModificationRequestComponent implements OnInit {
           ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
           this.ArrayDataStorage = [];
           this.reloadDataTbl();
+          this.spinner.hide();
+
         }
         this.spinner.hide();
       }, error => {
@@ -1157,7 +1165,11 @@ export class ModificationRequestComponent implements OnInit {
           //guardar archivos
           let filesUp: boolean = this.rtnFile
           //console.log('files return', filesUp);
-          this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+          setTimeout(() => {
+            this.spinner.hide();
+
+            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+            }, 4000);
           //Elimación de los registros en LocalStorage
           ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
