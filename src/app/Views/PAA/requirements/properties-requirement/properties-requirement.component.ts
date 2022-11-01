@@ -111,6 +111,7 @@ export class PropertiesRequirementComponent implements OnInit {
   msjVerifyRangeSararial: string = '';
   formEditRequirement: boolean = false;
   loading: boolean = false;
+  btnViewBtn: boolean = false;
   //variables localstorage
   dataTableCodigos = new Array();
   dataTableCodigo: any;
@@ -353,9 +354,9 @@ export class PropertiesRequirementComponent implements OnInit {
     //this.statusReq = ProChartStorage.getItem(`estado${this.dataSolicitudID}`) || '';
 
     this.serviceModRequest.getModificationRequestByRequest(+this.dataProjectID, +this.dataSolicitudID).subscribe((data) => {
-      
+
       this.statusReq = data.data.solicitud_Estado || '';
-     
+
       if (this.typePage == 'Vista') {
         this.viewBtnVersion = false;
         this.viewVersion = true;
@@ -386,6 +387,7 @@ export class PropertiesRequirementComponent implements OnInit {
             this.viewVersionMod = false;
             this.viewsReviews = true;
             this.errorVerifyNumReq = false;
+            this.btnViewBtn = false;
           }
           if (this.statusReq == 'En Modificación' || this.statusReq == 'En Ajuste') {
             console.log('En Modificación', this.statusReq)
@@ -419,6 +421,7 @@ export class PropertiesRequirementComponent implements OnInit {
           this.viewVersionMod = false;
           this.viewsReviews = true;
           this.errorVerifyNumReq = false;
+          this.btnViewBtn = true;
           if (this.statusReq == 'En Modificación') {
             this.viewsSeccionReviews = false;
           } else if (this.statusReq == 'En Revisión') {
