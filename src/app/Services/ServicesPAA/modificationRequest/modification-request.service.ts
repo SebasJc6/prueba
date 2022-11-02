@@ -6,6 +6,7 @@ import { filterModificationRequestI, getModificationRequestByRequesI, getModific
 import { getDataI } from 'src/app/Models/ModelsPAA/Requeriment/RequerimentApproved.interface';
 import { AuthenticationService } from '../../Authentication/authentication.service';
 import { AuthInterceptorService } from '../../Authentication/Interceptor/auth-interceptor.service';
+import { ImportBody } from 'src/app/Views/PAA/requirements/modification-request/pop-up-import/pop-up-import.component';
 
 @Injectable({
   providedIn: 'root'
@@ -32,23 +33,19 @@ export class ModificationRequestService {
   }
 
   getModificationRequestByRequestId(idRequets: number,formFilter: filterModificationRequestI): Observable<getModificationRequestByRequesI>{
-    let dir = this.Url  + 'SolicitudMod/' +idRequets + '/Modificaciones/'
-    '?page=' + formFilter.page +
-    '&take=' + formFilter.take 
-    // '&columna=' + formFilter.columna +
-    // '&ascending=' + formFilter.ascending+
-    // '&NumeroRequerimiento=' + formFilter.NumeroRequerimiento +
-    // '&DependenciaDestino=' + formFilter.DependenciaDestino +
-    // '&ActuacionContractual=' + formFilter.ActuacionContractual +
-    // '&NumeroContrato=' + formFilter.NumeroContrato +
-    // '&TipoContrato=' + formFilter.TipoContrato +
-    // '&Perfil=' + formFilter.Perfil +
-    // '&Honorarios=' + formFilter.Honorarios +
-    // '&SaldoRequerimiento=' + formFilter.SaldoRequerimiento +
-    // '&ValorAumenta=' + formFilter.ValorAumenta +
-    // '&ValorDisminuye=' + formFilter.ValorDisminuye +
-    // '&NuevoSaldoApropiacion=' + formFilter.NuevoSaldoApropiacion +
-    // '&ModalidadSeleccion=' + formFilter.ModalidadSeleccion ;    
+    let dir = this.Url  + 'SolicitudMod/' +idRequets + '/Modificaciones' +
+    '?NumeroRequerimiento=' + formFilter.NumeroRequerimiento +
+    '&DependenciaDestino=' + formFilter.DependenciaDestino +
+    '&Descripcion=' + formFilter.Descripcion +
+    '&ActuacionContractual=' + formFilter.ActuacionContractual +
+    '&NumeroContrato=' + formFilter.NumeroContrato +
+    '&TipoContrato=' + formFilter.TipoContrato +
+    '&Perfil=' + formFilter.Perfil +
+    '&ModalidadSeleccion=' + formFilter.ModalidadSeleccion + 
+    '&page=' + formFilter.page +
+    '&take=' + formFilter.take +
+    '&columna=' + formFilter.columna +
+    '&ascending=' + formFilter.ascending;
     return this.http.get<getModificationRequestByRequesI>(dir);
   }
 
@@ -75,9 +72,9 @@ export class ModificationRequestService {
   }
 
 
-  importFile(body: any, file: FormData): Observable<any> {
-    let dir = `${this.Url}/SolicitudMod/ImportFile?ProjectId=${body.ProjectId}&Observacion=${body.Observacion}`;
-    return this.http.post(dir, file);
+  importFile(id_project: number, info: any): Observable<any> {
+    let dir = `${this.Url}/SolicitudMod/ImportFile?projectId=${id_project}`;
+    return this.http.post(dir, info);
   }
 
 

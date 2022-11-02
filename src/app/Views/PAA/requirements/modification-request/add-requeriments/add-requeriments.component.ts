@@ -68,7 +68,7 @@ export class AddrequirementsComponent implements OnInit {
   getDataRequeriment(projectId: number, filterDataRequertiments: filterDataRequerimentI) {
     this.filterDataRequertiments.NumeroRequerimiento = this.filterForm.get('NumeroRequerimiento')?.value || '';
     this.filterDataRequertiments.Descripcion = this.filterForm.get('Descripcion')?.value || '';
-    // this.spinner.show();
+    this.spinner.show();
     this.serviceRequeriment.getDataRequeriment(projectId, filterDataRequertiments).subscribe((data) => {
       this.viewDataRequeriment = data;
       this.numberPages = this.viewDataRequeriment.data.pages;
@@ -80,9 +80,9 @@ export class AddrequirementsComponent implements OnInit {
       });
       this.dataSource = new MatTableDataSource(this.viewDataRequeriment.data.items);
       // console.log(data.data)
-      // this.spinner.hide();
+      this.spinner.hide();
     }, error => {
-      // this.spinner.hide();
+      this.spinner.hide();
     });
   }
   getPagination() {

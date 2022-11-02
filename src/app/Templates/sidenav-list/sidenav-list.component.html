@@ -14,9 +14,15 @@
 
                 <h3 class="name"><strong>{{UserName}}</strong> </h3>
 
-                <!-- <h4 class="mail"> <strong>admin</strong> </h4> -->
 
+                <!-- <h4 class="mail"> <strong>admin</strong> </h4> -->
             </div>
+            <div class="rol">
+                <mat-icon style="color: white;">person</mat-icon>
+
+                <h3 class="rolName"><strong>{{AccessUser}}</strong> </h3>
+            </div>
+
             <div class="menu">
                 <div class="menu-head">
                     <span></span>
@@ -56,17 +62,20 @@
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div>
-                                <button mat-button class="menu-button" [routerLink]="['PAA/Adquisiciones']" (click)="sidebar.toggle()">
+                                <button mat-button class="menu-button" [routerLink]="['PAA/Adquisiciones']"
+                                    (click)="sidebar.toggle()">
                                     <span>PAA</span>
                                 </button>
                             </div>
                             <div *ngIf="AccessUser === 'Referente_PAA'">
-                                <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeTareas']" (click)="sidebar.toggle()">
+                                <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeTareas']"
+                                    (click)="sidebar.toggle()">
                                     <span>Bandeja de tareas</span>
                                 </button>
                             </div>
                             <div>
-                                <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeSolicitudes']" (click)="sidebar.toggle()">
+                                <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeSolicitudes']"
+                                    (click)="sidebar.toggle()">
                                     <span>Modificaciones solicitadas</span>
                                 </button>
                             </div>

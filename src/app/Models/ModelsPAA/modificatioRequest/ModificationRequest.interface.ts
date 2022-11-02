@@ -19,6 +19,7 @@ export interface modificationRequestI {
   numero_Modificacion: number,
   nombreProyecto: string,
   proyecto_Estado: string,
+  solicitud_Estado: string,
   datos: ModificationRequestByRequestIdI,
   observacion: string,
   archivos: archivosI
@@ -34,7 +35,7 @@ export interface ModificationRequestByRequestIdI {
 }
 
 export interface dateTableModificationI {
-  fuenteId: number,
+  fuente: number,
   modificacion_ID: number,
   isContrapartida: boolean,
   numeroRequerimiento: number,
@@ -71,11 +72,11 @@ export interface filterModificationRequestI {
   NumeroContrato: string,
   TipoContrato: string,
   Perfil: string,
-  Honorarios: string,
-  SaldoRequerimiento: string,
-  ValorAumenta: string,
-  ValorDisminuye: string,
-  NuevoSaldoApropiacion: string,
+  // Honorarios: string,
+  // SaldoRequerimiento: string,
+  // ValorAumenta: string,
+  // ValorDisminuye: string,
+  // NuevoSaldoApropiacion: string,
   ModalidadSeleccion: string,
   page: string,
   take: number,
