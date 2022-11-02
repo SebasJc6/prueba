@@ -41,7 +41,7 @@
                             </button>
                         </mat-expansion-panel>
 
-                        <mat-expansion-panel class="menu-panel">
+                        <!-- <mat-expansion-panel class="menu-panel">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     <img src="assets/img/PROYECTO.png" alt="PROYECTO">
@@ -51,7 +51,7 @@
                             <button mat-button class="menu-button" [routerLink]="['']">
                                 <span>Empy</span>
                             </button>
-                        </mat-expansion-panel>
+                        </mat-expansion-panel> -->
 
 
                         <mat-expansion-panel class="menu-panel">
@@ -77,6 +77,12 @@
                                 <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeSolicitudes']"
                                     (click)="sidebar.toggle()">
                                     <span>Modificaciones solicitadas</span>
+                                </button>
+                            </div>
+                            <div>
+                                <button mat-button class="menu-button" disabled="true" [routerLink]="['']"
+                                    (click)="sidebar.toggle()">
+                                    <span>Reportes</span>
                                 </button>
                             </div>
                         </mat-expansion-panel>

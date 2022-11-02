@@ -37,8 +37,29 @@ export class CDPComponent implements OnInit {
 
   //Valores para guardar la informacion del proyecto para mostrar en la miga de pan
   codProject: number = 0;
-  nomProject: string = ''; 
+  nomProject: string = '';
+  
+  //FILTRO
+  viewFilter: boolean = true;
+  viewOrder: boolean = false;
 
+  //CAMPOS PARA EL FILTRO
+  // filterRequestTray = {} as filterRequestTrayI;
+  filterForm = new FormGroup({
+    Vigencia: new FormControl(''),
+    CDP: new FormControl(),
+    FechaCDP: new FormControl(),
+    ValorInicial: new FormControl(),
+    ValorAnulacion: new FormControl(),
+    FechaAnulacion: new FormControl(),
+    ValorFinal: new FormControl(),
+    NumeroRP: new FormControl(),
+    ValorRP: new FormControl(),
+    ValorDistribuido: new FormControl(),
+    columna: new FormControl(''),
+    ascending: new FormControl(false)
+  });
+  
   //Paginación
   pageSummary = {} as any; //TODO: Crear interfaces similares a Modification Sumary
 
@@ -68,6 +89,36 @@ export class CDPComponent implements OnInit {
     }, error => {
       this.spinner.hide();
     });
+  }
+
+
+  notifyCDP() {
+
+  }
+
+
+  //FILTRO
+  openFilter() {
+    this.viewFilter = false
+  }
+  closeFilter() {
+    this.viewFilter = true
+  }
+
+  getFilter() {
+    // this.filterModificationRequest.NumeroRequerimiento = this.filterForm.value.NumeroRequerimiento || '';
+    // this.filterModificationRequest.DependenciaDestino = this.filterForm.get('DependenciaDestino')?.value || '';
+    // this.filterModificationRequest.Descripcion = this.filterForm.get('Descripcion')?.value || '';
+    // this.filterModificationRequest.ModalidadSeleccion = this.filterForm.get('ModalidadSeleccion')?.value || '';
+    // this.filterModificationRequest.ActuacionContractual = this.filterForm.get('ActuacionContractual')?.value || '';
+    // this.filterModificationRequest.NumeroContrato = this.filterForm.get('NumeroContrato')?.value || '';
+    // this.filterModificationRequest.TipoContrato = this.filterForm.get('TipoContrato')?.value || '';
+    // this.filterModificationRequest.Perfil = this.filterForm.get('Perfil')?.value || '';
+    // this.filterModificationRequest.columna = this.filterForm.get('columna')?.value || '';
+    // this.filterModificationRequest.ascending = this.filterForm.get('ascending')?.value || false;
+
+    // this.getModificationRequestByRequestId(Number(this.dataSolicitudModID), this.filterModificationRequest);
+    this.closeFilter();
   }
 
 

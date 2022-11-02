@@ -45,16 +45,19 @@
                 Filtrar
             </button>
             <span class="btnExcel">
-                <button mat-button [disabled]="(dataSolicitudModID !== '0') ? false : true" (click)="exportFile()">
-                    Exportar
-                    <img class="imgExcel" src="../../../../assets/img/excel.jpg">
+                <button mat-button (click)="exportFile()"
+                [disabled]="(dataSolicitudModID !== '0') ? false : true">
+                    <mat-icon class="imgExcel mat-icon" matTooltip="Exportar Excel">
+                        <img class="imgExcel" src="../../../../assets/img/excel.jpg">
+                    </mat-icon>
                 </button>
             </span>
             <span *ngIf="AccessUser === 'Referente_Planeacion'" class="btngImport">
-                <button type="button" mat-raised-button class="btngImport" (click)="openChargeFile()"
+                <button mat-button class="btn" (click)="openChargeFile()"
                     [disabled]="(dataSolicitudModID == '0') ? false : true">
-                    Importar
-                    <img class="imgImport" src="../../../../assets/img/import.png">
+                    <mat-icon class="imgImport mat-icon" matTooltip="Importar Excel">
+                        <img class="imgImport" src="../../../../assets/img/import.png">
+                    </mat-icon>
                 </button>
             </span>
         </div>
@@ -73,14 +76,14 @@
                     <input class="contData" value="{{numModification}}" disabled>
                 </div>
 
-                <!-- <div class="contTxt label1">
+                <div class="contTxt label1">
                     <p class="tltData">Vigencia a afectar</p>
                     <mat-select class="contDataSelect" formControlName="">
                         <mat-option *ngFor="" [value]="">2022</mat-option>
                         <mat-option value="2023">2023</mat-option>
                         <mat-option value="2024">2024</mat-option>
                     </mat-select>
-                </div> -->
+                </div>
             </div>
         </form>
 

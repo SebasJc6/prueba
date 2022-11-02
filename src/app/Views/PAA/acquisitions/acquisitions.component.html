@@ -16,7 +16,25 @@
       </mat-card-title>
 
       <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">Filtrar</button>
-      <button class="btnExcel" mat-button>Exportar<img class="imgExcel" src="../../../../assets/img/excel.jpg"></button>
+
+      <button class="btnExcel btn" mat-button>
+        <mat-icon class="imgExcel mat-icon" matTooltip="Exportar Excel">
+          <img class="imgExcel" src="../../../../assets/img/excel.jpg">
+        </mat-icon>
+      </button>
+
+      <button class="btnExcel btn" mat-button>
+        <mat-icon class="btnActions mat-icon" matTooltip="Exportar Giros">
+          autorenew
+        </mat-icon>
+      </button>
+
+      <button class="btnExcel btn" mat-button>
+        <mat-icon class="btnActions mat-icon" matTooltip="Exportar CDP/RP">
+          attach_money
+        </mat-icon>
+      </button>
+
     </div>
     
     <div>

@@ -63,14 +63,32 @@
 
   .btnExcel {
     color: #35867c;
-    margin-top: -1.8%;
+    margin-top: -2%;
     float: right;
+    margin-left: -1.2%;
   }
 
   .imgExcel {
     margin-left: 2%;
     color: #35867c;
     width: 30px;
+  }
+
+  .btnActions {
+    border-color: #185564;
+    border: 2px solid #185564;
+    color: #185564;
+    border-radius: 0.5rem;
+  }
+
+  .btn:hover {
+    cursor: default;
+    transition-duration: 0.3s;
+}
+
+  .mat-icon {
+    height: 100%;
+    cursor: pointer;
   }
 }
 

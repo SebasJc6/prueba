@@ -66,10 +66,9 @@
         }
 
         .btn:hover {
-            cursor: pointer;
+            cursor: default;
             transition-duration: 0.3s;
-            color: white;
-            background-color: #185564;
+            background-color: #fff;
         }
 
         .btngImport {
@@ -81,26 +80,9 @@
             .imgImport {
                 color: #3772FF;
                 margin-left: 2%;
-                width: 28px;
+                width: 30px;
             }
         }
-    .mat-raised-button:not([class*=mat-elevation-z]) {
-        box-shadow: none;
-    }
-
-    .mat-raised-button:hover([class*=mat-elevation-z]) {
-        box-shadow: none;
-
-    }
-    .mat-raised-button {
-        background-color: #fbfbfb;
-    }
-
-    .mat-raised-button:hover {
-        cursor: pointer;
-        transition-duration: 0.3s;
-        background-color: #f3f3f3;
-    }
 
         .btnExcel {
             margin-top: 1%;
@@ -114,6 +96,11 @@
                 color: #35867c;
                 width: 30px;
             }
+        }
+
+        .mat-icon {
+            height: 100%;
+            cursor: pointer;
         }
     }
 
