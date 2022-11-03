@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
-import { filterModificationRequestI, getModificationRequestByRequesI, getModificationRequestI, modificationRequestI, postModificationRequestI, postModificRequestCountersI, RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
-import { getDataI } from 'src/app/Models/ModelsPAA/Requeriment/RequerimentApproved.interface';
-import { AuthenticationService } from '../../Authentication/authentication.service';
-import { AuthInterceptorService } from '../../Authentication/Interceptor/auth-interceptor.service';
-import { ImportBody } from 'src/app/Views/PAA/requirements/modification-request/pop-up-import/pop-up-import.component';
+import { filterModificationRequestI, getModificationRequestByRequesI, getModificationRequestI, postModificationRequestI, RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +12,7 @@ export class ModificationRequestService {
 
   readonly Url: string= environment.baseUrl.logic ;
 
-  constructor(private http: HttpClient, private authService: AuthenticationService, private authInterceptor: AuthInterceptorService) {}
+  constructor(private http: HttpClient) {}
 
   getModificationRequest(idProject: number): Observable<getModificationRequestI>{
     let dir = this.Url + 'Proyecto/' + idProject + '/SolicitudMod';
@@ -32,8 +28,8 @@ export class ModificationRequestService {
     return this.http.get<getModificationRequestI>(this.Url);
   }
 
-  getModificationRequestByRequestId(idRequets: number,formFilter: filterModificationRequestI): Observable<getModificationRequestByRequesI>{
-    let dir = this.Url  + 'SolicitudMod/' +idRequets + '/Modificaciones' +
+  getModificationRequestByRequestId(idRequets: number, vigencia: number, formFilter: filterModificationRequestI): Observable<getModificationRequestByRequesI>{
+    let dir = this.Url  + 'SolicitudMod/' +idRequets + '/Modificaciones/' + vigencia +
     '?NumeroRequerimiento=' + formFilter.NumeroRequerimiento +
     '&DependenciaDestino=' + formFilter.DependenciaDestino +
     '&Descripcion=' + formFilter.Descripcion +
@@ -91,5 +87,10 @@ export class ModificationRequestService {
   putRevisionesEnviar(body: RevisionSend): Observable<any> {
     let dir = `${this.Url}Revisiones/Enviar/Solicitud`;
     return this.http.put(dir, body);
+  }
+
+  getValidityByRequest(id_request: number): Observable<any> {
+    let dir = `${this.Url}/SolicitudMod/${id_request}/Vigencias`;
+    return this.http.get<any>(dir);
   }
 }

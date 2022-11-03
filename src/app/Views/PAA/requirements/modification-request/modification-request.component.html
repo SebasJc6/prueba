@@ -76,12 +76,12 @@
                     <input class="contData" value="{{numModification}}" disabled>
                 </div>
 
-                <div class="contTxt label1">
+                <div class="contTxt label1" *ngIf="dataSolicitudModID != '0'">
                     <p class="tltData">Vigencia a afectar</p>
-                    <mat-select class="contDataSelect" formControlName="">
-                        <mat-option *ngFor="" [value]="">2022</mat-option>
-                        <mat-option value="2023">2023</mat-option>
-                        <mat-option value="2024">2024</mat-option>
+                    <mat-select class="contDataSelect"
+                        [(ngModel)]="dataValidity" name="validity"
+                        (selectionChange)="selectValidity()">
+                        <mat-option *ngFor="let validity of ArrayValidity" [value]="validity">{{validity}}</mat-option>
                     </mat-select>
                 </div>
             </div>
