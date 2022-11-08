@@ -12,6 +12,12 @@ export interface getModificationRequestByRequesI {
   data: ModificationRequestByRequestIdI,
 }
 
+export interface getValidityByRequestI {
+  status: number,
+  messag: any,
+  title: any,
+  data: number[]
+}
 
 export interface modificationRequestI {
   idSolicitud: number,
@@ -22,7 +28,8 @@ export interface modificationRequestI {
   solicitud_Estado: string,
   datos: ModificationRequestByRequestIdI,
   observacion: string,
-  archivos: archivosI
+  archivos: archivosI,
+  vigencia: number
 }
 
 export interface ModificationRequestByRequestIdI {

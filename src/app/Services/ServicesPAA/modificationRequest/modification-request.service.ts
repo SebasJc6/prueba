@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
-import { filterModificationRequestI, getModificationRequestByRequesI, getModificationRequestI, postModificationRequestI, RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
+import { filterModificationRequestI, getModificationRequestByRequesI, getModificationRequestI, getValidityByRequestI, postModificationRequestI, RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -89,8 +89,8 @@ export class ModificationRequestService {
     return this.http.put(dir, body);
   }
 
-  getValidityByRequest(id_request: number): Observable<any> {
+  getValidityByRequest(id_request: number): Observable<getValidityByRequestI> {
     let dir = `${this.Url}/SolicitudMod/${id_request}/Vigencias`;
-    return this.http.get<any>(dir);
+    return this.http.get<getValidityByRequestI>(dir);
   }
 }

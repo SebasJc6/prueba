@@ -168,7 +168,6 @@ export class ModificationRequestComponent implements OnInit {
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
     this.getModificationRequet(Number(this.dataProjectID), Number(this.dataSolicitudModID));
     if (this.dataSolicitudModID != '0') {
-      this.getAllValidiy(Number(this.dataSolicitudModID));
       this.getRequestAndProject(Number(this.dataProjectID), Number(this.dataSolicitudModID));
       this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
     } else {
@@ -189,6 +188,11 @@ export class ModificationRequestComponent implements OnInit {
 
   ngAfterViewInit() {
     this.btnFiltrar.focus();
+    this.spinner.show();
+    setTimeout(() => {
+      this.getAllValidiy(Number(this.dataSolicitudModID));
+      this.spinner.hide();
+    }, 1200);
   }
 
 
@@ -210,11 +214,13 @@ export class ModificationRequestComponent implements OnInit {
   getModificationRequet(projectId: number, requestID: number) {
     this.spinner.show();
     this.serviceModRequest.getModificationRequestByRequest(projectId, requestID).subscribe((data) => {
+      // console.log(data.data);
       this.codProject = data.data.proyecto_COD;
       this.numModification = data.data.numero_Modificacion;
       this.nomProject = data.data.nombreProyecto;
       this.ProjectState = data.data.proyecto_Estado;
       this.StatusRequest = data.data.solicitud_Estado || '';
+      this.dataValidity = data.data.vigencia;
       this.spinner.hide();
     }, error => {
       this.spinner.hide();
@@ -265,10 +271,11 @@ export class ModificationRequestComponent implements OnInit {
   getAllValidiy(id_request: number){
     this.spinner.show();
     this.serviceModRequest.getValidityByRequest(id_request).subscribe(res => {
-      // console.log(res.data);
+      //  console.log(res.data);
       this.ArrayValidity = res.data;
-      this.dataValidity = res.data[0];
-
+      if (this.dataValidity === 0) {
+        this.dataValidity = res.data[0];
+      }
       this.getModificationRequestByRequestId(+this.dataSolicitudModID, this.dataValidity, this.filterModificationRequest);
     });
   }
@@ -864,9 +871,10 @@ export class ModificationRequestComponent implements OnInit {
       // this.onFileUpload();
       this.loadTableFiles();
       this.useNewFile = true;
-    })
-
+    });
   }
+
+
   loadTableFiles() {
     // this.arrayFile = [] ;
 
@@ -920,21 +928,21 @@ export class ModificationRequestComponent implements OnInit {
         }
 
         this.dataSourceAttachedFiles = new MatTableDataSource(this.arrayFile);
-
-
-
-
       }
-
     }
 
+    if (this.arrayFile.length > 0) {
+      this.rtnFile = true;
+    } else {
+      this.rtnFile = false;
+    }
     //let newfile = this.viewTableFiles
   }
+
 
   addFiles(idSol: number) {
     // console.log('addFiles idSol', idSol)
     // console.log('addFiles this.arrayFile', this.arrayFile)
-
 
     let files: any = [];
     this.arrayFile.forEach(element => {
@@ -960,25 +968,24 @@ export class ModificationRequestComponent implements OnInit {
     tags.idProject = +this.dataProjectID;
     tags.idSol = idSol;
     formPost.tags = tags;
-    formPost.archivos = files
+    formPost.archivos = files;
     // console.log('addFiles formPost', formPost)
 
     this.serviceFiles.postFile(formPost).subscribe(res => {
       // console.log('res', res)
       if (res.status == 200) {
         this.openSnackBar('Éxito al Guardar', `Archivos Guardado.`, 'success');
-        this.rtnFile = true;
       } else {
         this.openSnackBar('Lo sentimos', `Error al guardar archivos`, 'error', res.message);
-        this.rtnFile = false;
       }
     }, error => {
       this.spinner.hide();
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', error.message);
       this.rtnFile = false;
-    })
-    return this.rtnFile;
+    });
   }
+
+
   getAllFiles(idProject: number, idRequets: number) {
     //  this.spinner.show();
     this.serviceFiles.getAllFiles(idProject, idRequets).subscribe((data) => {
@@ -992,6 +999,8 @@ export class ModificationRequestComponent implements OnInit {
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     })
   }
+
+
   deleteFile(File: any) {
     this.spinner.show();
     var index = this.arrayFile.findIndex((x: any) => x.blobName === File.blobName);
@@ -1017,8 +1026,9 @@ export class ModificationRequestComponent implements OnInit {
       this.spinner.hide();
     }
     // console.log('blobName delete', blobName)
-
   }
+
+
   dowloadFile(File: any) {
     this.spinner.show();
     if (File.fileAsBase64 == '') {
@@ -1037,8 +1047,9 @@ export class ModificationRequestComponent implements OnInit {
       this.downloadPdf(File.fileAsBase64, File.fileName);
       this.spinner.hide();
     }
-
   }
+
+
   downloadPdf(base64String: string, fileName: string) {
     const source = `data:application/pdf;base64,${base64String}`;
     const link = document.createElement("a");
@@ -1081,10 +1092,15 @@ export class ModificationRequestComponent implements OnInit {
           //guardar archivos
           let filesUp: boolean = this.rtnFile
           //console.log('files return', filesUp);
-          setTimeout(() => {
+          if (filesUp) {
+            setTimeout(() => {
+              this.spinner.hide();
+              this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+            }, 4000);
+          } else {
             this.spinner.hide();
-          this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
-          }, 4000);
+            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+          }
           //Elimación de los registros en LocalStorage
           ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
@@ -1130,7 +1146,6 @@ export class ModificationRequestComponent implements OnInit {
           this.ArrayDataStorage = [];
           this.reloadDataTbl();
           this.spinner.hide();
-
         }
         this.spinner.hide();
       }, error => {
@@ -1184,11 +1199,15 @@ export class ModificationRequestComponent implements OnInit {
           //guardar archivos
           let filesUp: boolean = this.rtnFile
           //console.log('files return', filesUp);
-          setTimeout(() => {
-            this.spinner.hide();
-
-            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+          if (filesUp) {
+            setTimeout(() => {
+              this.spinner.hide();
+              this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
             }, 4000);
+          } else {
+            this.spinner.hide();
+            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+          }
           //Elimación de los registros en LocalStorage
           ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);

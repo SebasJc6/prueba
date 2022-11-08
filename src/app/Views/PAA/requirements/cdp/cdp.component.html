@@ -47,17 +47,8 @@
                 <div class="filter">
                   <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
                     <mat-radio-button value="Vigencia">Vigencia</mat-radio-button>
-                    <!-- <mat-radio-button value="FechaPresentacion">Fecha de Presentación</mat-radio-button> -->
                     <mat-radio-button value="CDP">CDP</mat-radio-button>
                     <!-- <mat-radio-button value="FechaCDP">Fecha CDP</mat-radio-button> -->
-                    <mat-radio-button value="ValorInicial">Valor Inicial</mat-radio-button>
-                    <!-- <mat-radio-button value="FechaAnulacion">Fecha Anulación</mat-radio-button> -->
-                    <mat-radio-button value="ValorAnulacion">Valor Anulación</mat-radio-button>
-                    <mat-radio-button value="ValorFinal">Valor Final</mat-radio-button>
-                    <mat-radio-button value="NumeroRP">No. RP</mat-radio-button>
-                    <mat-radio-button value="ValorRP">Valor RP</mat-radio-button>
-                    <mat-radio-button value="ValorDistribuido">Valor Distribuido</mat-radio-button>
-                    <!-- <mat-radio-button value="FechaAprobacion_rechazo">Fecha de aprobación / rechazo</mat-radio-button> -->
                   </mat-radio-group>
                 </div>
                 <mat-divider></mat-divider>
@@ -86,35 +77,6 @@
                     <mat-label>Fecha CDP</mat-label>
                     <input matInput formControlName="FechaCDP" type="date">
                   </mat-form-field>
-                  <mat-form-field style="width: 15%;" appearance="outline">
-                    <mat-label>ValorInicial</mat-label>
-                    <input matInput formControlName="ValorInicial" type="text">
-                  </mat-form-field>
-                  <mat-form-field style="width: 15%;" appearance="outline">
-                    <mat-label>Valor Anulación</mat-label>
-                    <input matInput formControlName="ValorAnulacion" type="text">
-                  </mat-form-field>
-                  <mat-form-field style="width: 15%;" appearance="outline">
-                    <mat-label>Fecha Anulación</mat-label>
-                    <input matInput formControlName="FechaAnulacion" type="date">
-                  </mat-form-field>
-                  <mat-form-field style="width: 15%;" appearance="outline">
-                    <mat-label>ValorFinal</mat-label>
-                    <input matInput formControlName="ValorFinal" type="text">
-                  </mat-form-field>
-                  <mat-form-field style="width: 15%;" appearance="outline">
-                    <mat-label>Numero RP</mat-label>
-                    <input matInput formControlName="NumeroRP" type="date">
-                  </mat-form-field>
-                  <mat-form-field style="width: 15%;" appearance="outline">
-                    <mat-label>Valor RP</mat-label>
-                    <input matInput formControlName="ValorRP" type="text">
-                  </mat-form-field>
-                  <mat-form-field style="width: 15%;" appearance="outline">
-                    <mat-label>Valor Distribuido</mat-label>
-                    <input matInput formControlName="ValorDistribuido" type="text">
-                  </mat-form-field>
-
                 </div>
               </mat-expansion-panel>
             </mat-accordion>

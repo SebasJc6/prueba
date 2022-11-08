@@ -3,7 +3,9 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { filterCDPsI } from 'src/app/Models/ModelsPAA/Requeriment/cdp';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
+import { CDPService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/cdp.service';
 
 @Component({
   selector: 'app-cdp',
@@ -15,6 +17,7 @@ export class CDPComponent implements OnInit {
   constructor( private activeRoute: ActivatedRoute,
     public router: Router,
     private serviceModRequest: ModificationRequestService,
+    private serviceCdps: CDPService,
     private spinner: NgxSpinnerService,) { }
 
   displayedColumns: string[] = [
@@ -44,24 +47,17 @@ export class CDPComponent implements OnInit {
   viewOrder: boolean = false;
 
   //CAMPOS PARA EL FILTRO
-  // filterRequestTray = {} as filterRequestTrayI;
+  filterCDPs = {} as filterCDPsI;
   filterForm = new FormGroup({
-    Vigencia: new FormControl(''),
+    Vigencia: new FormControl(),
     CDP: new FormControl(),
     FechaCDP: new FormControl(),
-    ValorInicial: new FormControl(),
-    ValorAnulacion: new FormControl(),
-    FechaAnulacion: new FormControl(),
-    ValorFinal: new FormControl(),
-    NumeroRP: new FormControl(),
-    ValorRP: new FormControl(),
-    ValorDistribuido: new FormControl(),
     columna: new FormControl(''),
     ascending: new FormControl(false)
   });
   
   //Paginación
-  pageSummary = {} as any; //TODO: Crear interfaces similares a Modification Sumary
+  pageCDP = {} as any; //TODO: Crear interfaces similares a Modification Sumary
 
   paginationForm = new FormGroup({
     page: new FormControl(),
@@ -77,6 +73,7 @@ export class CDPComponent implements OnInit {
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
     this.requerimentId = this.activeRoute.snapshot.paramMap.get('idReq') || '';
     this.getModificationRequet(Number(this.dataProjectID));
+    this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
   }
 
   //Obtener la información del proyecto para mostrar en miga de pan
@@ -91,6 +88,17 @@ export class CDPComponent implements OnInit {
     });
   }
 
+
+  getAllCDPsByRequerimentId(id_requeriment: number, filterForm: filterCDPsI) {
+    this.serviceCdps.getCDPsByRequerimentId(id_requeriment, filterForm).subscribe(data => {
+      console.log(data);
+      
+      this.paginationForm.setValue({
+        take: filterForm.take,
+        page: filterForm.page
+      });
+    });
+  }
 
   notifyCDP() {
 
@@ -124,15 +132,15 @@ export class CDPComponent implements OnInit {
 
   //PAGINACIÓN
   getPagination() {
-    this.pageSummary.page = this.paginationForm.get('page')?.value;
-    this.pageSummary.take = this.paginationForm.get('take')?.value;
+    this.pageCDP.page = this.paginationForm.get('page')?.value;
+    this.pageCDP.take = this.paginationForm.get('take')?.value;
     // this.getSummary(Number(this.dataSolicitudModID),this.selectedValueSource, this.pageSummary);
   }
 
   nextPage() {
     if (this.numberPage < this.numberPages) {
       this.numberPage++;
-      this.pageSummary.page = this.numberPage.toString();
+      this.pageCDP.page = this.numberPage.toString();
       // this.getSummary(31,this.selectedValueSource, this.pageSummary);
     }
   }
@@ -141,20 +149,20 @@ export class CDPComponent implements OnInit {
   prevPage() {
     if (this.numberPage > 1) {
       this.numberPage--;
-      this.pageSummary.page = this.numberPage.toString();
+      this.pageCDP.page = this.numberPage.toString();
       // this.getSummary(31,this.selectedValueSource, this.pageSummary);
     }
   }
 
   firstPage() {
     this.numberPage = 1;
-    this.pageSummary.page = this.numberPage.toString();
+    this.pageCDP.page = this.numberPage.toString();
     // this.getSummary(31,this.selectedValueSource, this.pageSummary);
   }
 
   latestPage() {
     this.numberPage = this.numberPages;
-    this.pageSummary.page = this.numberPage.toString();
+    this.pageCDP.page = this.numberPage.toString();
     // this.getSummary(31,this.selectedValueSource, this.pageSummary);
   }
 

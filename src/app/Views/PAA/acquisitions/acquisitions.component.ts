@@ -89,6 +89,18 @@ export class AcquisitionsComponent implements OnInit {
   //Objeto con la informacion de acceso del Usuario
   AccessUser: string = '';
 
+  
+  ngOnInit(): void {
+    this.ngAfterViewInit();
+    
+    this.filterProjects.page = "1";
+    this.filterProjects.take = 20;
+    this.getAllProjects(this.filterProjects);
+    
+    this.AccessUser = this.authService.getRolUser();
+  }
+  
+
   ngAfterViewInit() {
     if (this.isApproved === true) {
       this.tooltip = 'Ejecutar'
@@ -97,16 +109,7 @@ export class AcquisitionsComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-    this.ngAfterViewInit();
-
-    this.filterProjects.page = "1";
-    this.filterProjects.take = 20;
-    this.getAllProjects(this.filterProjects);
-
-    this.AccessUser = this.authService.getRolUser();
-  }
-
+  
   getAllProjects(filterProjects: filterProjectI) {
     if (this.filterForm.value.EstadoDesc == 'Todos') {
       this.filterProjects.EstadoDesc =  ' ';
