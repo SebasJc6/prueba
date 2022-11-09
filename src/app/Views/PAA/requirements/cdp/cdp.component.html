@@ -46,8 +46,8 @@
                 </mat-expansion-panel-header>
                 <div class="filter">
                   <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
-                    <mat-radio-button value="Vigencia">Vigencia</mat-radio-button>
-                    <mat-radio-button value="CDP">CDP</mat-radio-button>
+                    <mat-radio-button value="vigencia">Vigencia</mat-radio-button>
+                    <mat-radio-button value="numeroCDP">CDP</mat-radio-button>
                     <!-- <mat-radio-button value="FechaCDP">Fecha CDP</mat-radio-button> -->
                   </mat-radio-group>
                 </div>
@@ -67,15 +67,15 @@
                 <div class="form">
                   <mat-form-field style="width: 15%;" appearance="outline">
                     <mat-label>Vigencia</mat-label>
-                    <input matInput formControlName="Vigencia" type="text">
+                    <input matInput formControlName="vigencia" type="number">
                   </mat-form-field>
                   <mat-form-field style="width: 15%;" appearance="outline">
                     <mat-label>CDP</mat-label>
-                    <input matInput formControlName="CDP" type="text">
+                    <input matInput formControlName="numeroCDP" type="number">
                   </mat-form-field>
                   <mat-form-field style="width: 15%;" appearance="outline">
                     <mat-label>Fecha CDP</mat-label>
-                    <input matInput formControlName="FechaCDP" type="date">
+                    <input matInput formControlName="fechaCDP" type="date">
                   </mat-form-field>
                 </div>
               </mat-expansion-panel>
@@ -93,62 +93,62 @@
     <table mat-table class="tablePrin mat-elevation-z8" [dataSource]="dataSource">
       <ng-container matColumnDef="Vigencia">
         <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>Vigencia</p>  </th>
-        <td mat-cell *matCellDef="let element"> <p>{{element.pospre}} </p> </td>
+        <td mat-cell *matCellDef="let element"> <p>{{element.vigencia}}</p> </td>
         <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
       </ng-container>
 
       <ng-container matColumnDef="CDP">
         <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header><p>CDP</p></th>
-        <td mat-cell *matCellDef="let element"> <p>{{element.mga}}</p></td>
+        <td mat-cell *matCellDef="let element"><p> <a [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]"> {{element.numeroCDP}} </a> </p></td>
         <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
       </ng-container>
 
       <ng-container matColumnDef="FECHA CDP">
         <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>FECHA CDP</p></th>
-        <td mat-cell *matCellDef="let element"> <p>{{element.auxiliar}}</p>  </td>
+        <td mat-cell *matCellDef="let element"> <p>{{element.fechaCDP}}</p>  </td>
         <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 8%;">TOTAL GENERAL</p></td>
       </ng-container>
 
       <ng-container matColumnDef="VALOR INICIAL">
         <th mat-header-cell *matHeaderCellDef class="encabesado"><p>VALOR INICIAL</p></th>
-        <td mat-cell *matCellDef="let element"> <p>{{element.sumaValorAumenta | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
-        <td mat-footer-cell *matFooterCellDef class="encabesado"> <p style="margin-top: 5%;">{{0 | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
+        <td mat-cell *matCellDef="let element"> <p>{{element.valorinicial | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado"> <p style="margin-top: 5%;">{{initialValue | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
       </ng-container>
 
       <ng-container matColumnDef="VALOR ANULACIÓN">
         <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>VALOR ANULACIÓN</p> </th>
-        <td mat-cell *matCellDef="let element"> <p>{{element.sumaValorAumenta | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
-        <td mat-footer-cell *matFooterCellDef class="encabesado"> <p style="margin-top: 5%;">{{0 | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
+        <td mat-cell *matCellDef="let element"> <p>{{element.valorAnulacion | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado"> <p style="margin-top: 5%;">{{cancellationValue | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
       </ng-container>
 
       <ng-container matColumnDef="FECHA ANULACIÓN">
         <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>FECHA ANULACIÓN</p> </th>
-        <td mat-cell *matCellDef="let element">  <p>{{element.sumaValorDisminuye}} </p></td>
+        <td mat-cell *matCellDef="let element">  <p>{{element.fechaAnulacion}} </p></td>
         <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
       </ng-container>
 
       <ng-container matColumnDef="VALOR FINAL">
         <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>VALOR FINAL</p> </th>
-        <td mat-cell *matCellDef="let element"> <p>{{element.diferencia | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
-        <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 9.5%;">{{0 | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
+        <td mat-cell *matCellDef="let element"> <p>{{element.valorFinal | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 9.5%;">{{finalvalue | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
       </ng-container>
 
-      <ng-container matColumnDef="No. RP">
-        <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>No. RP</p> </th>
-        <td mat-cell *matCellDef="let element"> <p>{{element.diferencia}}</p></td>
+      <ng-container matColumnDef="CANTIDAD RP">
+        <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>CANTIDAD RP</p> </th>
+        <td mat-cell *matCellDef="let element"> <p>{{element.cantidadRPs}}</p></td>
         <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
       </ng-container>
 
       <ng-container matColumnDef="VALOR RP">
         <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>VALOR RP</p> </th>
-        <td mat-cell *matCellDef="let element"> <p>{{element.diferencia | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
-        <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 9.5%;">{{0 | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
+        <td mat-cell *matCellDef="let element"> <p>{{element.valorRP | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 9.5%;">{{valueRP | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
       </ng-container>
 
       <ng-container matColumnDef="VALOR DISTRIBUIDO">
         <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>VALOR DISTRIBUIDO</p> </th>
-        <td mat-cell *matCellDef="let element"> <p>{{element.diferencia | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
-        <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 9.5%;">{{0 | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
+        <td mat-cell *matCellDef="let element"> <p>{{element.valorDistribuido | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 9.5%;">{{distributedValue | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
