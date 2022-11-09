@@ -125,7 +125,7 @@
                                         <p class="tltData">Duracion estimada del contrato</p>
                                         <input type="number" class="contData" style="width: 20%;"
                                             formControlName="duracionMes">
-                                        
+
                                         meses&nbsp;&nbsp;
 
                                         <input type="number" class="contData" style="width: 20%;"
@@ -524,7 +524,7 @@
                                             <td mat-cell *matCellDef="let element">
                                                 <div class="Actions">
                                                     <mat-icon mat-icon-button class="btnActions" matTooltip="Editar"
-                                                        (click)="openBudgetModification(element)">
+                                                        (click)="openBudgetModification('editar',element)">
                                                         edit
                                                     </mat-icon>
                                                     <mat-icon mat-icon-button style="margin-left: 5px;"
@@ -1189,6 +1189,22 @@
                                             '1.0-0'}}
                                         </td>
                                     </ng-container>
+                                    <ng-container matColumnDef="acciones">
+                                        <tr>
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="acc"> Acciones
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td mat-cell *matCellDef="let element">
+                                                <div class="Actions">
+                                                    <mat-icon mat-icon-button class="btnActions" matTooltip="Ver"
+                                                        (click)="openBudgetModification('ver',element)">
+                                                        remove_red_eye
+                                                    </mat-icon>
+                                                </div>
+                                            </td>
+                                        <tr>
+                                    </ng-container>
 
                                     <tr mat-header-row *matHeaderRowDef="displayedColumnsRew"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumnsRew"></tr>S
@@ -1749,6 +1765,22 @@
                                             'symbol' :
                                             '1.0-0'}}
                                         </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="acciones">
+                                        <tr>
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="acc"> Acciones
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td mat-cell *matCellDef="let element">
+                                                <div class="Actions">
+                                                    <mat-icon mat-icon-button class="btnActions" matTooltip="Ver"
+                                                        (click)="openBudgetModification('ver',element)">
+                                                        remove_red_eye
+                                                    </mat-icon>
+                                                </div>
+                                            </td>
+                                        <tr>
                                     </ng-container>
 
                                     <tr mat-header-row *matHeaderRowDef="displayedColumnsAct"></tr>

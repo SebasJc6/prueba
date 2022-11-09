@@ -110,7 +110,6 @@ export class PropertiesRequirementService {
     return this.http.get<getDataTemporalI>(dir)
   }
   getDataAprobad(projectId: number, requerimetId: number): Observable<getDataAprobadaI> {
-
     let dir = this.logicUrl + '/Proyecto/' + projectId + '/Requerimiento/' + requerimetId
     return this.http.get<getDataAprobadaI>(dir)
   }

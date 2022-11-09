@@ -393,7 +393,9 @@ export interface cadenasPresupuestalesI {
         disminucion: number,
         compromisos: number,
         apropiacionDefinitiva: number,
-        giros: number
+        giros: number,
+        subAumento: number, 
+        subDisminucion : number,
     },
     project_ID: number,
     requerimiento_ID: number,
@@ -428,6 +430,47 @@ export interface cadenasPresupuestalesI {
     compromisos: number,
     apropiacionDefinitiva: number,
     giros: number,
-    
 
+
+}
+
+export interface  cadenaPresupuestalI {
+    uuid: string,
+    project_ID: number,
+    requerimiento_ID: number,
+    mes: number,
+    anioVigRecursos: number,
+    auxiliar: {
+        aux_ID: number,
+        codigo: number
+    },
+    fuente: {
+        fuente_ID: number,
+        codigoFuente: number,
+        detalleFuente: string,
+        fuenteMSPS: number
+    },
+    actividad: {
+        actividad_ID: number,
+        codigo: number,
+        metaODS: string
+    },
+    mga: {
+        mgA_ID: number,
+        codigo: number
+    },
+    pospre: {
+        pospre_ID: number,
+        codigo: number
+    },
+    apropiacionDisponible: number,
+    aumento: number,
+    disminucion: number,
+    compromisos: number,
+    apropiacionDefinitiva: number,
+    giros: number,
+    subAumento: number, 
+    subDisminucion : number,
+    iva: number,
+    arl: number,
 }

@@ -265,8 +265,8 @@ export class PropertiesRequirementComponent implements OnInit {
   public selectedIndex = 0;
   //INFORMACION PARA LA TABLA CLASIFICACION PRESUPUESTAL
   displayedColumns: string[] = ['mes', 'anioVigRecursos', 'auxiliar', 'detalleFuente', 'actividad', 'meta', 'fuente', 'fuenteMSPS', 'MGA', 'pospre', 'apropiacionDisponible', 'aumento', 'disminucion', 'apropiacionDefinitiva', 'compromisos', 'giros', 'acciones'];
-  displayedColumnsAct: string[] = ['mes', 'anioVigRecursos', 'auxiliar', 'detalleFuente', 'actividad', 'meta', 'fuente', 'fuenteMSPS', 'MGA', 'pospre', 'apropiacionDisponible', 'aumento', 'disminucion', 'apropiacionDefinitiva', 'compromisos', 'giros'];
-  displayedColumnsRew: string[] = ['mes', 'anioVigRecursos', 'auxiliar', 'detalleFuente', 'actividad', 'meta', 'fuente', 'fuenteMSPS', 'MGA', 'pospre', 'apropiacionDisponible', 'aumento', 'disminucion', 'apropiacionDefinitiva', 'compromisos', 'giros'];
+  displayedColumnsAct: string[] = ['mes', 'anioVigRecursos', 'auxiliar', 'detalleFuente', 'actividad', 'meta', 'fuente', 'fuenteMSPS', 'MGA', 'pospre', 'apropiacionDisponible', 'aumento', 'disminucion', 'apropiacionDefinitiva', 'compromisos', 'giros', 'acciones'];
+  displayedColumnsRew: string[] = ['mes', 'anioVigRecursos', 'auxiliar', 'detalleFuente', 'actividad', 'meta', 'fuente', 'fuenteMSPS', 'MGA', 'pospre', 'apropiacionDisponible', 'aumento', 'disminucion', 'apropiacionDefinitiva', 'compromisos', 'giros', 'acciones'];
   //INFORMACION PARA LA TABLA CODIGOS UNSPSC
   codigosColumns: string[] = ['codigoUNSPSC', 'descripcion', 'eliminar'];
   codigosColumnsAct: string[] = ['codigoUNSPSC', 'descripcion'];
@@ -835,7 +835,7 @@ export class PropertiesRequirementComponent implements OnInit {
   getDataAprobad(projectId: number, requerimetId: number) {
     this.serviceProRequirement.getDataAprobad(projectId, requerimetId).subscribe(dataAprobad => {
       let dataApro = dataAprobad.data
-      // console.log('dataAprobad', dataAprobad)
+       console.log('dataAprobad', dataAprobad)
       if (dataAprobad.data != null) {
         //   console.log('dataApro', dataApro)
         this.dataRequirementNum = dataApro.requerimiento.numeroRequerimiento.toString();
@@ -1253,6 +1253,10 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dataTableClasificacion['compromisos'] = 0;
         this.dataTableClasificacion['apropiacionDefinitiva'] = 0;
         this.dataTableClasificacion['giros'] = 0;
+        this.dataTableClasificacion['subAumento'] = 0;
+        this.dataTableClasificacion['subDisminucion'] = 0;
+        this.dataTableClasificacion['iva'] = 0;
+        this.dataTableClasificacion['arl'] = 0;
         let repe = this.dataTableClasificaciones.filter(u => u.uuid == this.dataTableClasificacion['uuid'])
         if (repe.length != 0) {
           //console.log('ya existe', repe);
@@ -1518,12 +1522,16 @@ export class PropertiesRequirementComponent implements OnInit {
     });
   }
 
-  openBudgetModification(element: any) {
+  openBudgetModification(type:string,element: any) {
     // console.log('element clasificacion', element)
     const dialogRef = this.dialog.open(BudgetModificationComponent, {
       width: '800px',
       height: '500px',
-      data: this.dataProjectID,
+      data: {type,element},
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed'),result;
+     // this.animal = result;
     });
   }
 }
