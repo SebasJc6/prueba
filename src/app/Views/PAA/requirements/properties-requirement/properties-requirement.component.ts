@@ -313,12 +313,7 @@ export class PropertiesRequirementComponent implements OnInit {
     this.dataRequirementID = this.activeRoute.snapshot.paramMap.get('idReq') || '';
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
     this.typePage = this.activeRoute.snapshot.paramMap.get('type') || '';
-    ////console.log(+this.dataProjectID, +this.dataRequirementID)
     this.getInfoToCreateReq(+this.dataProjectID);
-    // if (this.dataSolicitudID == 'true') {
-    //   console.log('aprobado')
-    //   this.getDataAprobad(+this.dataProjectID, +this.dataRequirementID);
-    // } else
   }
   uploadDropdownLists() {
     this.getDependenciesByCod();
@@ -343,7 +338,6 @@ export class PropertiesRequirementComponent implements OnInit {
   ngOnInit(): void {
     //Obtener token para manejar los roles
     this.AccessUser = this.authService.getRolUser();
-    console.log(this.AccessUser);
 
     // this.loading = true;
     this.ngAfterViewInit();
@@ -351,7 +345,6 @@ export class PropertiesRequirementComponent implements OnInit {
     this.currencyInput();
     this.valueRequired();
 
-    //this.statusReq = ProChartStorage.getItem(`estado${this.dataSolicitudID}`) || '';
 
     this.serviceModRequest.getModificationRequestByRequest(+this.dataProjectID, +this.dataSolicitudID).subscribe((data) => {
 
@@ -390,7 +383,6 @@ export class PropertiesRequirementComponent implements OnInit {
             this.btnViewBtn = false;
           }
           if (this.statusReq == 'En Modificación' || this.statusReq == 'En Ajuste') {
-            console.log('En Modificación', this.statusReq)
             this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
             this.viewVersionMod = true;
             this.viewsReviews = false;
@@ -531,14 +523,12 @@ export class PropertiesRequirementComponent implements OnInit {
   getInfoToCreateReq(projectId: number) {
     this.spinner.show();
     this.serviceProRequirement.getInfoToCreateReq(projectId).subscribe((dataProject) => {
-      ////console.log(data)
       this.getInfoToProject = dataProject.data;
       this.codProject = this.getInfoToProject.codigoProyecto;
       this.nomProject = this.getInfoToProject.nombreProyecto;
       this.dependenciaRec = this.getInfoToProject.dependenciaOrigen;
       this.proRequirementeForm.controls.infoBasicaForm.controls['codigoPro'].setValue(this.codProject);
       this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaOri'].setValue(this.dependenciaRec);
-      ////console.log(this.nomProject, this.codProject)
       this.spinner.hide();
     }, error => {
       this.spinner.hide();
@@ -553,8 +543,6 @@ export class PropertiesRequirementComponent implements OnInit {
     ).subscribe(val => {
       this.serviceProRequirement.getDependenceElastic(val || '').subscribe((dataDependencie) => {
         this.listDependencies = dataDependencie.data;
-        // //console.log(this.dependencieFil)
-        ////console.log(dataDependencie)
       })
     }) || '';
   }
@@ -565,7 +553,6 @@ export class PropertiesRequirementComponent implements OnInit {
     ).subscribe(val => {
       this.serviceProRequirement.getSelectionModeElastic(val || '').subscribe((dataSelcMode) => {
         this.listSelcMode = dataSelcMode.data;
-        // //console.log(this.listSelcMode)
       })
     }) || '';
 
@@ -579,7 +566,6 @@ export class PropertiesRequirementComponent implements OnInit {
   getAllContacType() {
     this.serviceProRequirement.getAllContacType().subscribe((dataContratType) => {
       this.listContacType = dataContratType.data;
-      ////console.log(this.listContacType)
     })
   }
   getAllProfile() {
@@ -591,22 +577,11 @@ export class PropertiesRequirementComponent implements OnInit {
     this.serviceProRequirement.getAuxiliarByProject(+this.dataProjectID).subscribe((dataAuxuliar) => {
       this.listAuxiliar = dataAuxuliar.data
     })
-    // this.proRequirementeForm.controls.clasPresFinaForm.controls.auxiliar.valueChanges.pipe(
-    //   //  this.clasPresFinaForm.controls.auxiliar.valueChanges.pipe(
-    //   // debounceTime(1000),
-    //   distinctUntilChanged()
-    // ).subscribe(val => {
-    //   this.serviceProRequirement.getAuxiliarElastic(val || '').subscribe((dataAuxuliar) => {
-    //     this.listAuxiliar = dataAuxuliar.data
-    //   })
-    // }) || '';
   }
   getFuentesBycod() {
     this.serviceProRequirement.getFuentesByProject(+this.dataProjectID).subscribe((dataFuentes) => {
       this.listFuentes = dataFuentes.data
-      // //console.log(' this.listFuentes', this.listFuentes)
     }), (err: any) => {
-      //console.log('err', err)
       this.proRequirementeForm.controls.clasPresFinaForm.patchValue({
         ftnMSPS: ''
       })
@@ -615,7 +590,6 @@ export class PropertiesRequirementComponent implements OnInit {
   getAllActivities() {
     this.serviceProRequirement.getAllActivities(+this.dataProjectID).subscribe((dataActi) => {
       this.listActivities = dataActi.data
-      //   //console.log('actividades', this.listActivities)
     })
   }
   getMGAByCod() {
@@ -624,7 +598,6 @@ export class PropertiesRequirementComponent implements OnInit {
     ).subscribe(val => {
       this.serviceProRequirement.getMGAElastic(val).subscribe(dataMGA => {
         this.listMGA = dataMGA.data
-        // //console.log('dataMGA', this.listMGA)
       })
     })
   }
@@ -634,7 +607,6 @@ export class PropertiesRequirementComponent implements OnInit {
     ).subscribe(val => {
       this.serviceProRequirement.getPOSPREElastic(val).subscribe(dataPOSPRE => {
         this.listPOSPRE = dataPOSPRE.data
-        //console.log('dataPOSPRE', this.listPOSPRE)
       })
     })
   }
@@ -644,7 +616,6 @@ export class PropertiesRequirementComponent implements OnInit {
     ).subscribe(val => {
       this.serviceProRequirement.getUNSPSCElastic(val).subscribe(dataUNSPSC => {
         this.listUNSPSC = dataUNSPSC.data
-        //console.log('dataUNSPSC', this.listUNSPSC)
       })
     })
   }
@@ -658,7 +629,6 @@ export class PropertiesRequirementComponent implements OnInit {
   getAllConcepts() {
     this.serviceProRequirement.getAllConcepts().subscribe(dataConcept => {
       this.allConcepts = dataConcept.data
-      // //console.log('dataConcept',dataConcept.data)
     })
   }
   verifyNumReq() {
@@ -685,7 +655,6 @@ export class PropertiesRequirementComponent implements OnInit {
       distinctUntilChanged()
     ).subscribe(val => {
       this.idPerfil = val;
-      //console.log('idPerfil', this.idPerfil);
     })
   }
   verifyRangeSararial() {
@@ -706,12 +675,9 @@ export class PropertiesRequirementComponent implements OnInit {
   getDataConsulta(projectId: number, requestId: number, reqTempId: number) {
     this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
-      console.log('dataTemp', dataTemp)
       this.reqID = dataTemp.requerimiento.requerimiento_ID
       let dataReviews = dataTemp
       if (dataReviews != null) {
-        console.log('dataApro', dataReviews)
-        // this.dataRequirementNum = dataReviews.requerimiento.numeroRequerimiento.toString();
 
         this.versionReviewForm.setValue({
           codigoProRew: dataReviews.proyecto.codigoProyecto,
@@ -757,17 +723,14 @@ export class PropertiesRequirementComponent implements OnInit {
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number) {
     this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
-      console.log('dataTemp', dataTemp)
 
       this.reqID = dataTemp.requerimiento.requerimiento_ID
-      //  console.log('dataTemporal', dataTemp)
 
       if (dataTemp != null) {
         this.proRequirementeForm.controls.infoBasicaForm.setValue({
           numeroReq: dataTemp.requerimiento.numeroRequerimiento,
           dependenciaDes: dataTemp.requerimiento.dependenciaDestino,
           mesSeleccion: dataTemp.requerimiento.mesEstimadoInicioSeleccion.toString(),
-          // mesSeleccion:'1',
           mesOfertas: dataTemp.requerimiento.mesEstimadoPresentacion.toString(),
           mesContrato: dataTemp.requerimiento.mesEstmadoInicioEjecucion.toString(),
           duracionMes: dataTemp.requerimiento.duracionMes,
@@ -803,14 +766,8 @@ export class PropertiesRequirementComponent implements OnInit {
         ProChartStorage.setItem("dataTableClacificaciones", stringToStoreCla);
         var fromStorageCla = ProChartStorage.getItem("dataTableClacificaciones");
         this.reloadDataTbl(fromStorageCla, 'clasificaciones');
-        // console.log('this.dataTableClasificaciones', this.dataTableClasificaciones)
-        // this.codigosTemporal = dataTemp.codsUNSPSC 
-        // let codTem = this.codigosTemporal.forEach(element => {
-        //   return JSON.parse(element.unspsc.codUNSPSC +element.unspsc.descripcion+element.unspsc.descripcion )
-        // });
         this.dataTableCodigos = dataTemp.codsUNSPSC
         this.codigosTemporal = dataTemp.codsUNSPSC
-        //  console.log('codigosTemporal', this.codigosTemporal)
         var stringToStoreCod = JSON.stringify(this.codigosTemporal);
         ProChartStorage.setItem("dataTableCodigos", stringToStoreCod);
         var fromStorageCod = ProChartStorage.getItem("dataTableCodigos");
@@ -835,9 +792,7 @@ export class PropertiesRequirementComponent implements OnInit {
   getDataAprobad(projectId: number, requerimetId: number) {
     this.serviceProRequirement.getDataAprobad(projectId, requerimetId).subscribe(dataAprobad => {
       let dataApro = dataAprobad.data
-       console.log('dataAprobad', dataAprobad)
       if (dataAprobad.data != null) {
-        //   console.log('dataApro', dataApro)
         this.dataRequirementNum = dataApro.requerimiento.numeroRequerimiento.toString();
 
         this.versionActualForm.setValue({
@@ -874,7 +829,6 @@ export class PropertiesRequirementComponent implements OnInit {
         this.codigosVerAct = dataApro.codsUNSPSC
         this.dataSourceCodigosAct = new MatTableDataSource(this.codigosVerAct);
       } else if (dataAprobad.data == null) {
-        // console.log('Message', dataAprobad.Message)
         this.openSnackBar('Error', dataAprobad.message, 'error')
         this.viewVersion = false
       }
@@ -934,7 +888,6 @@ export class PropertiesRequirementComponent implements OnInit {
       this.dataCodigos = JSON.parse(dtaCod || '[]')
       this.formVerifyComplete['codigos'] = JSON.parse(dtaCod || '[]')
 
-      //  console.log('this.dataClasificacion', this.dataClasificacion)
       this.dataClasificacion.forEach((item: any) => {
         item.anioVigRecursos = item.anioVigRecursos
         item.proj_ID = +this.dataProjectID
@@ -950,15 +903,12 @@ export class PropertiesRequirementComponent implements OnInit {
         delete item.fuente
         delete item.uuid
       })
-      //  console.log('this.dataClasificacion', this.dataClasificacion)
       this.dataCodigos.forEach((item: any) => {
-        //   console.log('this.item', item)
         item.unspsC_ID = item.unspsC_ID || item.unspsc.unspsC_ID
         delete item.unspsc
         delete item.descripcion
         delete item.codigoUNSPSC
       })
-      // console.log('this.dataCodigos arr', this.dataCodigos)
 
       let requerimientoForm = {} as requerimientoI
       if (this.typePage == 'nuevo') {
@@ -996,15 +946,11 @@ export class PropertiesRequirementComponent implements OnInit {
 
       this.formVerify.cadenasPresupuestales = this.dataClasificacion
       this.formVerify.codsUNSPSC = this.dataCodigos
-      // console.log('this. dataCodigos  dataCodigos', this.dataCodigos)
       this.formVerify.apropiacionInicial = this.proRequirementeForm.controls.initialAppro.value
-      console.log('this.formVerify', this.formVerify)
 
       if (this.typePage == 'Nuevo') {
         this.serviceProRequirement.postVerifyDataSaveI(this.formVerify).subscribe(dataResponse => {
-          //console.log('dataResponse', dataResponse)
           if (dataResponse.status == 200) {
-            // console.log('formVerifyComplete', this.formVerifyComplete)
             var stringToStoreCom = JSON.stringify(this.formVerifyComplete);
             ProChartStorage.setItem("formVerifyComplete", stringToStoreCom);
             var stringToStore = JSON.stringify(this.formVerify);
@@ -1016,16 +962,12 @@ export class PropertiesRequirementComponent implements OnInit {
             this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
             this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
           } else {
-            // console.log('dataResponse', dataResponse)
             this.openSnackBar('Error', dataResponse.message, 'error');
           }
         }, err => {
-          // console.log('dataResponse', err)
           this.openSnackBar('Error', JSON.stringify(err.error.data), 'error');
         })
       } else {
-        //  console.log('formModificationRequest', this.formModificationRequest)
-
         this.formModificationRequest.idProyecto = +this.dataProjectID
         this.formModificationRequest.observacion = 'editRequeriment'
         let saveDataEditDatos = {} as saveDataEditDatosI
@@ -1043,13 +985,8 @@ export class PropertiesRequirementComponent implements OnInit {
         this.formModificationRequest.solicitudModID = +this.dataSolicitudID
         this.formModificationRequest.deleteReqIDs = []
         this.formModificationRequest.deleteContraIDs = []
-
-
-        // console.log('this.dataRequirementID ', this.dataRequirementID)
-        // console.log('formModificationRequest', this.formModificationRequest)
         this.spinner.show();
         this.serviceProRequirement.putModificationRequestSend(this.formModificationRequest).subscribe(dataResponse => {
-          // console.log('dataResponse', dataResponse)
           if (dataResponse.status == 200) {
             this.loading = true
             this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
@@ -1061,7 +998,6 @@ export class PropertiesRequirementComponent implements OnInit {
           }
           this.spinner.hide();
         }, err => {
-          //  console.log('dataResponse', err)
           this.openSnackBar('Error', JSON.stringify(err.error.data), 'error');
           this.spinner.hide();
         })
@@ -1073,42 +1009,33 @@ export class PropertiesRequirementComponent implements OnInit {
 
   //funciones para retornar el valor al autocomplete
   displayFn(value: any) {
-    ////console.log('value', value)
     return value ? value.codigo : ''
   }
   displayFnAux(value: any) {
-    // //console.log('value', value)
     return value ? value.codigoAuxiliar : ''
   }
   displayFnFte(value: any) {
-    // //console.log('value', value)
     return value ? value.codigoFuente.concat(' - ', value.descripcion) : ''
   }
   displayFnAct(value: any) {
-    //  //console.log('value', value)
     return value ? value.codigoAct : ''
   }
   displayFnMGA(value: any) {
-    //console.log('value', value)
     return value ? value.codigoMGA : ''
   }
   displayFnPOSPRE(value: any) {
-    //console.log('value', value)
     return value ? value.codigo : ''
   }
   displayFnCod(value: any) {
-    //console.log('value', value)
     return value ? value.codigoUNSPSC : ''
   }
   displayFnArea(value: any) {
-    //console.log('value', value)
     return value ? value.nombre : ''
   }
   //funcion para obtener el id del autocomplete
   onSelectionChange(event: any, tipo: string) {
     if (tipo == 'actContractual') {
       if (event == 2) {
-        //console.log('event actContractual', event)
         //diable campos formulario
         this.disabledAdicion = true
         this.disabledInicial = false
@@ -1137,37 +1064,22 @@ export class PropertiesRequirementComponent implements OnInit {
       this.errorVigRec = false;
     }
     if (tipo === 'dependenciaDes') {
-      // this.formVerifyComplete['infoBasicaForm']['dependenciaDes'] = event.option.value
       this.dependencieId = event.option.value.dependencia_ID;
-      // //console.log('onSelectionChange dependenciaDes', event.option.value);
       this.depDesValue = event.option.value
-      ////console.log('onSelectionChange dependenciaDes', event.option.value.dependencia_ID);
-      // this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].setValue( event.option.value.dependencia_ID);
-      // this.proRequirementeForm.controls.infoBasicaForm.patchValue({
-      //   dependenciaDes: event.option.value.dependencia_ID,
-      // })
+
 
       this.errorDependencia = false
 
     }
     if (tipo === 'modalidadSel') {
-      // this.formVerifyComplete['infoBasicaForm']['modalidadSel'] = event.option.value
-      //  //console.log('onSelectionChange modalidadSel', event.option.value);
       this.selcModeId = event.option.value.modalidad_Sel_ID;
-      // this.proRequirementeForm.controls.infoBasicaForm.patchValue({
-      //   modalidadSel: event.option.value.modalidad_Sel_ID,
-      // })
     }
     if (tipo == 'auxiliar') {
-      // //console.log('onSelectionChange auxiliar', event.option.value);
       this.errorAux = false;
-      // this.auxiliarId = event.option.value.auxiliarId;
     }
     if (tipo == 'fuente') {
-      // console.log('onSelectionChange dataFuente', event.fuenteMSPS);
       this.fuenteId = event.fuente_ID
       this.errorFuentes = false;
-      // //console.log('onSelectionChange dataFuente', event.option.value.fuenteMSPS);
       this.proRequirementeForm.controls.clasPresFinaForm.patchValue({
         ftnMSPS: event.fuenteMSPS
       })
@@ -1175,7 +1087,6 @@ export class PropertiesRequirementComponent implements OnInit {
     if (tipo == 'actividad') {
       this.activityId = event.value.actividad_ID
       this.errorActi = false;
-      ////console.log( this.activityId ,'actividad',event)
       this.proRequirementeForm.controls.clasPresFinaForm.patchValue({
         meta: event.value.metaODS
       })
@@ -1194,8 +1105,6 @@ export class PropertiesRequirementComponent implements OnInit {
       this.proRequirementeForm.controls.codigosForm.patchValue({
         descCategoria: event.option.value.descripcion
       })
-
-      // //console.log('codCategoria', event)
     }
     if (tipo == 'areaRevicion') {
       this.errorArea = false;
@@ -1211,16 +1120,11 @@ export class PropertiesRequirementComponent implements OnInit {
   reloadDataTbl(value: any, type: string) {
     var objectsFromStorage = JSON.parse(value || '')
     if (type == 'codigos') {
-      // console.log('objectsFromStorage codigos', objectsFromStorage)
       this.dataSourceCodigos = new MatTableDataSource(objectsFromStorage);
     }
     if (type == 'clasificaciones') {
-      console.log('objectsFromStorage clasificaciones', objectsFromStorage)
       this.dataSourceClasificaciones = new MatTableDataSource(objectsFromStorage)
     }
-    // if (type == 'revisiones') {
-    //   this.dataSourceRevisiones = new MatTableDataSource(objectsFromStorage)
-    // }
 
 
   }
@@ -1243,10 +1147,8 @@ export class PropertiesRequirementComponent implements OnInit {
       } else if (this.proRequirementeForm.controls.clasPresFinaForm.controls['pospre'].value == '' || this.proRequirementeForm.controls.clasPresFinaForm.controls['pospre'].value == null) {
         this.errorPOSPRE = true;
       } else {
-        ////console.log('addclasPresFina', this.proRequirementeForm.controls.clasPresFinaForm.value)
         this.dataTableClasificacion = this.proRequirementeForm.controls.clasPresFinaForm.value
         this.dataTableClasificacion['uuid'] = uuid();
-        //this.dataTableClasificacion['anioVigRecursos'] = this.proRequirementeForm.controls.clasPresFinaForm.controls['vigenciaRecu'].value;
         this.dataTableClasificacion['apropiacionDisponible'] = 0;
         this.dataTableClasificacion['aumento'] = 0;
         this.dataTableClasificacion['disminucion'] = 0;
@@ -1259,7 +1161,6 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dataTableClasificacion['arl'] = 0;
         let repe = this.dataTableClasificaciones.filter(u => u.uuid == this.dataTableClasificacion['uuid'])
         if (repe.length != 0) {
-          //console.log('ya existe', repe);
           this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
           return;
 
@@ -1279,7 +1180,6 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dataTableCodigo = this.proRequirementeForm.controls.codigosForm.controls.codCategoria.value
         let repe = this.dataTableCodigos.filter(u => u.unspsC_ID == this.dataTableCodigo['unspsC_ID'])
         if (repe.length != 0) {
-          //console.log('ya existe', repe);
           this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
           return;
         }
@@ -1302,7 +1202,7 @@ export class PropertiesRequirementComponent implements OnInit {
         const fechaActual = Date.now();
         let dataRevision = {} as dataSourceRevisionesI
         dataRevision.fecha = moment(fechaActual).format("DD-MM-YYYY");;
-        dataRevision.usuario = 'Ususario Prueba';
+        dataRevision.usuario = 'Usuario Prueba';
         dataRevision.area = this.reviews.controls.area.value;
         dataRevision.concepto = this.reviews.controls.concepto.value;
         dataRevision.observacion = this.reviews.controls.observaciones.value || '';
@@ -1312,19 +1212,16 @@ export class PropertiesRequirementComponent implements OnInit {
 
         let repe = this.dataTableRevisiones.filter(u => u.uuid == this.dataTableRevision['uuid'])
         if (repe.length != 0) {
-          //console.log('ya existe', repe);
           this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
           return;
         }
         let dtl = this.dataTableRevision
-        // console.log('this.dtl 1', dtl)
 
         this.dataTableRevisiones.push(dtl);
         var stringToStoredtl = JSON.stringify(this.dataTableRevisiones);
         ProChartStorage.setItem("dataTableRevisiones", stringToStoredtl);
         var fromStoragedtl = ProChartStorage.getItem("dataTableRevisiones");
         this.reloadDataTbl(fromStoragedtl, 'revisiones');
-        //  console.log('this.dtl 2', dtl)
         return;
       }
     }
@@ -1346,11 +1243,9 @@ export class PropertiesRequirementComponent implements OnInit {
       var toFind = objectsFromStorage.filter(function (obj: any) {
         return obj.uuid == valueToFind;
       });
-      // find the index of the item to delete
       var index = objectsFromStorage.findIndex((x: any) => x.uuid === valueToFind.uuid);
       if (index >= 0) {
         this.dataTableClasificaciones.splice(index, 1);
-        //console.log('arreglo remove', this.dataTableClasificaciones)
         objectsFromStorage.splice(index, 1);
         var stringToStore = JSON.stringify(objectsFromStorage);
         ProChartStorage.setItem("dataTableClacificaciones", stringToStore);
@@ -1368,7 +1263,6 @@ export class PropertiesRequirementComponent implements OnInit {
 
       if (index >= 0) {
         this.dataTableCodigos.splice(index, 1);
-        //  //console.log('arreglo rem,ove',this.dataTableCodigos)
         objectsFromStorage.splice(index, 1);
         var stringToStore = JSON.stringify(objectsFromStorage);
         ProChartStorage.setItem("dataTableCodigos", stringToStore);
@@ -1382,7 +1276,6 @@ export class PropertiesRequirementComponent implements OnInit {
 
     this.serviceReviews.getAllReviews(Modificacion_ID).subscribe((data: any) => {
       this.dataTableRevisiones = data.data.items;
-      console.log('this.dataTableRevisiones', this.dataTableRevisiones)
       if (this.viewTableReviews == true) {
         this.dataSourceRevisionesView = new MatTableDataSource(this.dataTableRevisiones)
       } else if (this.viewTableReviewsEdit == true) {
@@ -1394,7 +1287,6 @@ export class PropertiesRequirementComponent implements OnInit {
     this.loading = true;
 
     if (type == 'Agregar') {
-      console.log('Agregar', this.reviews.value)
       let reviewsData = {} as postReviewsI
 
       reviewsData.modificacion_ID = +this.dataRequirementID
@@ -1404,10 +1296,8 @@ export class PropertiesRequirementComponent implements OnInit {
       reviews.observacion = this.reviews.controls.observaciones.value || ''
       reviews.area_ID = this.reviews.controls.area.value.area_ID || 0
       reviewsData.revisiones = [reviews]
-      console.log('reviewsData', reviewsData)
       this.spinner.show();
       this.serviceReviews.postReviews(reviewsData).subscribe((data: any) => {
-        console.log('data', data)
         if (data.status != 200) {
           this.openSnackBar('ERROR', data.message, 'error')
           this.loading = false;
@@ -1424,17 +1314,12 @@ export class PropertiesRequirementComponent implements OnInit {
     }
     if (type == 'Delete') {
 
-      // console.log('Delete', idReviews)
       let reviewsDelete = {} as deleteReviewsI
       reviewsDelete.modificacion_ID = +this.dataRequirementID
       reviewsDelete.revisiones = [idReviews]
-      // console.log('reviewsDelete', reviewsDelete)
       this.spinner.show();
       this.serviceReviews.deleteReviews(reviewsDelete).subscribe((data: any) => {
-        //   console.log('data', data)
-        // if(data.Status != 200){
-        //   this.openSnackBar('ERROR', data.Message, 'error')
-        // }else
+     
         if (data.status != 200) {
           this.openSnackBar('ERROR', data.message, 'error')
         }
@@ -1450,15 +1335,12 @@ export class PropertiesRequirementComponent implements OnInit {
     }
     if (type == 'Revisar') {
 
-      console.log('this.reviewsUpTemporal revisado', this.reviewsUpTemporal)
 
       let putUpdateReviews = {} as putUpdateReviewsI
       putUpdateReviews.modificacion_ID = +this.dataRequirementID
       putUpdateReviews.revisiones = this.reviewsUpTemporal
-      console.log('putUpdateReviews', putUpdateReviews)
       this.spinner.show();
       this.serviceReviews.putUpdateReviews(putUpdateReviews).subscribe((data: any) => {
-        console.log('data', data)
         if (data.status != 200) {
           this.openSnackBar('ERROR', data.message, 'error')
         }
@@ -1477,12 +1359,10 @@ export class PropertiesRequirementComponent implements OnInit {
 
   }
   showOptions(revisado: any, objectReview: any) {
-    //  console.log('this.reviewsUp 1', this.reviewsUp)
 
     let objectReviews = {} as revisionesI
     objectReviews.revisado = revisado
     objectReviews.revision_ID = objectReview
-    //console.log( 'objectReviews', objectReviews)    
     if (this.reviewsUpTemporal.length > 0) {
       this.reviewsUpTemporal.forEach((element: any) => {
         let index = this.reviewsUpTemporal.findIndex((x: any) => x.revision_ID === objectReviews.revision_ID);
@@ -1492,26 +1372,21 @@ export class PropertiesRequirementComponent implements OnInit {
         this.reviewsUpTemporal.unshift(objectReviews)
       });
     } else {
-      // this.reviewsUpTemporal.unshift(objectReviews)
       this.reviewsUpTemporal.push(objectReviews)
     }
 
 
-    // console.log('this.reviewsUpTemporal', this.reviewsUpTemporal)
 
 
   }
 
   versionActual(event: any) {
-    // obtenemos el index del tab
-    // console.log(event.index);
     // actualizamos el index seleccionado
     this.selectedIndex = event.index;
     if (event.index == 1) {
       this.getDataAprobad(+this.dataProjectID, +this.dataRequirementID);
     }
   }
-
   //Metodo para llamar alertas
   openSnackBar(title: string, message: string, type: string) {
     this.snackBar.openFromComponent(AlertsComponent, {
@@ -1523,14 +1398,24 @@ export class PropertiesRequirementComponent implements OnInit {
   }
 
   openBudgetModification(type:string,element: any) {
-    // console.log('element clasificacion', element)
     const dialogRef = this.dialog.open(BudgetModificationComponent, {
       width: '800px',
       height: '500px',
       data: {type,element},
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed'),result;
+      let repe = this.dataTableClasificaciones.filter(u => u.uuid == result['uuid'])
+      if (repe.length != 0) {
+        //eliminar el igual a uuid
+        let index = this.dataTableClasificaciones.findIndex((x: any) => x.uuid === result['uuid']);
+        if (index >= 0) {
+          this.dataTableClasificaciones.splice(index, 1);
+        }
+        
+      }
+      this.dataTableClasificaciones.push(result)
+      var stringToStore = JSON.stringify(this.dataTableClasificaciones);
+      ProChartStorage.setItem("dataTableClacificaciones", stringToStore);
      // this.animal = result;
     });
   }

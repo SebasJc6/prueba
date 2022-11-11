@@ -65,6 +65,7 @@ import { BudgetModificationComponent } from './Views/PAA/requirements/properties
 import { AuthInterceptorService } from './Services/Authentication/Interceptor/auth-interceptor.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { PopUpImportComponent } from './Views/PAA/requirements/modification-request/pop-up-import/pop-up-import.component';
+import { RpComponent } from './Views/PAA/requirements/cdp/rp/rp.component';
 
 
 const materialModules = [
@@ -126,7 +127,8 @@ const materialModules = [
     SpinnerComponent,
     CDPComponent,
     BudgetModificationComponent,
-    PopUpImportComponent
+    PopUpImportComponent,
+    RpComponent
 
   ],
   imports: [
