@@ -1,9 +1,11 @@
+import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { filterCDPsI, itemsCDPsI } from 'src/app/Models/ModelsPAA/Requeriment/cdp';
+import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { CDPService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/cdp.service';
 
@@ -18,9 +20,11 @@ export class CDPComponent implements OnInit {
     public router: Router,
     private serviceModRequest: ModificationRequestService,
     private serviceCdps: CDPService,
-    private spinner: NgxSpinnerService,) { }
+    private spinner: NgxSpinnerService,
+    private authService: AuthenticationService) { }
 
   displayedColumns: string[] = [
+    'select',
     'Vigencia',
     'CDP',
     'FECHA CDP',
@@ -30,8 +34,12 @@ export class CDPComponent implements OnInit {
     'VALOR FINAL',
     'CANTIDAD RP',
     'VALOR RP',
-    'VALOR DISTRIBUIDO'
+    'VALOR DISTRIBUIDO',
+    'DIFERENCIA'
   ];
+
+  //Propiedad con el Rol del Usuario
+  AccessUser: string = '';
 
   //Información que se muestra en la tabla
   dataSource: itemsCDPsI[] = [];
@@ -45,6 +53,8 @@ export class CDPComponent implements OnInit {
   valueRP: number = 0;
   //Valor Distribuido
   distributedValue: number = 0;
+  //Diferencia
+  diference: number = 0;
 
   dataProjectID: string = '';
   requerimentId: string = '';
@@ -78,6 +88,9 @@ export class CDPComponent implements OnInit {
   numberPages: number = 0;
   numberPage: number = 0;
 
+  CDPsChecked: itemsCDPsI[] = [];
+  selection = new SelectionModel<itemsCDPsI>(true, []);
+
   ngOnInit(): void {
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
     this.requerimentId = this.activeRoute.snapshot.paramMap.get('idReq') || '';
@@ -85,6 +98,9 @@ export class CDPComponent implements OnInit {
     this.filterCDPs.take = 20;
     this.getModificationRequet(Number(this.dataProjectID));
     this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
+    
+    //Obtener token para manejar los roles
+    this.AccessUser = this.authService.getRolUser();
   }
 
   //Obtener la información del proyecto para mostrar en miga de pan
@@ -109,7 +125,7 @@ export class CDPComponent implements OnInit {
 
     this.spinner.show();
     this.serviceCdps.getCDPsByRequerimentId(id_requeriment, filterForm).subscribe(request => {
-      // console.log(request);
+       console.log(request);
       if (request.hasItems) {
         this.dataSource = request.items;
         this.initialValue = request.calculados[0].valor;
@@ -117,6 +133,7 @@ export class CDPComponent implements OnInit {
         this.finalvalue = request.calculados[2].valor;
         this.valueRP = request.calculados[3].valor;
         this.distributedValue = request.calculados[4].valor;
+        this.diference = request.calculados[5].valor;
         this.numberPages = request.pages;
         this.numberPage = request.page;
         this.paginationForm.setValue({
@@ -152,6 +169,31 @@ export class CDPComponent implements OnInit {
 
     this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
     this.closeFilter();
+  }
+
+
+  //CHECKs
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.length;
+
+    this.CDPsChecked = this.selection.selected;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+    this.dataSource.forEach(row => this.selection.select(row));
+  }
+
+  checkboxLabel(row?: itemsCDPsI): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row}`;
   }
 
 

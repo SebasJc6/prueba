@@ -18,6 +18,7 @@ export interface dataCDPsI {
 
 export interface itemsCDPsI {
     cdP_ID: number,
+    diferencia: number,
     fechaAnulacion: Date,
     fechaCDP: Date,
     numeroCDP: number,
