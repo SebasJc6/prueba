@@ -78,13 +78,11 @@ export class RequirementsComponent implements OnInit {
   ngOnInit(): void {
     this.filterRequertiments.page = "1";
     this.filterRequertiments.take = 20;
-    // this.getPagination();
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('data') || '';
 
     //Se obtiene el estado del Proyecto
     this.getStatusProject(Number(this.dataProjectID));
 
-    // console.log(+this.dataProjectID)
     this.getRequerimentsByProject(+this.dataProjectID, this.filterRequertiments);
 
     this.AccessUser = this.authService.getRolUser();
@@ -101,7 +99,6 @@ export class RequirementsComponent implements OnInit {
   }
 
   getPagination() {
-    //console.log(this.paginationForm.value);
     this.filterRequertiments.page = this.paginationForm.get('page')?.value;
     this.filterRequertiments.take = this.paginationForm.get('take')?.value;
     this.getRequerimentsByProject(+this.dataProjectID, this.filterRequertiments);
@@ -125,11 +122,8 @@ export class RequirementsComponent implements OnInit {
     this.serviceRequeriment.getRequerimentsByProject(projectId, filterRequertiments).subscribe((data) => {
       this.viewRequeriments = data;
       this.dataSource = new MatTableDataSource(this.viewRequeriments.data.requerimientos.items);
-     // console.log(this.viewRequeriments.data.requerimientos.items);
-      // this.requeriments = this.viewRequeriments.data.requerimientos.items;
       this.codProject = this.viewRequeriments.data.codigoProyecto;
       this.nomProject = this.viewRequeriments.data.nombre;
-      //console.log(this.viewRequeriments.data.proyectoId)
       this.numberPages = this.viewRequeriments.data.requerimientos.pages;
       this.numberPage = this.viewRequeriments.data.requerimientos.page;
       this.numberTake = filterRequertiments.take
@@ -179,7 +173,6 @@ export class RequirementsComponent implements OnInit {
   }
 
   getFilter() {
-    //console.log(this.filterForm.value)
     this.filterRequertiments.NumeroRequerimiento = this.filterForm.value.NumeroRequerimiento || '';
     this.filterRequertiments.DependenciaDestino = this.filterForm.get('DependenciaDestino')?.value || '';
     this.filterRequertiments.Descripcion = this.filterForm.get('Descripcion')?.value || '';
@@ -207,7 +200,7 @@ export class RequirementsComponent implements OnInit {
   }
 
   CDP(requirementId: number) {
-    this.router.navigate([`/WAPI/PAA/CDP/${this.dataProjectID}/${requirementId}`])
+    // this.router.navigate([`/WAPI/PAA/CDP/${this.dataProjectID}/${requirementId}`])
   }
 
   modificatioRequest() {

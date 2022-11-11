@@ -112,8 +112,6 @@ export class ModificationRequestComponent implements OnInit {
   ArrayDatos: postDataModReqI[] = [];
   CounterpartsDelete: number[] = [];
   RequerimentsDelete: number[] = [];
-  //Aqui se guarda el archivo a importar
-  private fileTmp: any;
 
   //Aqui guardamos el id de una solicitud creada por importación de un excel
   idSolicitudImport: string = '';
@@ -188,11 +186,13 @@ export class ModificationRequestComponent implements OnInit {
 
   ngAfterViewInit() {
     this.btnFiltrar.focus();
-    this.spinner.show();
-    setTimeout(() => {
-      this.getAllValidiy(Number(this.dataSolicitudModID));
-      this.spinner.hide();
-    }, 1200);
+    if (this.dataSolicitudModID != '0') {
+      this.spinner.show();
+      setTimeout(() => {
+        this.getAllValidiy(Number(this.dataSolicitudModID));
+        this.spinner.hide();
+      }, 1200);
+    }
   }
 
 
@@ -211,10 +211,10 @@ export class ModificationRequestComponent implements OnInit {
     });
   }
 
+
   getModificationRequet(projectId: number, requestID: number) {
     this.spinner.show();
     this.serviceModRequest.getModificationRequestByRequest(projectId, requestID).subscribe((data) => {
-      // console.log(data.data);
       this.codProject = data.data.proyecto_COD;
       this.numModification = data.data.numero_Modificacion;
       this.nomProject = data.data.nombreProyecto;
@@ -226,6 +226,7 @@ export class ModificationRequestComponent implements OnInit {
       this.spinner.hide();
     });
   }
+
 
   getModificationRequestByRequestId(requestId: number, validity: number, filterForm: filterModificationRequestI) {
     this.filterModificationRequest.NumeroRequerimiento = this.filterForm.value.NumeroRequerimiento || '';
@@ -241,7 +242,7 @@ export class ModificationRequestComponent implements OnInit {
 
     this.spinner.show();
     this.serviceModRequest.getModificationRequestByRequestId(requestId, validity, filterForm).subscribe((data) => {
-      if (data.data !== null) {
+      if (data.data.hasItems) {
         this.viewsModificationRequest = data;
         this.ArrayDataTable = this.viewsModificationRequest.data.items;
         this.dataSourcePrin = new MatTableDataSource(this.viewsModificationRequest.data.items);
@@ -255,23 +256,21 @@ export class ModificationRequestComponent implements OnInit {
         this.viewsCalAum = this.viewsModificationRequest.data.calculados[1].valor;
         this.viewsCalDis = this.viewsModificationRequest.data.calculados[2].valor;
         this.viewsCalApr = this.viewsModificationRequest.data.calculados[3].valor;
-        // console.log(this.viewsModificationRequest)
 
         let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
         this.reloadDataTbl(fromStorage);
       } else {
-
+        this.spinner.hide();
       }
     }, error => {
       this.spinner.hide();
     });
   }
 
-
+  //Función que obtiene las vigencias
   getAllValidiy(id_request: number){
     this.spinner.show();
     this.serviceModRequest.getValidityByRequest(id_request).subscribe(res => {
-      //  console.log(res.data);
       this.ArrayValidity = res.data;
       if (this.dataValidity === 0) {
         this.dataValidity = res.data[0];
@@ -413,6 +412,11 @@ export class ModificationRequestComponent implements OnInit {
         cadenasPres.pospre_ID = elem.pospre.pospre_ID;
         cadenasPres.proj_ID = elem.project_ID;
         cadenasPres.requerimiento_ID = elem.requerimiento_ID;
+        cadenasPres.cadena_Presupuestal_ID = elem.cadena_Presupuestal_ID;
+        cadenasPres.iva = elem.iva;
+        cadenasPres.arl = elem.arl;
+        cadenasPres.subAumento = elem.subAumento;
+        cadenasPres.subDisminucion = elem.subDisminucion;
 
         cadenasPresupuestales.unshift(cadenasPres)
       });
@@ -550,7 +554,6 @@ export class ModificationRequestComponent implements OnInit {
         let arrayCounterparts = ProChartStorage.getItem(`arrayCounterparts${this.dataSolicitudModID}`);
         let objectsFromStorage = JSON.parse(fromStorage || '');
         let objectArrayCounterparts = JSON.parse(arrayCounterparts || '');
-        // console.log(objectArrayCounterparts);
 
         let toFind = objectsFromStorage.filter((obj: any) => {
           return obj.fuenteId == valueToFind.fuenteId;
@@ -639,6 +642,8 @@ export class ModificationRequestComponent implements OnInit {
     let fromStorage = ProChartStorage.getItem(`formVerify`);
     let objectsFromStorage = JSON.parse(fromStorage || '');
 
+    console.log(objectsFromStorage);
+    
     let fromStorageData = ProChartStorage.getItem(`arrayDatos${this.dataSolicitudModID}`);
     if (fromStorageData != null) {
       let objectsFromStorageData = JSON.parse(fromStorageData || '');
@@ -661,7 +666,7 @@ export class ModificationRequestComponent implements OnInit {
     let stringToStore = JSON.stringify(this.ArrayDatos);
     ProChartStorage.setItem(`arrayDatos${this.dataSolicitudModID}`, stringToStore);
 
-    ProChartStorage.removeItem('formVerify');
+    //ProChartStorage.removeItem('formVerify');
 
     this.getInfoTableNewRequeriment();
   }
@@ -676,6 +681,8 @@ export class ModificationRequestComponent implements OnInit {
       this.ArrayDataStorage = objectsFromStorageData;
     }
 
+    console.log(objectsFromStorage);
+    
     let dataTable = {} as dateTableModificationI;
     dataTable.numeroRequerimiento = objectsFromStorage.infoBasica.numeroReq;
     dataTable.dependenciaDestino = objectsFromStorage.infoBasica.dependenciaDes.codigo;
@@ -687,6 +694,7 @@ export class ModificationRequestComponent implements OnInit {
     dataTable.tipoContrato = objectsFromStorage.infoBasica.tipoCont || 0;
     dataTable.perfil = objectsFromStorage.infoBasica.perfil || 0;
     dataTable.honorarios = objectsFromStorage.infoBasica.valorHonMes || 0;
+    
 
     let clasificaciones: any[] = objectsFromStorage.clasificaciones;
     clasificaciones.map(item => {
@@ -816,7 +824,6 @@ export class ModificationRequestComponent implements OnInit {
     const fileName = `Reporte Solicitud Modificación_${this.codProject} (${fecha.toISOString()}).xlsx`;
     this.spinner.show();
     this.serviceModRequest.exportFile(this.dataProjectID, this.dataSolicitudModID).subscribe(res => {
-      // console.log(res);
       this.manageExcelFile(res, fileName);
     }, error => {
       this.spinner.hide();
@@ -862,12 +869,10 @@ export class ModificationRequestComponent implements OnInit {
 
   onFileSelected(event: any) {
     const captureFile: File = event.target.files[0]
-    // console.log('captureFile', captureFile)
     this.extraerBase64(captureFile).then((archivo: any) => {
       this.fileName = archivo.nameFile;
       this.base64File = archivo.base;
       // this.blockSave = this.fileName;
-      // console.log('archivo', archivo)
       // this.onFileUpload();
       this.loadTableFiles();
       this.useNewFile = true;
@@ -896,9 +901,7 @@ export class ModificationRequestComponent implements OnInit {
 
     } else {
       if (this.viewsFiles.length > 0) {
-        console.log('this.viewsFiles fileName', this.fileName)
         if (this.fileName == '') {
-          // console.log('ENTRO A ACTUALIZAR TABLE')
           this.viewsFiles.forEach((element: any) => {
             let inFiles: any = []
             inFiles.blobName = element.blobName;
@@ -909,7 +912,6 @@ export class ModificationRequestComponent implements OnInit {
 
           });
         } else {
-          // console.log('ENTRO A AGREGAR TABLE en datatable existente')
           viewTableFiles.blobName = uuid();
           viewTableFiles.fileName = this.fileName;
           viewTableFiles.fileAsBase64 = this.base64File;
@@ -919,7 +921,6 @@ export class ModificationRequestComponent implements OnInit {
         }
         //this.arrayFile.push(viewTableFiles);
       } else {
-        // console.log('ENTRO A AGREGAR TABLE')
         if (this.base64File != '') {
           viewTableFiles.blobName = uuid();
           viewTableFiles.fileName = this.fileName;
@@ -941,9 +942,6 @@ export class ModificationRequestComponent implements OnInit {
 
 
   addFiles(idSol: number) {
-    // console.log('addFiles idSol', idSol)
-    // console.log('addFiles this.arrayFile', this.arrayFile)
-
     let files: any = [];
     this.arrayFile.forEach(element => {
       let file = {} as fileDataI;
@@ -951,28 +949,14 @@ export class ModificationRequestComponent implements OnInit {
       file.fileAsBase64 = element.fileAsBase64;
       files.push(file);
     });
-    // if (+this.dataSolicitudModID != 0) {
-    //   files.forEach((element:any) => {
-    //     if (element.fileAsBase64) {
-    //       delete element.fileAsBase64;
-    //       delete element.fileName;
-    //       delete element.blobName;
-    //      }
-    //   });
-    //   console.log('files', files)
-    //   this.rtnFile = false
-    // }
-    // console.log('addFiles files', files)
     let formPost = {} as postFileI
     let tags = {} as tagsI;
     tags.idProject = +this.dataProjectID;
     tags.idSol = idSol;
     formPost.tags = tags;
     formPost.archivos = files;
-    // console.log('addFiles formPost', formPost)
 
     this.serviceFiles.postFile(formPost).subscribe(res => {
-      // console.log('res', res)
       if (res.status == 200) {
         this.openSnackBar('Éxito al Guardar', `Archivos Guardado.`, 'success');
       } else {
@@ -987,15 +971,11 @@ export class ModificationRequestComponent implements OnInit {
 
 
   getAllFiles(idProject: number, idRequets: number) {
-    //  this.spinner.show();
     this.serviceFiles.getAllFiles(idProject, idRequets).subscribe((data) => {
-      // console.log('getAllFiles', data)
       this.viewsFiles = data.data;
       this.arrayFile = [];
       this.loadTableFiles();
-      //  this.spinner.hide();
     }, error => {
-      //   this.spinner.hide();
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     })
   }
@@ -1010,7 +990,6 @@ export class ModificationRequestComponent implements OnInit {
         return obj.blobName == File.blobName;
       });
       this.serviceFiles.deleteFile(toFind[0].blobName).subscribe((data) => {
-        console.log('deleteFile', data)
         this.arrayFile.splice(index, 1);
         this.dataSourceAttachedFiles = new MatTableDataSource(this.arrayFile);
         this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
@@ -1020,21 +999,17 @@ export class ModificationRequestComponent implements OnInit {
         this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
       })
     } else {
-      console.log('index', index)
       this.arrayFile.splice(index, 1);
       this.dataSourceAttachedFiles = new MatTableDataSource(this.arrayFile);
       this.spinner.hide();
     }
-    // console.log('blobName delete', blobName)
   }
 
 
   dowloadFile(File: any) {
     this.spinner.show();
     if (File.fileAsBase64 == '') {
-      // console.log('blobName dowload', blobName)
       this.serviceFiles.dowloadFile(File.blobName).subscribe((dataFile) => {
-        // console.log('dowloadFile', dataFile)
         this.dataFiles = dataFile;
         this.downloadPdf(this.dataFiles.fileAsBase64, this.dataFiles.fileName);
         // this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
@@ -1065,7 +1040,6 @@ export class ModificationRequestComponent implements OnInit {
     let fromStorageArrayData = ProChartStorage.getItem(`arrayDatos${this.dataSolicitudModID}`);
     if (fromStorageArrayData != null) {
       arrayDataSave = JSON.parse(fromStorageArrayData || '');
-      //  console.log(arrayDataSave);
     }
 
     let arrayCounterpartsSave: postModificRequestCountersI[] = [];
@@ -1073,8 +1047,6 @@ export class ModificationRequestComponent implements OnInit {
     if (fromStorageCounters != null) {
       arrayCounterpartsSave = JSON.parse(fromStorageCounters || '');
     }
-    // console.log(arrayCounterpartsSave);
-
 
     if (this.dataSolicitudModID == '0') {
       let postDataSave = {} as postModificationRequestI;
@@ -1085,21 +1057,20 @@ export class ModificationRequestComponent implements OnInit {
 
       this.spinner.show();
       this.serviceModRequest.postModificationRequestSave(postDataSave).subscribe(res => {
-        //console.log(res);
         let idSolicitud = res.data.idSolicitud;
-
+        console.log(postDataSave);
+        
         if (res.status == 200) {
           //guardar archivos
           let filesUp: boolean = this.rtnFile
-          //console.log('files return', filesUp);
           if (filesUp) {
             setTimeout(() => {
               this.spinner.hide();
-              this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+              this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada con éxito.`, 'success');
             }, 4000);
           } else {
             this.spinner.hide();
-            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada con éxito.`, 'success');
           }
           //Elimación de los registros en LocalStorage
           ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
@@ -1110,30 +1081,6 @@ export class ModificationRequestComponent implements OnInit {
           }
           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
 
-          // if (filesUp == true) {
-          //   this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
-          //   //Elimación de los registros en LocalStorage
-          //   ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-          //   ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
-          //   ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
-          //   this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
-          // } else {
-          //   console.log('error al guardar archivos');
-          //   return
-          // }
-
-        } else if (res.Status == 404) {
-          let Data: string[] = [];
-          Data = Object.values(res.Data);
-          let erorsMessages = '';
-          Data.map(item => {
-            erorsMessages += item + '. ';
-          });
-          this.openSnackBar('Lo sentimos', `No hay registros para guardar`, 'error', erorsMessages);
-          ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-          this.ArrayDataStorage = [];
-          this.reloadDataTbl();
-          this.spinner.hide();
         } else if (res.status == 404) {
           let Data: string[] = [];
           Data = Object.values(res.data);
@@ -1141,10 +1088,10 @@ export class ModificationRequestComponent implements OnInit {
           Data.map(item => {
             erorsMessages += item + '. ';
           });
-          this.openSnackBar('Lo sentimos', `No hay registros para guardar`, 'error', erorsMessages);
-          ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-          this.ArrayDataStorage = [];
-          this.reloadDataTbl();
+          this.openSnackBar('Lo sentimos', res.message, 'error', erorsMessages);
+          // ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
+          // this.ArrayDataStorage = [];
+          // this.reloadDataTbl();
           this.spinner.hide();
         }
         this.spinner.hide();
@@ -1198,7 +1145,6 @@ export class ModificationRequestComponent implements OnInit {
         if (res.status == 200) {
           //guardar archivos
           let filesUp: boolean = this.rtnFile
-          //console.log('files return', filesUp);
           if (filesUp) {
             setTimeout(() => {
               this.spinner.hide();
@@ -1215,9 +1161,7 @@ export class ModificationRequestComponent implements OnInit {
           if (this.useNewFile == true) {
             this.addFiles(idSolicitud);
           }
-
           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
-
 
         } else if (res.status == 404) {
 
@@ -1239,8 +1183,6 @@ export class ModificationRequestComponent implements OnInit {
         }
         this.spinner.hide();
       }, error => {
-        // console.log('Hubo un error ', error);
-
         if (error.status == 400) {
           let Data: string[] = [];
           Data = Object.values(error.error.Data);
@@ -1281,7 +1223,6 @@ export class ModificationRequestComponent implements OnInit {
 
       this.spinner.show();
       this.serviceModRequest.putModificationRequestSend(sendData).subscribe(res => {
-        // console.log(res);
         if (res.status == 200) {
           this.openSnackBar('Éxito al Enviar', `Solicitud de Modificación N° ${res.data.numSolicitud} Enviada con éxito.`, 'success');
           //Elimación de los registros en LocalStorage
@@ -1330,7 +1271,6 @@ export class ModificationRequestComponent implements OnInit {
 
       this.spinner.show();
       this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
-        // console.log(res);
         if (res.status == 200) {
           this.openSnackBar('Éxito al Enviar', `Revisiones de la Solicitud de Modificación Enviadas con éxito.`, 'success');
           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
@@ -1362,7 +1302,6 @@ export class ModificationRequestComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: RevisionSend) => {
       if (result) {
-        // console.log(result);
         const Revisiones: RevisionSend = {
           accion: result.accion,
           comentarios: result.comentarios,
@@ -1372,7 +1311,6 @@ export class ModificationRequestComponent implements OnInit {
 
         this.spinner.show();
         this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
-          // console.log(res);
           if (res.status == 200) {
             this.openSnackBar('Éxito al Enviar', `Revisiones de la Solicitud de Modificación Enviadas con éxito.`, 'success');
             this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
@@ -1402,7 +1340,6 @@ export class ModificationRequestComponent implements OnInit {
     if (this.StatusRequest === 'En Modificación' && this.AccessUser !== 'Revisor') {
       this.spinner.show();
       this.serviceModRequest.deleteModificationRequest(Number(this.dataSolicitudModID)).subscribe(res => {
-        // console.log(res.status);
         if (res.status == 200) {
           this.openSnackBar('Acciones Canceladas', `Solicitud de Modificación Eliminada.`, 'success');
           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
@@ -1423,7 +1360,6 @@ export class ModificationRequestComponent implements OnInit {
     } else if (this.StatusRequest == 'Rechazada') {
       this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
     }
-
   }
 
 

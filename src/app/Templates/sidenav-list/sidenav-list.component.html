@@ -29,7 +29,7 @@
                 </div>
                 <div class="menu-item">
                     <mat-accordion multi>
-                        <mat-expansion-panel class="menu-panel">
+                        <mat-expansion-panel class="menu-panel" *ngIf="false">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     <img src="assets/img/PDD.png" alt="PDD">
@@ -80,7 +80,7 @@
                                 </button>
                             </div>
                             <div>
-                                <button mat-button class="menu-button" disabled="true" [routerLink]="['']"
+                                <button mat-button class="menu-button" *ngIf="false" disabled="true" [routerLink]="['']"
                                     (click)="sidebar.toggle()">
                                     <span>Reportes</span>
                                 </button>
@@ -88,7 +88,7 @@
                         </mat-expansion-panel>
 
 
-                        <mat-expansion-panel class="menu-panel">
+                        <mat-expansion-panel class="menu-panel" *ngIf="false">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     <img src="assets/img/POAI.png" alt="POAI">
@@ -101,7 +101,7 @@
                         </mat-expansion-panel>
 
 
-                        <mat-expansion-panel class="menu-panel">
+                        <mat-expansion-panel class="menu-panel" *ngIf="false">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     <img src="assets/img/SEGAPLAN.png" alt="SEGAPLAN">

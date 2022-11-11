@@ -85,7 +85,6 @@ export class PopUpImportComponent implements OnInit {
             this.dialogRef.close();
             this.spinner.hide();
           }, error => {
-            // console.log(error);
            let status = error.error.status;
 
            if (status == 422) {

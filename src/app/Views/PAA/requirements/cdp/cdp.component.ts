@@ -125,7 +125,6 @@ export class CDPComponent implements OnInit {
 
     this.spinner.show();
     this.serviceCdps.getCDPsByRequerimentId(id_requeriment, filterForm).subscribe(request => {
-       console.log(request);
       if (request.hasItems) {
         this.dataSource = request.items;
         this.initialValue = request.calculados[0].valor;

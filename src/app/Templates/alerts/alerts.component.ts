@@ -1,7 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
-import { AlertData } from 'src/app/Views/PAA/task-tray/task-tray.component';
+
+export interface AlertData {
+  type: string;
+  title: string;
+  message: string;
+  message2?: string;
+  value?: string;
+}
 
 @Component({
   selector: 'app-alerts',

@@ -79,10 +79,8 @@ export class RequestTrayComponent implements OnInit {
     this.filterRequestTray.columna = this.filterForm.get('columna')?.value || '';
     this.filterRequestTray.ascending = this.filterForm.get('ascending')?.value || false;
 
-    //console.log(filterRequestTray);
     this.spinner.show();
     this.requestTrayService.getRequestTray(filterRequestTray).subscribe(request => {
-      //console.log('solicitud',request)
       this.dataSource = request.data.items;
       this.numberPage = request.data.page;
       this.numberPages = request.data.pages;
@@ -119,7 +117,6 @@ export class RequestTrayComponent implements OnInit {
     this.filterRequestTray.NombreProyecto = this.filterForm.get('NombreProyecto')?.value || '';
     this.filterRequestTray.Version = this.filterForm.value.Version || '';
     this.filterRequestTray.Solicitante = this.filterForm.get('Solicitante')?.value || '';
-    // this.filterRequestTray.Estado = this.filterForm.get('Estado')?.value || '';
     this.filterRequestTray.FechaAprobacion_rechazo = this.filterForm.get('FechaAprobacion_rechazo')?.value || '';
     this.filterRequestTray.columna = this.filterForm.get('columna')?.value || '';
     this.filterRequestTray.ascending = this.filterForm.get('ascending')?.value || false;
@@ -171,7 +168,6 @@ var ProChartStorage = {
     return localStorage.getItem(key);
   },
   setItem: function (key: any, value: any) {
-    // console.log("prochart setItem")
     localStorage.setItem(key, value);
   },
   removeItem: function (key: any) {

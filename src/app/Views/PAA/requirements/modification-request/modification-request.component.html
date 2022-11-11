@@ -23,21 +23,25 @@
     <div class="ActionsUp">
         <div class="btnUpAction">
             <button *ngIf="AccessUser === 'Referente_PAA'" class="buton btn" mat-button mat-icon-button
+                style="cursor: pointer;"
                 [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true"
                 (click)="newRequeriment()">
                 Nuevo
             </button>
             <button *ngIf="AccessUser === 'Referente_PAA'" class="buton btn" mat-button mat-icon-button
+                style="cursor: pointer;"
                 [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true"
                 (click)="Addrequirement()">
                 Modificar
             </button>
             <button *ngIf="AccessUser === 'Referente_PAA'" class="buton btn" mat-button mat-icon-button
+                style="cursor: pointer;"
                 [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true"
                 (click)="Addcounterpart()">
                 Contrapartida
             </button>
             <button class="buton btn" mat-button mat-icon-button
+                style="cursor: pointer;"
                 [disabled]="(dataSolicitudModID !== '0') ? false : true" (click)="ResumenModificacion()">
                 Resumen
             </button>

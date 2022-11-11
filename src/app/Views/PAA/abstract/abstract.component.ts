@@ -1,10 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { dataAbstractI, responsibleAbstractI } from 'src/app/Models/ModelsPAA/Abstract/abstract';
-import { ProjectByIdI, responsableI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { AbstractService } from 'src/app/Services/ServicesPAA/Abstract/abstract.service';
-import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
 
 
 @Component({
@@ -32,8 +30,6 @@ export class AbstractComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('data') || '';
-     //console.log(+this.dataProjectID)
-    //  this.getProjectByID(+this.dataProjectID);
 
     this.getAbstract(this.dataProjectID);
   }
@@ -48,16 +44,6 @@ export class AbstractComponent implements OnInit {
       this.spinner.hide();
     });
   }
-
-  // getProjectByID(projectId : number){
-  //   this.serviceRequeriment.getProjectById(projectId).subscribe((data)=> {
-  //     this.viewProjectById = data.data;
-  //     this.viewResponsable = this.viewProjectById.responsable;
-  //     console.log(this.viewProjectById)
-  //     console.log(this.viewResponsable)
-
-  //   })
-  // }
 
   regresar(){
     this.router.navigate(['/WAPI/PAA/Adquisiciones'])

@@ -79,11 +79,6 @@ export interface filterModificationRequestI {
   NumeroContrato: string,
   TipoContrato: string,
   Perfil: string,
-  // Honorarios: string,
-  // SaldoRequerimiento: string,
-  // ValorAumenta: string,
-  // ValorDisminuye: string,
-  // NuevoSaldoApropiacion: string,
   ModalidadSeleccion: string,
   page: string,
   take: number,
@@ -171,6 +166,7 @@ export interface postDataModifRequerimentsI {
 export interface postDataModifCadenasPresI {
   proj_ID: number,
   requerimiento_ID: number,
+  cadena_Presupuestal_ID: number,
   mes: number,
   anioVigRecursos: number,
   auxiliar_ID: number,
@@ -179,11 +175,15 @@ export interface postDataModifCadenasPresI {
   mgA_ID: number,
   pospre_ID: number,
   apropiacionDisponible: number,
+  iva: number,
+  arl: number,
   aumento: number,
+  subAumento: number,
+  subDisminucion: number,
   disminucion: number,
   compromisos: number,
   apropiacionDefinitiva: number,
-  giros:number
+  giros:number,
 }
 
 export interface postDataModifApropiacionInicialI {

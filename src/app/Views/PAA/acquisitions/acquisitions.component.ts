@@ -120,15 +120,12 @@ export class AcquisitionsComponent implements OnInit {
     this.filterProjects.DependenciaOrigen = this.filterForm.get('DependenciaOrigen')?.value || '';
     this.filterProjects.CodigoProyecto = this.filterForm.value.CodigoProyecto || '';
     this.filterProjects.Nombre = this.filterForm.get('Nombre')?.value || '';
-    // this.filterProjects.EstadoDesc = this.filterForm.get('EstadoDesc')?.value || '';
     this.filterProjects.columna = this.filterForm.get('columna')?.value || '';
     this.filterProjects.ascending = this.filterForm.get('ascending')?.value || false;
 
-    //console.log(filterProjects)
     this.spinner.show();
     this.serviceProject.getAllProjectsFilter(filterProjects).subscribe(data => {
       this.viewProjects = data
-      // console.log(this.viewProjects.data.items)
       this.dataSource = new MatTableDataSource(this.viewProjects.data.items);
       this.numberPage = this.viewProjects.data.page;
       this.numberPages = this.viewProjects.data.pages;
@@ -163,10 +160,8 @@ export class AcquisitionsComponent implements OnInit {
   }
 
   getPagination() {
-    //  console.log('form', this.paginationForm.value)
     this.filterProjects.page = this.paginationForm.get('page')?.value;;
     this.filterProjects.take = this.paginationForm.get('take')?.value;
-    // console.log('get', this.filterProjects);
     this.getAllProjects(this.filterProjects);
   }
 
@@ -207,11 +202,9 @@ export class AcquisitionsComponent implements OnInit {
   }
 
   getFilter() {
-    console.log(this.filterForm.value)
     this.filterProjects.DependenciaOrigen = this.filterForm.get('DependenciaOrigen')?.value || '';
     this.filterProjects.CodigoProyecto = this.filterForm.value.CodigoProyecto || '';
     this.filterProjects.Nombre = this.filterForm.get('Nombre')?.value || '';
-    // this.filterProjects.EstadoDesc = this.filterForm.get('EstadoDesc')?.value || '';
     this.filterProjects.columna = this.filterForm.get('columna')?.value || '';
     this.filterProjects.ascending = this.filterForm.get('ascending')?.value || false;
 
@@ -230,14 +223,12 @@ export class AcquisitionsComponent implements OnInit {
     this.serviceProject.patchExecutionProject(proyectoID).subscribe(data => {
       this.getAllProjects(this.filterProjects);
       this.isApproved = true;
-      // console.log(data)
     })
   }
   changeStatus(proyectoID: number) {   
     this.serviceProject.patchStatusProject(proyectoID).subscribe(data => {
       this.getAllProjects(this.filterProjects);
       this.isApproved = true;
-      // console.log(data)
     })
   }
 

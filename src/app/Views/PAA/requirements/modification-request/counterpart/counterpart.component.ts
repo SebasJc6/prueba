@@ -75,32 +75,21 @@ export class CounterpartComponent implements OnInit {
         return objectsFromStorage.indexOf(item) === index;
       });
       if (objectsFromStorage.length > 0) {
-        // this.spinner.show();
         this.counterpartSubscription = this.serviceCounterpar.postFuentesGetList(listIdSource).subscribe(res => {
           this.SourcesGet = res.data;
-          //console.log(res);
-          // this.spinner.hide();
         }, error => {
-          // this.spinner.hide();
         });
 
         //TODO: Revisar esta parte
         this.SourcesGet.map(item => {
           this.Source.descripcion = item.descripcion;
           this.Source.fuente_ID = item.fuente_ID;
-          //this.Source. = 0;
     
           this.ArraySources.push(this.Source);
           return this.ArraySources;
         });
       }
-      
-      //console.log(this.ArraySources);
     }
-    //this.states.concat(this.ArraySources);
-    
-    //console.log(this.states);
-    
   }
 
   cargarDataEdit() {
@@ -145,7 +134,6 @@ export class CounterpartComponent implements OnInit {
           }
           this.spinner.hide();
         }, error => {
-          // console.log(error);
           this.spinner.hide();
         });
       }else {
@@ -181,7 +169,6 @@ var ProChartStorage = {
     return localStorage.getItem(key);
   },
   setItem: function (key: any, value: any) {
-    // console.log("prochart setItem")
     localStorage.setItem(key, value);
   },
   removeItem: function (key: any) {
