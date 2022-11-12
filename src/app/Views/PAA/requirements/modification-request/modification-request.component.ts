@@ -635,15 +635,13 @@ export class ModificationRequestComponent implements OnInit {
         }
       }
     }
-
   }
+
 
   getNewRequeriment() {
     let fromStorage = ProChartStorage.getItem(`formVerify`);
     let objectsFromStorage = JSON.parse(fromStorage || '');
 
-    console.log(objectsFromStorage);
-    
     let fromStorageData = ProChartStorage.getItem(`arrayDatos${this.dataSolicitudModID}`);
     if (fromStorageData != null) {
       let objectsFromStorageData = JSON.parse(fromStorageData || '');
@@ -665,8 +663,7 @@ export class ModificationRequestComponent implements OnInit {
     this.ArrayDatos.unshift(requerimentDato);
     let stringToStore = JSON.stringify(this.ArrayDatos);
     ProChartStorage.setItem(`arrayDatos${this.dataSolicitudModID}`, stringToStore);
-
-    //ProChartStorage.removeItem('formVerify');
+    ProChartStorage.removeItem('formVerify');
 
     this.getInfoTableNewRequeriment();
   }
@@ -680,8 +677,6 @@ export class ModificationRequestComponent implements OnInit {
       let objectsFromStorageData = JSON.parse(fromStorageData || '');
       this.ArrayDataStorage = objectsFromStorageData;
     }
-
-    console.log(objectsFromStorage);
     
     let dataTable = {} as dateTableModificationI;
     dataTable.numeroRequerimiento = objectsFromStorage.infoBasica.numeroReq;
@@ -1058,7 +1053,6 @@ export class ModificationRequestComponent implements OnInit {
       this.spinner.show();
       this.serviceModRequest.postModificationRequestSave(postDataSave).subscribe(res => {
         let idSolicitud = res.data.idSolicitud;
-        console.log(postDataSave);
         
         if (res.status == 200) {
           //guardar archivos
