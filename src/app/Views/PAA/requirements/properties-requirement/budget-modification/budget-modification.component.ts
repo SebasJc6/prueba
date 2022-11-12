@@ -29,9 +29,9 @@ export class BudgetModificationComponent implements OnInit {
     this.valueForm(this.data.element);
   }
   valueForm(event: cadenaPresupuestalI) {
-    if(this.data.type == 'ver'){
+    if (this.data.type == 'ver') {
       this.isDisabledView = true;
-    }else if(this.data.type == 'editar'){
+    } else if (this.data.type == 'editar') {
       this.isDisabledView = false;
     }
     // console.log(event);
@@ -50,12 +50,12 @@ export class BudgetModificationComponent implements OnInit {
       this.isDisabled = true;
       this.isSelected = false;
     }
-   this.valueTotal();
-  //  this.total = this.formSubmit.disminucion + this.formSubmit.aumento + this.formSubmit.iva + this.formSubmit.arl ;    
+    this.valueTotal();
+    //  this.total = this.formSubmit.disminucion + this.formSubmit.aumento + this.formSubmit.iva + this.formSubmit.arl ;    
 
   }
   isDisableds(event: any) {
-   // console.log(event);
+    // console.log(event);
     if (event.checked == true) {
       this.isDisabled = false;
     } else {
@@ -67,12 +67,16 @@ export class BudgetModificationComponent implements OnInit {
     this.dialogRef.close();
     this.formSubmit.aumento = this.aumenta;
   }
-  valueTotal(){
-     this.total = this.formSubmit.aumento + this.formSubmit.iva + this.formSubmit.arl -  this.formSubmit.disminucion  ;    
-     this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.total ;
-  //  if (this.formSubmit.aumento != 0){
-  //       this.isDisabledAum = false;
-  //     this.isDisabledDis = true;
-  //   }
+  valueTotal() {
+    this.total = this.formSubmit.aumento + this.formSubmit.iva + this.formSubmit.arl - this.formSubmit.disminucion;
+    this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.total;
+    this.formSubmit.subAumento = this.formSubmit.aumento 
+    this.formSubmit.subDisminucion = this.formSubmit.disminucion 
+    this.formSubmit.aumento = this.formSubmit.subAumento + this.formSubmit.iva + this.formSubmit.arl;
+    this.formSubmit.disminucion = this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl;
+    //  if (this.formSubmit.aumento != 0){
+    //       this.isDisabledAum = false;
+    //     this.isDisabledDis = true;
+    //   }
   }
 }
