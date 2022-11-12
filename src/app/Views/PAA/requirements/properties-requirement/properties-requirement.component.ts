@@ -622,7 +622,6 @@ export class PropertiesRequirementComponent implements OnInit {
   getAllReviewsArea() {
     this.serviceProRequirement.getAllReviewsArea(+this.dataProjectID).subscribe(dataReviews => {
       this.allReviewsArea = dataReviews.data
-      console.log('dataReviews', dataReviews.data)
     })
 
   }
@@ -713,7 +712,6 @@ export class PropertiesRequirementComponent implements OnInit {
         this.codigosVerRew = dataReviews.codsUNSPSC
         this.dataSourceCodigosRew = new MatTableDataSource(this.codigosVerRew);
       } else {
-        // //   console.log('Message', dataAprobad.Message)
         // this.openSnackBar('Error', dataReviews.Message, 'error')
         // this.viewVersion = false
       }
@@ -1426,7 +1424,6 @@ var ProChartStorage = {
     return localStorage.getItem(key);
   },
   setItem: function (key: any, value: any) {
-    //console.log("prochart setItem")
     localStorage.setItem(key, value);
   },
   removeItem: function (key: any) {

@@ -34,7 +34,7 @@ export class BudgetModificationComponent implements OnInit {
     }else if(this.data.type == 'editar'){
       this.isDisabledView = false;
     }
-    console.log(event);
+    // console.log(event);
     this.formSubmit = event;
     this.iva = this.formSubmit.iva;
     this.arl = this.formSubmit.arl;
@@ -68,7 +68,8 @@ export class BudgetModificationComponent implements OnInit {
     this.formSubmit.aumento = this.aumenta;
   }
   valueTotal(){
-     this.total = this.formSubmit.disminucion + this.formSubmit.aumento + this.formSubmit.iva + this.formSubmit.arl ;    
+     this.total = this.formSubmit.aumento + this.formSubmit.iva + this.formSubmit.arl -  this.formSubmit.disminucion  ;    
+     this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.total ;
   //  if (this.formSubmit.aumento != 0){
   //       this.isDisabledAum = false;
   //     this.isDisabledDis = true;
