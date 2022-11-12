@@ -72,8 +72,6 @@ export class BudgetModificationComponent implements OnInit {
     this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.total;
     this.formSubmit.subAumento = this.formSubmit.aumento 
     this.formSubmit.subDisminucion = this.formSubmit.disminucion 
-    this.formSubmit.aumento = this.formSubmit.subAumento + this.formSubmit.iva + this.formSubmit.arl;
-    this.formSubmit.disminucion = this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl;
     //  if (this.formSubmit.aumento != 0){
     //       this.isDisabledAum = false;
     //     this.isDisabledDis = true;
