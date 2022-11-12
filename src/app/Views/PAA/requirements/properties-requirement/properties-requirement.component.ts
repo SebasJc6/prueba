@@ -1403,7 +1403,7 @@ export class PropertiesRequirementComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
     result.aumento = result.subAumento + result.iva + result.arl 
-    result.disminucion = result.subDisminucion + result.iva + result.arl;
+   // result.disminucion = result.subDisminucion + result.iva + result.arl;
 
 
       let repe = this.dataTableClasificaciones.filter(u => u.uuid == result['uuid'])
