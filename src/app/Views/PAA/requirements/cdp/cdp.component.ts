@@ -146,7 +146,15 @@ export class CDPComponent implements OnInit {
     });
   }
 
+
+  //Notificar CDPs
   notifyCDP() {
+
+  }
+
+  
+  //Habilitar CDPs
+  enableCDP(){
 
   }
 
