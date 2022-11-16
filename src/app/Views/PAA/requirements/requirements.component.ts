@@ -200,11 +200,15 @@ export class RequirementsComponent implements OnInit {
   }
 
   CDP(requirementId: number) {
-    // this.router.navigate([`/WAPI/PAA/CDP/${this.dataProjectID}/${requirementId}`])
+    //this.router.navigate([`/WAPI/PAA/CDP/${this.dataProjectID}/${requirementId}`]);
+  }
+
+  StockOrders(requirementId: number) {
+    //this.router.navigate([`/WAPI/PAA/StockOrders/${this.dataProjectID}/${requirementId}`]);
   }
 
   modificatioRequest() {
-    this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/0' ])
+    this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/0' ]);
   }
 
 }

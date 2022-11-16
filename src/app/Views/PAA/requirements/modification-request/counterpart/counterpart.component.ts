@@ -1,14 +1,14 @@
 
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { CounterpartInterface, editCounterpartI } from 'src/app/Models/ModelsPAA/modificatioRequest/counterpart/counterpart-interface';
-import { dateTableModificationI, postModificRequestCounterpartI, putModificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
+import { postModificRequestCounterpartI, putModificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
+import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { CounterpartService } from 'src/app/Services/ServicesPAA/modificationRequest/counterpart/counterpart.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
@@ -25,6 +25,7 @@ export class CounterpartComponent implements OnInit {
     private snackBar: MatSnackBar,
     public serviceModRequest: ModificationRequestService,
     public dialogRef: MatDialogRef<CounterpartComponent>,
+    private authService: AuthenticationService,
     @Inject(MAT_DIALOG_DATA) public dataCounterparts: any,
     private spinner: NgxSpinnerService,) { dialogRef.disableClose = true;}
 
@@ -37,6 +38,12 @@ export class CounterpartComponent implements OnInit {
 
   CounterEdit = {} as editCounterpartI;
   ModificationId: number = 0;
+
+  //Estado de la solicitud d modificación
+  StatusRequest: string = '';
+
+  //Propiedad con el Rol del Usuario
+  AccessUser: string = '';
 
   counterpartForm = new FormGroup({
     fuentes: new FormControl(),
@@ -53,6 +60,10 @@ export class CounterpartComponent implements OnInit {
     this.getCounterpartF(this.dataCounterparts.id_request);
     this.getSourcesTemporal();
     this.cargarDataEdit();
+    this.StatusRequest = this.dataCounterparts.statusRequest;
+
+    //Obtener token para manejar los roles
+    this.AccessUser = this.authService.getRolUser();
   }
 
   //Función que trae la información del proyecto de la Api
@@ -65,7 +76,7 @@ export class CounterpartComponent implements OnInit {
   }
 
   getSourcesTemporal() {
-    let fromStorage: any = ProChartStorage.getItem(`arrayIdSources${this.dataCounterparts.id_request}`);
+    let fromStorage: any = ProChartStorage.getItem(`arrayIdSources${this.dataCounterparts.id_project}${this.dataCounterparts.id_request}`);
     let listIdSource: string[] = [];
     let objectsFromStorage: string[] = []
     
@@ -93,7 +104,7 @@ export class CounterpartComponent implements OnInit {
   }
 
   cargarDataEdit() {
-    let CounterFromStorage = ProChartStorage.getItem(`CounterpartEdit${this.dataCounterparts.id_request}`);
+    let CounterFromStorage = ProChartStorage.getItem(`CounterpartEdit${this.dataCounterparts.id_project}${this.dataCounterparts.id_request}`);
     
     if (CounterFromStorage?.length != 0 && CounterFromStorage !== null) {
       this.CounterEdit = JSON.parse(CounterFromStorage || '');
@@ -159,10 +170,30 @@ export class CounterpartComponent implements OnInit {
     });
   }
 
+
+  validateFormat(event: any) {
+    let key;
+    if (event.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      key = event.keyCode;
+      key = String.fromCharCode(key);
+    }
+    const regex = /[0-9]|\./;
+     if (!regex.test(key)) {
+      event.returnValue = false;
+       if (event.preventDefault) {
+        event.preventDefault();
+       }
+     }
+    }
+
+
   ngOnDestroy() {
     this.counterpartSubscription.unsubscribe();
   }
 }
+
 
 var ProChartStorage = {
   getItem: function (key: any) {

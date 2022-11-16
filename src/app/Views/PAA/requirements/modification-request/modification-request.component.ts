@@ -463,7 +463,8 @@ export class ModificationRequestComponent implements OnInit {
 
     let dataCounterparts: any = {
       id_project: this.dataProjectID,
-      id_request: this.dataSolicitudModID
+      id_request: this.dataSolicitudModID,
+      statusRequest: this.StatusRequest
     }
 
     const dialogRef = this.dialog.open(CounterpartComponent, {
@@ -1219,14 +1220,16 @@ export class ModificationRequestComponent implements OnInit {
             erorsMessages += item + '. ';
           });
           this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
-        } else if (res.Status == 404) {
+        } else if (res.status == 400) {
           let Data: string[] = [];
-          Data = Object.values(res.Data);
           let erorsMessages = '';
-          Data.map(item => {
-            erorsMessages += item + '. ';
-          });
-          this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
+          if (res.data != null) {   
+            Data = Object.values(res.data);
+            Data.map(item => {
+              erorsMessages += item + '. ';
+            });
+          }
+          this.openSnackBar('Lo sentimos', res.message, 'error', erorsMessages);
         }
         this.spinner.hide();
       }, error => {
