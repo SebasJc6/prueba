@@ -422,7 +422,6 @@ export class PropertiesRequirementComponent implements OnInit {
             this.viewTableReviewsEdit = true;
             this.viewTableReviews = false;
             this.getAllReviewsArea();
-
           }
           else {
             this.viewsSeccionReviews = true;
@@ -434,9 +433,13 @@ export class PropertiesRequirementComponent implements OnInit {
           this.viewsReviews = true;
           this.errorVerifyNumReq = false;
         }
-
-
-
+      } else if (this.typePage == 'Ajuste') {
+        if (this.AccessUser == 'Referente_PAA') {
+          this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
+          this.viewVersionMod = true;
+          this.viewsReviews = false;
+          this.errorVerifyNumReq = false;
+        }
       }
     });
 
@@ -1317,7 +1320,7 @@ export class PropertiesRequirementComponent implements OnInit {
       reviewsDelete.revisiones = [idReviews]
       this.spinner.show();
       this.serviceReviews.deleteReviews(reviewsDelete).subscribe((data: any) => {
-     
+
         if (data.status != 200) {
           this.openSnackBar('ERROR', data.message, 'error')
         }
@@ -1395,16 +1398,19 @@ export class PropertiesRequirementComponent implements OnInit {
     });
   }
 
-  openBudgetModification(type:string,element: any) {
+  openBudgetModification(type: string, element: any) {
     const dialogRef = this.dialog.open(BudgetModificationComponent, {
       width: '800px',
       height: '500px',
-      data: {type,element},
+      data: { type, element },
     });
     dialogRef.afterClosed().subscribe(result => {
-    result.aumento = result.subAumento + result.iva + result.arl 
-   // result.disminucion = result.subDisminucion + result.iva + result.arl;
-
+      console.log(result);
+      if (result.aumento != 0) {
+        result.aumento = result.subAumento + result.iva + result.arl
+      }else if (result.disminucion != 0) {
+      result.disminucion = result.subDisminucion + result.iva + result.arl;
+      }
 
       let repe = this.dataTableClasificaciones.filter(u => u.uuid == result['uuid'])
       if (repe.length != 0) {
@@ -1413,12 +1419,11 @@ export class PropertiesRequirementComponent implements OnInit {
         if (index >= 0) {
           this.dataTableClasificaciones.splice(index, 1);
         }
-        
       }
       this.dataTableClasificaciones.push(result)
       var stringToStore = JSON.stringify(this.dataTableClasificaciones);
       ProChartStorage.setItem("dataTableClacificaciones", stringToStore);
-     // this.animal = result;
+      // this.animal = result;
     });
   }
 }

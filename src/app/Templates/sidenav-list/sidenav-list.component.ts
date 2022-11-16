@@ -28,7 +28,8 @@ export class SidenavListComponent implements OnInit {
   ngOnInit(): void {
     const Token: string = this.authService.getCookie('token');
     const tokenInfo: any  =  this.decodeToken(Token);
-    this.UserName = tokenInfo.name;
+    console.log(tokenInfo);
+    this.UserName = tokenInfo.name + ' ' + tokenInfo.surname;
 
     //Obtener token para manejar los roles
     const TokenAccess = JSON.parse(tokenInfo.access);
