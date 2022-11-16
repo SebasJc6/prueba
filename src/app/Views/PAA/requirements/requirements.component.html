@@ -50,10 +50,6 @@
               </div>
               <mat-divider></mat-divider>
               <div class="Order" *ngIf="viewOrder">
-                <!-- <mat-radio-group color="warn" formControlName="ascending">
-                <mat-radio-button value=true>Ascendente</mat-radio-button>
-                <mat-radio-button value=false>Descendente</mat-radio-button>
-              </mat-radio-group> -->
                 Descendente<mat-slide-toggle formControlName="ascending"> Ascendente</mat-slide-toggle>
               </div>
 
@@ -73,12 +69,12 @@
                 &nbsp;
                 <mat-form-field style="width: 15%;" appearance="outline">
                   <mat-label>Dependencia destino de recursos</mat-label>
-                  <input matInput formControlName="DependenciaDestino" type="number">
+                  <input matInput formControlName="DependenciaDestino" type="text">
                 </mat-form-field>
                 &nbsp;
                 <mat-form-field style="width: 30%;" appearance="outline">
                   <mat-label>Descripción</mat-label>
-                  <input matInput formControlName="Descripcion">
+                  <input matInput formControlName="Descripcion" type="text">
                 </mat-form-field>
                 &nbsp;
                 <mat-form-field appearance="outline">

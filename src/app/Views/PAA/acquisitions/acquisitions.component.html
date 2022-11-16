@@ -82,7 +82,7 @@
                   &nbsp;
                   <mat-form-field style="width: 15%;" appearance="outline">
                     <mat-label>Código Proyecto</mat-label>
-                    <input matInput formControlName="CodigoProyecto" type="text">
+                    <input matInput formControlName="CodigoProyecto" type="number">
                   </mat-form-field>
                   &nbsp;
                   <mat-form-field style="width: 30%;" appearance="outline">
@@ -192,7 +192,7 @@
               <mat-icon mat-icon-button class="btnActions" (click)="openAbstract(element.proyectoID)"
                 matTooltip="Resumen Ejecución">insert_drive_file
               </mat-icon>&nbsp;
-              <mat-icon *ngIf="AccessUser == 'Referente_Planeacion'" mat-icon-button [matTooltip]="(element.estadoDesc === 'En Ejecución') ? 'Aprobado' : 'En Ejecución'" [disabled]="!disabledExecute ? true : null" [ngClass]="{
+              <mat-icon *ngIf="AccessUser == 'Referente_Planeacion'" mat-icon-button [matTooltip]="(element.estadoDesc === 'En Ejecución') ? 'Aprobar' : 'Ejecutar'" [disabled]="!disabledExecute ? true : null" [ngClass]="{
               'btnExecution': element.estadoDesc == 'En Ejecución',
               'btnActions' : element.estadoDesc == 'Aprobado' || 'Cerrado' || 'Anteproyecto'}"
                 (click)="changeExecution(element.proyectoID)">
@@ -200,7 +200,7 @@
               <mat-icon *ngIf="AccessUser == 'Referente_Planeacion'" mat-icon-button [ngClass]="{
               'btnExecution': element.estadoDesc == 'Cerrado',
               'btnActions' : element.estadoDesc == 'En Ejecución'|| 'Aprobado' || 'Cerrado' || 'Anteproyecto'}"
-              [matTooltip]="(element.estadoDesc === 'Cerrado') ? 'En Ejecución' : 'Cerrado'" (click)="changeStatus(element.proyectoID)">close</mat-icon>
+              [matTooltip]="(element.estadoDesc === 'Cerrado') ? 'Ejecutar' : 'Cerrar'" (click)="changeStatus(element.proyectoID)">close</mat-icon>
             </div>
           </td>
         <tr>
