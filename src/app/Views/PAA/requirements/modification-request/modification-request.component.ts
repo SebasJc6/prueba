@@ -341,8 +341,6 @@ export class ModificationRequestComponent implements OnInit {
           }, error => {
             // this.spinner.hide();
           });
-
-          // this.addDataTbl();
         });
 
         this.addDataTbl();
