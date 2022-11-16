@@ -156,10 +156,16 @@
               <mat-icon mat-icon-button class="btnActions" matTooltip="Propiedades requerimiento"
                 (click)="propertiesRequirement(element.requerimientoId)">
                 insert_drive_file</mat-icon>
-              <mat-icon mat-icon-button class="btnActions" matTooltip="CDP" 
-              (click)="CDP(element.requerimientoId)"
-              >attach_money</mat-icon>
-              <mat-icon mat-icon-button class="btnActions" matTooltip="Giros">autorenew</mat-icon>
+              <mat-icon mat-icon-button 
+                class="btnActions" matTooltip="CDP" 
+                (click)="CDP(element.requerimientoId)">
+                attach_money
+              </mat-icon>
+              <mat-icon mat-icon-button 
+                class="btnActions" matTooltip="Giros"
+                (click)="StockOrders(element.requerimientoId)">
+                autorenew
+              </mat-icon>
             </div>
           </td>
         <tr>
@@ -204,8 +210,10 @@
     <button class="buton btn" mat-button mat-icon-button (click)="regresar()">
       REGRESAR
     </button>
-    <button *ngIf="AccessUser !== 'Revisor'" class="buton btn" [disabled]="(ProjectState === 'Anteproyecto' || ProjectState === 'En Ejecución') ? false : true" mat-button mat-icon-button (click)="modificatioRequest()">
-      <span>SOLICITAR MODIFICACIÓN</span>
+    <button *ngIf="(AccessUser !== 'Revisor' && (ProjectState === 'Anteproyecto' || ProjectState === 'En Ejecución')) ? true : false" class="buton btn" 
+      mat-button mat-icon-button 
+      (click)="modificatioRequest()">
+        <span>SOLICITAR MODIFICACIÓN</span>
     </button>
   </mat-card-actions>
 

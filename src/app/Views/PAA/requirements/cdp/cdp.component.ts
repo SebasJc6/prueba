@@ -66,7 +66,12 @@ export class CDPComponent implements OnInit {
   //FILTRO
   viewFilter: boolean = true;
   viewOrder: boolean = false;
-
+  
+  
+  CDPsChecked: itemsCDPsI[] = [];
+  selection = new SelectionModel<itemsCDPsI>(true, []);
+  
+  
   //CAMPOS PARA EL FILTRO
   filterCDPs = {} as filterCDPsI;
   filterForm = new FormGroup({
@@ -88,8 +93,6 @@ export class CDPComponent implements OnInit {
   numberPages: number = 0;
   numberPage: number = 0;
 
-  CDPsChecked: itemsCDPsI[] = [];
-  selection = new SelectionModel<itemsCDPsI>(true, []);
 
   ngOnInit(): void {
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
@@ -146,7 +149,15 @@ export class CDPComponent implements OnInit {
     });
   }
 
+
+  //Notificar CDPs
   notifyCDP() {
+
+  }
+
+  
+  //Habilitar CDPs
+  enableCDP(){
 
   }
 

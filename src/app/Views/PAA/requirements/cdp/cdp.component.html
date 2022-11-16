@@ -125,7 +125,6 @@
         <td mat-cell *matCellDef="let element">
           <p> <a [routerLink]="['/WAPI/PAA/RP', requerimentId,element.cdP_ID]"> {{element.numeroCDP}} </a> </p>
         </td>
-NN
         <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
       </ng-container>
 
@@ -271,6 +270,7 @@ NN
     <mat-card-actions>
       <button class="buton btn" mat-button mat-icon-button (click)="regresar()">REGRESAR</button>
       <button class="buton btn" mat-button mat-icon-button (click)="notifyCDP()">NOTIFICAR</button>
+      <button class="buton btn" mat-button mat-icon-button (click)="enableCDP()">HABILITAR</button>
     </mat-card-actions>
   </div>
 

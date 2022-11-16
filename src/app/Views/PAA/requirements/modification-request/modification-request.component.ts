@@ -152,7 +152,8 @@ export class ModificationRequestComponent implements OnInit {
   constructor(
     private serviceFiles: FilesService,
     private activeRoute: ActivatedRoute,
-    public router: Router, public dialog: MatDialog,
+    public router: Router, 
+    public dialog: MatDialog,
     public serviceModRequest: ModificationRequestService,
     private snackBar: MatSnackBar,
     private authService: AuthenticationService,
@@ -169,7 +170,7 @@ export class ModificationRequestComponent implements OnInit {
       this.getRequestAndProject(Number(this.dataProjectID), Number(this.dataSolicitudModID));
       this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
     } else {
-      let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
+      let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
       this.reloadDataTbl(fromStorage);
     }
 
@@ -257,7 +258,7 @@ export class ModificationRequestComponent implements OnInit {
         this.viewsCalDis = this.viewsModificationRequest.data.calculados[2].valor;
         this.viewsCalApr = this.viewsModificationRequest.data.calculados[3].valor;
 
-        let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
+        let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
         this.reloadDataTbl(fromStorage);
       } else {
         this.spinner.hide();
@@ -412,13 +413,13 @@ export class ModificationRequestComponent implements OnInit {
         cadenasPres.pospre_ID = elem.pospre.pospre_ID;
         cadenasPres.proj_ID = elem.project_ID;
         cadenasPres.requerimiento_ID = elem.requerimiento_ID;
-        cadenasPres.cadena_Presupuestal_ID = elem.cadena_Presupuestal_ID;
+        cadenasPres.cadena_Presupuestal_ID = elem.cadena_Presupuestla_ID;
         cadenasPres.iva = elem.iva;
         cadenasPres.arl = elem.arl;
         cadenasPres.subAumento = elem.subAumento;
         cadenasPres.subDisminucion = elem.subDisminucion;
 
-        cadenasPresupuestales.unshift(cadenasPres)
+        cadenasPresupuestales.unshift(cadenasPres);
       });
 
       let modificacion: postDataModificationsI = {
@@ -449,7 +450,7 @@ export class ModificationRequestComponent implements OnInit {
       }
 
       let stringToStore = JSON.stringify(this.ArrayDatos);
-      ProChartStorage.setItem(`arrayDatos${this.dataSolicitudModID}`, stringToStore);
+      ProChartStorage.setItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`, stringToStore);
     });
   }
 
@@ -462,7 +463,8 @@ export class ModificationRequestComponent implements OnInit {
 
     let dataCounterparts: any = {
       id_project: this.dataProjectID,
-      id_request: this.dataSolicitudModID
+      id_request: this.dataSolicitudModID,
+      statusRequest: this.StatusRequest
     }
 
     const dialogRef = this.dialog.open(CounterpartComponent, {
@@ -472,8 +474,8 @@ export class ModificationRequestComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
-      ProChartStorage.removeItem(`CounterpartEdit${this.dataSolicitudModID}`);
+      ProChartStorage.removeItem(`arrayIdSources${this.dataProjectID}${this.dataSolicitudModID}`);
+      ProChartStorage.removeItem(`CounterpartEdit${this.dataProjectID}${this.dataSolicitudModID}`);
       if (result !== '' && result !== undefined) {
 
         let counterpart = {} as dateTableModificationI;
@@ -484,7 +486,7 @@ export class ModificationRequestComponent implements OnInit {
         counterpart.valorDisminuye = result.valorDisminuye || 0;
 
         let objectsFromStorage: postModificRequestCountersI[] = [];
-        let fromStorage = ProChartStorage.getItem(`arrayCounterparts${this.dataSolicitudModID}`);
+        let fromStorage = ProChartStorage.getItem(`arrayCounterparts${this.dataProjectID}${this.dataSolicitudModID}`);
         if (fromStorage != null) {
           objectsFromStorage = JSON.parse(fromStorage || '');
         }
@@ -504,7 +506,7 @@ export class ModificationRequestComponent implements OnInit {
         this.ArrayDataStorage.unshift(counterpart);
 
         let stringToStore = JSON.stringify(this.arrayCounterpart);
-        ProChartStorage.setItem(`arrayCounterparts${this.dataSolicitudModID}`, stringToStore);
+        ProChartStorage.setItem(`arrayCounterparts${this.dataProjectID}${this.dataSolicitudModID}`, stringToStore);
         this.addDataTbl();
       } else if (this.dataSolicitudModID != '0') {
         this.getModificationRequestByRequestId(Number(this.dataSolicitudModID), this.dataValidity, this.filterModificationRequest);
@@ -514,8 +516,8 @@ export class ModificationRequestComponent implements OnInit {
 
   addDataTbl() {
     let stringToStore = JSON.stringify(this.ArrayDataStorage);
-    ProChartStorage.setItem(`dataTableItems${this.dataSolicitudModID}`, stringToStore);
-    let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
+    ProChartStorage.setItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`, stringToStore);
+    let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
     this.reloadDataTbl(fromStorage);
   }
 
@@ -531,7 +533,7 @@ export class ModificationRequestComponent implements OnInit {
 
 
   removeDataTbl(valueToFind: any) {
-
+    
     if (valueToFind.isContrapartida == true) {
 
       if (valueToFind.modificacion_ID != null) {
@@ -550,8 +552,8 @@ export class ModificationRequestComponent implements OnInit {
           this.reloadDataTbl();
         }
       } else {
-        let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
-        let arrayCounterparts = ProChartStorage.getItem(`arrayCounterparts${this.dataSolicitudModID}`);
+        let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
+        let arrayCounterparts = ProChartStorage.getItem(`arrayCounterparts${this.dataProjectID}${this.dataSolicitudModID}`);
         let objectsFromStorage = JSON.parse(fromStorage || '');
         let objectArrayCounterparts = JSON.parse(arrayCounterparts || '');
 
@@ -567,10 +569,10 @@ export class ModificationRequestComponent implements OnInit {
 
           objectsFromStorage.splice(index, 1);
           let stringToStore = JSON.stringify(objectsFromStorage);
-          ProChartStorage.setItem(`dataTableItems${this.dataSolicitudModID}`, stringToStore);
+          ProChartStorage.setItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`, stringToStore);
 
           let newCounters = JSON.stringify(this.arrayCounterpart);
-          ProChartStorage.setItem(`arrayCounterparts${this.dataSolicitudModID}`, newCounters);
+          ProChartStorage.setItem(`arrayCounterparts${this.dataProjectID}${this.dataSolicitudModID}`, newCounters);
           this.reloadDataTbl(stringToStore);
         }
       }
@@ -593,14 +595,14 @@ export class ModificationRequestComponent implements OnInit {
             this.reloadDataTbl();
           }
         } else {
-          let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
+          let fromStorage = ProChartStorage.getItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
           let objectsFromStorage = JSON.parse(fromStorage || '');
           let toFind = objectsFromStorage.filter((obj: any) => {
             return obj.requerimientoID == valueToFind.requerimientoID;
           });
 
           let objectsFromStorageArrayData: any[] = [];
-          let fromStorageArrayData = ProChartStorage.getItem(`arrayDatos${this.dataSolicitudModID}`);
+          let fromStorageArrayData = ProChartStorage.getItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`);
           if (fromStorageArrayData != null) {
             objectsFromStorageArrayData = JSON.parse(fromStorageArrayData || '');
           }
@@ -614,8 +616,8 @@ export class ModificationRequestComponent implements OnInit {
             objectsFromStorageArrayData.splice(index, 1);
             let stringToStore = JSON.stringify(objectsFromStorage);
             let stringToStoreArrayData = JSON.stringify(objectsFromStorageArrayData);
-            ProChartStorage.setItem(`dataTableItems${this.dataSolicitudModID}`, stringToStore);
-            ProChartStorage.setItem(`arrayDatos${this.dataSolicitudModID}`, stringToStoreArrayData);
+            ProChartStorage.setItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`, stringToStore);
+            ProChartStorage.setItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`, stringToStoreArrayData);
             this.reloadDataTbl(stringToStore);
           }
         }
@@ -635,16 +637,14 @@ export class ModificationRequestComponent implements OnInit {
         }
       }
     }
-
   }
+
 
   getNewRequeriment() {
     let fromStorage = ProChartStorage.getItem(`formVerify`);
     let objectsFromStorage = JSON.parse(fromStorage || '');
 
-    console.log(objectsFromStorage);
-    
-    let fromStorageData = ProChartStorage.getItem(`arrayDatos${this.dataSolicitudModID}`);
+    let fromStorageData = ProChartStorage.getItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`);
     if (fromStorageData != null) {
       let objectsFromStorageData = JSON.parse(fromStorageData || '');
       this.ArrayDatos = objectsFromStorageData;
@@ -664,9 +664,8 @@ export class ModificationRequestComponent implements OnInit {
 
     this.ArrayDatos.unshift(requerimentDato);
     let stringToStore = JSON.stringify(this.ArrayDatos);
-    ProChartStorage.setItem(`arrayDatos${this.dataSolicitudModID}`, stringToStore);
-
-    //ProChartStorage.removeItem('formVerify');
+    ProChartStorage.setItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`, stringToStore);
+    ProChartStorage.removeItem('formVerify');
 
     this.getInfoTableNewRequeriment();
   }
@@ -675,13 +674,11 @@ export class ModificationRequestComponent implements OnInit {
     let fromStorage = ProChartStorage.getItem(`formVerifyComplete`);
     let objectsFromStorage = JSON.parse(fromStorage || '');
 
-    let fromStorageData = ProChartStorage.getItem(`dataTableItems${this.dataSolicitudModID}`);
+    let fromStorageData = ProChartStorage.getItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
     if (fromStorageData != null) {
       let objectsFromStorageData = JSON.parse(fromStorageData || '');
       this.ArrayDataStorage = objectsFromStorageData;
     }
-
-    console.log(objectsFromStorage);
     
     let dataTable = {} as dateTableModificationI;
     dataTable.numeroRequerimiento = objectsFromStorage.infoBasica.numeroReq;
@@ -716,7 +713,7 @@ export class ModificationRequestComponent implements OnInit {
     });
 
     let stringToStore = JSON.stringify(ArrayCodesSources);
-    ProChartStorage.setItem(`arrayIdSources${this.dataSolicitudModID}`, stringToStore);
+    ProChartStorage.setItem(`arrayIdSources${this.dataProjectID}${this.dataSolicitudModID}`, stringToStore);
   }
 
 
@@ -740,7 +737,7 @@ export class ModificationRequestComponent implements OnInit {
         };
 
         let stringToStore = JSON.stringify(CounterpartEdit);
-        ProChartStorage.setItem(`CounterpartEdit${this.dataSolicitudModID}`, stringToStore);
+        ProChartStorage.setItem(`CounterpartEdit${this.dataProjectID}${this.dataSolicitudModID}`, stringToStore);
         this.Addcounterpart();
       }
 
@@ -1037,13 +1034,13 @@ export class ModificationRequestComponent implements OnInit {
   //Botón Guardar
   guardar() {
     let arrayDataSave: postDataModReqI[] = [];
-    let fromStorageArrayData = ProChartStorage.getItem(`arrayDatos${this.dataSolicitudModID}`);
+    let fromStorageArrayData = ProChartStorage.getItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`);
     if (fromStorageArrayData != null) {
       arrayDataSave = JSON.parse(fromStorageArrayData || '');
     }
 
     let arrayCounterpartsSave: postModificRequestCountersI[] = [];
-    let fromStorageCounters = ProChartStorage.getItem(`arrayCounterparts${this.dataSolicitudModID}`);
+    let fromStorageCounters = ProChartStorage.getItem(`arrayCounterparts${this.dataProjectID}${this.dataSolicitudModID}`);
     if (fromStorageCounters != null) {
       arrayCounterpartsSave = JSON.parse(fromStorageCounters || '');
     }
@@ -1058,7 +1055,6 @@ export class ModificationRequestComponent implements OnInit {
       this.spinner.show();
       this.serviceModRequest.postModificationRequestSave(postDataSave).subscribe(res => {
         let idSolicitud = res.data.idSolicitud;
-        console.log(postDataSave);
         
         if (res.status == 200) {
           //guardar archivos
@@ -1073,9 +1069,9 @@ export class ModificationRequestComponent implements OnInit {
             this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada con éxito.`, 'success');
           }
           //Elimación de los registros en LocalStorage
-          ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`arrayCounterparts${this.dataProjectID}${this.dataSolicitudModID}`);
           if (this.useNewFile == true) {
             this.addFiles(idSolicitud);
           }
@@ -1089,10 +1085,6 @@ export class ModificationRequestComponent implements OnInit {
             erorsMessages += item + '. ';
           });
           this.openSnackBar('Lo sentimos', res.message, 'error', erorsMessages);
-          // ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-          // this.ArrayDataStorage = [];
-          // this.reloadDataTbl();
-          this.spinner.hide();
         }
         this.spinner.hide();
       }, error => {
@@ -1105,10 +1097,6 @@ export class ModificationRequestComponent implements OnInit {
             erorsMessages += item + '. ';
           });
           this.openSnackBar('Lo sentimos', error.error.Message, 'error', erorsMessages);
-          // ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-          // this.ArrayDataStorage = [];
-          // this.reloadDataTbl();
-          // this.spinner.hide();
         } else if (error.Status == 400) {
           let Data: string[] = [];
           Data = Object.values(error.error.Data);
@@ -1117,10 +1105,6 @@ export class ModificationRequestComponent implements OnInit {
             erorsMessages += item + '. ';
           });
           this.openSnackBar('Lo sentimos', error.error.Message, 'error', erorsMessages);
-          // ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-          // this.ArrayDataStorage = [];
-          // this.reloadDataTbl();
-          // this.spinner.hide();
         } else {
           this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
         }
@@ -1155,9 +1139,9 @@ export class ModificationRequestComponent implements OnInit {
             this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
           }
           //Elimación de los registros en LocalStorage
-          ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`arrayCounterparts${this.dataProjectID}${this.dataSolicitudModID}`);
           if (this.useNewFile == true) {
             this.addFiles(idSolicitud);
           }
@@ -1191,9 +1175,6 @@ export class ModificationRequestComponent implements OnInit {
             erorsMessages += item + '. ';
           });
           this.openSnackBar('Lo sentimos', error.error.Message, 'error', erorsMessages);
-          // ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-          // this.ArrayDataStorage = [];
-          // this.reloadDataTbl();
         } else {
           this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
         }
@@ -1204,8 +1185,8 @@ export class ModificationRequestComponent implements OnInit {
 
   //Botón Enviar
   enviar() {
-    let fromStorageArrayData = ProChartStorage.getItem(`arrayDatos${this.dataSolicitudModID}`);
-    let fromStorageCounters = ProChartStorage.getItem(`arrayCounterparts${this.dataSolicitudModID}`);
+    let fromStorageArrayData = ProChartStorage.getItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`);
+    let fromStorageCounters = ProChartStorage.getItem(`arrayCounterparts${this.dataProjectID}${this.dataSolicitudModID}`);
 
     if (this.dataSolicitudModID == '0') {
       this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe guardar primero la solicitud para poder enviarla.`);
@@ -1226,10 +1207,10 @@ export class ModificationRequestComponent implements OnInit {
         if (res.status == 200) {
           this.openSnackBar('Éxito al Enviar', `Solicitud de Modificación N° ${res.data.numSolicitud} Enviada con éxito.`, 'success');
           //Elimación de los registros en LocalStorage
-          ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
-          ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`arrayCounterparts${this.dataProjectID}${this.dataSolicitudModID}`);
+          ProChartStorage.removeItem(`arrayIdSources${this.dataProjectID}${this.dataSolicitudModID}`);
           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
         } else if (res.status == 404) {
           let Data: string[] = [];
@@ -1239,22 +1220,22 @@ export class ModificationRequestComponent implements OnInit {
             erorsMessages += item + '. ';
           });
           this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
-        } else if (res.Status == 404) {
+        } else if (res.status == 400) {
           let Data: string[] = [];
-          Data = Object.values(res.Data);
           let erorsMessages = '';
-          Data.map(item => {
-            erorsMessages += item + '. ';
-          });
-          this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
+          if (res.data != null) {   
+            Data = Object.values(res.data);
+            Data.map(item => {
+              erorsMessages += item + '. ';
+            });
+          }
+          this.openSnackBar('Lo sentimos', res.message, 'error', erorsMessages);
         }
         this.spinner.hide();
       }, error => {
         this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
         this.spinner.hide();
       });
-    } else {
-      this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe estar en estado "En Modificación" ó "En Ajuste" para ser enviada.`);
     }
   }
 
@@ -1333,10 +1314,10 @@ export class ModificationRequestComponent implements OnInit {
   cancel() {
     this.CounterpartsDelete = [];
     this.RequerimentsDelete = [];
-    ProChartStorage.removeItem(`dataTableItems${this.dataSolicitudModID}`);
-    ProChartStorage.removeItem(`arrayDatos${this.dataSolicitudModID}`);
-    ProChartStorage.removeItem(`arrayCounterparts${this.dataSolicitudModID}`);
-    ProChartStorage.removeItem(`arrayIdSources${this.dataSolicitudModID}`);
+    ProChartStorage.removeItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
+    ProChartStorage.removeItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`);
+    ProChartStorage.removeItem(`arrayCounterparts${this.dataProjectID}${this.dataSolicitudModID}`);
+    ProChartStorage.removeItem(`arrayIdSources${this.dataProjectID}${this.dataSolicitudModID}`);
     if (this.StatusRequest === 'En Modificación' && this.AccessUser !== 'Revisor') {
       this.spinner.show();
       this.serviceModRequest.deleteModificationRequest(Number(this.dataSolicitudModID)).subscribe(res => {

@@ -19,6 +19,7 @@ import { PropertiesRequirementComponent } from './Views/PAA/requirements/propert
 
 
 import { RequirementsComponent } from './Views/PAA/requirements/requirements.component';
+import { StockOrdersComponent } from './Views/PAA/requirements/stock-orders/stock-orders.component';
 import { TaskTrayComponent } from './Views/PAA/task-tray/task-tray.component';
 
 
@@ -46,6 +47,7 @@ const routes: Routes = [
             // ]
           },
           { path: 'RP/:idReq/:idCDP', component: RpComponent, canActivate: [VigilantSessionsGuard] },
+          { path: 'StockOrders/:idPro/:idReq', component: StockOrdersComponent, canActivate: [VigilantSessionsGuard] },
           { path: 'SolicitudModificacion/:idPro/:idSol', component: ModificationRequestComponent, canActivate: [VigilantSessionsGuard] },
           { path: 'ResumenModificacion/:idPro/:idSol', component: ModificationSummaryComponent, canActivate: [VigilantSessionsGuard] }
         ]
