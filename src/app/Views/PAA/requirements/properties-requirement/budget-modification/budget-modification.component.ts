@@ -14,6 +14,9 @@ export class BudgetModificationComponent implements OnInit {
   isSelected = false;
   isDisabledAum = false;
   isDisabledDis = false;
+  viewDisabledAum = false;
+  viewDisabledDis = false;
+  type : string = '';
   formSubmit = {} as cadenaPresupuestalI
   iva: number = 0;
   arl: number = 0;
@@ -23,7 +26,8 @@ export class BudgetModificationComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<BudgetModificationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { dialogRef.disableClose = true; }
+  ) { dialogRef.disableClose = true;
+    dialogRef.beforeClosed().subscribe(() => dialogRef.close(this.type)); }
 
   ngOnInit(): void {
     this.valueForm(this.data.element);
@@ -67,11 +71,23 @@ export class BudgetModificationComponent implements OnInit {
     this.dialogRef.close();
     this.formSubmit.aumento = this.aumenta;
   }
-  valueTotal() {
-    this.total = this.formSubmit.aumento + this.formSubmit.iva + this.formSubmit.arl - this.formSubmit.disminucion;
-    this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.total;
-    this.formSubmit.subAumento = this.formSubmit.aumento 
-    this.formSubmit.subDisminucion = this.formSubmit.disminucion 
+  valueTotal(type?: string) {
+    if (type == 'aumento') {
+      this.total = this.formSubmit.aumento + this.formSubmit.iva + this.formSubmit.arl - this.formSubmit.disminucion;
+      this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.total;
+      this.formSubmit.subAumento = this.formSubmit.aumento      
+      this.isDisabledDis = true;
+      this.viewDisabledDis = true;
+      this.type = 'aumento';
+    }else if (type == 'disminucion') {
+      this.total = this.formSubmit.disminucion + this.formSubmit.iva + this.formSubmit.arl ;
+      this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.total;
+      this.formSubmit.subDisminucion = this.formSubmit.disminucion
+      this.isDisabledAum = true;
+      this.viewDisabledAum = true;
+      this.type = 'disminucion';
+    }
+
     //  if (this.formSubmit.aumento != 0){
     //       this.isDisabledAum = false;
     //     this.isDisabledDis = true;
