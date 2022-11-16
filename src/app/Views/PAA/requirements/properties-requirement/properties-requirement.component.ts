@@ -1405,7 +1405,7 @@ export class PropertiesRequirementComponent implements OnInit {
       data: { type, element },
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
+     // console.log(result);
       if (result.aumento != 0) {
         result.aumento = result.subAumento + result.iva + result.arl
       }else if (result.disminucion != 0) {
