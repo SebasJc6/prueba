@@ -52,18 +52,14 @@ export class PopUpImportComponent implements OnInit {
           this.spinner.show();
           this.serviceModRequest.importFile(this.dataProjectID, FILE).subscribe(res => {
 
-            let message = res.Message;
+            let message = res.message;
             let status = res.status;
-            let Status = res.Status;
             let Data: string[] = [];
 
-
             if (status == 404) {
-              Data = Object.values(res.Data);
+              Data = Object.values(res.data);
             } else if (status == 200) {
               this.idSolicitudImport = res.data.idSolicitud;
-            } else if (Status == 404) {
-              Data = Object.values(res.Data);
             }
 
             let erorsMessages = '';
@@ -76,12 +72,8 @@ export class PopUpImportComponent implements OnInit {
             } else if (status == 200) {
               this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
               this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
-            } else if (Status == 404) {
-              this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
-            } else if (Status == 200) {
-              this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
-              this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
             }
+
             this.dialogRef.close();
             this.spinner.hide();
           }, error => {

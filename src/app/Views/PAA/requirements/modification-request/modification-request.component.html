@@ -52,7 +52,7 @@
                     </mat-icon>
                 </button>
             </span>
-            <span *ngIf="(AccessUser === 'Referente_Planeacion' && (dataSolicitudModID !== '0')) ? true : false" class="btngImport">
+            <span *ngIf="(AccessUser === 'Referente_Planeacion' && dataSolicitudModID == '0') ? true : false" class="btngImport">
                 <button mat-button class="btn" (click)="openChargeFile()">
                     <mat-icon class="imgImport mat-icon" matTooltip="Importar Excel">
                         <img class="imgImport" src="../../../../assets/img/import.png">
@@ -129,35 +129,35 @@
                         </mat-expansion-panel-header>
                         <div class="form">
                             <mat-form-field style="width: 10%;" appearance="outline">
-                                <mat-label>Número de requerimiento</mat-label>
+                                <mat-label class="text__opacity">Número de requerimiento</mat-label>
                                 <input matInput formControlName="NumeroRequerimiento" type="number">
                             </mat-form-field>
                             <mat-form-field style="width: 10%;" appearance="outline">
-                                <mat-label>Dependencia destino de recursos</mat-label>
+                                <mat-label class="text__opacity">Dependencia destino de recursos</mat-label>
                                 <input matInput formControlName="DependenciaDestino" type="number">
                             </mat-form-field>
                             <mat-form-field style="width: 25%;" appearance="outline">
-                                <mat-label>Descripción</mat-label>
+                                <mat-label class="text__opacity">Descripción</mat-label>
                                 <input matInput formControlName="Descripcion">
                             </mat-form-field>
                             <mat-form-field style="width: 20%;" appearance="outline">
-                                <mat-label>Modalidad de Selección</mat-label>
+                                <mat-label class="text__opacity">Modalidad de Selección</mat-label>
                                 <input matInput formControlName="ModalidadSeleccion">
                             </mat-form-field>
                             <mat-form-field style="width: 15%;" appearance="outline">
-                                <mat-label>Actuacion Contractual</mat-label>
+                                <mat-label class="text__opacity">Actuacion Contractual</mat-label>
                                 <input matInput formControlName="ActuacionContractual">
                             </mat-form-field>
                             <mat-form-field style="width: 10%;" appearance="outline">
-                                <mat-label>Numero Contrato</mat-label>
+                                <mat-label class="text__opacity">Numero Contrato</mat-label>
                                 <input matInput formControlName="NumeroContrato">
                             </mat-form-field>
                             <mat-form-field style="width: 20%;" appearance="outline">
-                                <mat-label>Tipo Contrato</mat-label>
+                                <mat-label class="text__opacity">Tipo Contrato</mat-label>
                                 <input matInput formControlName="TipoContrato">
                             </mat-form-field>
                             <mat-form-field style="width: 15%;" appearance="outline">
-                                <mat-label>Perfil</mat-label>
+                                <mat-label class="text__opacity">Perfil</mat-label>
                                 <input matInput formControlName="Perfil">
                             </mat-form-field>
 
@@ -438,24 +438,25 @@
 
     </div>
 
-    <mat-card-actions>
-        <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false"  class="buton btn" mat-button mat-icon-button
-            (click)="guardar()">
-            Guardar
-        </button>
-        <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste')) ? true : false" class="buton btn" mat-button mat-icon-button (click)="enviar()">
-            Enviar
-        </button>
-        <!-- <div> -->
-        <button *ngIf="AccessUser == 'Referente_Planeacion'" class="buton btn" mat-button mat-icon-button
-            [disabled]="(StatusRequest == 'En Revisión') ? false : true"
-            (click)="enviarRecisiones()">
-            Enviar Revisiones
-        </button>
-        <!--</div> -->
-        <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
-            Cancelar
-        </button>
-    </mat-card-actions>
+    <div style="margin-top: 3%;">
+        <mat-card-actions>
+            <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false"  class="buton btn" mat-button mat-icon-button
+                (click)="guardar()">
+                Guardar
+            </button>
+            <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste')) ? true : false" class="buton btn" mat-button mat-icon-button (click)="enviar()">
+                Enviar
+            </button>
+            <!-- <div> -->
+            <button *ngIf="AccessUser == 'Referente_Planeacion' && StatusRequest == 'En Revisión'" class="buton btn" mat-button mat-icon-button
+                (click)="enviarRecisiones()">
+                Enviar Revisiones
+            </button>
+            <!--</div> -->
+            <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
+                Cancelar
+            </button>
+        </mat-card-actions>
+    </div>
 
 </div>

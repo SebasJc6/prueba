@@ -810,7 +810,7 @@ export class ModificationRequestComponent implements OnInit {
   openChargeFile() {
     const dialogRef = this.dialog.open(PopUpImportComponent, {
       width: '1000px',
-      height: '500px',
+      height: '580px',
       data: this.dataProjectID,
     });
   }
@@ -1277,7 +1277,7 @@ export class ModificationRequestComponent implements OnInit {
   openDialog(title: string, message: string, type: string, message2: string): void {
     const dialogRef = this.dialog.open(AlertsPopUpComponent, {
       width: '1000px',
-      height: '500px',
+      height: '580px',
       data: { title: title, message: message, type: type, message2: message2 },
     });
 

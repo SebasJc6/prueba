@@ -63,22 +63,22 @@
               </mat-expansion-panel-header>
               <div class="form">
                 <mat-form-field appearance="outline">
-                  <mat-label>Número de requerimiento</mat-label>
+                  <mat-label class="text__opacity">Número de requerimiento</mat-label>
                   <input matInput formControlName="NumeroRequerimiento" type="number">
                 </mat-form-field>
                 &nbsp;
                 <mat-form-field style="width: 15%;" appearance="outline">
-                  <mat-label>Dependencia destino de recursos</mat-label>
+                  <mat-label class="text__opacity">Dependencia destino de recursos</mat-label>
                   <input matInput formControlName="DependenciaDestino" type="text">
                 </mat-form-field>
                 &nbsp;
                 <mat-form-field style="width: 30%;" appearance="outline">
-                  <mat-label>Descripción</mat-label>
+                  <mat-label class="text__opacity">Descripción</mat-label>
                   <input matInput formControlName="Descripcion" type="text">
                 </mat-form-field>
                 &nbsp;
                 <mat-form-field appearance="outline">
-                  <mat-label>Estado</mat-label>
+                  <mat-label class="text__opacity">Estado</mat-label>
                   <mat-select formControlName="Estado">
                     <mat-option [value]="Item" *ngFor="let Item of estadoFilter">{{Item}}</mat-option>
                   </mat-select>
