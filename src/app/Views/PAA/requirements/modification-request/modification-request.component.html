@@ -52,7 +52,7 @@
                     </mat-icon>
                 </button>
             </span>
-            <span *ngIf="(AccessUser === 'Referente_Planeacion' && (dataSolicitudModID === '0')) ? true : false" class="btngImport">
+            <span *ngIf="(AccessUser === 'Referente_Planeacion' && (dataSolicitudModID !== '0')) ? true : false" class="btngImport">
                 <button mat-button class="btn" (click)="openChargeFile()">
                     <mat-icon class="imgImport mat-icon" matTooltip="Importar Excel">
                         <img class="imgImport" src="../../../../assets/img/import.png">
@@ -116,7 +116,7 @@
                         </div>
                         <mat-divider></mat-divider>
                         <div class="Order" *ngIf="viewOrder">
-                            Descendente<mat-slide-toggle formControlName="ascending"> Ascendente</mat-slide-toggle>
+                            Decendente<mat-slide-toggle formControlName="ascending"> Acendente</mat-slide-toggle>
                         </div>
 
                     </mat-expansion-panel>
@@ -447,7 +447,8 @@
             Enviar
         </button>
         <!-- <div> -->
-        <button *ngIf="(AccessUser == 'Referente_Planeacion' && dataSolicitudModID !== '0' && (StatusRequest !== 'Aprobada' && StatusRequest !== 'En Modificación'))" class="buton btn" mat-button mat-icon-button
+        <button *ngIf="AccessUser == 'Referente_Planeacion'" class="buton btn" mat-button mat-icon-button
+            [disabled]="(StatusRequest == 'En Revisión') ? false : true"
             (click)="enviarRecisiones()">
             Enviar Revisiones
         </button>
