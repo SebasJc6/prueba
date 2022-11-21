@@ -413,7 +413,7 @@ export class ModificationRequestComponent implements OnInit {
         cadenasPres.pospre_ID = elem.pospre.pospre_ID;
         cadenasPres.proj_ID = elem.project_ID;
         cadenasPres.requerimiento_ID = elem.requerimiento_ID;
-        cadenasPres.cadena_Presupuestal_ID = elem.cadena_Presupuestla_ID;
+        cadenasPres.cadena_Presupuestal_ID = elem.cadena_Presupuestal_ID;
         cadenasPres.iva = elem.iva;
         cadenasPres.arl = elem.arl;
         cadenasPres.subAumento = elem.subAumento;

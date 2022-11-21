@@ -141,7 +141,7 @@ export interface cadenasPresupuestalesI {
     compromisos: number,
     apropiacionDefinitiva: number,
     giros: number,
-    cadena_Presupuestla_ID: number,
+    cadena_Presupuestal_ID: number,
     iva: number,
     arl: number,
     subAumento: number,

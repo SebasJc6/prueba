@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { dataAbstractI, responsibleAbstractI } from 'src/app/Models/ModelsPAA/Abstract/abstract';
+import { abstractDataI, abstractDataYearI, responsibleAbstractI } from 'src/app/Models/ModelsPAA/Abstract/abstract';
 import { AbstractService } from 'src/app/Services/ServicesPAA/Abstract/abstract.service';
 
 
@@ -20,13 +20,11 @@ export class AbstractComponent implements OnInit {
 
   dataProjectID = '';
 
-  abstractData = {} as dataAbstractI;
+  abstractData = {} as abstractDataI;
+  abstractDataInfoYear = {} as abstractDataYearI;
   responsibleAbstractData = {} as responsibleAbstractI;
-
-  Modelo = 'Interpolacion';
-
-  valor = 7791;
-
+  year!: number;
+  arrayYears: number[] = [];
 
   ngOnInit(): void {
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('data') || '';
@@ -34,15 +32,44 @@ export class AbstractComponent implements OnInit {
     this.getAbstract(this.dataProjectID);
   }
 
+
   getAbstract(projectId: string) {
     this.spinner.show();
     this.serviceAbsctract.getAbstract(projectId).subscribe(request => {
+      this.year = request.data.anio;
       this.abstractData = request.data;
       this.responsibleAbstractData = request.data.responsable;
-      this.spinner.hide();
+      this.arrayYears = request.data.anios;
+
+      this.getAbstractYear();
+    this.spinner.hide();
     }, error => {
       this.spinner.hide();
     });
+  }
+
+
+  //Obtener la informacion al cargar un año
+  getAbstractYear() {
+    // console.log(this.year);
+    if (this.arrayYears.length > 0) {
+      this.serviceAbsctract.getAbstractYear(Number(this.dataProjectID), this.year).subscribe(res => {
+        this.abstractDataInfoYear = res.data;
+      });
+    } else {
+      this.abstractDataInfoYear = {
+        apropiacionDefinitiva: 0,
+        apropiacionInicial: 0,
+        ejecucionAcumulada: 0,
+        ejecucionApropPCT: 0,
+        ejecucionGiroPCT: 0,
+        ejecucionGirosPCT: 0,
+        giroAcumulado: 0,
+        girosReserva: 0,
+        porEjecutar: 0,
+        reservaConstituida: 0
+      }
+    }
   }
 
   regresar(){
