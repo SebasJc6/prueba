@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
-import { filterModificationRequestI, getModificationRequestByRequesI, getModificationRequestI, getValidityByRequestI, postModificationRequestI, RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
+import { filterModificationRequestI, getActuacionI, getModificationRequestByRequesI, getModificationRequestI, getPerfilI, getTipoContratoI, getValidityByRequestI, postModificationRequestI, RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,7 @@ export class ModificationRequestService {
 
 
   readonly Url: string= environment.baseUrl.logic ;
+  readonly Url_2: string = environment.baseUrl.generic;
 
   constructor(private http: HttpClient) {}
 
@@ -92,5 +93,23 @@ export class ModificationRequestService {
   getValidityByRequest(id_request: number): Observable<getValidityByRequestI> {
     let dir = `${this.Url}/SolicitudMod/${id_request}/Vigencias`;
     return this.http.get<getValidityByRequestI>(dir);
+  }
+
+  //Obtener el objeto Actuacion (Nombre y Id)
+  getActuacion(id_actuacion: number): Observable<getActuacionI> {
+    let dir = `${this.Url_2}Actuacion/${id_actuacion}`;
+    return this.http.get<getActuacionI>(dir);
+  }
+
+  //Obtener el objeto Perfil (Nombre y Id)
+  getPerfil(id_perfil: number): Observable<getPerfilI> {
+    let dir = `${this.Url_2}Perfil/${id_perfil}`;
+    return this.http.get<getPerfilI>(dir);
+  }
+
+  //Obtener el objeto TipoContrato (Nombre y Id)
+  getTipoContrato(id_tipoContrato: number): Observable<getTipoContratoI> {
+    let dir = `${this.Url_2}TipoContrato/${id_tipoContrato}`;
+    return this.http.get<getTipoContratoI>(dir);
   }
 }

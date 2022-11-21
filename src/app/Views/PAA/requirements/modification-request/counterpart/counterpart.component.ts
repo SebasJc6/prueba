@@ -45,6 +45,12 @@ export class CounterpartComponent implements OnInit {
   //Propiedad con el Rol del Usuario
   AccessUser: string = '';
 
+  //Disabled Valor Aumenta
+  dissabledIncreases: boolean = false;
+
+  //Disabled Valor Disminuye
+  dissabledDecreases: boolean = false;
+
   counterpartForm = new FormGroup({
     fuentes: new FormControl(),
     Descripcion: new FormControl(''),
@@ -117,6 +123,28 @@ export class CounterpartComponent implements OnInit {
     }
   }
 
+  //Manejo del input Valor Aumenta
+  onPressValueIncreases() {
+    let valorAumenta = this.counterpartForm.value.ValorAumenta;
+    if (Boolean(valorAumenta) !== null && Number(valorAumenta) !== 0) {
+      this.dissabledDecreases = true;
+    } else {
+      this.dissabledDecreases = false;
+    }
+  }
+
+
+  //Manejo del input Valor Disminuye
+  onPressValueDecreases(){
+    let valorDisminuye = this.counterpartForm.value.ValorDisminuye;
+    if (Boolean(valorDisminuye) !== null && Number(valorDisminuye) !== 0) {
+      this.dissabledIncreases = true;
+    } else {
+      this.dissabledIncreases = false;
+    }
+  }
+
+
   closedDialog(){
     if (this.counterpartForm.value.fuentes){
       if (this.ModificationId != 0) {
@@ -133,8 +161,7 @@ export class CounterpartComponent implements OnInit {
         putDataSave.solicitudModID = Number(this.dataCounterparts.id_request);
         putDataSave.deleteReqIDs = [];
         putDataSave.deleteContraIDs = [];
-  
-  
+
         //Validar esta parte
         this.spinner.show();
         this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {

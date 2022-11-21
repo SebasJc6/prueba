@@ -217,3 +217,36 @@ export interface RevisionSend {
   comentarios: string,
   accion: number
 }
+
+//Interfaz para obtener Actuacion Contractual
+export interface getActuacionI {
+  status: number,
+  message: string,
+  title: string,
+  data: {
+    actuacion_ID: number,
+    tipo: string
+  }
+}
+
+//Interfaz para obtener Perfil Laboral
+export interface getPerfilI {
+  status: number,
+  message: string,
+  title: string,
+  data: {
+    perfil_ID: number,
+    nombre_Perfil: string
+  }
+}
+
+//Interfaz para obtener Tipo de Contrato
+export interface getTipoContratoI {
+  status: number,
+  message: string,
+  title: string,
+  data: {
+    tipoContrato_ID: number,
+    nombre: string
+  }
+}

@@ -41,6 +41,8 @@
             <input type="number" 
                 maxlength="20"
                 (keypress)="validateFormat($event)"
+                (keyup)="onPressValueIncreases()"
+                [readonly]="dissabledIncreases"
                 [readonly]="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? false : true"
                 class="contData"
                 formControlName="ValorAumenta">
@@ -50,7 +52,9 @@
             <input type="text"
                 maxlength="20"
                 (keypress)="validateFormat($event)"
+                (keyup)="onPressValueDecreases()"
                 class="contData"
+                [readonly]="dissabledDecreases"
                 [readonly]="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? false : true"
                 formControlName="ValorDisminuye">
         </div>

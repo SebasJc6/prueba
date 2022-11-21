@@ -679,17 +679,40 @@ export class ModificationRequestComponent implements OnInit {
       let objectsFromStorageData = JSON.parse(fromStorageData || '');
       this.ArrayDataStorage = objectsFromStorageData;
     }
+    let classifications: any[] = objectsFromStorage.clasificaciones;
     
     let dataTable = {} as dateTableModificationI;
+    dataTable.valorAumenta = 0;
+    dataTable.valorDisminuye = 0;
+    dataTable.nuevoSaldoApropiacion = 0;
+    classifications.forEach(element => {
+      let valorAumenta = element.aumento;
+      let valorDisminuye = element.disminucion;
+      let apropiacionDefinitiva = element.apropiacionDefinitiva;
+      dataTable.valorAumenta + Number(valorAumenta);
+      dataTable.valorDisminuye + Number(valorDisminuye);
+      dataTable.nuevoSaldoApropiacion + Number(apropiacionDefinitiva);
+    });
     dataTable.numeroRequerimiento = objectsFromStorage.infoBasica.numeroReq;
     dataTable.dependenciaDestino = objectsFromStorage.infoBasica.dependenciaDes.codigo;
     dataTable.descripcion = objectsFromStorage.infoBasica.descripcion;
     dataTable.modalidadSeleccion = objectsFromStorage.infoBasica.modalidadSel.codigo;
-    dataTable.actuacionContractual = objectsFromStorage.infoBasica.actuacionCont;
+    this.serviceModRequest.getActuacion(objectsFromStorage.infoBasica.actuacionCont).subscribe(res => {
+      dataTable.actuacionContractual = res.data.tipo;
+    });
     dataTable.numeroContrato = objectsFromStorage.infoBasica.numeroContrato || 0;
     dataTable.saldoRequerimiento = objectsFromStorage.infoBasica.saldoRequerimiento || 0;
-    dataTable.tipoContrato = objectsFromStorage.infoBasica.tipoCont || 0;
-    dataTable.perfil = objectsFromStorage.infoBasica.perfil || 0;
+    this.serviceModRequest.getTipoContrato(objectsFromStorage.infoBasica.tipoCont).subscribe(res => {
+      dataTable.tipoContrato = res.data.nombre;
+    });
+    this.serviceModRequest.getPerfil(objectsFromStorage.infoBasica.perfil).subscribe(res => {
+      dataTable.perfil = res.data.nombre_Perfil;
+      setTimeout(() => {
+        this.ArrayDataStorage.unshift(dataTable);
+        ProChartStorage.removeItem('formVerifyComplete');
+        this.addDataTbl();
+      }, 2000);
+    });
     dataTable.honorarios = objectsFromStorage.infoBasica.valorHonMes || 0;
     
 
@@ -697,11 +720,6 @@ export class ModificationRequestComponent implements OnInit {
     clasificaciones.map(item => {
       dataTable.fuente = item.fuente_ID;
     });
-
-    this.ArrayDataStorage.unshift(dataTable);
-
-    ProChartStorage.removeItem('formVerifyComplete');
-    this.addDataTbl();
   }
 
   getCodeSources() {
@@ -1145,7 +1163,11 @@ export class ModificationRequestComponent implements OnInit {
           if (this.useNewFile == true) {
             this.addFiles(idSolicitud);
           }
-          this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+          setTimeout(() => {
+            this.getModificationRequet(Number(this.dataProjectID), Number(this.dataSolicitudModID));
+            this.getModificationRequestByRequestId(+this.dataSolicitudModID, this.dataValidity, this.filterModificationRequest);
+            this.ArrayDataStorage = [];
+          }, 1000);
 
         } else if (res.status == 404) {
 
@@ -1169,7 +1191,7 @@ export class ModificationRequestComponent implements OnInit {
       }, error => {
         if (error.status == 400) {
           let Data: string[] = [];
-          Data = Object.values(error.error.Data);
+          Data = Object.values(error.error.data);
           let erorsMessages = '';
           Data.map(item => {
             erorsMessages += item + '. ';
