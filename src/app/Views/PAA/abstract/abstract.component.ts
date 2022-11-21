@@ -36,7 +36,7 @@ export class AbstractComponent implements OnInit {
   getAbstract(projectId: string) {
     this.spinner.show();
     this.serviceAbsctract.getAbstract(projectId).subscribe(request => {
-      this.year = request.data.anio;
+      this.year = request.data.anios[0];
       this.abstractData = request.data;
       this.responsibleAbstractData = request.data.responsable;
       this.arrayYears = request.data.anios;
