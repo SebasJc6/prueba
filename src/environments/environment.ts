@@ -7,4 +7,3 @@ export const environment = {
       generic:"https://wa-aeu-sds-qas-wapi-canonical.azurewebsites.net/api/v1/"
     } 
   };
-  
