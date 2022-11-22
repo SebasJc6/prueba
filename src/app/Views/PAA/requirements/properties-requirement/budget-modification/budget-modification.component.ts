@@ -9,6 +9,13 @@ import { cadenaPresupuestalI } from 'src/app/Models/ModelsPAA/propertiesRequirem
   styleUrls: ['./budget-modification.component.scss']
 })
 export class BudgetModificationComponent implements OnInit {
+  valueFormSubmit = new FormGroup({
+    aumenta : new FormGroup(0),
+    disminuye : new FormGroup(0),
+    iva : new FormGroup(0),
+    arl : new FormGroup(0),
+    total : new FormGroup(0)
+  });
   isDisabled = true;
   isDisabledView = false;
   isSelected = false;
@@ -16,7 +23,7 @@ export class BudgetModificationComponent implements OnInit {
   isDisabledDis = false;
   viewDisabledAum = false;
   viewDisabledDis = false;
-  type : string = '';
+  type: string = '';
   formSubmit = {} as cadenaPresupuestalI
   iva: number = 0;
   arl: number = 0;
@@ -26,8 +33,10 @@ export class BudgetModificationComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<BudgetModificationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { dialogRef.disableClose = true;
-    dialogRef.beforeClosed().subscribe(() => dialogRef.close(this.type)); }
+  ) {
+    dialogRef.disableClose = true;
+    dialogRef.beforeClosed().subscribe(() => dialogRef.close(this.type));
+  }
 
   ngOnInit(): void {
     this.valueForm(this.data.element);
@@ -75,12 +84,12 @@ export class BudgetModificationComponent implements OnInit {
     if (type == 'aumento') {
       this.total = this.formSubmit.aumento + this.formSubmit.iva + this.formSubmit.arl - this.formSubmit.disminucion;
       this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.total;
-      this.formSubmit.subAumento = this.formSubmit.aumento      
+      this.formSubmit.subAumento = this.formSubmit.aumento
       this.isDisabledDis = true;
       this.viewDisabledDis = true;
       this.type = 'aumento';
-    }else if (type == 'disminucion') {
-      this.total = this.formSubmit.disminucion + this.formSubmit.iva + this.formSubmit.arl ;
+    } else if (type == 'disminucion') {
+      this.total = this.formSubmit.disminucion + this.formSubmit.iva + this.formSubmit.arl;
       this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.total;
       this.formSubmit.subDisminucion = this.formSubmit.disminucion
       this.isDisabledAum = true;

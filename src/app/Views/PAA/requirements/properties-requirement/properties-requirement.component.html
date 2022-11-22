@@ -149,11 +149,15 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label2">
                                         <p class="tltData">Modalidad de selección</p>
-                                        <!-- <select formControlName="modalidadSel" class="contDataSelect">
-                                        <option [value]="item.modalidad_Sel_ID" *ngFor="let item of allSelectionMode">
-                                            {{item.codigo}}</option>
-                                    </select> -->
-                                        <input type="text" class="contDataAutocomplete" [matAutocomplete]="auto2"
+                                        <mat-select formControlName="modalidadSel" class="contDataAutocomplete">
+                                            <mat-option [value]="item.modalidad_Sel_ID"
+                                                *ngFor="let item of allSelectionMode">
+                                                {{item.codigo}}</mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="errorModalidad">
+                                            Campo <strong>Obligatorio</strong>
+                                        </mat-error>
+                                        <!-- <input type="text" class="contDataAutocomplete" [matAutocomplete]="auto2"
                                             formControlName="modalidadSel">
                                         <mat-error *ngIf="errorModalidad">
                                             Campo <strong>Obligatorio</strong>
@@ -163,7 +167,7 @@
                                             <mat-option [value]="item" *ngFor="let item of listSelcMode">
                                                 {{item.codigo}}
                                             </mat-option>
-                                        </mat-autocomplete>
+                                        </mat-autocomplete> -->
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Actuación Contractual</p>
@@ -334,7 +338,7 @@
                                         </mat-error>
                                     </div>
                                     <div class="contTxt label1">
-                                        <p class="tltData">fuente MSPS</p>
+                                        <p class="tltData">Fuente MSPS</p>
                                         <input class="contData contDataDisabled" formControlName="ftnMSPS">
                                     </div>
                                 </div>

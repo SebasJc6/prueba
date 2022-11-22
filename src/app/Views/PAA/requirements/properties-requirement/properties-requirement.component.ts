@@ -355,6 +355,7 @@ export class PropertiesRequirementComponent implements OnInit {
         this.viewVersion = true;
         this.viewActionCancel = true;
         this.getDataAprobad(+this.dataProjectID, +this.dataRequirementID);
+
       } else if (this.typePage == 'Nuevo') {
         if (this.AccessUser != 'Revisor') {
           this.dataRequirementNum = this.dataRequirementID;
@@ -551,13 +552,16 @@ export class PropertiesRequirementComponent implements OnInit {
   }
 
   getSelectionModeByCod() {
-    this.proRequirementeForm.controls.infoBasicaForm.controls.modalidadSel.valueChanges.pipe(
-      distinctUntilChanged()
-    ).subscribe(val => {
-      this.serviceProRequirement.getSelectionModeElastic(val || '').subscribe((dataSelcMode) => {
-        this.listSelcMode = dataSelcMode.data;
-      })
-    }) || '';
+    this.serviceProRequirement.getAllSelectionMode().subscribe((dataSelcMode) => {
+      this.allSelectionMode = dataSelcMode.data;
+    })
+    // this.proRequirementeForm.controls.infoBasicaForm.controls.modalidadSel.valueChanges.pipe(
+    //   distinctUntilChanged()
+    // ).subscribe(val => {
+    //   this.serviceProRequirement.getSelectionModeElastic(val || '').subscribe((dataSelcMode) => {
+    //     this.listSelcMode = dataSelcMode.data;
+    //   })
+    // }) || '';
 
   }
 
@@ -792,6 +796,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
   getDataAprobad(projectId: number, requerimetId: number) {
     this.serviceProRequirement.getDataAprobad(projectId, requerimetId).subscribe(dataAprobad => {
+    //  console.log(dataAprobad)
       let dataApro = dataAprobad.data
       if (dataAprobad.data != null) {
         this.dataRequirementNum = dataApro.requerimiento.numeroRequerimiento.toString();
@@ -1399,6 +1404,9 @@ export class PropertiesRequirementComponent implements OnInit {
   }
 
   openBudgetModification(type: string, element: any) {
+    if(this.typePage == 'Vista') {
+      type = 'Ver'
+    }
     const dialogRef = this.dialog.open(BudgetModificationComponent, {
       width: '800px',
       height: '500px',
