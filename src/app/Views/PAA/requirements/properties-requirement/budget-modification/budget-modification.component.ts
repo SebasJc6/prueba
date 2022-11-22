@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { distinctUntilChanged } from 'rxjs';
 import { cadenaPresupuestalI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
 
 @Component({
@@ -10,12 +11,12 @@ import { cadenaPresupuestalI } from 'src/app/Models/ModelsPAA/propertiesRequirem
 })
 export class BudgetModificationComponent implements OnInit {
   valueFormSubmit = new FormGroup({
-    aumenta : new FormGroup(0),
-    disminuye : new FormGroup(0),
-    disabled : new FormGroup(false),
-    iva : new FormGroup(0),
-    arl : new FormGroup(0),
-    total : new FormGroup(0)
+    aumenta: new FormControl(0),
+    disminuye: new FormControl(0),
+    disabled: new FormControl(false),
+    iva: new FormControl(0),
+    arl: new FormControl(0),
+    total: new FormControl({ value: 0, disabled: true }),
   });
   isDisabled = true;
   isDisabledView = false;
@@ -43,10 +44,16 @@ export class BudgetModificationComponent implements OnInit {
     this.valueForm(this.data.element);
   }
   valueForm(event: cadenaPresupuestalI) {
+
     if (this.data.type == 'ver') {
       this.isDisabledView = true;
     } else if (this.data.type == 'editar') {
       this.isDisabledView = false;
+      this.valueFormSubmit.controls['aumenta'].setValue(event.subAumento);	
+      this.valueFormSubmit.controls['disminuye'].setValue(event.subDisminucion);
+      this.valueFormSubmit.controls['iva'].setValue(event.iva);
+      this.valueFormSubmit.controls['arl'].setValue(event.arl);
+      this.valueFormSubmit.controls['total'].setValue(event.apropiacionDefinitiva);
     }
     // console.log(event);
     this.formSubmit = event;
@@ -64,7 +71,77 @@ export class BudgetModificationComponent implements OnInit {
       this.isDisabled = true;
       this.isSelected = false;
     }
-    this.valueTotal();
+    this.valueFormSubmit.controls.aumenta.valueChanges.pipe(
+      distinctUntilChanged(),
+    ).subscribe((value) => {
+      this.isDisabledDis = true;
+      this.viewDisabledDis = true;
+      this.isDisabledAum = false;
+      this.viewDisabledAum = false;
+      this.valueFormSubmit.controls['disminuye'].setValue(0);
+      this.formSubmit.subAumento = this.valueFormSubmit.controls['aumenta'].value || 0;
+      this.formSubmit.subDisminucion = 0;
+      this.valueFormSubmit.controls['total'].setValue(this.formSubmit.subAumento + this.formSubmit.iva + this.formSubmit.arl);
+      this.formSubmit.aumento = this.formSubmit.subAumento + this.formSubmit.iva + this.formSubmit.arl
+      this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.formSubmit.aumento - this.formSubmit.disminucion;
+    });
+    this.valueFormSubmit.controls.disminuye.valueChanges.pipe(
+      distinctUntilChanged(),
+    ).subscribe((value) => {
+      this.isDisabledAum = true;
+      this.viewDisabledAum = true;
+      this.isDisabledDis = false;
+      this.viewDisabledDis = false;
+      this.valueFormSubmit.controls['aumenta'].setValue(0);
+      this.formSubmit.subDisminucion = this.valueFormSubmit.controls['disminuye'].value || 0;
+      this.formSubmit.subAumento = 0;
+      this.valueFormSubmit.controls['total'].setValue(this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl);
+      this.formSubmit.disminucion = this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl
+      this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.formSubmit.aumento - this.formSubmit.disminucion;
+
+    });
+    this.valueFormSubmit.controls.iva.valueChanges.pipe(
+      distinctUntilChanged(),
+    ).subscribe((value) => {
+      this.formSubmit.iva = this.valueFormSubmit.controls['iva'].value || 0;
+      this.valueFormSubmit.controls['total'].setValue(this.formSubmit.subAumento + this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl);
+      if (this.formSubmit.subAumento != 0) {
+        this.formSubmit.aumento = this.formSubmit.subAumento + this.formSubmit.iva + this.formSubmit.arl
+        this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.formSubmit.aumento - this.formSubmit.disminucion;
+
+      } else if (this.formSubmit.subDisminucion != 0) {
+        this.formSubmit.disminucion = this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl
+        this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.formSubmit.aumento - this.formSubmit.disminucion;
+
+      }
+
+    });
+    this.valueFormSubmit.controls.arl.valueChanges.pipe(
+      distinctUntilChanged(),
+    ).subscribe((value) => {
+      this.formSubmit.arl = this.valueFormSubmit.controls['arl'].value || 0;
+      this.valueFormSubmit.controls['total'].setValue(this.formSubmit.subAumento + this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl);
+      if (this.formSubmit.subAumento != 0) {
+        this.formSubmit.aumento = this.formSubmit.subAumento + this.formSubmit.iva + this.formSubmit.arl
+        this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.formSubmit.aumento - this.formSubmit.disminucion;
+
+      }
+      else if (this.formSubmit.subDisminucion != 0) {
+        this.formSubmit.disminucion = this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl
+        this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.formSubmit.aumento - this.formSubmit.disminucion;
+
+      }
+
+    });
+    this.valueFormSubmit.controls.disabled.valueChanges.pipe(
+      distinctUntilChanged(),
+    ).subscribe((value) => {
+      if (value == true) {
+        this.isDisabled = false;
+      } else {
+        this.isDisabled = true;
+      }
+    });
     //  this.total = this.formSubmit.disminucion + this.formSubmit.aumento + this.formSubmit.iva + this.formSubmit.arl ;    
 
   }
@@ -79,7 +156,10 @@ export class BudgetModificationComponent implements OnInit {
   // this.isDisabled= false? true: false;
   onNoClick(): void {
     this.dialogRef.close();
-    this.formSubmit.aumento = this.aumenta;
+  }
+  onClick(): void {
+
+    this.dialogRef.close(this.formSubmit);
   }
   valueTotal(type?: string) {
     if (type == 'aumento') {

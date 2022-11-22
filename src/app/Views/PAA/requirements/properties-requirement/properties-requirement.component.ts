@@ -855,7 +855,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
   saveForm() {
 
-  
+
 
     /** traer todos los ID del arreglo dataTableCodigos */
     let idsCodigos = this.dataTableCodigos.map((item) => {
@@ -1415,25 +1415,18 @@ export class PropertiesRequirementComponent implements OnInit {
       data: { type, element },
     });
     dialogRef.afterClosed().subscribe(result => {
-      // console.log(result);
-      if (result.aumento != 0) {
-        result.aumento = result.subAumento + result.iva + result.arl
-      } else if (result.disminucion != 0) {
-        result.disminucion = result.subDisminucion + result.iva + result.arl;
-      }
-
-      let repe = this.dataTableClasificaciones.filter(u => u.uuid == result['uuid'])
+     
+      let repe = this.dataTableClasificaciones.filter(u => u.uuid == element['uuid'])
       if (repe.length != 0) {
         //eliminar el igual a uuid
-        let index = this.dataTableClasificaciones.findIndex((x: any) => x.uuid === result['uuid']);
+        let index = this.dataTableClasificaciones.findIndex((x: any) => x.uuid === element['uuid']);
         if (index >= 0) {
           this.dataTableClasificaciones.splice(index, 1);
         }
       }
-      this.dataTableClasificaciones.push(result)
+      this.dataTableClasificaciones.push(element)
       var stringToStore = JSON.stringify(this.dataTableClasificaciones);
       ProChartStorage.setItem("dataTableClacificaciones", stringToStore);
-      // this.animal = result;
     });
   }
 }
