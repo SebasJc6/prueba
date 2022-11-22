@@ -796,7 +796,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
   getDataAprobad(projectId: number, requerimetId: number) {
     this.serviceProRequirement.getDataAprobad(projectId, requerimetId).subscribe(dataAprobad => {
-    //  console.log(dataAprobad)
+      //  console.log(dataAprobad)
       let dataApro = dataAprobad.data
       if (dataAprobad.data != null) {
         this.dataRequirementNum = dataApro.requerimiento.numeroRequerimiento.toString();
@@ -855,6 +855,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
   saveForm() {
 
+  
 
     /** traer todos los ID del arreglo dataTableCodigos */
     let idsCodigos = this.dataTableCodigos.map((item) => {
@@ -931,7 +932,8 @@ export class PropertiesRequirementComponent implements OnInit {
       requerimientoForm.mesEstmadoInicioEjecucion = this.proRequirementeForm.controls.infoBasicaForm.value.mesContrato
       requerimientoForm.duracionMes = this.proRequirementeForm.controls.infoBasicaForm.value.duracionMes
       requerimientoForm.duracionDias = this.proRequirementeForm.controls.infoBasicaForm.value.duracionDias
-      requerimientoForm.modalidadSeleccion_Id = +this.selcModeId
+      requerimientoForm.modalidadSeleccion_Id = this.proRequirementeForm.controls.infoBasicaForm.value.modalidadSel
+
       requerimientoForm.actuacion_Id = this.proRequirementeForm.controls.infoBasicaForm.value.actuacionCont
       if (requerimientoForm.actuacion_Id == 1) {
         requerimientoForm.numeroDeContrato = '0'
@@ -1404,7 +1406,7 @@ export class PropertiesRequirementComponent implements OnInit {
   }
 
   openBudgetModification(type: string, element: any) {
-    if(this.typePage == 'Vista') {
+    if (this.typePage == 'Vista') {
       type = 'Ver'
     }
     const dialogRef = this.dialog.open(BudgetModificationComponent, {
@@ -1413,11 +1415,11 @@ export class PropertiesRequirementComponent implements OnInit {
       data: { type, element },
     });
     dialogRef.afterClosed().subscribe(result => {
-     // console.log(result);
+      // console.log(result);
       if (result.aumento != 0) {
         result.aumento = result.subAumento + result.iva + result.arl
-      }else if (result.disminucion != 0) {
-      result.disminucion = result.subDisminucion + result.iva + result.arl;
+      } else if (result.disminucion != 0) {
+        result.disminucion = result.subDisminucion + result.iva + result.arl;
       }
 
       let repe = this.dataTableClasificaciones.filter(u => u.uuid == result['uuid'])

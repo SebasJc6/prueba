@@ -12,6 +12,7 @@ export class BudgetModificationComponent implements OnInit {
   valueFormSubmit = new FormGroup({
     aumenta : new FormGroup(0),
     disminuye : new FormGroup(0),
+    disabled : new FormGroup(false),
     iva : new FormGroup(0),
     arl : new FormGroup(0),
     total : new FormGroup(0)
@@ -96,7 +97,6 @@ export class BudgetModificationComponent implements OnInit {
       this.viewDisabledAum = true;
       this.type = 'disminucion';
     }
-
     //  if (this.formSubmit.aumento != 0){
     //       this.isDisabledAum = false;
     //     this.isDisabledDis = true;
