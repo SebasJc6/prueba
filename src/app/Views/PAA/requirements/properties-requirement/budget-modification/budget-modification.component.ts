@@ -1,7 +1,9 @@
+import { CurrencyPipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { distinctUntilChanged } from 'rxjs';
+import { formatCurrency, getCurrencySymbol } from '@angular/common';
 import { cadenaPresupuestalI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
 
 @Component({
@@ -11,7 +13,7 @@ import { cadenaPresupuestalI } from 'src/app/Models/ModelsPAA/propertiesRequirem
 })
 export class BudgetModificationComponent implements OnInit {
   valueFormSubmit = new FormGroup({
-    aumenta: new FormControl(0),
+    aumenta: new FormControl(),
     disminuye: new FormControl(0),
     disabled: new FormControl(false),
     iva: new FormControl(0),
@@ -35,6 +37,7 @@ export class BudgetModificationComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<BudgetModificationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private currencyPipe: CurrencyPipe,
   ) {
     dialogRef.disableClose = true;
     dialogRef.beforeClosed().subscribe(() => dialogRef.close(this.type));
@@ -42,18 +45,30 @@ export class BudgetModificationComponent implements OnInit {
 
   ngOnInit(): void {
     this.valueForm(this.data.element);
+    this.currencyInput();
   }
-  valueForm(event: cadenaPresupuestalI) {
+  currencyInput() {
+    //use pipe to display currency
+    this.valueFormSubmit.valueChanges.subscribe(form => {
+      if (form.aumenta) {
+        this.valueFormSubmit.patchValue({
+          aumenta: this.currencyPipe.transform( "COP", 'symbol-narrow', '1.0-0') || ''
+        }, { emitEvent: false })
+      }
+    });
+  }
 
+  valueForm(event: cadenaPresupuestalI) {
     if (this.data.type == 'ver') {
       this.isDisabledView = true;
     } else if (this.data.type == 'editar') {
       this.isDisabledView = false;
-      this.valueFormSubmit.controls['aumenta'].setValue(event.subAumento);	
+      this.valueFormSubmit.controls['aumenta'].setValue(event.subAumento);
       this.valueFormSubmit.controls['disminuye'].setValue(event.subDisminucion);
       this.valueFormSubmit.controls['iva'].setValue(event.iva);
       this.valueFormSubmit.controls['arl'].setValue(event.arl);
       this.valueFormSubmit.controls['total'].setValue(event.apropiacionDefinitiva);
+      this.currencyInput();
     }
     // console.log(event);
     this.formSubmit = event;
@@ -84,6 +99,8 @@ export class BudgetModificationComponent implements OnInit {
       this.valueFormSubmit.controls['total'].setValue(this.formSubmit.subAumento + this.formSubmit.iva + this.formSubmit.arl);
       this.formSubmit.aumento = this.formSubmit.subAumento + this.formSubmit.iva + this.formSubmit.arl
       this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.formSubmit.aumento - this.formSubmit.disminucion;
+      this.formSubmit.disminucion = 0;
+
     });
     this.valueFormSubmit.controls.disminuye.valueChanges.pipe(
       distinctUntilChanged(),
@@ -98,6 +115,8 @@ export class BudgetModificationComponent implements OnInit {
       this.valueFormSubmit.controls['total'].setValue(this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl);
       this.formSubmit.disminucion = this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl
       this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.formSubmit.aumento - this.formSubmit.disminucion;
+      this.formSubmit.aumento = 0;
+
 
     });
     this.valueFormSubmit.controls.iva.valueChanges.pipe(
@@ -108,10 +127,12 @@ export class BudgetModificationComponent implements OnInit {
       if (this.formSubmit.subAumento != 0) {
         this.formSubmit.aumento = this.formSubmit.subAumento + this.formSubmit.iva + this.formSubmit.arl
         this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.formSubmit.aumento - this.formSubmit.disminucion;
+        this.formSubmit.disminucion = 0;
 
       } else if (this.formSubmit.subDisminucion != 0) {
         this.formSubmit.disminucion = this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl
         this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.formSubmit.aumento - this.formSubmit.disminucion;
+        this.formSubmit.aumento = 0;
 
       }
 

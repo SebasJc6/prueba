@@ -364,6 +364,7 @@ export class PropertiesRequirementComponent implements OnInit {
         }
       } else if (this.typePage == 'En Ajuste') {
         if (this.AccessUser == 'Referente_PAA') {
+          this.viewTableReviews = true;
           this.getAllReviews(+this.dataRequirementID)
           this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
           this.viewVersionMod = true;
@@ -372,7 +373,6 @@ export class PropertiesRequirementComponent implements OnInit {
           this.viewsSeccionReviews = true;
           this.viewsFormReviews = false;
           this.viewTableReviewsEdit = false;
-          this.viewTableReviews = true;
         }
       } else if (this.typePage == 'Editar') {
         if (this.AccessUser == 'Referente_PAA') {
@@ -388,6 +388,11 @@ export class PropertiesRequirementComponent implements OnInit {
             this.viewVersionMod = true;
             this.viewsReviews = false;
             this.errorVerifyNumReq = false;
+            this.viewsSeccionReviews = true;
+            this.viewTableReviewsEdit = false;
+            this.viewTableReviews = true;
+            this.getAllReviews(+this.dataRequirementID)
+
           }
           if (this.statusReq == 'Aprobada' || this.statusReq == 'Rechazada') {
             this.getDataConsulta(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
@@ -1281,7 +1286,6 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
   getAllReviews(Modificacion_ID: number) {
-
     this.serviceReviews.getAllReviews(Modificacion_ID).subscribe((data: any) => {
       this.dataTableRevisiones = data.data.items;
       if (this.viewTableReviews == true) {
@@ -1415,7 +1419,7 @@ export class PropertiesRequirementComponent implements OnInit {
       data: { type, element },
     });
     dialogRef.afterClosed().subscribe(result => {
-     
+
       let repe = this.dataTableClasificaciones.filter(u => u.uuid == element['uuid'])
       if (repe.length != 0) {
         //eliminar el igual a uuid

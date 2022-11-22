@@ -41,7 +41,7 @@
                 <mat-accordion multi>
 
                     <!-- SECCION INFORMACION BASICA DEL PROYECTO -->
-                    <mat-expansion-panel class="menu-panel">
+                    <mat-expansion-panel class="menu-panel"  [expanded]="true">
                         <mat-expansion-panel-header>
 
                             <!-- TITULO DE LA SECCION -->
@@ -134,10 +134,6 @@
                                         Dias
                                         <br>
                                         <mat-error *ngIf="errorDuratioMes">
-                                            Campo <strong>Obligatorio</strong>
-                                        </mat-error>
-                                        &nbsp;
-                                        <mat-error *ngIf="errorDurationDia">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
                                         <mat-error *ngIf="viewErrorDiaMax">
