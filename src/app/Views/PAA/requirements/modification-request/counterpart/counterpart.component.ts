@@ -1,7 +1,7 @@
 
 import { CurrencyPipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -56,8 +56,8 @@ export class CounterpartComponent implements OnInit {
   counterpartForm = new FormGroup({
     fuentes: new FormControl(),
     Descripcion: new FormControl(''),
-    ValorAumenta: new FormControl(),
-    ValorDisminuye: new FormControl()
+    ValorAumenta: new FormControl({value: '$0', disabled: false}),
+    ValorDisminuye: new FormControl({value: '$0', disabled: false})
   });
 
   private counterpartSubscription!: Subscription;
@@ -93,19 +93,27 @@ export class CounterpartComponent implements OnInit {
     this.counterpartForm.valueChanges.subscribe( form => {
       if (form.ValorAumenta) {
         this.counterpartForm.patchValue({
-          ValorAumenta: this.currencyPipe.transform(form.ValorAumenta.replace(/\D/g, '').replace(/^0+/, ''), 'COP', 'symbol-narrow', '1.0-0')
+          ValorAumenta: this.assignCurrencyPipe(form.ValorAumenta)
         }, {emitEvent: false});
       }
       if (form.ValorDisminuye) {
         this.counterpartForm.patchValue({
-          ValorDisminuye: this.currencyPipe.transform(form.ValorDisminuye.replace(/\D/g, '').replace(/^0+/, ''), 'COP', 'symbol-narrow', '1.0-0')
+          ValorDisminuye: this.assignCurrencyPipe(form.ValorDisminuye)
         }, {emitEvent: false});
       }
     });
   }
 
-  quitCurrencyPipe(element: string) {
-    return element.replace(/\$+/g, '').replace(/,/g, "");
+  //Función para asignar formato de moneda a un numero y retorna el numero formatrado
+  assignCurrencyPipe(number: string) {
+    const NUMBER_ASSIGN = this.currencyPipe.transform(number.replace(/\D/g, '').replace(/^-1+/, ''), 'COP', 'symbol-narrow', '1.0-0');
+    return NUMBER_ASSIGN;
+  }
+
+  //Función que quita el formato de moneda y retorna un numero
+  quitCurrencyPipe(element: string): number {
+    const ELEMENT_QUIT = element.replace(/\$+/g, '').replace(/,/g, "");
+    return Number(ELEMENT_QUIT);
   }
 
   getSourcesTemporal() {
@@ -144,8 +152,15 @@ export class CounterpartComponent implements OnInit {
       this.ModificationId = this.CounterEdit.modificacion_ID;
       this.counterpartForm.controls['fuentes'].setValue(this.CounterEdit.contrapartida.fuente_ID);
       this.counterpartForm.controls['Descripcion'].setValue(this.CounterEdit.contrapartida.descripcion);
-      this.counterpartForm.controls['ValorAumenta'].setValue(this.CounterEdit.contrapartida.valorAumenta);
-      this.counterpartForm.controls['ValorDisminuye'].setValue(this.CounterEdit.contrapartida.valorDisminuye);
+      
+      //Se pasa a formato de moneda los Valores y se agregan al formulario
+      const rawValueAumento = String(this.CounterEdit.contrapartida.valorAumenta);
+      const VALUE_INCREASES = this.assignCurrencyPipe(rawValueAumento);
+      const rawValueDisminucion = String(this.CounterEdit.contrapartida.valorDisminuye);
+      const VALUE_DECREASES = this.assignCurrencyPipe(rawValueDisminucion)
+
+      this.counterpartForm.controls['ValorAumenta'].setValue(VALUE_INCREASES);
+      this.counterpartForm.controls['ValorDisminuye'].setValue(VALUE_DECREASES);
 
       if (this.CounterEdit.contrapartida.valorAumenta !== 0 && this.CounterEdit.contrapartida.valorAumenta !== null) {
         this.dissabledIncreases = false;
@@ -160,7 +175,7 @@ export class CounterpartComponent implements OnInit {
   //Manejo del input Valor Aumenta
   onPressValueIncreases() {
     let valorAumenta = this.counterpartForm.value.ValorAumenta;
-    if (valorAumenta !== null) {
+    if (valorAumenta !== null && valorAumenta != '$0') {
       this.dissabledDecreases = true;
       this.dissabledIncreases = false;
     } else {
@@ -173,59 +188,73 @@ export class CounterpartComponent implements OnInit {
   //Manejo del input Valor Disminuye
   onPressValueDecreases(){
     let valorDisminuye = this.counterpartForm.value.ValorDisminuye;
-    if (valorDisminuye !== null) {
+    if (valorDisminuye !== null && valorDisminuye != '$0') {
       this.dissabledDecreases = false;
       this.dissabledIncreases = true;
     } else {
       this.dissabledIncreases = false;
       this.dissabledDecreases = false;
+    }    
+  }
+
+  //Funcion que se ejecuta al añadir la contrapartida
+  addCounterpart() {
+    if (this.ModificationId != 0) {
+      this.CounterEdit.contrapartida.fuente_ID = this.counterpartForm.value.fuentes || '';
+      this.CounterEdit.contrapartida.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
+      
+      //Se obtienen los valores del formulario y se les quita el formato de Moneda para poder guardar la contrapartida
+      const rawValueAumento = String(this.counterpartForm.value.ValorAumenta || 0);
+      const rawValueDisminucion = String(this.counterpartForm.value.ValorDisminuye || 0);
+
+      this.CounterEdit.contrapartida.valorAumenta =  this.quitCurrencyPipe(rawValueAumento);
+      this.CounterEdit.contrapartida.valorDisminuye = this.quitCurrencyPipe(rawValueDisminucion);
+
+      let putDataSave = {} as putModificationRequestI;
+      putDataSave.contrapartidas = [this.CounterEdit];
+      putDataSave.datos = [];
+      putDataSave.idProyecto = Number(this.dataCounterparts.id_project);
+      putDataSave.observacion = '';
+      putDataSave.solicitudModID = Number(this.dataCounterparts.id_request);
+      putDataSave.deleteReqIDs = [];
+      putDataSave.deleteContraIDs = [];
+
+      //Validar esta parte
+      this.spinner.show();
+      this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
+        if (res.status == 200) {
+          this.openSnackBar('Guardado Exitosamente', `Contrapartida Actualizada.`, 'success');
+          this.router.navigate([`/WAPI/PAA/SolicitudModificacion/${this.dataCounterparts.id_project}/${res.data.idSolicitud}`]);
+          this.dialogRef.close();
+        }
+        this.spinner.hide();
+      }, error => {
+        this.spinner.hide();
+      });
+    }else {
+      this.counterpart.fuente_ID = this.counterpartForm.value.fuentes || '';
+      this.counterpart.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
+      //Se obtienen los valores del formulario y se les quita el formato de Moneda para poder guardar la contrapartida
+      let rawValueAumento = this.counterpartForm.value.ValorAumenta || '';
+      let rawValueDisminucion = this.counterpartForm.value.ValorDisminuye || '';
+
+      this.counterpart.valorAumenta = this.quitCurrencyPipe(rawValueAumento);
+      this.counterpart.valorDisminuye = this.quitCurrencyPipe(rawValueDisminucion);
+
+      this.dialogRef.close(this.counterpart);
     }
   }
 
 
   closedDialog(){
-    if (this.counterpartForm.value.fuentes){
-      if (this.ModificationId != 0) {
-        this.CounterEdit.contrapartida.fuente_ID = this.counterpartForm.value.fuentes || '';
-        this.CounterEdit.contrapartida.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
-        let rawValueAumento = this.counterpartForm.value.ValorAumenta || 0;
-        let rawValueDisminucion = this.counterpartForm.value.ValorDisminuye || 0;
-        this.CounterEdit.contrapartida.valorAumenta =  rawValueAumento.replace(/\$+/g, '').replace(/,/g, "");
-        this.CounterEdit.contrapartida.valorDisminuye = rawValueDisminucion.replace(/\$+/g, '').replace(/,/g, "");
-
-        let putDataSave = {} as putModificationRequestI;
-        putDataSave.contrapartidas = [this.CounterEdit];
-        putDataSave.datos = [];
-        putDataSave.idProyecto = Number(this.dataCounterparts.id_project);
-        putDataSave.observacion = '';
-        putDataSave.solicitudModID = Number(this.dataCounterparts.id_request);
-        putDataSave.deleteReqIDs = [];
-        putDataSave.deleteContraIDs = [];
-
-        //Validar esta parte
-        this.spinner.show();
-        this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
-          if (res.status == 200) {
-            this.openSnackBar('Éxito al Guardar', `Contrapartida Actualizada.`, 'success');
-            this.router.navigate([`/WAPI/PAA/SolicitudModificacion/${this.dataCounterparts.id_project}/${res.data.idSolicitud}`]);
-            this.dialogRef.close();
-          }
-          this.spinner.hide();
-        }, error => {
-          this.spinner.hide();
-        });
-      }else {
-        this.counterpart.fuente_ID = this.counterpartForm.value.fuentes || '';
-        this.counterpart.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
-        let rawValueAumento = this.counterpartForm.value.ValorAumenta || '';
-        let rawValueDisminucion = this.counterpartForm.value.ValorDisminuye || '';
-        this.counterpart.valorAumenta = rawValueAumento.replace(/\$+/g, '').replace(/,/g, "");
-        this.counterpart.valorDisminuye = rawValueDisminucion.replace(/\$+/g, '').replace(/,/g, "");
-
-        this.dialogRef.close(this.counterpart);
+    if (this.counterpartForm.value.fuentes && this.counterpartForm.value.Descripcion !== ''){
+      if ((this.counterpartForm.value.ValorAumenta !== null && this.counterpartForm.value.ValorAumenta !== '$0') || (this.counterpartForm.value.ValorDisminuye !== null && this.counterpartForm.value.ValorDisminuye !== '$0')) {
+        this.addCounterpart(); 
+      } else {
+        this.openSnackBar('Lo sentimos', `Error al crear la contrapartida`, 'error', `Debe ingresar datos en el campo Valor que aumenta o en Valor que disminuye.`);
       }
     } else {
-      this.openSnackBar('Lo sentimos', `No hay una fuente seleccionada`, 'error', `Debe seleccionar una fuente antes de añadir.`);
+      this.openSnackBar('Lo sentimos', `Error al crear la contrapartida`, 'error', `Debe llenar todos los campos.`);
     }
   }
 

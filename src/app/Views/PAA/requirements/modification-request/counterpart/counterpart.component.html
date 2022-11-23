@@ -45,6 +45,7 @@
                 [attr.disabled]="dissabledIncreases ? '' : null"
                 [readonly]="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? false : true"
                 class="contData"
+                [ngClass]="{'contDataDisabled' : dissabledIncreases == true }"
                 formControlName="ValorAumenta">
                 <!-- [value]="counterpartForm.value.ValorAumenta | currency:'COP':'symbol-narrow': '1.0-0'" -->
         </div>
@@ -55,6 +56,7 @@
                 (keypress)="validateFormat($event)"
                 (keyup)="onPressValueDecreases()"
                 class="contData"
+                [ngClass]="{'contDataDisabled' : dissabledDecreases == true }"
                 [attr.disabled]="dissabledDecreases ? '' : null"
                 [readonly]="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? false : true"
                 formControlName="ValorDisminuye">

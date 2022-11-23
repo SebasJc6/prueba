@@ -860,7 +860,7 @@ export class ModificationRequestComponent implements OnInit {
     document.body.appendChild(downloadLink);
     this.spinner.hide();
     downloadLink.click();
-    this.openSnackBar('Éxito al Exportar', `${fileName}. Descargado correctamente.`, 'success');
+    this.openSnackBar('Exportado Exitosamente', `${fileName}. Descargado correctamente.`, 'success');
   }
 
   extraerBase64 = async ($event: any) => new Promise((resolve) => {
@@ -974,7 +974,7 @@ export class ModificationRequestComponent implements OnInit {
 
     this.serviceFiles.postFile(formPost).subscribe(res => {
       if (res.status == 200) {
-        this.openSnackBar('Éxito al Guardar', `Archivos Guardado.`, 'success');
+        this.openSnackBar('Guardado Exitosamente', `Archivos Guardado.`, 'success');
       } else {
         this.openSnackBar('Lo sentimos', `Error al guardar archivos`, 'error', res.message);
       }
@@ -1081,11 +1081,11 @@ export class ModificationRequestComponent implements OnInit {
           if (filesUp) {
             setTimeout(() => {
               this.spinner.hide();
-              this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada con éxito.`, 'success');
+              this.openSnackBar('Guardado Exitosamente', `Solicitud de Modificación Guardada con éxito.`, 'success');
             }, 4000);
           } else {
             this.spinner.hide();
-            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada con éxito.`, 'success');
+            this.openSnackBar('Guardado Exitosamente', `Solicitud de Modificación Guardada con éxito.`, 'success');
           }
           //Elimación de los registros en LocalStorage
           ProChartStorage.removeItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
@@ -1151,11 +1151,11 @@ export class ModificationRequestComponent implements OnInit {
           if (filesUp) {
             setTimeout(() => {
               this.spinner.hide();
-              this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+              this.openSnackBar('Guardado Exitosamente', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
             }, 4000);
           } else {
             this.spinner.hide();
-            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
+            this.openSnackBar('Guardado Exitosamente', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
           }
           //Elimación de los registros en LocalStorage
           ProChartStorage.removeItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
@@ -1228,7 +1228,7 @@ export class ModificationRequestComponent implements OnInit {
       this.spinner.show();
       this.serviceModRequest.putModificationRequestSend(sendData).subscribe(res => {
         if (res.status == 200) {
-          this.openSnackBar('Éxito al Enviar', `Solicitud de Modificación N° ${res.data.numSolicitud} Enviada con éxito.`, 'success');
+          this.openSnackBar('Enviado Exitosamente', `Solicitud de Modificación N° ${res.data.numSolicitud} Enviada con éxito.`, 'success');
           //Elimación de los registros en LocalStorage
           ProChartStorage.removeItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`);
@@ -1276,7 +1276,7 @@ export class ModificationRequestComponent implements OnInit {
       this.spinner.show();
       this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
         if (res.status == 200) {
-          this.openSnackBar('Éxito al Enviar', `Revisiones de la Solicitud de Modificación Enviadas con éxito.`, 'success');
+          this.openSnackBar('Enviado Exitosamente', `Revisiones de la Solicitud de Modificación Enviadas con éxito.`, 'success');
           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
         } else if (res.status == 400) {
           this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
@@ -1316,7 +1316,7 @@ export class ModificationRequestComponent implements OnInit {
         this.spinner.show();
         this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
           if (res.status == 200) {
-            this.openSnackBar('Éxito al Enviar', `Revisiones de la Solicitud de Modificación Enviadas con éxito.`, 'success');
+            this.openSnackBar('Enviado Exitosamente', `Revisiones de la Solicitud de Modificación Enviadas con éxito.`, 'success');
             this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           } else if (res.status == 400) {
             this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);

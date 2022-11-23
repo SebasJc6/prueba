@@ -2,16 +2,23 @@
 <div class="container center-h center-v">
     <div class="mgp">
         Plan Anual de Adquisiciones
-        <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
+        <a *ngIf="dataSolicitudModID === '0'" class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
             &nbsp;>&nbsp;{{codProject}}
             -&nbsp;{{nomProject}}
         </a>
-        <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/',dataProjectID]">
+        <a *ngIf="dataSolicitudModID === '0'" class="href" [routerLink]="['/WAPI/PAA/Requerimientos/',dataProjectID]">
             &nbsp;>&nbsp;Requerimientos
+        </a>
+        <a *ngIf="dataSolicitudModID !== '0'" class="href" [routerLink]="['/WAPI/PAA/BandejaDeSolicitudes']">
+            &nbsp;>&nbsp;Modificaciones solicitadas
         </a>
         <a class="href selected">
             &nbsp;>&nbsp;Solicitud modificación
         </a>
+    </div>
+
+    <div class="mgp">
+
     </div>
 
     <div class="tltPrin">
