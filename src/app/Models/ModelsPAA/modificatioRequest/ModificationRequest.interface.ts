@@ -218,6 +218,19 @@ export interface RevisionSend {
   accion: number
 }
 
+
+//Interfaz para obtener Modalidad de Seleccion
+export interface getModalidadDeSeleccionI {
+  status: number,
+  message: string,
+  title: string,
+  data: {
+    modalidad_Sel_ID: number,
+    codigo: string,
+    caracteristicas: any
+  }
+}
+
 //Interfaz para obtener Actuacion Contractual
 export interface getActuacionI {
   status: number,

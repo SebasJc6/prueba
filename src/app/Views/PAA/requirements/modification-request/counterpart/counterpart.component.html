@@ -42,10 +42,11 @@
                 maxlength="20"
                 (keypress)="validateFormat($event)"
                 (keyup)="onPressValueIncreases()"
-                [readonly]="dissabledIncreases"
+                [attr.disabled]="dissabledIncreases ? '' : null"
                 [readonly]="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? false : true"
                 class="contData"
                 formControlName="ValorAumenta">
+                <!-- [value]="counterpartForm.value.ValorAumenta | currency:'COP':'symbol-narrow': '1.0-0'" -->
         </div>
         <div class="contTxt input2">
             <p class="tltData">Valor que disminuye</p>
@@ -54,9 +55,10 @@
                 (keypress)="validateFormat($event)"
                 (keyup)="onPressValueDecreases()"
                 class="contData"
-                [readonly]="dissabledDecreases"
+                [attr.disabled]="dissabledDecreases ? '' : null"
                 [readonly]="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? false : true"
                 formControlName="ValorDisminuye">
+                <!-- [value]="counterpartForm.value.ValorDisminuye| currency:'COP':'symbol-narrow': '1.0-0'" -->
         </div>
       </div>
 

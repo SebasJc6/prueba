@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Observable } from 'rxjs';
-import { filterModificationRequestI, getActuacionI, getModificationRequestByRequesI, getModificationRequestI, getPerfilI, getTipoContratoI, getValidityByRequestI, postModificationRequestI, RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
+import { filterModificationRequestI, getActuacionI, getModalidadDeSeleccionI, getModificationRequestByRequesI, getModificationRequestI, getPerfilI, getTipoContratoI, getValidityByRequestI, postModificationRequestI, RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -93,6 +93,12 @@ export class ModificationRequestService {
   getValidityByRequest(id_request: number): Observable<getValidityByRequestI> {
     let dir = `${this.Url}/SolicitudMod/${id_request}/Vigencias`;
     return this.http.get<getValidityByRequestI>(dir);
+  }
+
+  //Obtener el objeto Modalidad de Seleccion (Nombre y Id)
+  getModalidadDeSeleccion(id_modalidad: number): Observable<getModalidadDeSeleccionI> {
+    let dir = `${this.Url_2}ModalidadDeSeleccion/${id_modalidad}`;
+    return this.http.get<getModalidadDeSeleccionI>(dir);
   }
 
   //Obtener el objeto Actuacion (Nombre y Id)

@@ -689,14 +689,16 @@ export class ModificationRequestComponent implements OnInit {
       let valorAumenta = element.aumento;
       let valorDisminuye = element.disminucion;
       let apropiacionDefinitiva = element.apropiacionDefinitiva;
-      dataTable.valorAumenta + Number(valorAumenta);
-      dataTable.valorDisminuye + Number(valorDisminuye);
-      dataTable.nuevoSaldoApropiacion + Number(apropiacionDefinitiva);
+      dataTable.valorAumenta += Number(valorAumenta);
+      dataTable.valorDisminuye += Number(valorDisminuye);
+      dataTable.nuevoSaldoApropiacion += Number(apropiacionDefinitiva);
     });
     dataTable.numeroRequerimiento = objectsFromStorage.infoBasica.numeroReq;
     dataTable.dependenciaDestino = objectsFromStorage.infoBasica.dependenciaDes.codigo;
     dataTable.descripcion = objectsFromStorage.infoBasica.descripcion;
-    dataTable.modalidadSeleccion = objectsFromStorage.infoBasica.modalidadSel.codigo;
+    this.serviceModRequest.getModalidadDeSeleccion(objectsFromStorage.infoBasica.modalidadSel).subscribe(res => {
+      dataTable.modalidadSeleccion = res.data.codigo;
+    });
     this.serviceModRequest.getActuacion(objectsFromStorage.infoBasica.actuacionCont).subscribe(res => {
       dataTable.actuacionContractual = res.data.tipo;
     });
@@ -715,11 +717,10 @@ export class ModificationRequestComponent implements OnInit {
     });
     dataTable.honorarios = objectsFromStorage.infoBasica.valorHonMes || 0;
     
-
     let clasificaciones: any[] = objectsFromStorage.clasificaciones;
     clasificaciones.map(item => {
-      dataTable.fuente = item.fuente_ID;
-    });
+      dataTable.fuente = item.fuente.fuente_ID;
+    });    
   }
 
   getCodeSources() {

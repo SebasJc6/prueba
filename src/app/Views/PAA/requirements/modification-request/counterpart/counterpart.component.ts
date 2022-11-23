@@ -1,4 +1,5 @@
 
+import { CurrencyPipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -26,6 +27,7 @@ export class CounterpartComponent implements OnInit {
     public serviceModRequest: ModificationRequestService,
     public dialogRef: MatDialogRef<CounterpartComponent>,
     private authService: AuthenticationService,
+    private currencyPipe: CurrencyPipe,
     @Inject(MAT_DIALOG_DATA) public dataCounterparts: any,
     private spinner: NgxSpinnerService,) { dialogRef.disableClose = true;}
 
@@ -70,6 +72,12 @@ export class CounterpartComponent implements OnInit {
 
     //Obtener token para manejar los roles
     this.AccessUser = this.authService.getRolUser();
+    
+    this.currentPipeReplace();
+  }
+
+  ngAfterViewInit() {
+
   }
 
   //Función que trae la información del proyecto de la Api
@@ -79,6 +87,25 @@ export class CounterpartComponent implements OnInit {
     }, error => {
 
     });
+  }
+
+  currentPipeReplace() {
+    this.counterpartForm.valueChanges.subscribe( form => {
+      if (form.ValorAumenta) {
+        this.counterpartForm.patchValue({
+          ValorAumenta: this.currencyPipe.transform(form.ValorAumenta.replace(/\D/g, '').replace(/^0+/, ''), 'COP', 'symbol-narrow', '1.0-0')
+        }, {emitEvent: false});
+      }
+      if (form.ValorDisminuye) {
+        this.counterpartForm.patchValue({
+          ValorDisminuye: this.currencyPipe.transform(form.ValorDisminuye.replace(/\D/g, '').replace(/^0+/, ''), 'COP', 'symbol-narrow', '1.0-0')
+        }, {emitEvent: false});
+      }
+    });
+  }
+
+  quitCurrencyPipe(element: string) {
+    return element.replace(/\$+/g, '').replace(/,/g, "");
   }
 
   getSourcesTemporal() {
@@ -120,15 +147,24 @@ export class CounterpartComponent implements OnInit {
       this.counterpartForm.controls['ValorAumenta'].setValue(this.CounterEdit.contrapartida.valorAumenta);
       this.counterpartForm.controls['ValorDisminuye'].setValue(this.CounterEdit.contrapartida.valorDisminuye);
 
+      if (this.CounterEdit.contrapartida.valorAumenta !== 0 && this.CounterEdit.contrapartida.valorAumenta !== null) {
+        this.dissabledIncreases = false;
+        this.dissabledDecreases = true;
+      } else if (this.CounterEdit.contrapartida.valorDisminuye !== 0 && this.CounterEdit.contrapartida.valorDisminuye !== null){
+        this.dissabledIncreases = true;
+        this.dissabledDecreases = false;
+      }
     }
   }
 
   //Manejo del input Valor Aumenta
   onPressValueIncreases() {
     let valorAumenta = this.counterpartForm.value.ValorAumenta;
-    if (Boolean(valorAumenta) !== null && Number(valorAumenta) !== 0) {
+    if (valorAumenta !== null) {
       this.dissabledDecreases = true;
+      this.dissabledIncreases = false;
     } else {
+      this.dissabledIncreases = false;
       this.dissabledDecreases = false;
     }
   }
@@ -137,10 +173,12 @@ export class CounterpartComponent implements OnInit {
   //Manejo del input Valor Disminuye
   onPressValueDecreases(){
     let valorDisminuye = this.counterpartForm.value.ValorDisminuye;
-    if (Boolean(valorDisminuye) !== null && Number(valorDisminuye) !== 0) {
+    if (valorDisminuye !== null) {
+      this.dissabledDecreases = false;
       this.dissabledIncreases = true;
     } else {
       this.dissabledIncreases = false;
+      this.dissabledDecreases = false;
     }
   }
 
@@ -150,9 +188,11 @@ export class CounterpartComponent implements OnInit {
       if (this.ModificationId != 0) {
         this.CounterEdit.contrapartida.fuente_ID = this.counterpartForm.value.fuentes || '';
         this.CounterEdit.contrapartida.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
-        this.CounterEdit.contrapartida.valorAumenta = this.counterpartForm.value.ValorAumenta || 0;
-        this.CounterEdit.contrapartida.valorDisminuye = this.counterpartForm.value.ValorDisminuye || 0;
-  
+        let rawValueAumento = this.counterpartForm.value.ValorAumenta || 0;
+        let rawValueDisminucion = this.counterpartForm.value.ValorDisminuye || 0;
+        this.CounterEdit.contrapartida.valorAumenta =  rawValueAumento.replace(/\$+/g, '').replace(/,/g, "");
+        this.CounterEdit.contrapartida.valorDisminuye = rawValueDisminucion.replace(/\$+/g, '').replace(/,/g, "");
+
         let putDataSave = {} as putModificationRequestI;
         putDataSave.contrapartidas = [this.CounterEdit];
         putDataSave.datos = [];
@@ -177,9 +217,11 @@ export class CounterpartComponent implements OnInit {
       }else {
         this.counterpart.fuente_ID = this.counterpartForm.value.fuentes || '';
         this.counterpart.descripcion = this.counterpartForm.get('Descripcion')?.value || '';
-        this.counterpart.valorAumenta = this.counterpartForm.value.ValorAumenta || '';
-        this.counterpart.valorDisminuye = this.counterpartForm.value.ValorDisminuye || '';
-        
+        let rawValueAumento = this.counterpartForm.value.ValorAumenta || '';
+        let rawValueDisminucion = this.counterpartForm.value.ValorDisminuye || '';
+        this.counterpart.valorAumenta = rawValueAumento.replace(/\$+/g, '').replace(/,/g, "");
+        this.counterpart.valorDisminuye = rawValueDisminucion.replace(/\$+/g, '').replace(/,/g, "");
+
         this.dialogRef.close(this.counterpart);
       }
     } else {
