@@ -3,15 +3,11 @@
         <!--Miga de Pan-->
         <div class="mgp">
           Plan Anual de Adquisiciones
-          <a class="href "  [routerLink]="['/WAPI/PAA/Adquisiciones']">
-            &nbsp;>&nbsp;{{codProject}}
-            -&nbsp;{{nomProject}}
-          </a>
-          <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
-            &nbsp;>&nbsp;Requerimientos
+          <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeSolicitudes']">
+            &nbsp;>&nbsp;Modificaciones solicitadas
           </a>
           <a class="href" [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudModID]">
-          &nbsp;>&nbsp;Solicitud de modificación
+            &nbsp;>&nbsp;Solicitud de modificación
           </a>
           <a class="href selected" [routerLink]="['/WAPI/PAA/ResumenModificacion/', dataProjectID]">
             &nbsp;>&nbsp; Resumen
