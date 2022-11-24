@@ -445,6 +445,10 @@ export class PropertiesRequirementComponent implements OnInit {
           this.viewVersionMod = true;
           this.viewsReviews = false;
           this.errorVerifyNumReq = false;
+          this.viewsSeccionReviews = true;
+          this.viewTableReviewsEdit = false;
+          this.viewTableReviews = true;
+          this.getAllReviews(+this.dataRequirementID)
         }
       }
     });
