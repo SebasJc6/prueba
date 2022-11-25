@@ -76,7 +76,7 @@
             margin-bottom: 1%;
             color: #5971aa;
             float: right;
-            margin-right: 3%;
+            margin-right: -2%;
 
             .imgImport {
                 color: #3772FF;
@@ -167,10 +167,11 @@
 
         .FilSear {
             margin-top: 1%;
+            margin-left: 1.5%;
+            margin-right: 1.5%;
             border: 2px solid #185564;
             border-radius: 0.5rem;
             border-color: #185564;
-            width: 6%;
             color: #185564;
         }
     }
@@ -196,7 +197,6 @@
     border: 2px solid #185564;
     border-radius: 0.5rem;
     border-color: #185564;
-    width: 6%;
     color: #185564;
 }
 

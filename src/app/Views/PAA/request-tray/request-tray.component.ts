@@ -126,6 +126,14 @@ export class RequestTrayComponent implements OnInit {
     this.closeFilter();
   }
 
+  //Limpiar el Filtro
+  clearFilter() {
+    this.filterForm.reset();
+    
+    this.getRequestTray(this.filterRequestTray);
+    this.closeFilter();
+  }
+
     //PAGINACIÓN
     getPagination() {
       this.filterRequestTray.page = this.paginationForm.get('page')?.value;
@@ -159,6 +167,24 @@ export class RequestTrayComponent implements OnInit {
       this.numberPage = this.numberPages;
       this.filterRequestTray.page = this.numberPage.toString();
       this.getRequestTray(this.filterRequestTray);
+    }
+
+    //Expresion regular para validar que solo se ingresen numeros en la paginación
+  validateFormat(event: any) {
+    let key;
+    if (event.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      key = event.keyCode;
+      key = String.fromCharCode(key);
+    }
+    const regex = /[1-9]|\./;
+     if (!regex.test(key)) {
+      event.returnValue = false;
+       if (event.preventDefault) {
+        event.preventDefault();
+       }
+     }
     }
 
 }

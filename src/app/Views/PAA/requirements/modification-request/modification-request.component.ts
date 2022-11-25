@@ -816,6 +816,14 @@ export class ModificationRequestComponent implements OnInit {
     this.closeFilter();
   }
 
+  //Limpiar el Filtro
+  clearFilter() {
+    this.filterForm.reset();
+
+    this.getModificationRequestByRequestId(Number(this.dataSolicitudModID), this.dataValidity, this.filterModificationRequest);
+    this.closeFilter();
+  }
+
   nextPage() {
     if (this.numberPage < this.numberPages) {
       this.numberPage++;
@@ -845,10 +853,16 @@ export class ModificationRequestComponent implements OnInit {
 
 
   openChargeFile() {
+    const dataImport: any = {
+      id_project: this.dataProjectID,
+      id_request: this.dataSolicitudModID,
+      justify: this.JustificationText
+    }
+
     const dialogRef = this.dialog.open(PopUpImportComponent, {
       width: '1000px',
       height: '580px',
-      data: this.dataProjectID,
+      data: dataImport,
     });
   }
 
@@ -1243,6 +1257,13 @@ export class ModificationRequestComponent implements OnInit {
         vigencia: this.dataValidity
       }
 
+      let TEXT_MESSAGE: string = ``;
+      if (this.ProjectState === 'Anteproyecto') {
+        TEXT_MESSAGE = `Se enviará la Solicitud de Modificación`;
+      } else {
+        TEXT_MESSAGE = `Se enviará la Solicitud de Modificación con el año de vigencia ${this.dataValidity}`;
+      }
+
       //Alerta de confirmación
       Swal.fire({
         customClass: {
@@ -1250,7 +1271,7 @@ export class ModificationRequestComponent implements OnInit {
           denyButton: 'swalBtnColor'
         },
         title: '¿Estás Seguro?',
-        text: `Se enviará la Solicitud de Modificación con el año de vigencia ${this.dataValidity}`,
+        text: `${TEXT_MESSAGE}`,
         showDenyButton: true,
         denyButtonText: 'NO',
         confirmButtonText: 'SI',
@@ -1428,6 +1449,25 @@ export class ModificationRequestComponent implements OnInit {
       panelClass: [type],
     });
   }
+
+
+  //Expresion regular para validar que solo se ingresen numeros en la paginación
+  validateFormat(event: any) {
+    let key;
+    if (event.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      key = event.keyCode;
+      key = String.fromCharCode(key);
+    }
+    const regex = /[1-9]|\./;
+     if (!regex.test(key)) {
+      event.returnValue = false;
+       if (event.preventDefault) {
+        event.preventDefault();
+       }
+     }
+    }
 }
 
 

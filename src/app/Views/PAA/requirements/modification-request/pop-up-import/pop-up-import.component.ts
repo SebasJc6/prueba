@@ -24,7 +24,7 @@ export class PopUpImportComponent implements OnInit {
     private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
     public router: Router,
-    @Inject(MAT_DIALOG_DATA) private dataProjectID: number,) { dialogRef.disableClose = true; }
+    @Inject(MAT_DIALOG_DATA) private dataImport: any,) { dialogRef.disableClose = true; }
 
   //Aqui se guarda el archivo a importar
   fileTmp: any;
@@ -35,73 +35,130 @@ export class PopUpImportComponent implements OnInit {
   //Justificación
   Justificacion: string = '';
 
+  //Id del proyecto
+  id_project: number = 0;
+  //Id de la solicitud
+  id_request: number = 0;
+
   ngOnInit(): void {
+    this.id_project = Number(this.dataImport.id_project);
+    this.id_request = Number(this.dataImport.id_request);
+    
+    if (this.id_request != 0) {
+      this.Justificacion = this.dataImport.justify;
+    }
   }
 
 
   importFile() {
-    //
-    const type = this.fileTmp.fileName.split('.').pop();
-      if (type === 'xlsx') {
-        if (this.Justificacion !== '') {
-          
-          let FILE = new FormData();
-          FILE.append('File', this.fileTmp.file);
-          FILE.append('Observacion', this.Justificacion);
+    if (this.Justificacion !== '' && this.fileTmp !== undefined) {
+      let FILE = new FormData();
+      FILE.append('File', this.fileTmp.file);
+      FILE.append('Observacion', this.Justificacion);
 
-          this.spinner.show();
-          this.serviceModRequest.importFile(this.dataProjectID, FILE).subscribe(res => {
+      //Verificar que la Solicitud de Modificación no exista
+      if (this.id_request === 0) {
+        this.spinner.show();
+        this.serviceModRequest.importFile(this.id_project, FILE).subscribe(res => {
 
-            let message = res.message;
-            let status = res.status;
-            let Data: string[] = [];
+          let message = res.message;
+          let status = res.status;
+          let Data: string[] = [];
 
-            if (status == 404) {
-              Data = Object.values(res.data);
-            } else if (status == 200) {
-              this.idSolicitudImport = res.data.idSolicitud;
-            }
+          if (status == 404) {
+            Data = Object.values(res.data);
+          } else if (status == 200) {
+            this.idSolicitudImport = res.data.idSolicitud;
+          }
 
-            let erorsMessages = '';
-            Data.map(item => {
-              erorsMessages += item + '. ';
-            });
-
-            if (status == 404) {
-              this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
-            } else if (status == 200) {
-              this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
-              this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
-            }
-
-            this.dialogRef.close();
-            this.spinner.hide();
-          }, error => {
-           let status = error.error.status;
-
-           if (status == 422) {
-             let message = error.error.message;
-             let erorsMessages = '';
-             if (error.error.data) {
-               let errorData: string[] = Object.values(error.error.data);
-               errorData.map(item => {
-                 erorsMessages += item + '. ';
-                });
-              }
-             this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
-           } else if (status == 500) {
-              this.openSnackBar('Lo sentimos', 'El documento Importado no cumple con los criterios de aceptación.', 'error');
-           } else {
-              this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
-           }
-            this.spinner.hide();
+          let erorsMessages = '';
+          Data.map(item => {
+            erorsMessages += item + '. ';
           });
-        } else {
-          this.openSnackBar('Error', `Debe agreagar una Justificación para Importar`, 'error');
-        }
-      } else {
-        this.openSnackBar('Error', `Solo puede ingresar un archivo Excel`, 'error');
+
+          if (status == 404) {
+            this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
+          } else if (status == 200) {
+            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
+            this.dialogRef.close();
+          }
+
+          this.spinner.hide();
+        }, error => {
+          let status = error.error.status;
+
+          if (status == 422) {
+            let message = error.error.message;
+            let erorsMessages = '';
+            if (error.error.data) {
+              let errorData: string[] = Object.values(error.error.data);
+              errorData.map(item => {
+                erorsMessages += item + '. ';
+              });
+            }
+            this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
+          } else if (status == 500) {
+            this.openSnackBar('Lo sentimos', 'El documento Importado no cumple con los criterios de aceptación.', 'error');
+          } else {
+            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+          }
+          
+          this.spinner.hide();
+        });
+      } else if (this.id_request !== 0) {
+        //Se ejecuta el endpoint de actualizar import
+        this.spinner.show();
+        this.serviceModRequest.importFilePut(this.id_project, this.id_request, FILE).subscribe(res => {
+
+          console.log(res);
+          
+          let message = res.message;
+          let status = res.status;
+          let Data: string[] = [];
+
+          if (status == 404) {
+            Data = Object.values(res.data);
+          }
+
+          let erorsMessages = '';
+          Data.map(item => {
+            erorsMessages += item + '. ';
+          });
+
+          if (status == 404) {
+            this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
+          } else if (status == 200) {
+            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
+            this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+          }
+
+          this.spinner.hide();
+        }, error => {
+          let status = error.error.status;
+
+          if (status == 422) {
+            let message = error.error.message;
+            let erorsMessages = '';
+            if (error.error.data) {
+              let errorData: string[] = Object.values(error.error.data);
+              errorData.map(item => {
+                erorsMessages += item + '. ';
+              });
+            }
+            this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
+          } else if (status == 500) {
+            this.openSnackBar('Lo sentimos', 'El documento Importado no cumple con los criterios de aceptación.', 'error');
+          } else {
+            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+          }
+          this.spinner.hide();
+        });
+
       }
+
+    } else {
+      this.openSnackBar('Error', `Debe agreagar un Archivo y una Justificación para Importar`, 'error');
+    }
   }
 
 
@@ -118,10 +175,9 @@ export class PopUpImportComponent implements OnInit {
       const type = this.fileTmp.fileName.split('.').pop();
       if (type === 'xlsx') {
         this.fileName = this.fileTmp.fileName;
+      } else {
+        this.openSnackBar('Error', `Solo puede ingresar un archivo Excel`, 'error');
       }
-      
-    } else {
-      this.openSnackBar('Error', `Solo puede ingresar un archivo Excel`, 'error');
     }
   }
 

@@ -181,6 +181,14 @@ export class CDPComponent implements OnInit {
     this.closeFilter();
   }
 
+  //Limpiar el Filtro
+  clearFilter() {
+    this.filterForm.reset();
+    
+    this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
+    this.closeFilter();
+  }
+
 
   //CHECKs
   isAllSelected() {
@@ -251,4 +259,23 @@ export class CDPComponent implements OnInit {
   regresar() {
     this.router.navigate([`/WAPI/PAA/Requerimientos/${this.dataProjectID}`]);
   }
+
+
+  //Expresion regular para validar que solo se ingresen numeros en la paginación
+  validateFormat(event: any) {
+    let key;
+    if (event.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      key = event.keyCode;
+      key = String.fromCharCode(key);
+    }
+    const regex = /[1-9]|\./;
+     if (!regex.test(key)) {
+      event.returnValue = false;
+       if (event.preventDefault) {
+        event.preventDefault();
+       }
+     }
+    }
 }

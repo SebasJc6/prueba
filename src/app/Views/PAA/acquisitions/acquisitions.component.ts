@@ -4,15 +4,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { merge, Observable, of as observableOf } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { dataTableProjectI, filterProjectI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -213,6 +209,14 @@ export class AcquisitionsComponent implements OnInit {
     this.closeFilter();
   }
 
+  //Limpiar el Filtro
+  clearFilter() {
+    this.filterForm.reset();
+    
+    this.getAllProjects(this.filterProjects);
+    this.closeFilter();
+  }
+
   openRequeriment(proyectoID: number) {
     this.router.navigate(['/WAPI/PAA/Requerimientos', proyectoID])
   }
@@ -231,5 +235,23 @@ export class AcquisitionsComponent implements OnInit {
       this.isApproved = true;
     })
   }
+
+  //Expresion regular para validar que solo se ingresen numeros en la paginación
+  validateFormat(event: any) {
+    let key;
+    if (event.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      key = event.keyCode;
+      key = String.fromCharCode(key);
+    }
+    const regex = /[1-9]|\./;
+     if (!regex.test(key)) {
+      event.returnValue = false;
+       if (event.preventDefault) {
+        event.preventDefault();
+       }
+     }
+    }
 
 }

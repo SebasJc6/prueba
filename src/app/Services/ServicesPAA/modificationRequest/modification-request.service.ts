@@ -74,6 +74,11 @@ export class ModificationRequestService {
     return this.http.post(dir, info);
   }
 
+  importFilePut(id_project: number, id_request: number, file: any): Observable<any> {
+    let dir = `${this.Url}/SolicitudMod/ImportFile?IDProject=${id_project}&IDSolicitud=${id_request}`;
+    return this.http.put(dir, file);
+  }
+
 
   exportFile(projectId: string, requestId: string): Observable<any> {
     let dir = `${this.Url}/SolicitudMod/ExportFile?ProyectoId=${projectId}&SolicitudId=${requestId}`;

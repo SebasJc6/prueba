@@ -90,6 +90,9 @@
           <button class="FilSear" mat-button (click)="getFilter()">
             Filtrar
           </button>
+          <button class="FilSear" mat-button (click)="clearFilter()">
+            Limpiar
+          </button>
         </div>
 
 
@@ -187,7 +190,7 @@
     </a>
     <mat-form-field class="page" appearance="legacy">
       <mat-label>pagina</mat-label>
-      <input matInput value="{{numberPage}}" formControlName="page">
+      <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page">
       <button matSuffix (click)="getPagination()" mat-icon-button>
         <mat-icon matTooltip="Buscar Pagina">youtube_searched_for</mat-icon>
       </button>

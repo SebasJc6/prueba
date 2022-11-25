@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -98,12 +97,33 @@ export class RequirementsComponent implements OnInit {
     });
   }
 
-  getPagination() {
-    this.filterRequertiments.page = this.paginationForm.get('page')?.value;
-    this.filterRequertiments.take = this.paginationForm.get('take')?.value;
+  openFilter() {
+    this.viewFilter = false
+  }
+  closeFilter() {
+    this.viewFilter = true
+  }
+
+  getFilter() {
+    this.filterRequertiments.NumeroRequerimiento = this.filterForm.value.NumeroRequerimiento || '';
+    this.filterRequertiments.DependenciaDestino = this.filterForm.get('DependenciaDestino')?.value || '';
+    this.filterRequertiments.Descripcion = this.filterForm.get('Descripcion')?.value || '';
+    this.filterRequertiments.columna = this.filterForm.get('columna')?.value || '';
+    this.filterRequertiments.ascending = this.filterForm.get('ascending')?.value || false;
+
     this.getRequerimentsByProject(Number(this.dataProjectID), this.filterRequertiments);
 
+    this.closeFilter();
   }
+
+  //Limpiar el Filtro
+  clearFilter() {
+    this.filterForm.reset();
+    
+    this.getRequerimentsByProject(Number(this.dataProjectID), this.filterRequertiments);
+    this.closeFilter();
+  }
+
 
   getRequerimentsByProject(projectId: number, filterRequertiments: filterRequerimentI) {
     this.projectId = projectId;
@@ -138,6 +158,12 @@ export class RequirementsComponent implements OnInit {
     });
   }
 
+  getPagination() {
+    this.filterRequertiments.page = this.paginationForm.get('page')?.value;
+    this.filterRequertiments.take = this.paginationForm.get('take')?.value;
+    this.getRequerimentsByProject(Number(this.dataProjectID), this.filterRequertiments);
+  }
+
   nextPage() {
     if (this.numberPage < this.numberPages) {
       this.numberPage++;
@@ -163,25 +189,6 @@ export class RequirementsComponent implements OnInit {
     this.numberPage = this.numberPages;
     this.filterRequertiments.page = this.numberPage.toString();
     this.getRequerimentsByProject(Number(this.dataProjectID), this.filterRequertiments);
-  }
-
-  openFilter() {
-    this.viewFilter = false
-  }
-  closeFilter() {
-    this.viewFilter = true
-  }
-
-  getFilter() {
-    this.filterRequertiments.NumeroRequerimiento = this.filterForm.value.NumeroRequerimiento || '';
-    this.filterRequertiments.DependenciaDestino = this.filterForm.get('DependenciaDestino')?.value || '';
-    this.filterRequertiments.Descripcion = this.filterForm.get('Descripcion')?.value || '';
-    this.filterRequertiments.columna = this.filterForm.get('columna')?.value || '';
-    this.filterRequertiments.ascending = this.filterForm.get('ascending')?.value || false;
-
-    this.getRequerimentsByProject(Number(this.dataProjectID), this.filterRequertiments);
-
-    this.closeFilter();
   }
 
 
@@ -211,4 +218,22 @@ export class RequirementsComponent implements OnInit {
     this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/0' ]);
   }
 
+
+  //Expresion regular para validar que solo se ingresen numeros en la paginación
+  validateFormat(event: any) {
+    let key;
+    if (event.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      key = event.keyCode;
+      key = String.fromCharCode(key);
+    }
+    const regex = /[1-9]|\./;
+     if (!regex.test(key)) {
+      event.returnValue = false;
+       if (event.preventDefault) {
+        event.preventDefault();
+       }
+     }
+    }
 }

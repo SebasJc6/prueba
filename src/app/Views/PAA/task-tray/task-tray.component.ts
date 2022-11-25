@@ -106,6 +106,14 @@ export class TaskTrayComponent implements OnInit {
     this.closeFilter();
   }
 
+    //Limpiar el Filtro
+    clearFilter() {
+      this.filterForm.reset();
+      
+      this.getTaskTray(this.filterTaskTray);
+      this.closeFilter();
+    }
+
   //PAGINACIÓN
   getPagination() {
     this.filterTaskTray.page = this.paginationForm.get('page')?.value;
@@ -147,4 +155,22 @@ export class TaskTrayComponent implements OnInit {
     this.router.navigate(['/WAPI/PAA/PropiedadesRequerimiento/' + projectId + '/'+solId+'/' + numReq+ '/Ajuste'])
   }
   
+
+  //Expresion regular para validar que solo se ingresen numeros en la paginación
+  validateFormat(event: any) {
+    let key;
+    if (event.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      key = event.keyCode;
+      key = String.fromCharCode(key);
+    }
+    const regex = /[1-9]|\./;
+     if (!regex.test(key)) {
+      event.returnValue = false;
+       if (event.preventDefault) {
+        event.preventDefault();
+       }
+     }
+    }
 }

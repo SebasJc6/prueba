@@ -97,7 +97,7 @@
       </a>
       <mat-form-field class="page" appearance="legacy">
         <mat-label>página</mat-label>
-        <input matInput value="{{numberPage}}" formControlName="page">
+        <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page">
         <button matSuffix (click)="getPagination()" mat-icon-button>
           <mat-icon matTooltip="Buscar Página">youtube_searched_for</mat-icon>
         </button>

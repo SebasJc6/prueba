@@ -107,6 +107,14 @@ export class AddrequirementsComponent implements OnInit {
     this.closeFilter();
   }
 
+  //Limpiar el Filtro
+  clearFilter() {
+    this.filterForm.reset();
+    
+    this.getDataRequeriment(+this.dataProjectID, this.filterDataRequertiments);
+    this.closeFilter();
+  }
+
   
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -163,4 +171,22 @@ export class AddrequirementsComponent implements OnInit {
     this.dialogRef.close(this.requerimentsAdd);
   }
 
+
+  //Expresion regular para validar que solo se ingresen numeros en la paginación
+  validateFormat(event: any) {
+    let key;
+    if (event.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      key = event.keyCode;
+      key = String.fromCharCode(key);
+    }
+    const regex = /[1-9]|\./;
+     if (!regex.test(key)) {
+      event.returnValue = false;
+       if (event.preventDefault) {
+        event.preventDefault();
+       }
+     }
+    }
 }
