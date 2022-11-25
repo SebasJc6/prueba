@@ -49,7 +49,7 @@ export class RequestTrayComponent implements OnInit {
   numberPage: number = 0;
   dataProjectID: number = 0;
 
-  estadoFilter: string[] = ['Todos', 'Aprobada', 'En Revisión', 'Rechazada', 'En Ajuste', 'En Modificación']
+  estadoFilter: string[] = ['Todos', 'Aprobada', 'En Revisión', 'Rechazada', 'En Ajuste', 'En Creación']
   viewFilter: boolean = true;
   viewOrder = false;
 
@@ -178,7 +178,7 @@ export class RequestTrayComponent implements OnInit {
       key = event.keyCode;
       key = String.fromCharCode(key);
     }
-    const regex = /[1-9]|\./;
+    const regex = /[0-9]|\./;
      if (!regex.test(key)) {
       event.returnValue = false;
        if (event.preventDefault) {

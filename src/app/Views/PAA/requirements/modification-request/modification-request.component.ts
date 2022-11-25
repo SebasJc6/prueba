@@ -1235,7 +1235,7 @@ export class ModificationRequestComponent implements OnInit {
       this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe guardar o eliminar los requerimientos nuevos.`);
     } else if (fromStorageCounters !== null) {
       this.openSnackBar('Lo sentimos', `No se puede enviar la solicitud`, 'error', `Debe guardar o eliminar las contrapartidas nuevas.`);
-    } else if (this.StatusRequest == 'En Modificación' || this.StatusRequest == 'En Ajuste') {
+    } else if (this.StatusRequest == 'En Creación' || this.StatusRequest == 'En Ajuste') {
 
       let sendData = {
         idProyecto: this.dataProjectID,
@@ -1401,7 +1401,7 @@ export class ModificationRequestComponent implements OnInit {
     ProChartStorage.removeItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`);
     ProChartStorage.removeItem(`arrayCounterparts${this.dataProjectID}${this.dataSolicitudModID}`);
     ProChartStorage.removeItem(`arrayIdSources${this.dataProjectID}${this.dataSolicitudModID}`);
-    if (this.StatusRequest === 'En Modificación' && this.AccessUser !== 'Revisor') {
+    if (this.StatusRequest === 'En Creación' && this.AccessUser !== 'Revisor') {
       //Alerta de confirmación
       Swal.fire({
         customClass: {
@@ -1464,7 +1464,7 @@ export class ModificationRequestComponent implements OnInit {
       key = event.keyCode;
       key = String.fromCharCode(key);
     }
-    const regex = /[1-9]|\./;
+    const regex = /[0-9]|\./;
      if (!regex.test(key)) {
       event.returnValue = false;
        if (event.preventDefault) {

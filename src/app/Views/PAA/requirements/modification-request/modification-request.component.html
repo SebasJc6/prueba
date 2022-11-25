@@ -29,17 +29,17 @@
 
     <div class="ActionsUp">
         <div class="btnUpAction">
-            <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false"  class="buton btn" mat-button mat-icon-button
+            <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false"  class="buton btn" mat-button mat-icon-button
                 style="cursor: pointer;"
                 (click)="newRequeriment()">
                 Nuevo
             </button>
-            <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="buton btn" mat-button mat-icon-button
+            <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="buton btn" mat-button mat-icon-button
                 style="cursor: pointer;"
                 (click)="Addrequirement()">
                 Modificar
             </button>
-            <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="buton btn" mat-button mat-icon-button
+            <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="buton btn" mat-button mat-icon-button
                 style="cursor: pointer;"
                 (click)="Addcounterpart()">
                 Contrapartida
@@ -59,7 +59,7 @@
                     </mat-icon>
                 </button>
             </span>
-            <span *ngIf="(AccessUser === 'Referente_Planeacion'  && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="btngImport">
+            <span *ngIf="(AccessUser === 'Referente_Planeacion'  && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="btngImport">
                 <button mat-button class="btn" (click)="openChargeFile()">
                     <mat-icon class="imgImport mat-icon" matTooltip="Importar Excel">
                         <img class="imgImport" src="../../../../assets/img/import.png">
@@ -337,7 +337,7 @@
                                     (click)="editRecord(element)">edit</mat-icon>
                             </button>
 
-                            <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" mat-icon-button
+                            <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" mat-icon-button
                                 (click)="removeDataTbl(element)">
                                 <mat-icon mat-icon-button class="btnActions" matTooltip="Eliminar">delete</mat-icon>
                             </button>
@@ -390,7 +390,7 @@
         <mat-form-field hintLabel="Máximo 3000 caracteres" appearance="outline">
             <textarea matInput #input maxlength="3000" [(ngModel)]="JustificationText" rows="8"
                 placeholder="Se requiere modificar"
-                [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') && AccessUser === 'Referente_PAA' ? false : true"></textarea>
+                [disabled]="(StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '') && AccessUser === 'Referente_PAA' ? false : true"></textarea>
             <mat-hint align="end">{{input.value.length || 0}}/3000</mat-hint>
         </mat-form-field>
 
@@ -399,7 +399,7 @@
     <div class="attachedFiles">
         <p>Archivos adjuntos</p>
 
-        <div class="btnAttachedFiles" *ngIf="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? true : false">
+        <div class="btnAttachedFiles" *ngIf="(StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? true : false">
 
             <mat-icon *ngIf="AccessUser == 'Referente_PAA'" mat-icon-button class="btnActions"
                 matTooltip="Adjunta los archivos" (click)="fileUpload.click()">attach_file</mat-icon>
@@ -420,7 +420,7 @@
                 </th>
                 <td mat-cell *matCellDef="let element">
                     <div>
-                        <mat-icon mat-icon-button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" mat-icon-button
+                        <mat-icon mat-icon-button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" mat-icon-button
                             class="btnActions"
                             matTooltip="Elimina el archivo adjunto" (click)="deleteFile(element)">delete
                         </mat-icon>
@@ -450,11 +450,11 @@
 
     <div style="margin-top: 3%;">
         <mat-card-actions>
-            <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false"  class="buton btn" mat-button mat-icon-button
+            <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false"  class="buton btn" mat-button mat-icon-button
                 (click)="guardar()">
                 Guardar
             </button>
-            <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste')) ? true : false" class="buton btn" mat-button mat-icon-button (click)="enviar()">
+            <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste')) ? true : false" class="buton btn" mat-button mat-icon-button (click)="enviar()">
                 Enviar
             </button>
             <!-- <div> -->

@@ -165,7 +165,7 @@ export class TaskTrayComponent implements OnInit {
       key = event.keyCode;
       key = String.fromCharCode(key);
     }
-    const regex = /[1-9]|\./;
+    const regex = /[0-9]|\./;
      if (!regex.test(key)) {
       event.returnValue = false;
        if (event.preventDefault) {
