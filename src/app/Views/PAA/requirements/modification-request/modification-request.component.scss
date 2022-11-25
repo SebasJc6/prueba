@@ -503,3 +503,8 @@ mat-card-actions {
 .file-input {
     display: none;
   }
+
+  .mat-button:first-child {
+    margin-left: 18.375px;
+    margin-right: 18.375px;
+  }

@@ -193,3 +193,46 @@ $custom-typography: mat-typography-config($font-family: '"Montserrat", sans-seri
   color: #000;
   border: 2px solid #185564;
 }
+
+//SweetAlert Buttons
+.swal2-styled.swal2-confirm.swalBtnColor {
+  border-color: #185564;
+  border: 2px solid #185564;
+  color: #185564;
+  width: 8rem;
+  height: 2.5rem;
+  background-color: #ffff;
+  border-radius: 1.5rem;
+  font-weight: bold;
+  line-height: 0px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.swal2-styled.swal2-confirm.swalBtnColor:hover {
+  cursor: pointer;
+  transition-duration: 0.3s;
+  background-color: #185564;
+  color: #ffff;
+}
+
+.swal2-styled.swal2-deny.swalBtnColor {
+  border-color: #185564;
+  border: 2px solid #185564;
+  color: #185564;
+  width: 8rem;
+  height: 2.5rem;
+  background-color: #ffff;
+  border-radius: 1.5rem;
+  font-weight: bold;
+  line-height: 0px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.swal2-styled.swal2-deny.swalBtnColor:hover {
+  cursor: pointer;
+  transition-duration: 0.3s;
+  background-color: #185564;
+  color: #ffff;
+}

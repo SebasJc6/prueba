@@ -3,7 +3,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { distinctUntilChanged } from 'rxjs';
-import { formatCurrency, getCurrencySymbol } from '@angular/common';
 import { cadenaPresupuestalI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
 
 @Component({
@@ -13,13 +12,14 @@ import { cadenaPresupuestalI } from 'src/app/Models/ModelsPAA/propertiesRequirem
 })
 export class BudgetModificationComponent implements OnInit {
   valueFormSubmit = new FormGroup({
-    aumenta: new FormControl(),
-    disminuye: new FormControl(0),
+    aumenta: new FormControl({value: '$0', disabled:false}),
+    disminuye: new FormControl({value: '$0', disabled:false}),
     disabled: new FormControl(false),
-    iva: new FormControl(0),
-    arl: new FormControl(0),
-    total: new FormControl({ value: 0, disabled: true }),
+    iva: new FormControl({value: '$0', disabled:false}),
+    arl: new FormControl({value: '$0', disabled:false}),
+    total: new FormControl({ value: '$0', disabled: true }),
   });
+  
   isDisabled = true;
   isDisabledView = false;
   isSelected = false;
@@ -47,15 +47,44 @@ export class BudgetModificationComponent implements OnInit {
     this.valueForm(this.data.element);
     this.currencyInput();
   }
+  
+
   currencyInput() {
     //use pipe to display currency
     this.valueFormSubmit.valueChanges.subscribe(form => {
       if (form.aumenta) {
         this.valueFormSubmit.patchValue({
-          aumenta: this.currencyPipe.transform( "COP", 'symbol-narrow', '1.0-0') || ''
+          aumenta: this.assignCurrencyPipe(form.aumenta)
+        }, { emitEvent: false })
+      }
+      if (form.disminuye) {
+        this.valueFormSubmit.patchValue({
+          disminuye: this.assignCurrencyPipe(form.disminuye)
+        }, { emitEvent: false })
+      }
+      if (form.iva) {
+        this.valueFormSubmit.patchValue({
+          iva: this.assignCurrencyPipe(form.iva)
+        }, { emitEvent: false })
+      }
+      if (form.arl) {
+        this.valueFormSubmit.patchValue({
+          arl: this.assignCurrencyPipe(form.arl)
         }, { emitEvent: false })
       }
     });
+  }
+
+  //Función para asignar formato de moneda a un numero y retorna el numero formatrado
+  assignCurrencyPipe(number: string) {
+    const NUMBER_ASSIGN = this.currencyPipe.transform(number.replace(/\D/g, '').replace(/^-1+/, ''), 'COP', 'symbol-narrow', '1.0-0');
+    return NUMBER_ASSIGN;
+  }
+
+  //Función que quita el formato de moneda y retorna un numero
+  quitCurrencyPipe(element: string): number {
+    const ELEMENT_QUIT = element.replace(/\$+/g, '').replace(/,/g, "");
+    return Number(ELEMENT_QUIT);
   }
 
   valueForm(event: cadenaPresupuestalI) {
@@ -63,11 +92,28 @@ export class BudgetModificationComponent implements OnInit {
       this.isDisabledView = true;
     } else if (this.data.type == 'editar') {
       this.isDisabledView = false;
-      this.valueFormSubmit.controls['aumenta'].setValue(event.subAumento);
-      this.valueFormSubmit.controls['disminuye'].setValue(event.subDisminucion);
-      this.valueFormSubmit.controls['iva'].setValue(event.iva);
-      this.valueFormSubmit.controls['arl'].setValue(event.arl);
-      this.valueFormSubmit.controls['total'].setValue(event.apropiacionDefinitiva);
+
+      //Dar formato al valor que Aumenta
+      const aumenta = String(event.subAumento);
+      const VALUE_AUMENTA = this.assignCurrencyPipe(aumenta);
+      //Dar formato al valor que Disminuye
+      const disminuye = String(event.subDisminucion);
+      const VALUE_DISMINUYE = this.assignCurrencyPipe(disminuye);
+      //Dar formato al valor de iva
+      const iva = String(event.iva);
+      const VALUE_IVA = this.assignCurrencyPipe(iva);
+      //Dar formato al valor qde arl
+      const arl = String(event.arl);
+      const VALUE_ARL = this.assignCurrencyPipe(arl);
+      //Dar formato al valor total
+      const total = String(event.apropiacionDefinitiva);
+      const VALUE_TOTAL = this.assignCurrencyPipe(total);
+
+      this.valueFormSubmit.controls['aumenta'].setValue(VALUE_AUMENTA);
+      this.valueFormSubmit.controls['disminuye'].setValue(VALUE_DISMINUYE);
+      this.valueFormSubmit.controls['iva'].setValue(VALUE_IVA);
+      this.valueFormSubmit.controls['arl'].setValue(VALUE_ARL);
+      this.valueFormSubmit.controls['total'].setValue(VALUE_TOTAL);
       this.currencyInput();
     }
     // console.log(event);
@@ -93,10 +139,16 @@ export class BudgetModificationComponent implements OnInit {
       this.viewDisabledDis = true;
       this.isDisabledAum = false;
       this.viewDisabledAum = false;
-      this.valueFormSubmit.controls['disminuye'].setValue(0);
-      this.formSubmit.subAumento = this.valueFormSubmit.controls['aumenta'].value || 0;
+      this.valueFormSubmit.controls['disminuye'].setValue('$0');
+      //Quitar formato al valor aumenta
+      const subAumento = String(this.valueFormSubmit.controls['aumenta'].value || 0);
+      const VALUE_SUB_AUMENTO = this.quitCurrencyPipe(subAumento);
+      this.formSubmit.subAumento = VALUE_SUB_AUMENTO;
       this.formSubmit.subDisminucion = 0;
-      this.valueFormSubmit.controls['total'].setValue(this.formSubmit.subAumento + this.formSubmit.iva + this.formSubmit.arl);
+      //Asignar formato al valor total
+      const total = String((this.formSubmit.subAumento + this.formSubmit.iva + this.formSubmit.arl));
+      const VALUE_TOTAL = this.assignCurrencyPipe(total);
+      this.valueFormSubmit.controls['total'].setValue(VALUE_TOTAL);
       this.formSubmit.aumento = this.formSubmit.subAumento + this.formSubmit.iva + this.formSubmit.arl
       this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.formSubmit.aumento - this.formSubmit.disminucion;
       this.formSubmit.disminucion = 0;
@@ -109,10 +161,16 @@ export class BudgetModificationComponent implements OnInit {
       this.viewDisabledAum = true;
       this.isDisabledDis = false;
       this.viewDisabledDis = false;
-      this.valueFormSubmit.controls['aumenta'].setValue(0);
-      this.formSubmit.subDisminucion = this.valueFormSubmit.controls['disminuye'].value || 0;
+      this.valueFormSubmit.controls['aumenta'].setValue('$0');
+      //Quitar formato al valor disminuye
+      const subDisminucion = String(this.valueFormSubmit.controls['disminuye'].value || 0);
+      const VALUE_SUB_DISMINUCION = this.quitCurrencyPipe(subDisminucion);
+      this.formSubmit.subDisminucion = VALUE_SUB_DISMINUCION;
       this.formSubmit.subAumento = 0;
-      this.valueFormSubmit.controls['total'].setValue(this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl);
+      //Asignar formato al valor total
+      const total = String((this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl));
+      const VALUE_TOTAL = this.assignCurrencyPipe(total);
+      this.valueFormSubmit.controls['total'].setValue(VALUE_TOTAL);
       this.formSubmit.disminucion = this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl
       this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.formSubmit.aumento - this.formSubmit.disminucion;
       this.formSubmit.aumento = 0;
@@ -122,8 +180,14 @@ export class BudgetModificationComponent implements OnInit {
     this.valueFormSubmit.controls.iva.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe((value) => {
-      this.formSubmit.iva = this.valueFormSubmit.controls['iva'].value || 0;
-      this.valueFormSubmit.controls['total'].setValue(this.formSubmit.subAumento + this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl);
+      //Quitar formato al valor del iva
+      const iva = String(this.valueFormSubmit.controls['iva'].value || 0);
+      const VALUE_IVA = this.quitCurrencyPipe(iva);
+      this.formSubmit.iva = VALUE_IVA;
+      //Asignar formato al valor total
+      const total = String((this.formSubmit.subAumento + this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl));
+      const VALUE_TOTAL = this.assignCurrencyPipe(total);
+      this.valueFormSubmit.controls['total'].setValue(VALUE_TOTAL);
       if (this.formSubmit.subAumento != 0) {
         this.formSubmit.aumento = this.formSubmit.subAumento + this.formSubmit.iva + this.formSubmit.arl
         this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.formSubmit.aumento - this.formSubmit.disminucion;
@@ -140,8 +204,14 @@ export class BudgetModificationComponent implements OnInit {
     this.valueFormSubmit.controls.arl.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe((value) => {
-      this.formSubmit.arl = this.valueFormSubmit.controls['arl'].value || 0;
-      this.valueFormSubmit.controls['total'].setValue(this.formSubmit.subAumento + this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl);
+      //Quitar formato al valor del arl
+      const arl = String(this.valueFormSubmit.controls['arl'].value || 0);
+      const VALUE_ARL = this.quitCurrencyPipe(arl);
+      this.formSubmit.arl = VALUE_ARL;
+      //Asignar formato al valor total
+      const total = String((this.formSubmit.subAumento + this.formSubmit.subDisminucion + this.formSubmit.iva + this.formSubmit.arl));
+      const VALUE_TOTAL = this.assignCurrencyPipe(total);
+      this.valueFormSubmit.controls['total'].setValue(VALUE_TOTAL);
       if (this.formSubmit.subAumento != 0) {
         this.formSubmit.aumento = this.formSubmit.subAumento + this.formSubmit.iva + this.formSubmit.arl
         this.formSubmit.apropiacionDefinitiva = this.formSubmit.apropiacionDisponible + this.formSubmit.aumento - this.formSubmit.disminucion;
