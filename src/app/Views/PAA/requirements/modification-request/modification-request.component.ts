@@ -204,7 +204,7 @@ export class ModificationRequestComponent implements OnInit {
       if (res.data !== null) {
         this.JustificationText = res.data.observacion;
       } else if (this.dataSolicitudModID !== '0') {
-        this.openSnackBar('Lo sentimos', `Error en la Solicitud de Modificación.`, 'error', `Solicitud de Modificación no Existe.`);
+        this.openSnackBar('Lo sentimos', `Error en la Solicitud de modificación.`, 'error', `Solicitud de modificación no existe.`);
         this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
       }
       this.spinner.hide();
@@ -541,8 +541,8 @@ export class ModificationRequestComponent implements OnInit {
         confirmButton: 'swalBtnColor',
         denyButton: 'swalBtnColor'
       },
-      title: '¿Estás Seguro?',
-      text: `Se eliminará este registro`,
+      title: '¿Está seguro que desea eliminar el registro?',
+      text: `Se eliminará este registro si selecciona "SI"`,
       showDenyButton: true,
       denyButtonText: 'NO',
       confirmButtonText: 'SI',
@@ -1006,13 +1006,13 @@ export class ModificationRequestComponent implements OnInit {
 
     this.serviceFiles.postFile(formPost).subscribe(res => {
       if (res.status == 200) {
-        this.openSnackBar('Guardado Exitosamente', `Archivos Guardado.`, 'success');
+        // this.openSnackBar('Guardado Exitosamente', `El archivos Guardados.`, 'success');
       } else {
-        this.openSnackBar('Lo sentimos', `Error al guardar archivos`, 'error', res.message);
+        this.openSnackBar('Lo sentimos', `Error al guardar los archivos adjuntos`, 'error', res.message);
       }
     }, error => {
       this.spinner.hide();
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', error.message);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema`, 'error', `Comuniquese con el administrador del sistema.`);
       this.rtnFile = false;
     });
   }
@@ -1110,15 +1110,8 @@ export class ModificationRequestComponent implements OnInit {
         if (res.status == 200) {
           //guardar archivos
           let filesUp: boolean = this.rtnFile
-          if (filesUp) {
-            setTimeout(() => {
-              this.spinner.hide();
-              this.openSnackBar('Guardado Exitosamente', `Solicitud de Modificación Guardada con éxito.`, 'success');
-            }, 4000);
-          } else {
             this.spinner.hide();
-            this.openSnackBar('Guardado Exitosamente', `Solicitud de Modificación Guardada con éxito.`, 'success');
-          }
+            this.openSnackBar('Guardado Exitosamente', `Solicitud de modificación guardada con éxito.`, 'success');
           //Elimación de los registros en LocalStorage
           ProChartStorage.removeItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`);
@@ -1180,15 +1173,8 @@ export class ModificationRequestComponent implements OnInit {
         if (res.status == 200) {
           //guardar archivos
           let filesUp: boolean = this.rtnFile
-          if (filesUp) {
-            setTimeout(() => {
-              this.spinner.hide();
-              this.openSnackBar('Guardado Exitosamente', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
-            }, 4000);
-          } else {
-            this.spinner.hide();
-            this.openSnackBar('Guardado Exitosamente', `Solicitud de Modificación Actualizada y Guardada con éxito.`, 'success');
-          }
+          this.spinner.hide();
+          this.openSnackBar('Guardado Exitosamente', `Solicitud de modificación actualizada y guardada con éxito.`, 'success');
           //Elimación de los registros en LocalStorage
           ProChartStorage.removeItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`);
@@ -1259,9 +1245,9 @@ export class ModificationRequestComponent implements OnInit {
 
       let TEXT_MESSAGE: string = ``;
       if (this.ProjectState === 'Anteproyecto') {
-        TEXT_MESSAGE = `Se enviará la Solicitud de Modificación`;
+        TEXT_MESSAGE = `Se enviará la Solicitud de modificación si selecciona "SI"`;
       } else {
-        TEXT_MESSAGE = `Se enviará la Solicitud de Modificación con el año de vigencia ${this.dataValidity}`;
+        TEXT_MESSAGE = `Se enviará la Solicitud de modificación con el año de vigencia ${this.dataValidity} si selecciona "SI"`;
       }
 
       //Alerta de confirmación
@@ -1270,7 +1256,7 @@ export class ModificationRequestComponent implements OnInit {
           confirmButton: 'swalBtnColor',
           denyButton: 'swalBtnColor'
         },
-        title: '¿Estás Seguro?',
+        title: '¿Está seguro que desea enviar la Solicitud?',
         text: `${TEXT_MESSAGE}`,
         showDenyButton: true,
         denyButtonText: 'NO',
@@ -1282,7 +1268,7 @@ export class ModificationRequestComponent implements OnInit {
           this.spinner.show();
           this.serviceModRequest.putModificationRequestSend(sendData).subscribe(res => {
             if (res.status == 200) {
-              this.openSnackBar('Enviado Exitosamente', `Solicitud de Modificación N° ${res.data.numSolicitud} Enviada con éxito.`, 'success');
+              this.openSnackBar('Enviado Exitosamente', `Solicitud de Modificación N° ${res.data.numSolicitud}. Enviada con éxito.`, 'success');
               //Elimación de los registros en LocalStorage
               ProChartStorage.removeItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
               ProChartStorage.removeItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`);
@@ -1329,26 +1315,44 @@ export class ModificationRequestComponent implements OnInit {
         idSolicitud: Number(this.dataSolicitudModID)
       }
 
-      this.spinner.show();
-      this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
-        if (res.status == 200) {
-          this.openSnackBar('Enviado Exitosamente', `Revisiones de la Solicitud de Modificación Enviadas con éxito.`, 'success');
-          this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
-        } else if (res.status == 400) {
-          this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
-        } else if (res.status == 404) {
-          this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
+      //Alerta de confirmación
+      Swal.fire({
+        customClass: {
+          confirmButton: 'swalBtnColor',
+          denyButton: 'swalBtnColor'
+        },
+        title: '¿Está seguro que desea enviar las revisiones?',
+        text: `Se enviarán las revisiones de la Solicitud si selecciona "SI"`,
+        showDenyButton: true,
+        denyButtonText: 'NO',
+        confirmButtonText: 'SI',
+        allowOutsideClick: false
+      }).then((result) => {
+        if (result.value) {
+
+          this.spinner.show();
+          this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
+            if (res.status == 200) {
+              this.openSnackBar('Enviado Exitosamente', `Revisiones de la Solicitud de Modificación Enviadas con éxito.`, 'success');
+              this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+            } else if (res.status == 400) {
+              this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
+            } else if (res.status == 404) {
+              this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
+            }
+            this.spinner.hide();
+          }, error => {
+            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+            this.spinner.hide();
+          });
         }
-        this.spinner.hide();
-      }, error => {
-        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
-        this.spinner.hide();
       });
     } else if (this.ProjectState === 'En Ejecución') {
       this.openDialog('Advertencia', 'Ingrese los comentarios de su revisión', 'warningInput', 'Seleccione el estado de la modificación con su revisión.')
     } else {
       this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `El Proyecto debe estar en estado "Anteproyecto" ó "En Ejecución".`);
     }
+    
   }
 
 
@@ -1372,7 +1376,7 @@ export class ModificationRequestComponent implements OnInit {
         this.spinner.show();
         this.serviceModRequest.putRevisionesEnviar(Revisiones).subscribe(res => {
           if (res.status == 200) {
-            this.openSnackBar('Enviado Exitosamente', `Revisiones de la Solicitud de Modificación Enviadas con éxito.`, 'success');
+            this.openSnackBar('Enviado Exitosamente', `Revisiones de la Solicitud de modificación enviadas con éxito.`, 'success');
             this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           } else if (res.status == 400) {
             this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
@@ -1404,8 +1408,8 @@ export class ModificationRequestComponent implements OnInit {
           confirmButton: 'swalBtnColor',
           denyButton: 'swalBtnColor'
         },
-        title: '¿Estás Seguro?',
-        text: 'Si cancelas se eliminará la Solicitud de Modificación',
+        title: '¿Está seguro de eliminar la Solicitud?',
+        text: 'Se eliminará la Solicitud de modificación si selecciona "SI"',
         showDenyButton: true,
         denyButtonText: 'NO',
         confirmButtonText: 'SI',
@@ -1416,14 +1420,14 @@ export class ModificationRequestComponent implements OnInit {
           this.spinner.show();
           this.serviceModRequest.deleteModificationRequest(Number(this.dataSolicitudModID)).subscribe(res => {
             if (res.status == 200) {
-              this.openSnackBar('Acciones Canceladas', `Solicitud de Modificación Eliminada.`, 'success');
+              this.openSnackBar('Acciones Canceladas', `Solicitud de modificación eliminada.`, 'success');
               this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
             }
             this.spinner.hide();
           }, error => {
             this.spinner.hide();
             this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
-          });  
+          });
         }
       });
     } else if (this.StatusRequest == null || this.StatusRequest === '') {

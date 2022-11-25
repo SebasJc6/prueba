@@ -223,7 +223,7 @@ export class CounterpartComponent implements OnInit {
       this.spinner.show();
       this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
         if (res.status == 200) {
-          this.openSnackBar('Guardado Exitosamente', `Contrapartida Actualizada.`, 'success');
+          this.openSnackBar('Guardado Exitosamente', `Contrapartida actualizada.`, 'success');
           this.router.navigate([`/WAPI/PAA/SolicitudModificacion/${this.dataCounterparts.id_project}/${res.data.idSolicitud}`]);
           this.dialogRef.close();
         }
@@ -249,9 +249,9 @@ export class CounterpartComponent implements OnInit {
   closedDialog(){
     if (this.counterpartForm.value.fuentes && this.counterpartForm.value.Descripcion !== ''){
       if ((this.counterpartForm.value.ValorAumenta !== null && this.counterpartForm.value.ValorAumenta !== '$0') || (this.counterpartForm.value.ValorDisminuye !== null && this.counterpartForm.value.ValorDisminuye !== '$0')) {
-        this.addCounterpart(); 
+        this.addCounterpart();
       } else {
-        this.openSnackBar('Lo sentimos', `Error al crear la contrapartida`, 'error', `Debe ingresar datos en el campo Valor que aumenta o en Valor que disminuye.`);
+        this.openSnackBar('Lo sentimos', `Error al crear la contrapartida`, 'error', `Debe ingresar datos en el campo Valor que aumenta o el Valor que disminuye.`);
       }
     } else {
       this.openSnackBar('Lo sentimos', `Error al crear la contrapartida`, 'error', `Debe llenar todos los campos.`);
