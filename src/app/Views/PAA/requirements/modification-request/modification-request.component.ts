@@ -658,6 +658,7 @@ export class ModificationRequestComponent implements OnInit {
   }
 
 
+  //Obtener requerimiento creado en Propiedades de requerimiento
   getNewRequeriment() {
     let fromStorage = ProChartStorage.getItem(`formVerify`);
     let objectsFromStorage = JSON.parse(fromStorage || '');
@@ -714,26 +715,34 @@ export class ModificationRequestComponent implements OnInit {
     dataTable.numeroRequerimiento = objectsFromStorage.infoBasica.numeroReq;
     dataTable.dependenciaDestino = objectsFromStorage.infoBasica.dependenciaDes.codigo;
     dataTable.descripcion = objectsFromStorage.infoBasica.descripcion;
-    this.serviceModRequest.getModalidadDeSeleccion(objectsFromStorage.infoBasica.modalidadSel).subscribe(res => {
-      dataTable.modalidadSeleccion = res.data.codigo;
-    });
+    dataTable.numeroContrato = objectsFromStorage.infoBasica.numeroContrato || 0;
+    dataTable.saldoRequerimiento = objectsFromStorage.infoBasica.saldoRequerimiento || 0;
+    dataTable.honorarios = objectsFromStorage.infoBasica.valorHonMes || 0;
+    
+    if (objectsFromStorage.infoBasica.actuacionCont != 1) {
+      dataTable.tipoContrato = objectsFromStorage.infoBasica.tipoCont;
+      dataTable.perfil = objectsFromStorage.infoBasica.perfil;
+    } else {
+      this.serviceModRequest.getTipoContrato(objectsFromStorage.infoBasica.tipoCont).subscribe(res => {
+        dataTable.tipoContrato = res.data.nombre;
+      });
+      this.serviceModRequest.getPerfil(objectsFromStorage.infoBasica.perfil).subscribe(res => {
+        dataTable.perfil = res.data.nombre_Perfil;
+      });
+    }
+
     this.serviceModRequest.getActuacion(objectsFromStorage.infoBasica.actuacionCont).subscribe(res => {
       dataTable.actuacionContractual = res.data.tipo;
     });
-    dataTable.numeroContrato = objectsFromStorage.infoBasica.numeroContrato || 0;
-    dataTable.saldoRequerimiento = objectsFromStorage.infoBasica.saldoRequerimiento || 0;
-    this.serviceModRequest.getTipoContrato(objectsFromStorage.infoBasica.tipoCont).subscribe(res => {
-      dataTable.tipoContrato = res.data.nombre;
-    });
-    this.serviceModRequest.getPerfil(objectsFromStorage.infoBasica.perfil).subscribe(res => {
-      dataTable.perfil = res.data.nombre_Perfil;
+
+    this.serviceModRequest.getModalidadDeSeleccion(objectsFromStorage.infoBasica.modalidadSel).subscribe(res => {
+      dataTable.modalidadSeleccion = res.data.codigo;
       setTimeout(() => {
         this.ArrayDataStorage.unshift(dataTable);
         ProChartStorage.removeItem('formVerifyComplete');
         this.addDataTbl();
       }, 2000);
     });
-    dataTable.honorarios = objectsFromStorage.infoBasica.valorHonMes || 0;
     
     let clasificaciones: any[] = objectsFromStorage.clasificaciones;
     clasificaciones.map(item => {

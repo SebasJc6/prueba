@@ -19,4 +19,10 @@ export class CDPService {
     &take=${filterForm.take}&columna=${filterForm.columna}&ascending=${filterForm.ascending}`;
     return this.http.get<dataCDPsI>(dir);
   }
+
+
+  putLockCDPs(id_requeriment: number): Observable<any> {
+    let dir = ``;
+    return this.http.put(dir, null);
+  }
 }
