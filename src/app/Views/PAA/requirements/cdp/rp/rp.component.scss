@@ -1,0 +1,214 @@
+.container {
+    margin-left: 3%;
+    position: block;
+    margin-right: 3%;
+    text-align: center;
+}
+
+.mgp {
+    float: start;
+    display: flex;
+    color: #185564;
+    align-items: center;
+
+    button {
+        margin-left: -0.5%;
+
+        mat-icon {
+            margin-top: -2%;
+        }
+    }
+
+    .href {
+        text-decoration: none;
+        color: #185564;
+    }
+
+    .selected {
+        font-weight: bold;
+    }
+}
+
+.center-h {
+    justify-content: center;
+}
+
+.center-v {
+    align-items: center;
+}
+
+//TITULO Y BOTON FILTRAR
+.opciones {
+    margin-right: 6%;
+    margin-bottom: 2%;
+
+    .export {
+        margin-left: 2%;
+        margin-top: 3%;
+        display: flex;
+        color: #185564;
+    }
+
+    .Fil {
+        margin-bottom: 1%;
+        float: right;
+        border: 2px solid #185564;
+        border-radius: 0.5rem;
+        border-color: #185564;
+        width: 6%;
+        color: #185564;
+        margin-top: -2%;
+    }
+}
+
+.colorCard1 {
+    background-color: #dcf8ff;
+}
+
+.colorCard2 {
+    background-color: white;
+}
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #185564;
+}
+.formCont {
+    .tablaCont {
+        display: flex;
+        margin-left: 2%;
+        margin-right: 2%;
+        color: black;
+
+        .contTxt {
+            text-align: left;
+            margin: 1%;
+            margin-top: 0.8%;
+            margin-bottom: 0.8%;
+            .tltData {
+                font-size: 14px;
+                margin-bottom: -1.5%;
+
+                mat-select {
+                    margin-top: 2%;
+                }
+                .colorSelect{
+                    background-color: white;
+                }
+            }
+
+            .contData {
+                border: 2px solid #185564;
+                border-radius: 0.3rem;
+                height: 30px;
+                width: 100%;
+                margin-top: 1.5%;
+            }
+         
+            .contDataDisabled {
+                border-color: gray;
+                background-color: white;
+                color:  gray;
+            }
+
+            ::ng-deep .mat-form-field-flex>.mat-form-field-infix {
+                padding: 0.2em 0px !important;
+                height: 35px;
+                border: 2px solid #185564;
+                border-radius: 0.3rem;
+            }
+        }
+
+        .dis{
+            display: inline;
+        }
+        .label1 {
+            width: 23%;
+        }
+
+        .label2 {
+            width: 74%;
+        }
+    }
+}
+table {
+    width: 93.5%;
+    margin-left: 3%;
+    margin-right: 3%;
+    
+    th {
+        background-color: #185564;
+        color: white;
+        text-align: center;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    td {
+        text-align: center;
+        font-size: 11px;
+    }
+    mat-table {
+      max-height: 500px;
+    }
+
+    //ESTILOS TABLA CLASIFICACION PRESUPUESTAL
+    .codAct{
+        width: 10%;
+    }
+    .pos{
+        width: 17%;
+    }
+    .mga{
+        width: 10%;
+    }
+    .aux{
+        width: 10%;
+    }
+     .fue {
+        width: 25%;
+    }        
+    .aprDis{
+        width: 14%;
+    }
+    .valDis{
+        width: 14%;
+    }
+    .contDataTabla{
+        border: 2px solid #ffffff;
+        border-radius: 0.3rem;
+        height: 30px;
+        width: 60%;
+        margin-top: 1.5%;
+    }
+ 
+   
+    
+}
+mat-card-actions {
+    display: block;
+    margin-top: 2%;
+    margin-bottom: 5%;
+    .buton {
+        margin-left: 5%;
+        margin-right: 5%;
+        text-transform: uppercase;
+        border-color: #185564;
+        // margin: 2%;
+        border: 2px solid #185564;
+        color: #185564;
+        width: 15%;
+        border-radius: 1.5rem;
+        font-weight: bold;
+        font-size: 100%;
+        align-items: center;
+        line-height: 0px;
+    }
+
+    .btn:hover {
+        cursor: pointer;
+        transition-duration: 0.3s;
+        color: white;
+        background-color: #185564;
+    }
+}

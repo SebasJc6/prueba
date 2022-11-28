@@ -3,18 +3,14 @@
         <!--Miga de Pan-->
         <div class="mgp">
           Plan Anual de Adquisiciones
-          <a class="href "  [routerLink]="['/WAPI/PAA/Adquisiciones']">
-            &nbsp;>&nbsp;{{codProject}}
-            -&nbsp;{{nomProject}}
-          </a>
-          <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
-            &nbsp;>&nbsp;Requerimientos
+          <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeSolicitudes']">
+            &nbsp;>&nbsp;Modificaciones solicitadas
           </a>
           <a class="href" [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudModID]">
-          &nbsp;>&nbsp;Solicitud de modificación
+            &nbsp;>&nbsp;Solicitud de modificación
           </a>
           <a class="href selected" [routerLink]="['/WAPI/PAA/ResumenModificacion/', dataProjectID]">
-            &nbsp;>&nbsp; Resumen
+            &nbsp;>&nbsp; Resumen de modificación
           </a>
         </div>
 
@@ -101,7 +97,7 @@
       </a>
       <mat-form-field class="page" appearance="legacy">
         <mat-label>página</mat-label>
-        <input matInput value="{{numberPage}}" formControlName="page">
+        <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page">
         <button matSuffix (click)="getPagination()" mat-icon-button>
           <mat-icon matTooltip="Buscar Página">youtube_searched_for</mat-icon>
         </button>

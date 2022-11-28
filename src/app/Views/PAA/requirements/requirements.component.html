@@ -50,11 +50,7 @@
               </div>
               <mat-divider></mat-divider>
               <div class="Order" *ngIf="viewOrder">
-                <!-- <mat-radio-group color="warn" formControlName="ascending">
-                <mat-radio-button value=true>Acendente</mat-radio-button>
-                <mat-radio-button value=false>Decendente</mat-radio-button>
-              </mat-radio-group> -->
-                Decendente<mat-slide-toggle formControlName="ascending"> Acendente</mat-slide-toggle>
+                Descendente<mat-slide-toggle formControlName="ascending"> Ascendente</mat-slide-toggle>
               </div>
 
             </mat-expansion-panel>
@@ -67,22 +63,22 @@
               </mat-expansion-panel-header>
               <div class="form">
                 <mat-form-field appearance="outline">
-                  <mat-label>Número de requerimiento</mat-label>
+                  <mat-label class="text__opacity">Número de requerimiento</mat-label>
                   <input matInput formControlName="NumeroRequerimiento" type="number">
                 </mat-form-field>
                 &nbsp;
                 <mat-form-field style="width: 15%;" appearance="outline">
-                  <mat-label>Dependencia destino de recursos</mat-label>
-                  <input matInput formControlName="DependenciaDestino" type="number">
+                  <mat-label class="text__opacity">Dependencia destino de recursos</mat-label>
+                  <input matInput formControlName="DependenciaDestino" type="text">
                 </mat-form-field>
                 &nbsp;
                 <mat-form-field style="width: 30%;" appearance="outline">
-                  <mat-label>Descripción</mat-label>
-                  <input matInput formControlName="Descripcion">
+                  <mat-label class="text__opacity">Descripción</mat-label>
+                  <input matInput formControlName="Descripcion" type="text">
                 </mat-form-field>
                 &nbsp;
                 <mat-form-field appearance="outline">
-                  <mat-label>Estado</mat-label>
+                  <mat-label class="text__opacity">Estado</mat-label>
                   <mat-select formControlName="Estado">
                     <mat-option [value]="Item" *ngFor="let Item of estadoFilter">{{Item}}</mat-option>
                   </mat-select>
@@ -93,6 +89,9 @@
 
           <button class="FilSear" mat-button (click)="getFilter()">
             Filtrar
+          </button>
+          <button class="FilSear" mat-button (click)="clearFilter()">
+            Limpiar
           </button>
         </div>
 
@@ -121,7 +120,7 @@
 
       <ng-container matColumnDef="description">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="Desc">
-          Descripción
+          Descripción (objeto del contrato)
         </th>
         <td mat-cell *matCellDef="let element" style="margin-top:1%; margin-bottom:2%">
           {{ element.descripcion }}
@@ -156,10 +155,16 @@
               <mat-icon mat-icon-button class="btnActions" matTooltip="Propiedades requerimiento"
                 (click)="propertiesRequirement(element.requerimientoId)">
                 insert_drive_file</mat-icon>
-              <mat-icon mat-icon-button class="btnActions" matTooltip="CDP" 
-              (click)="CDP(element.requerimientoId)"
-              >attach_money</mat-icon>
-              <mat-icon mat-icon-button class="btnActions" matTooltip="Giros">autorenew</mat-icon>
+              <mat-icon mat-icon-button 
+                class="btnActions" matTooltip="CDP" 
+                (click)="CDP(element.requerimientoId)">
+                attach_money
+              </mat-icon>
+              <mat-icon mat-icon-button 
+                class="btnActions" matTooltip="Giros"
+                (click)="StockOrders(element.requerimientoId)">
+                autorenew
+              </mat-icon>
             </div>
           </td>
         <tr>
@@ -185,7 +190,7 @@
     </a>
     <mat-form-field class="page" appearance="legacy">
       <mat-label>pagina</mat-label>
-      <input matInput value="{{numberPage}}" formControlName="page">
+      <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page">
       <button matSuffix (click)="getPagination()" mat-icon-button>
         <mat-icon matTooltip="Buscar Pagina">youtube_searched_for</mat-icon>
       </button>
@@ -204,8 +209,10 @@
     <button class="buton btn" mat-button mat-icon-button (click)="regresar()">
       REGRESAR
     </button>
-    <button *ngIf="AccessUser !== 'Revisor'" class="buton btn" [disabled]="(ProjectState === 'Anteproyecto' || ProjectState === 'En Ejecución') ? false : true" mat-button mat-icon-button (click)="modificatioRequest()">
-      <span>SOLICITAR MODIFICACIÓN</span>
+    <button *ngIf="(AccessUser !== 'Revisor' && (ProjectState === 'Anteproyecto' || ProjectState === 'En Ejecución')) ? true : false" class="buton btn" 
+      mat-button mat-icon-button 
+      (click)="modificatioRequest()">
+        <span>SOLICITAR MODIFICACIÓN</span>
     </button>
   </mat-card-actions>
 

@@ -140,7 +140,12 @@ export interface cadenasPresupuestalesI {
     disminucion: number,
     compromisos: number,
     apropiacionDefinitiva: number,
-    giros: number
+    giros: number,
+    cadena_Presupuestal_ID: number,
+    iva: number,
+    arl: number,
+    subAumento: number,
+    subDisminucion: number,
 }
 
 export interface codsUNSPSCI {

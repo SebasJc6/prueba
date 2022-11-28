@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, skipWhile, tap } from 'rxjs/operators'
 import { environment } from 'src/environments/environment';
-import { getAllActivitiesI, getAllAuxiliarI, getAllContacTypeI, getAllContractualActionI, getAllDependenciesI, getAllFuentesI, getAllMGAI, getAllPOSPREI, getAllProfileI, getAllReviewsAreaI, getAllSelectionModeDataI, getAllSelectionModeI, getAllUNSPSCI, getConceptsI, getDataAprobadaI, getDataTemporalI, getInfoToCreateReqI, responseVerifyDataSaveI, saveDataEditI, verifyDataSaveI, verifyReqI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
+import { getAllActivitiesI, getAllAuxiliarI, getAllContacTypeI, getAllContractualActionI, getAllDependenciesI, getAllFuentesI, getAllMGAI, getAllPOSPREI, getAllProfileI, getAllReviewsAreaI, getAllSelectionModeDataI, getAllSelectionModeI, getAllUNSPSCI, getConceptsI, getDataAprobadaI, getDataTemporalI, getDataTemporalModifiedI, getInfoToCreateReqI, responseVerifyDataSaveI, saveDataEditI, verifyDataSaveI, verifyReqI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from '../../Authentication/authentication.service';
 
@@ -110,7 +110,6 @@ export class PropertiesRequirementService {
     return this.http.get<getDataTemporalI>(dir)
   }
   getDataAprobad(projectId: number, requerimetId: number): Observable<getDataAprobadaI> {
-
     let dir = this.logicUrl + '/Proyecto/' + projectId + '/Requerimiento/' + requerimetId
     return this.http.get<getDataAprobadaI>(dir)
   }
@@ -120,8 +119,8 @@ export class PropertiesRequirementService {
     return this.http.get<verifyReqI>(dir)
   }
 
-  verifyRangeSararial(perfilId: number, value: number): Observable<verifyReqI> {
-    let dir = this.genericUrl + 'RangoSalarialPerfil/Validate?perfilId=' + perfilId + '&value=' + value
+  verifyRangeSararial(perfilId: number, value: number, anio: number): Observable<verifyReqI> {
+    let dir = this.genericUrl + 'RangoSalarialPerfil/Validate?perfilId=' + perfilId + '&value=' + value + '&anio=' + anio
     return this.http.get<verifyReqI>(dir)
   }
   postVerifyDataSaveI(form: verifyDataSaveI): Observable<responseVerifyDataSaveI> {
@@ -132,5 +131,9 @@ export class PropertiesRequirementService {
   putModificationRequestSend(form: saveDataEditI): Observable<any> {
     let dir = `${this.logicUrl}SolicitudMod/Guardar`;
     return this.http.put(dir, form);
+  }
+  getAllDataTemporalModified(projectId: number, requestId: number, reqTempId: number): Observable<getDataTemporalModifiedI> {
+    let dir = this.logicUrl + 'Solicitud/' + requestId + '/Proyecto/' + projectId + '/Temporal/' + reqTempId + '/Modificaciones'
+    return this.http.get<getDataTemporalModifiedI>(dir)
   }
 }

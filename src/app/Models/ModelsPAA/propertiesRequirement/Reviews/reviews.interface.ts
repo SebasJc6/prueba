@@ -1,3 +1,5 @@
+import { getAllReviewsAreaDataI } from "../propertiesRequirement.interface"
+
 export interface getAllReviewsI {
     status: number,
     message: string,
@@ -16,7 +18,7 @@ export interface getAllReviewsItemsI {
     solicitudRevID: number,
     fechaRevision: string,
     usuario: string,
-    area: string,
+    area: getAllReviewsAreaDataI,
     concepto: string,
     observacion: string,
     revisado: boolean
@@ -27,10 +29,13 @@ export interface postReviewsI {
     revisiones: reviewsI[]
 }
 export interface reviewsI{
+    revision_ID: any,
     revisado: boolean,
+    fecha: string,
     concepto: string,
     observacion: string,
-    area_ID: number
+    area_ID: number,
+    usuario: string,
 }
 
 export interface putUpdateReviewsI {

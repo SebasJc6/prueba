@@ -25,12 +25,12 @@
                 </mat-expansion-panel-header>
                 <div class="form">
                   <mat-form-field style="width: 20%;"  appearance="outline">
-                    <mat-label>Número de requerimiento</mat-label>
+                    <mat-label class="text__opacity">Número de requerimiento</mat-label>
                     <input matInput formControlName="NumeroRequerimiento" type="number">
                   </mat-form-field>
                   &nbsp;&nbsp;
                   <mat-form-field style="width: 70%;" appearance="outline">
-                    <mat-label>Descripción</mat-label>
+                    <mat-label class="text__opacity">Descripción</mat-label>
                     <input matInput formControlName="Descripcion">
                   </mat-form-field>
                   
@@ -40,6 +40,9 @@
     
             <button class="FilSear" mat-button (click)="getFilter()">
               Filtrar
+            </button>
+            <button class="FilSear" mat-button (click)="clearFilter()">
+              Limpiar
             </button>
           </div>
     
@@ -97,7 +100,7 @@
         </a>
         <mat-form-field class="page" appearance="legacy">
           <mat-label>página</mat-label>
-          <input matInput value="{{numberPage}}" formControlName="page">
+          <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page">
           <button matSuffix (click)="getPagination()" mat-icon-button>
             <mat-icon matTooltip="Buscar Página">youtube_searched_for</mat-icon>
           </button>

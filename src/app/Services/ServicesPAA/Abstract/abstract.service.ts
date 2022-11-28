@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { getAbstractI } from 'src/app/Models/ModelsPAA/Abstract/abstract';
+import { getAbstractDataYear, getAbstractI } from 'src/app/Models/ModelsPAA/Abstract/abstract';
 
 
 @Injectable({
@@ -16,5 +16,10 @@ export class AbstractService {
   getAbstract(projectId: string): Observable<getAbstractI> {
     let dir = `${this.Url}Proyecto/${projectId}/Resumen`;
     return this.http.get<getAbstractI>(dir);
+  }
+
+  getAbstractYear(project_id: number, year: number): Observable<getAbstractDataYear> {
+    let dir = `${this.Url}Proyecto/${project_id}/ResumenInfo/${year}`;
+    return this.http.get<getAbstractDataYear>(dir);
   }
 }

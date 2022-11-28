@@ -12,6 +12,12 @@ export interface getModificationRequestByRequesI {
   data: ModificationRequestByRequestIdI,
 }
 
+export interface getValidityByRequestI {
+  status: number,
+  messag: any,
+  title: any,
+  data: number[]
+}
 
 export interface modificationRequestI {
   idSolicitud: number,
@@ -22,7 +28,8 @@ export interface modificationRequestI {
   solicitud_Estado: string,
   datos: ModificationRequestByRequestIdI,
   observacion: string,
-  archivos: archivosI
+  archivos: archivosI,
+  vigencia: number
 }
 
 export interface ModificationRequestByRequestIdI {
@@ -72,11 +79,6 @@ export interface filterModificationRequestI {
   NumeroContrato: string,
   TipoContrato: string,
   Perfil: string,
-  // Honorarios: string,
-  // SaldoRequerimiento: string,
-  // ValorAumenta: string,
-  // ValorDisminuye: string,
-  // NuevoSaldoApropiacion: string,
   ModalidadSeleccion: string,
   page: string,
   take: number,
@@ -164,6 +166,7 @@ export interface postDataModifRequerimentsI {
 export interface postDataModifCadenasPresI {
   proj_ID: number,
   requerimiento_ID: number,
+  cadena_Presupuestal_ID: number,
   mes: number,
   anioVigRecursos: number,
   auxiliar_ID: number,
@@ -172,11 +175,15 @@ export interface postDataModifCadenasPresI {
   mgA_ID: number,
   pospre_ID: number,
   apropiacionDisponible: number,
+  iva: number,
+  arl: number,
   aumento: number,
+  subAumento: number,
+  subDisminucion: number,
   disminucion: number,
   compromisos: number,
   apropiacionDefinitiva: number,
-  giros:number
+  giros:number,
 }
 
 export interface postDataModifApropiacionInicialI {
@@ -209,4 +216,50 @@ export interface RevisionSend {
   idProject: number,
   comentarios: string,
   accion: number
+}
+
+
+//Interfaz para obtener Modalidad de Seleccion
+export interface getModalidadDeSeleccionI {
+  status: number,
+  message: string,
+  title: string,
+  data: {
+    modalidad_Sel_ID: number,
+    codigo: string,
+    caracteristicas: any
+  }
+}
+
+//Interfaz para obtener Actuacion Contractual
+export interface getActuacionI {
+  status: number,
+  message: string,
+  title: string,
+  data: {
+    actuacion_ID: number,
+    tipo: string
+  }
+}
+
+//Interfaz para obtener Perfil Laboral
+export interface getPerfilI {
+  status: number,
+  message: string,
+  title: string,
+  data: {
+    perfil_ID: number,
+    nombre_Perfil: string
+  }
+}
+
+//Interfaz para obtener Tipo de Contrato
+export interface getTipoContratoI {
+  status: number,
+  message: string,
+  title: string,
+  data: {
+    tipoContrato_ID: number,
+    nombre: string
+  }
 }

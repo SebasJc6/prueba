@@ -16,7 +16,25 @@
       </mat-card-title>
 
       <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">Filtrar</button>
-      <button class="btnExcel" mat-button>Exportar<img class="imgExcel" src="../../../../assets/img/excel.jpg"></button>
+
+      <button class="btnExcel btn" mat-button>
+        <mat-icon class="imgExcel mat-icon" matTooltip="Exportar Excel">
+          <img class="imgExcel" src="../../../../assets/img/excel.jpg">
+        </mat-icon>
+      </button>
+
+      <button class="btnExcel btn" mat-button>
+        <mat-icon class="btnActions mat-icon" matTooltip="Importar Giros">
+          autorenew
+        </mat-icon>
+      </button>
+
+      <button class="btnExcel btn" mat-button>
+        <mat-icon class="btnActions mat-icon" matTooltip="Importar CDP/RP">
+          attach_money
+        </mat-icon>
+      </button>
+
     </div>
     
     <div>
@@ -45,7 +63,7 @@
                 </div>
                 <mat-divider></mat-divider>
                 <div class="Order" *ngIf="viewOrder">
-                  Decendente<mat-slide-toggle formControlName="ascending"> Acendente</mat-slide-toggle>
+                  Descendente<mat-slide-toggle formControlName="ascending"> Ascendente</mat-slide-toggle>
                 </div>
 
               </mat-expansion-panel>
@@ -58,22 +76,22 @@
                 </mat-expansion-panel-header>
                 <div class="form">
                   <mat-form-field appearance="outline">
-                    <mat-label>Subsecretaria</mat-label>
+                    <mat-label class="text__opacity">Subsecretaria</mat-label>
                     <input matInput formControlName="DependenciaOrigen" type="text">
                   </mat-form-field>
                   &nbsp;
                   <mat-form-field style="width: 15%;" appearance="outline">
-                    <mat-label>Código Proyecto</mat-label>
-                    <input matInput formControlName="CodigoProyecto" type="text">
+                    <mat-label class="text__opacity">Código Proyecto</mat-label>
+                    <input matInput formControlName="CodigoProyecto" type="number">
                   </mat-form-field>
                   &nbsp;
                   <mat-form-field style="width: 30%;" appearance="outline">
-                    <mat-label>Nombre Proyecto</mat-label>
+                    <mat-label class="text__opacity">Nombre Proyecto</mat-label>
                     <input matInput formControlName="Nombre">
                   </mat-form-field>
                   &nbsp;
                   <mat-form-field appearance="outline">
-                    <mat-label>Estado</mat-label>
+                    <mat-label class="text__opacity">Estado</mat-label>
                     <mat-select formControlName="EstadoDesc">
                       <mat-option [value]="Item" *ngFor="let Item of estadoFilter">{{Item}}</mat-option>
                     </mat-select>
@@ -84,6 +102,9 @@
 
             <button class="FilSear" mat-button (click)="getFilter()">
               Filtrar
+            </button>
+            <button class="FilSear" mat-button (click)="clearFilter()">
+              Limpiar
             </button>
           </div>
         </mat-card>
@@ -174,7 +195,7 @@
               <mat-icon mat-icon-button class="btnActions" (click)="openAbstract(element.proyectoID)"
                 matTooltip="Resumen Ejecución">insert_drive_file
               </mat-icon>&nbsp;
-              <mat-icon *ngIf="AccessUser == 'Referente_Planeacion'" mat-icon-button [matTooltip]="(element.estadoDesc === 'En Ejecución') ? 'Aprobado' : 'En Ejecución'" [disabled]="!disabledExecute ? true : null" [ngClass]="{
+              <mat-icon *ngIf="AccessUser == 'Referente_Planeacion'" mat-icon-button [matTooltip]="(element.estadoDesc === 'En Ejecución') ? 'Aprobar' : 'Ejecutar'" [disabled]="!disabledExecute ? true : null" [ngClass]="{
               'btnExecution': element.estadoDesc == 'En Ejecución',
               'btnActions' : element.estadoDesc == 'Aprobado' || 'Cerrado' || 'Anteproyecto'}"
                 (click)="changeExecution(element.proyectoID)">
@@ -182,7 +203,7 @@
               <mat-icon *ngIf="AccessUser == 'Referente_Planeacion'" mat-icon-button [ngClass]="{
               'btnExecution': element.estadoDesc == 'Cerrado',
               'btnActions' : element.estadoDesc == 'En Ejecución'|| 'Aprobado' || 'Cerrado' || 'Anteproyecto'}"
-              [matTooltip]="(element.estadoDesc === 'Cerrado') ? 'En Ejecución' : 'Cerrado'" (click)="changeStatus(element.proyectoID)">close</mat-icon>
+              [matTooltip]="(element.estadoDesc === 'Cerrado') ? 'Ejecutar' : 'Cerrar'" (click)="changeStatus(element.proyectoID)">close</mat-icon>
             </div>
           </td>
         <tr>
@@ -209,7 +230,7 @@
     </a>
     <mat-form-field class="page" appearance="legacy">
       <mat-label>página</mat-label>
-      <input matInput value="{{numberPage}}" formControlName="page">
+      <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page">
       <button matSuffix (click)="getPagination()" mat-icon-button>
         <mat-icon matTooltip="Buscar Página">youtube_searched_for</mat-icon>
       </button>
@@ -225,11 +246,3 @@
   </div>
 
 </div>
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>

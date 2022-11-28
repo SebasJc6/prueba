@@ -60,20 +60,25 @@
           <input class="contData contDataDisabled" value="{{abstractData.unidadContratacion}}" disabled>
         </div>
 
-        <!-- <div class="contTxt label1"> -->
-          <div class="contTxt label1">
-            <p class="tltData ">Año</p>
-            <input class="contData contDataDisabled" value="{{abstractData.anio}}" disabled>
-          </div>
-          <!-- <p class="tltData" style="margin-bottom: 5%;">Año*</p>
+        <!-- <div class="contTxt label1">
+          <p class="tltData ">Año</p>
+          <input class="contData contDataDisabled" value="{{abstractData.anio}}" disabled>
+        </div> -->
+        
+        <div class="contTxt label1">
+          <p class="tltData" style="margin-bottom: 4%;">Año</p>
           <div class="contData" style="margin-top: -3.7%;">
-            <mat-select disableRipple class="sltData">
-              <mat-option value="1">2020</mat-option>
-              <mat-option value="2">2021</mat-option>
-              <mat-option value="3">2022</mat-option>
+            <mat-select class="sltData"
+              [(ngModel)]="year"
+              name="year" 
+              (selectionChange)="getAbstractYear()">
+                <mat-option *ngFor="let anio of arrayYears" 
+                  [value]="anio">
+                    {{anio}}
+                </mat-option>
             </mat-select>
-          </div> -->
-        <!-- </div> -->
+          </div>
+        </div>
 
         <div class="contTxt label1">
           <p class="tltData"></p>
@@ -90,22 +95,22 @@
       <div class="tablaCont" style="display: flex;">
           <div class="contTxt label1">
             <p class="tltData">Apropiación Inicial</p>
-            <input class="contData contDataDisabled" value="{{abstractData.apropiacionInicial}}" disabled>
+            <input class="contData contDataDisabled" [value]="abstractDataInfoYear.apropiacionInicial | currency:'COP':'symbol-narrow': '1.0-0'" disabled>
           </div>
 
           <div class="contTxt label1">
             <p class="tltData">Apropiación Definitiva</p>
-            <input class="contData contDataDisabled" value="{{abstractData.apropiacionDefinitiva}}" disabled>
+            <input class="contData contDataDisabled" [value]="abstractDataInfoYear.apropiacionDefinitiva | currency:'COP':'symbol-narrow': '1.0-0'" disabled>
           </div>
 
           <div class="contTxt label1">
             <p class="tltData ">Ejecución Acumulada</p>
-            <input class="contData contDataDisabled" value="{{abstractData.ejecucionAcumulada}}" disabled>
+            <input class="contData contDataDisabled" [value]="abstractDataInfoYear.ejecucionAcumulada | currency:'COP':'symbol-narrow': '1.0-0'" disabled>
           </div>
 
           <div class="contTxt label1">
             <p class="tltData ">% Ejecución</p>
-            <input class="contData contDataDisabled" value="{{abstractData.ejecucionApropPCT}}" disabled>
+            <input class="contData contDataDisabled" [value]="abstractDataInfoYear.ejecucionApropPCT | currency:'COP':'symbol-narrow': '1.0-0'" disabled>
           </div>
       </div>
 
@@ -113,22 +118,22 @@
       <div class="tablaCont" style="display: flex;">
           <div class="contTxt label1">
             <p class="tltData">Por Ejecutar</p>
-            <input class="contData contDataDisabled" value="{{abstractData.porEjecutar}}" disabled>
+            <input class="contData contDataDisabled" [value]="abstractDataInfoYear.porEjecutar | currency:'COP':'symbol-narrow': '1.0-0'" disabled>
           </div>
 
           <div class="contTxt label1">
             <p class="tltData">Giro Acumulado</p>
-            <input class="contData contDataDisabled" value="{{abstractData.giroAcumulado}}" disabled>
+            <input class="contData contDataDisabled" [value]="abstractDataInfoYear.giroAcumulado | currency:'COP':'symbol-narrow': '1.0-0'" disabled>
           </div>
 
           <div class="contTxt label1">
             <p class="tltData ">% Ejecución</p>
-            <input class="contData contDataDisabled" value="{{abstractData.ejecucionGiroPCT}}" disabled>
+            <input class="contData contDataDisabled" [value]="abstractDataInfoYear.ejecucionGiroPCT | currency:'COP':'symbol-narrow': '1.0-0'" disabled>
           </div>
 
           <div class="contTxt label1">
             <p class="tltData ">Reserva Constituida</p>
-            <input class="contData contDataDisabled" value="{{abstractData.reservaConstituida}}" disabled>
+            <input class="contData contDataDisabled" [value]="abstractDataInfoYear.reservaConstituida | currency:'COP':'symbol-narrow': '1.0-0'" disabled>
           </div>
       </div>
 
@@ -136,12 +141,12 @@
       <div class="tablaCont" style="display: flex;">
           <div class="contTxt label1">
             <p class="tltData">Giros de Reserva</p>
-            <input class="contData contDataDisabled" value="{{abstractData.girosReserva}}" disabled>
+            <input class="contData contDataDisabled" [value]="abstractDataInfoYear.girosReserva | currency:'COP':'symbol-narrow': '1.0-0'" disabled>
           </div>
 
           <div class="contTxt label1">
             <p class="tltData">% Ejecución</p>
-            <input class="contData contDataDisabled" value="{{abstractData.ejecucionGirosPCT}}" disabled>
+            <input class="contData contDataDisabled" [value]="abstractDataInfoYear.ejecucionGirosPCT | currency:'COP':'symbol-narrow': '1.0-0'" disabled>
           </div>
 
           <div class="contTxt label1">

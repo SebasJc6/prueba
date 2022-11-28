@@ -1,141 +1,280 @@
 <app-spinner></app-spinner>
 <div class="container center-h center-v">
-    <!--Miga de Pan-->
-    <div class="mgp">
-        Plan Anual de Adquisiciones
-        <a class="href "  [routerLink]="['/WAPI/PAA/Adquisiciones']">
-          &nbsp;>&nbsp;{{codProject}}
-          -&nbsp;{{nomProject}}
-        </a>
-        <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
-          &nbsp;>&nbsp;Requerimientos
-        </a>
-        <a class="href selected" [routerLink]="['/WAPI/PAA/CDP/', dataProjectID, requerimentId]">
-          &nbsp;>&nbsp; CDP
-        </a>
+  <!--Miga de Pan-->
+  <div class="mgp">
+    Plan Anual de Adquisiciones
+    <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
+      &nbsp;>&nbsp;{{codProject}}
+      -&nbsp;{{nomProject}}
+    </a>
+    <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
+      &nbsp;>&nbsp;Requerimientos
+    </a>
+    <a class="href selected" [routerLink]="['/WAPI/PAA/CDP/', dataProjectID, requerimentId]">
+      &nbsp;>&nbsp; CDP
+    </a>
+  </div>
+
+  <!-- DIV  FILTRO Y TABLA CERTIFICADO DE DISPONIBILIDAD PRESUPUESTAL (CDP)-->
+  <div style="overflow: auto;">
+
+    <!-- TITULO -->
+    <div class="opciones">
+      <mat-card-title class="export">
+        <strong>CERTIFICADO DE DISPONIBILIDAD PRESUPUESTAL (CDP)</strong>
+      </mat-card-title>
+
+      <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">Filtrar</button>
+    </div>
+
+    <!-- FILTRO -->
+    <div>
+      <div class="top">
+        <mat-card *ngIf="!viewFilter">
+          <div class="close">
+            <button mat-icon-button (click)="closeFilter()" color="warn">
+              <mat-icon [inline]='true'>close</mat-icon>
+            </button>
+          </div>
+          <div [formGroup]="filterForm">
+            <mat-accordion multi>
+              <mat-expansion-panel class="menu-panel">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span class="title">Ordernar Por:</span>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="filter">
+                  <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
+                    <mat-radio-button value="vigencia">Vigencia</mat-radio-button>
+                    <mat-radio-button value="numeroCDP">CDP</mat-radio-button>
+                    <!-- <mat-radio-button value="FechaCDP">Fecha CDP</mat-radio-button> -->
+                  </mat-radio-group>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="Order" *ngIf="viewOrder">
+                  Descendente<mat-slide-toggle formControlName="ascending"> Ascendente</mat-slide-toggle>
+                </div>
+
+              </mat-expansion-panel>
+
+              <mat-expansion-panel class="menu-panel">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span class="title">Buscar Por:</span>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="form">
+                  <mat-form-field style="width: 15%;" appearance="outline">
+                    <mat-label class="text__opacity">Vigencia</mat-label>
+                    <input matInput formControlName="vigencia" type="number">
+                  </mat-form-field>
+                  <mat-form-field style="width: 15%;" appearance="outline">
+                    <mat-label class="text__opacity">CDP</mat-label>
+                    <input matInput formControlName="numeroCDP" type="number">
+                  </mat-form-field>
+                  <mat-form-field style="width: 15%;" appearance="outline">
+                    <mat-label class="text__opacity">Fecha CDP</mat-label>
+                    <input matInput formControlName="fechaCDP" type="date">
+                  </mat-form-field>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+
+            <button class="FilSear" mat-button (click)="getFilter()">
+              Filtrar
+            </button>
+            <button class="FilSear" mat-button (click)="clearFilter()">
+              Limpiar
+            </button>
+          </div>
+        </mat-card>
       </div>
+    </div>
 
-     <!--TITULO-->
-     <div style="overflow: auto;">
-        <div class="opciones">
-            <div class="export">
-                <mat-card-title>
-                <h1><strong>CERTIFICADO DE DISPONIBILIDAD PRESUPUESTAL (CDP)</strong></h1>
-                </mat-card-title>
-            </div>
+    <!--TABLA GRANDE CON FOOTER-->
+    <table mat-table class="tablePrin mat-elevation-z8" [dataSource]="dataSource">
 
-            <span class="btngImport">
-                <button type="button" class="btn btngImport" mat-raised-button (click)="fileInput.click()">Importar<img class="imgImport" src="../../../../assets/img/import.png"></button>
-                <input type="file" hidden #fileInput > <!-- (change)="getFile($event)" [disabled]="(dataSolicitudModID !== '0') ? true : false" -->
-            </span>
-        </div>
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef class="selc">
+          <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()"
+            [disabled]="(AccessUser == 'Referente_Planeacion') ? false : true">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(element) : null"
+            [checked]="selection.isSelected(element)"
+            [disabled]="(AccessUser == 'Referente_Planeacion') ? false : true">
+          </mat-checkbox>
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
+      </ng-container>
 
-        <!--TABLA GRANDE CON FOOTER-->
-        <div style="overflow: auto;">
-            <table mat-table class="tablePrin mat-elevation-z8" [dataSource]="dataSource">
-              <ng-container matColumnDef="Vigencia">
-                <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>Vigencia</p>  </th>
-                <td mat-cell *matCellDef="let element"> <p>{{element.pospre}} </p> </td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
-              </ng-container>
-  
-              <ng-container matColumnDef="CDP">
-                <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header><p>CDP</p></th>
-                <td mat-cell *matCellDef="let element"> <p>{{element.mga}}</p></td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
-              </ng-container>
-  
-              <ng-container matColumnDef="FECHA CDP">
-                <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>FECHA CDP</p></th>
-                <td mat-cell *matCellDef="let element"> <p>{{element.auxiliar}}</p>  </td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 8%;">TOTAL GENERAL</p></td>
-              </ng-container>
-  
-              <ng-container matColumnDef="VALOR INICIAL">
-                <th mat-header-cell *matHeaderCellDef class="encabesado"><p>VALOR INICIAL</p></th>
-                <td mat-cell *matCellDef="let element"> <p>{{element.sumaValorAumenta | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado"> <p style="margin-top: 5%;">{{0 | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
-              </ng-container>
-  
-              <ng-container matColumnDef="VALOR ANULACIÓN">
-                <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>VALOR ANULACIÓN</p> </th>
-                <td mat-cell *matCellDef="let element"> <p>{{element.sumaValorAumenta | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado"> <p style="margin-top: 5%;">{{0 | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
-              </ng-container>
-  
-              <ng-container matColumnDef="FECHA ANULACIÓN">
-                <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>FECHA ANULACIÓN</p> </th>
-                <td mat-cell *matCellDef="let element">  <p>{{element.sumaValorDisminuye}} </p></td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
-              </ng-container>
-  
-              <ng-container matColumnDef="VALOR FINAL">
-                <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>VALOR FINAL</p> </th>
-                <td mat-cell *matCellDef="let element"> <p>{{element.diferencia | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 9.5%;">{{0 | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
-              </ng-container>
+      <ng-container matColumnDef="Vigencia">
+        <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header>
+          <p>Vigencia</p>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <p>{{element.vigencia}}</p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
+      </ng-container>
 
-              <ng-container matColumnDef="No. RP">
-                <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>No. RP</p> </th>
-                <td mat-cell *matCellDef="let element"> <p>{{element.diferencia}}</p></td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
-              </ng-container>
+      <ng-container matColumnDef="CDP">
+        <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header>
+          <p>CDP</p>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <p> <a [routerLink]="['/WAPI/PAA/RP', requerimentId,element.cdP_ID]"> {{element.numeroCDP}} </a> </p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
+      </ng-container>
 
-              <ng-container matColumnDef="VALOR RP">
-                <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>VALOR RP</p> </th>
-                <td mat-cell *matCellDef="let element"> <p>{{element.diferencia | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 9.5%;">{{0 | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
-              </ng-container>
+      <ng-container matColumnDef="FECHA CDP">
+        <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header>
+          <p>FECHA CDP</p>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <p>{{element.fechaCDP}}</p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado">
+          <p style="margin-top: 8%;">TOTAL GENERAL</p>
+        </td>
+      </ng-container>
 
-              <ng-container matColumnDef="VALOR DISTRIBUIDO">
-                <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>VALOR DISTRIBUIDO</p> </th>
-                <td mat-cell *matCellDef="let element"> <p>{{element.diferencia | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 9.5%;">{{0 | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
-              </ng-container>
-  
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-              <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-            </table>
-         </div>
-     </div>
+      <ng-container matColumnDef="VALOR INICIAL">
+        <th mat-header-cell *matHeaderCellDef class="encabesado">
+          <p>VALOR INICIAL</p>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <p>{{element.valorinicial | currency:"COP":'symbol-narrow': '1.0-0'}}</p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado">
+          <p style="margin-top: 5%;">{{initialValue | currency:"COP":'symbol-narrow': '1.0-0'}} </p>
+        </td>
+      </ng-container>
 
-     <!-- PAGINACION -->
-    <div class="pagination " [formGroup]="paginationForm">
+      <ng-container matColumnDef="VALOR ANULACIÓN">
+        <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header>
+          <p>VALOR ANULACIÓN</p>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <p>{{element.valorAnulacion | currency:"COP":'symbol-narrow': '1.0-0'}}</p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado">
+          <p style="margin-top: 5%;">{{cancellationValue | currency:"COP":'symbol-narrow': '1.0-0'}} </p>
+        </td>
+      </ng-container>
 
-        <mat-form-field class="take" appearance="legacy" matTooltip="Items por página">
-          <mat-select formControlName="take" (selectionChange)="getPagination()">
-            <mat-option [value]="Item" *ngFor="let Item of pageSizeOptions">{{Item}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <a (click)="firstPage()">
-          <mat-icon matTooltip="Primer página">first_page</mat-icon>
-        </a>
-        <a (click)="prevPage()">
-          <mat-icon matTooltip="Anterior">chevron_left</mat-icon>
-        </a>
-        <mat-form-field class="page" appearance="legacy">
-          <mat-label>página</mat-label>
-          <input matInput value="{{numberPage}}" formControlName="page">
-          <button matSuffix (click)="getPagination()" mat-icon-button>
-            <mat-icon matTooltip="Buscar Página">youtube_searched_for</mat-icon>
-          </button>
-          <mat-hint> {{numberPage}} de {{numberPages}}</mat-hint>
-        </mat-form-field>
-        <a (click)="nextPage()">
-          <mat-icon matTooltip="Siguiente">chevron_right</mat-icon>
-        </a>
-        <a (click)="latestPage()">
-          <mat-icon matTooltip="Ultima página">last_page</mat-icon>
-        </a>
-    
-      </div>
+      <ng-container matColumnDef="FECHA ANULACIÓN">
+        <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header>
+          <p>FECHA ANULACIÓN</p>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <p>{{element.fechaAnulacion}} </p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
+      </ng-container>
 
+      <ng-container matColumnDef="VALOR FINAL">
+        <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header>
+          <p>VALOR FINAL</p>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <p>{{element.valorFinal | currency:"COP":'symbol-narrow': '1.0-0'}}</p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado">
+          <p style="margin-top: 9.5%;">{{finalvalue | currency:"COP":'symbol-narrow': '1.0-0'}} </p>
+        </td>
+      </ng-container>
 
-     <div style="margin-top: 3%;">
-        <mat-card-actions>
-          <button class="buton btn" mat-button mat-icon-button (click)="regresar()">REGRESAR</button>
-        </mat-card-actions>
-      </div>
+      <ng-container matColumnDef="CANTIDAD RP">
+        <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header>
+          <p>CANTIDAD RP</p>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <p>{{element.cantidadRPs}}</p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
+      </ng-container>
+
+      <ng-container matColumnDef="VALOR RP">
+        <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header>
+          <p>VALOR RP</p>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <p>{{element.valorRP | currency:"COP":'symbol-narrow': '1.0-0'}}</p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado">
+          <p style="margin-top: 9.5%;">{{valueRP | currency:"COP":'symbol-narrow': '1.0-0'}} </p>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="VALOR DISTRIBUIDO">
+        <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header>
+          <p>VALOR DISTRIBUIDO</p>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <p>{{element.valorDistribuido | currency:"COP":'symbol-narrow': '1.0-0'}}</p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado">
+          <p style="margin-top: 9.5%;">{{distributedValue | currency:"COP":'symbol-narrow': '1.0-0'}} </p>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="DIFERENCIA">
+        <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header>
+          <p>DIFERENCIA</p>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <p>{{element.diferencia | currency:"COP":'symbol-narrow': '1.0-0'}}</p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="encabesado">
+          <p style="margin-top: 9.5%;">{{diference | currency:"COP":'symbol-narrow': '1.0-0'}} </p>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+    </table>
+  </div>
+
+  <!-- PAGINACION -->
+  <div class="pagination " [formGroup]="paginationForm">
+    <mat-form-field class="take" appearance="legacy" matTooltip="Items por página">
+      <mat-select formControlName="take" (selectionChange)="getPagination()">
+        <mat-option [value]="Item" *ngFor="let Item of pageSizeOptions">{{Item}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <a (click)="firstPage()">
+      <mat-icon matTooltip="Primer página">first_page</mat-icon>
+    </a>
+    <a (click)="prevPage()">
+      <mat-icon matTooltip="Anterior">chevron_left</mat-icon>
+    </a>
+    <mat-form-field class="page" appearance="legacy">
+      <mat-label>página</mat-label>
+      <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page">
+      <button matSuffix (click)="getPagination()" mat-icon-button>
+        <mat-icon matTooltip="Buscar Página">youtube_searched_for</mat-icon>
+      </button>
+      <mat-hint> {{numberPage}} de {{numberPages}}</mat-hint>
+    </mat-form-field>
+    <a (click)="nextPage()">
+      <mat-icon matTooltip="Siguiente">chevron_right</mat-icon>
+    </a>
+    <a (click)="latestPage()">
+      <mat-icon matTooltip="Ultima página">last_page</mat-icon>
+    </a>
+  </div>
+
+  <div style="margin-top: 3%;">
+    <mat-card-actions>
+      <button class="buton btn" mat-button mat-icon-button (click)="regresar()">REGRESAR</button>
+      <button class="buton btn" mat-button mat-icon-button (click)="notifyCDP()">NOTIFICAR</button>
+      <button class="buton btn" mat-button mat-icon-button (click)="enableCDP()">HABILITAR</button>
+    </mat-card-actions>
+  </div>
 
 </div>

@@ -66,10 +66,9 @@
         }
 
         .btn:hover {
-            cursor: pointer;
+            cursor: default;
             transition-duration: 0.3s;
-            color: white;
-            background-color: #185564;
+            background-color: #fff;
         }
 
         .btngImport {
@@ -77,30 +76,14 @@
             margin-bottom: 1%;
             color: #5971aa;
             float: right;
+            margin-right: -2%;
 
             .imgImport {
                 color: #3772FF;
                 margin-left: 2%;
-                width: 28px;
+                width: 30px;
             }
         }
-    .mat-raised-button:not([class*=mat-elevation-z]) {
-        box-shadow: none;
-    }
-
-    .mat-raised-button:hover([class*=mat-elevation-z]) {
-        box-shadow: none;
-
-    }
-    .mat-raised-button {
-        background-color: #fbfbfb;
-    }
-
-    .mat-raised-button:hover {
-        cursor: pointer;
-        transition-duration: 0.3s;
-        background-color: #f3f3f3;
-    }
 
         .btnExcel {
             margin-top: 1%;
@@ -114,6 +97,11 @@
                 color: #35867c;
                 width: 30px;
             }
+        }
+
+        .mat-icon {
+            height: 100%;
+            cursor: pointer;
         }
     }
 
@@ -179,10 +167,11 @@
 
         .FilSear {
             margin-top: 1%;
+            margin-left: 1.5%;
+            margin-right: 1.5%;
             border: 2px solid #185564;
             border-radius: 0.5rem;
             border-color: #185564;
-            width: 6%;
             color: #185564;
         }
     }
@@ -194,6 +183,10 @@
     mat-radio-button {
         margin: 1%;
     }
+
+    .text__opacity {
+        opacity: .6;
+      }
 }
 
 .Fil {
@@ -204,7 +197,6 @@
     border: 2px solid #185564;
     border-radius: 0.5rem;
     border-color: #185564;
-    width: 6%;
     color: #185564;
 }
 
@@ -510,4 +502,9 @@ mat-card-actions {
 
 .file-input {
     display: none;
+  }
+
+  .mat-button:first-child {
+    margin-left: 18.375px;
+    margin-right: 18.375px;
   }

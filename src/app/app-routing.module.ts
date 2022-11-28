@@ -10,6 +10,7 @@ import { AbstractComponent } from './Views/PAA/abstract/abstract.component';
 import { AcquisitionsComponent } from './Views/PAA/acquisitions/acquisitions.component';
 import { RequestTrayComponent } from './Views/PAA/request-tray/request-tray.component';
 import { CDPComponent } from './Views/PAA/requirements/cdp/cdp.component';
+import { RpComponent } from './Views/PAA/requirements/cdp/rp/rp.component';
 import { ModificationRequestComponent } from './Views/PAA/requirements/modification-request/modification-request.component';
 import { ModificationSummaryComponent } from './Views/PAA/requirements/modification-request/modification-summary/modification-summary.component';
 import { PropertiesRequirementComponent } from './Views/PAA/requirements/properties-requirement/properties-requirement.component';
@@ -18,6 +19,7 @@ import { PropertiesRequirementComponent } from './Views/PAA/requirements/propert
 
 
 import { RequirementsComponent } from './Views/PAA/requirements/requirements.component';
+import { StockOrdersComponent } from './Views/PAA/requirements/stock-orders/stock-orders.component';
 import { TaskTrayComponent } from './Views/PAA/task-tray/task-tray.component';
 
 
@@ -38,14 +40,21 @@ const routes: Routes = [
           { path: 'Requerimientos/:data', component: RequirementsComponent, canActivate: [VigilantSessionsGuard] },
           { path: 'PropiedadesRequerimiento/:idPro/:idSol/:idReq/:type', component: PropertiesRequirementComponent, canActivate: [VigilantSessionsGuard] },
           { path: 'Resumen/:data', component: AbstractComponent, canActivate: [VigilantSessionsGuard] },
-          { path: 'CDP/:idPro/:idReq', component: CDPComponent, canActivate: [VigilantSessionsGuard] },
+          {
+            path: 'CDP/:idPro/:idReq', component: CDPComponent, canActivate: [VigilantSessionsGuard],
+            // children: [
+            //   { path: 'RP/:idReq/:idCDP', component: RpComponent, canActivate: [VigilantSessionsGuard], }
+            // ]
+          },
+          { path: 'RP/:idReq/:idCDP', component: RpComponent, canActivate: [VigilantSessionsGuard] },
+          { path: 'StockOrders/:idPro/:idReq', component: StockOrdersComponent, canActivate: [VigilantSessionsGuard] },
           { path: 'SolicitudModificacion/:idPro/:idSol', component: ModificationRequestComponent, canActivate: [VigilantSessionsGuard] },
           { path: 'ResumenModificacion/:idPro/:idSol', component: ModificationSummaryComponent, canActivate: [VigilantSessionsGuard] }
         ]
       }
     ]
   },
- 
+
 
 
 
