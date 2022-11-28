@@ -79,8 +79,9 @@ export class PopUpImportComponent implements OnInit {
           if (status == 404) {
             this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
           } else if (status == 200) {
-            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
+            this.openSnackBar('Guardado Exitosamente', `Solicitud de modificación guardada con éxito.`, 'success');
             this.dialogRef.close();
+            this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           }
 
           this.spinner.hide();
@@ -128,8 +129,8 @@ export class PopUpImportComponent implements OnInit {
           if (status == 404) {
             this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
           } else if (status == 200) {
-            this.openSnackBar('Éxito al Guardar', `Solicitud de Modificación Guardada.`, 'success');
-            this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+            this.openSnackBar('Guardado Exitosamente', `Solicitud de modificación actualizada y guardada con éxito.`, 'success');
+            this.dialogRef.close();
           }
 
           this.spinner.hide();
