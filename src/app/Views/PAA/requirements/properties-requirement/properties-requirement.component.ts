@@ -11,7 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { concat, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { postDataModificationsI, postDataModifRequerimentsI, postDataModReqI, postModificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
-import { dataSourceClasificacionesI, dataSourceRevisionesI, getAllAuxiliarDataI, getAllUNSPSCDataI, getInfoToCreateReqDataI, saveDataEditDatosI, requerimientoI, saveDataEditI, verifyDatacompleteI, verifyDataSaveI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
+import { dataSourceClasificacionesI, dataSourceRevisionesI, getAllAuxiliarDataI, getAllUNSPSCDataI, getInfoToCreateReqDataI, saveDataEditDatosI, requerimientoI, saveDataEditI, verifyDatacompleteI, verifyDataSaveI, getDataTemporalModifiedI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
 import { deleteReviewsI, postReviewsI, putUpdateReviewsI, reviewsI, revisionesI } from 'src/app/Models/ModelsPAA/propertiesRequirement/Reviews/reviews.interface';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
@@ -129,12 +129,36 @@ export class PropertiesRequirementComponent implements OnInit {
   dataCodigos = new Array()
   reviewsUp = new Array()
   reviewsUpTemporal = new Array()
+  reviewsCheck = new Array()
+  reviewsAdd = new Array()
   dependencieDes = new FormControl('');
   idPerfil = 0
   formVerify = {} as verifyDataSaveI;
   formVerifyComplete = {} as verifyDatacompleteI;
   formModificationRequest = {} as saveDataEditI
   viewErrorDiaMax: boolean = false;
+  //valores modififcados
+  numeroRequerimientoModified?: boolean;
+  dependenciaDestinoModified?: boolean;
+  mesEstimadoInicioSeleccionModified?: boolean;
+  mesEstimadoPresentacionModified?: boolean;
+  mesEstmadoInicioEjecucionModified?: boolean;
+  duracionDiasModified?: boolean;
+  duracionMesModified?: boolean;
+  modalidadSeleccionModified?: boolean;
+  actuacionModified?: boolean;
+  numeroDeContratoModified?: boolean;
+  tipoContratoModified?: boolean;
+  perfilModified?: boolean;
+  honorariosModified?: boolean;
+  cantidadDeContratosModified?: boolean;
+  descripcionModified?: boolean;
+  cadenaNueva?: boolean;
+  aumentoModified?: boolean;
+  disminucionModified?: boolean;
+  unspscNew?: boolean;
+
+
   cantMeses: any[] = [
     //  { idMes: '0', nameMes: ' ' },
     { idMes: '1', nameMes: 'Enero' },
@@ -383,7 +407,7 @@ export class PropertiesRequirementComponent implements OnInit {
             this.errorVerifyNumReq = false;
             this.btnViewBtn = false;
           }
-          if (this.statusReq == 'En Modificación' || this.statusReq == 'En Ajuste') {
+          if (this.statusReq == 'En Creación' || this.statusReq == 'En Ajuste') {
             this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
             this.viewVersionMod = true;
             this.viewsReviews = false;
@@ -402,11 +426,22 @@ export class PropertiesRequirementComponent implements OnInit {
           }
 
         } else if (this.AccessUser == 'Referente_Planeacion') {
-          if (this.statusReq == 'En Modificación') {
+          if (this.statusReq == 'En Creación') {
             this.getAllDataTemporal(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
             this.viewVersionMod = true;
             this.viewsReviews = false;
             this.errorVerifyNumReq = false;
+          } else if (this.statusReq == 'En Revisión') {
+            this.getAllReviews(+this.dataRequirementID)
+            this.getDataConsulta(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
+            this.viewVersionMod = false;
+            this.viewsReviews = true;
+            this.errorVerifyNumReq = false;
+            this.btnViewBtn = false;
+            this.viewsSeccionReviews = true;
+            this.viewsFormReviews = false;
+            this.viewTableReviewsEdit = false;
+            this.viewTableReviews = true;
           } else {
             this.getDataConsulta(+this.dataProjectID, +this.dataSolicitudID, +this.dataRequirementID);
             this.viewVersionMod = false;
@@ -420,7 +455,7 @@ export class PropertiesRequirementComponent implements OnInit {
           this.viewsReviews = true;
           this.errorVerifyNumReq = false;
           this.btnViewBtn = true;
-          if (this.statusReq == 'En Modificación') {
+          if (this.statusReq == 'En Creación') {
             this.viewsSeccionReviews = false;
           } else if (this.statusReq == 'En Revisión') {
             this.viewsSeccionReviews = true;
@@ -676,7 +711,7 @@ export class PropertiesRequirementComponent implements OnInit {
     this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].valueChanges.pipe(
       distinctUntilChanged()
     ).subscribe(val => {
-      this.serviceProRequirement.verifyRangeSararial(this.idPerfil, val).subscribe(data => {
+      this.serviceProRequirement.verifyRangeSararial(this.idPerfil, val, 2022).subscribe(data => {
         if (data.data == false) {
           this.errorRangeSararial = true;
           this.msjVerifyRangeSararial = data.message
@@ -688,7 +723,9 @@ export class PropertiesRequirementComponent implements OnInit {
     })
   }
   getDataConsulta(projectId: number, requestId: number, reqTempId: number) {
-    this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
+    // console.log(projectId, requestId, reqTempId)
+    this.serviceProRequirement.getAllDataTemporalModified(projectId, requestId, reqTempId).subscribe(dataTemp => {
+      //console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
       this.reqID = dataTemp.requerimiento.requerimiento_ID
       let dataReviews = dataTemp
@@ -722,7 +759,25 @@ export class PropertiesRequirementComponent implements OnInit {
           valorTotalRew: dataReviews.apropiacionInicial.valorTotal
         })
 
+        this.numeroRequerimientoModified = dataReviews.requerimiento.numeroRequerimientoModified
+        this.dependenciaDestinoModified = dataReviews.requerimiento.dependenciaDestinoModified
+        this.mesEstimadoInicioSeleccionModified = dataReviews.requerimiento.mesEstimadoInicioSeleccionModified
+        this.mesEstimadoPresentacionModified = dataReviews.requerimiento.mesEstimadoPresentacionModified
+        this.mesEstmadoInicioEjecucionModified = dataReviews.requerimiento.mesEstmadoInicioEjecucionModified
+        this.duracionMesModified = dataReviews.requerimiento.duracionMesModified
+        this.duracionDiasModified = dataReviews.requerimiento.duracionDiasModified
+        this.modalidadSeleccionModified = dataReviews.requerimiento.modalidadSeleccionModified
+        this.actuacionModified = dataReviews.requerimiento.actuacionModified
+        this.numeroDeContratoModified = dataReviews.requerimiento.numeroDeContratoModified
+        this.tipoContratoModified = dataReviews.requerimiento.tipoContratoModified
+        this.perfilModified = dataReviews.requerimiento.perfilModified
+        this.honorariosModified = dataReviews.requerimiento.honorariosModified
+        this.cantidadDeContratosModified = dataReviews.requerimiento.cantidadDeContratosModified
+        this.descripcionModified = dataReviews.requerimiento.descripcionModified
+
+        // const dependenciaDestinoModified = dataReviews.requerimiento.dependenciaDestinoModified
         this.cadenasPresupuestalesVerRew = dataReviews.cadenasPresupuestales
+        console.log(this.cadenasPresupuestalesVerRew)
         this.dataSourceClasificacionesRew = new MatTableDataSource(this.cadenasPresupuestalesVerRew)
 
         this.codigosVerRew = dataReviews.codsUNSPSC
@@ -863,9 +918,6 @@ export class PropertiesRequirementComponent implements OnInit {
   }
 
   saveForm() {
-
-
-
     /** traer todos los ID del arreglo dataTableCodigos */
     let idsCodigos = this.dataTableCodigos.map((item) => {
       return item.unspsC_ID = item.unspsC_ID
@@ -967,6 +1019,8 @@ export class PropertiesRequirementComponent implements OnInit {
 
       if (this.typePage == 'Nuevo') {
         this.serviceProRequirement.postVerifyDataSaveI(this.formVerify).subscribe(dataResponse => {
+
+          console.log('response', dataResponse)
           if (dataResponse.status == 200) {
             var stringToStoreCom = JSON.stringify(this.formVerifyComplete);
             ProChartStorage.setItem("formVerifyComplete", stringToStoreCom);
@@ -979,10 +1033,20 @@ export class PropertiesRequirementComponent implements OnInit {
             this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
             this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
           } else {
+            console.log('response', dataResponse)
+
+
             this.openSnackBar('Error', dataResponse.message, 'error');
           }
         }, err => {
-          this.openSnackBar('Error', JSON.stringify(err.error.data), 'error');
+          let Data: string[] = [];
+          Data = Object.values(err.error.data);
+          let errorMessages = '';
+          Data.map(item => {
+            errorMessages += item + '. ';
+          });
+          console.log('err', err)
+          this.openSnackBar('Error', err.error.message, 'error', errorMessages);
         })
       } else {
         this.formModificationRequest.idProyecto = +this.dataProjectID
@@ -1004,6 +1068,7 @@ export class PropertiesRequirementComponent implements OnInit {
         this.formModificationRequest.deleteContraIDs = []
         this.spinner.show();
         this.serviceProRequirement.putModificationRequestSend(this.formModificationRequest).subscribe(dataResponse => {
+          console.log('response', dataResponse)
           if (dataResponse.status == 200) {
             this.loading = true
             this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
@@ -1011,10 +1076,18 @@ export class PropertiesRequirementComponent implements OnInit {
             this.loading = false
 
           } else {
+            console.log('dats', dataResponse)
+            let Data: string[] = [];
+            Data = Object.values(dataResponse.data);
+            let erorsMessages = '';
+            Data.map(item => {
+              erorsMessages += item + '. ';
+            });
             this.openSnackBar('Error', dataResponse.message && JSON.stringify(dataResponse.data), 'error');
           }
           this.spinner.hide();
         }, err => {
+          console.log('err', err)
           this.openSnackBar('Error', JSON.stringify(err.error.data), 'error');
           this.spinner.hide();
         })
@@ -1207,41 +1280,41 @@ export class PropertiesRequirementComponent implements OnInit {
         this.reloadDataTbl(fromStorage, 'codigos');
       }
     }
-    if (type == 'revisiones') {
-      if (this.reviews.controls['area'].value == '' || this.reviews.controls['area'].value == null) {
-        this.errorArea = true;
-      } else if (this.reviews.controls['concepto'].value == '' || this.reviews.controls['concepto'].value == null) {
-        this.errorConcepto = true;
-      } else if (this.reviews.controls['observaciones'].value == '' || this.reviews.controls['observaciones'].value == null) {
-        this.errorObservaciones = true;
-      } else {
-        moment.locale("es");
-        const fechaActual = Date.now();
-        let dataRevision = {} as dataSourceRevisionesI
-        dataRevision.fecha = moment(fechaActual).format("DD-MM-YYYY");;
-        dataRevision.usuario = 'Usuario Prueba';
-        dataRevision.area = this.reviews.controls.area.value;
-        dataRevision.concepto = this.reviews.controls.concepto.value;
-        dataRevision.observacion = this.reviews.controls.observaciones.value || '';
-        dataRevision.revision = false;
-        this.dataTableRevision = dataRevision;
-        this.dataTableRevision['uuid'] = uuid();
+    // if (type == 'revisiones') {
+    //   if (this.reviews.controls['area'].value == '' || this.reviews.controls['area'].value == null) {
+    //     this.errorArea = true;
+    //   } else if (this.reviews.controls['concepto'].value == '' || this.reviews.controls['concepto'].value == null) {
+    //     this.errorConcepto = true;
+    //   } else if (this.reviews.controls['observaciones'].value == '' || this.reviews.controls['observaciones'].value == null) {
+    //     this.errorObservaciones = true;
+    //   } else {
+    //     moment.locale("es");
+    //     const fechaActual = Date.now();
+    //     let dataRevision = {} as dataSourceRevisionesI
+    //     dataRevision.fecha = moment(fechaActual).format("DD-MM-YYYY");;
+    //     dataRevision.usuario = 'Usuario Prueba';
+    //     dataRevision.area = this.reviews.controls.area.value;
+    //     dataRevision.concepto = this.reviews.controls.concepto.value;
+    //     dataRevision.observacion = this.reviews.controls.observaciones.value || '';
+    //     dataRevision.revision = false;
+    //     this.dataTableRevision = dataRevision;
+    //     this.dataTableRevision['uuid'] = uuid();
 
-        let repe = this.dataTableRevisiones.filter(u => u.uuid == this.dataTableRevision['uuid'])
-        if (repe.length != 0) {
-          this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
-          return;
-        }
-        let dtl = this.dataTableRevision
+    //     let repe = this.dataTableRevisiones.filter(u => u.uuid == this.dataTableRevision['uuid'])
+    //     if (repe.length != 0) {
+    //       this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
+    //       return;
+    //     }
+    //     let dtl = this.dataTableRevision
 
-        this.dataTableRevisiones.push(dtl);
-        var stringToStoredtl = JSON.stringify(this.dataTableRevisiones);
-        ProChartStorage.setItem("dataTableRevisiones", stringToStoredtl);
-        var fromStoragedtl = ProChartStorage.getItem("dataTableRevisiones");
-        this.reloadDataTbl(fromStoragedtl, 'revisiones');
-        return;
-      }
-    }
+    //     this.dataTableRevisiones.push(dtl);
+    //     var stringToStoredtl = JSON.stringify(this.dataTableRevisiones);
+    //     ProChartStorage.setItem("dataTableRevisiones", stringToStoredtl);
+    //     var fromStoragedtl = ProChartStorage.getItem("dataTableRevisiones");
+    //     this.reloadDataTbl(fromStoragedtl, 'revisiones');
+    //     return;
+    //   }
+    // }
   }
 
   getCodeUNSPSC(valueToFind: string) {
@@ -1288,36 +1361,113 @@ export class PropertiesRequirementComponent implements OnInit {
     }
   }
 
-
   getAllReviews(Modificacion_ID: number) {
+    this.reviewsUpTemporal = [];
     this.serviceReviews.getAllReviews(Modificacion_ID).subscribe((data: any) => {
       this.dataTableRevisiones = data.data.items;
       if (this.viewTableReviews == true) {
         this.dataSourceRevisionesView = new MatTableDataSource(this.dataTableRevisiones)
       } else if (this.viewTableReviewsEdit == true) {
+        this.reviewsUpTemporal = this.dataTableRevisiones;
         this.dataSourceRevisiones = new MatTableDataSource(this.dataTableRevisiones)
       }
     });
   }
-  btnReviews(idReviews: number, type: string) {
-    this.loading = true;
 
-    if (type == 'Agregar') {
+
+  btnReviews(idReviews: any, type: string) {
+    const fechaActual = Date.now();
+    this.loading = true;
+    if (type == 'add') {
+      if (this.reviews.controls['area'].value == '' || this.reviews.controls['area'].value == null) {
+        this.errorArea = true;
+      } else if (this.reviews.controls['concepto'].value == '' || this.reviews.controls['concepto'].value == null) {
+        this.errorConcepto = true;
+      } else if (this.reviews.controls['observaciones'].value == '' || this.reviews.controls['observaciones'].value == null) {
+        this.errorObservaciones = true;
+      } else {
+        moment.locale("es");
+        const fechaActual = Date.now();
+        let dataRevision = {} as dataSourceRevisionesI
+        dataRevision.revision_ID = uuid();
+        dataRevision.fecha = moment(fechaActual).format("DD-MM-YYYY");;
+        dataRevision.usuario = 'Usuario Prueba';
+        dataRevision.area = this.reviews.controls.area.value;
+        dataRevision.concepto = this.reviews.controls.concepto.value;
+        dataRevision.observacion = this.reviews.controls.observaciones.value || '';
+        dataRevision.revision = false;
+        this.dataTableRevision = dataRevision;
+        let repe = this.dataTableRevisiones.filter(u => u.concepto == dataRevision.concepto && u.area == dataRevision.area && u.observacion == dataRevision.observacion)
+        if (repe.length != 0) {
+          this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
+          return;
+        }
+        let dtl = this.dataTableRevision
+
+        this.dataTableRevisiones.push(dtl);
+        this.dataSourceRevisiones = new MatTableDataSource(this.dataTableRevisiones)
+      }
+    }
+
+    if (type == 'Delete') {
+      if (typeof idReviews !== 'string') {
+        console.log('idReviews numerico')
+        let reviewsDelete = {} as deleteReviewsI
+        reviewsDelete.modificacion_ID = +this.dataRequirementID
+        reviewsDelete.revisiones = [idReviews]
+        this.spinner.show();
+        this.serviceReviews.deleteReviews(reviewsDelete).subscribe((data: any) => {
+
+          if (data.status != 200) {
+            this.openSnackBar('ERROR', data.message, 'error')
+          }
+
+          this.getAllReviews(+this.dataRequirementID)
+
+          this.loading = false;
+          this.spinner.hide();
+        }, error => {
+          this.spinner.hide();
+        });
+      } else {
+        console.log('"No es numérico"')
+        console.log(this.dataTableRevisiones)
+
+        var fromStorage = this.dataTableRevisiones
+        var index = fromStorage.findIndex((x: any) => x.revision_ID === idReviews);
+        if (index >= 0) {
+          this.dataTableRevisiones.splice(index, 1);
+          this.dataSourceRevisiones = new MatTableDataSource(this.dataTableRevisiones)
+        }
+      }
+
+
+
+    }
+    if (type == 'Revisar') {
+      var fromStorage = this.dataTableRevisiones
       let reviewsData = {} as postReviewsI
 
       reviewsData.modificacion_ID = +this.dataRequirementID
-      let reviews = {} as reviewsI
-      reviews.revisado = false
-      reviews.concepto = this.reviews.controls.concepto.value || ''
-      reviews.observacion = this.reviews.controls.observaciones.value || ''
-      reviews.area_ID = this.reviews.controls.area.value.area_ID || 0
-      reviewsData.revisiones = [reviews]
+      for (let i = 0; i < fromStorage.length; i++) {
+        if (typeof fromStorage[i].revision_ID == 'string') {
+          let reviewsData = {} as postReviewsI
+          reviewsData.modificacion_ID = +this.dataRequirementID
+          let reviews = {} as reviewsI
+          reviews.revisado = false
+          reviews.concepto = fromStorage[i].concepto
+          reviews.observacion = fromStorage[i].observacion
+          reviews.area_ID = fromStorage[i].area.area_ID
+          //  this.spinner.show();
+          this.reviewsAdd.push(reviews)
+        }
+      }
+      reviewsData.revisiones = this.reviewsAdd
       this.spinner.show();
       this.serviceReviews.postReviews(reviewsData).subscribe((data: any) => {
         if (data.status != 200) {
           this.openSnackBar('ERROR', data.message, 'error')
           this.loading = false;
-
         } else {
           this.getAllReviews(+this.dataRequirementID)
           this.loading = false;
@@ -1327,72 +1477,53 @@ export class PropertiesRequirementComponent implements OnInit {
         this.spinner.hide();
       });
 
-    }
-    if (type == 'Delete') {
+      if (this.reviewsCheck.length != 0) {
+        console.log('this.reviewsCheck', this.reviewsCheck)
+        let putUpdateReviews = {} as putUpdateReviewsI
+        putUpdateReviews.modificacion_ID = +this.dataRequirementID
+        putUpdateReviews.revisiones = this.reviewsCheck
+        this.spinner.show();
+        this.serviceReviews.putUpdateReviews(putUpdateReviews).subscribe((data: any) => {
+          if (data.status != 200) {
+            this.openSnackBar('ERROR', data.message, 'error')
+          }
+          if (data.status == 200) {
+            this.openSnackBar('Revisado correctamente', data.message, 'success')
+          }
+          this.getAllReviews(+this.dataRequirementID)
+          this.loading = false;
+          this.spinner.hide();
+        }, error => {
+          this.spinner.hide();
+        });
+      } else {
+        console.log('No hay nada')
+      }
 
-      let reviewsDelete = {} as deleteReviewsI
-      reviewsDelete.modificacion_ID = +this.dataRequirementID
-      reviewsDelete.revisiones = [idReviews]
-      this.spinner.show();
-      this.serviceReviews.deleteReviews(reviewsDelete).subscribe((data: any) => {
-
-        if (data.status != 200) {
-          this.openSnackBar('ERROR', data.message, 'error')
-        }
-
-        this.getAllReviews(+this.dataRequirementID)
-
-        this.loading = false;
-        this.spinner.hide();
-      }, error => {
-        this.spinner.hide();
-      });
-
-    }
-    if (type == 'Revisar') {
-
-
-      let putUpdateReviews = {} as putUpdateReviewsI
-      putUpdateReviews.modificacion_ID = +this.dataRequirementID
-      putUpdateReviews.revisiones = this.reviewsUpTemporal
-      this.spinner.show();
-      this.serviceReviews.putUpdateReviews(putUpdateReviews).subscribe((data: any) => {
-        if (data.status != 200) {
-          this.openSnackBar('ERROR', data.message, 'error')
-        }
-        if (data.status == 200) {
-          this.openSnackBar('Revisado correctamente', data.message, 'success')
-
-        }
-        this.getAllReviews(+this.dataRequirementID)
-        this.loading = false;
-        this.spinner.hide();
-      }, error => {
-        this.spinner.hide();
-      });
       this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
     }
 
   }
   showOptions(revisado: any, objectReview: any) {
-
-    let objectReviews = {} as revisionesI
-    objectReviews.revisado = revisado
-    objectReviews.revision_ID = objectReview
-    if (this.reviewsUpTemporal.length > 0) {
-      this.reviewsUpTemporal.forEach((element: any) => {
-        let index = this.reviewsUpTemporal.findIndex((x: any) => x.revision_ID === objectReviews.revision_ID);
-        if (index >= 0) {
-          this.reviewsUpTemporal.splice(index, 1);
-        }
-        this.reviewsUpTemporal.unshift(objectReviews)
-      });
+    if (typeof objectReview !== 'string') {
+      let objectReviews = {} as revisionesI
+      objectReviews.revisado = revisado
+      objectReviews.revision_ID = objectReview
+      if (this.reviewsCheck.length > 0) {
+        this.reviewsCheck.forEach((element: any) => {
+          let index = this.reviewsCheck.findIndex((x: any) => x.revision_ID === objectReviews.revision_ID);
+          if (index >= 0) {
+            this.reviewsCheck.splice(index, 1);
+          }
+          this.reviewsCheck.unshift(objectReviews)
+        });
+      } else {
+        this.reviewsCheck.push(objectReviews)
+      }
+      console.log('reviewsCheck', this.reviewsCheck)
     } else {
-      this.reviewsUpTemporal.push(objectReviews)
+      console.log('No hace nada')
     }
-
-
-
 
   }
 
@@ -1400,13 +1531,13 @@ export class PropertiesRequirementComponent implements OnInit {
     // actualizamos el index seleccionado
     this.selectedIndex = event.index;
     if (event.index == 1) {
-      this.getDataAprobad(+this.dataProjectID, +this.dataRequirementID);
+      this.getDataAprobad(+this.dataProjectID, +this.reqID);
     }
   }
   //Metodo para llamar alertas
-  openSnackBar(title: string, message: string, type: string) {
+  openSnackBar(title: string, message: string, type: string, message2?: string) {
     this.snackBar.openFromComponent(AlertsComponent, {
-      data: { title, message, type },
+      data: { title, message, message2, type },
       horizontalPosition: 'center',
       verticalPosition: 'top',
       panelClass: [type],

@@ -126,6 +126,11 @@
                     background-color: white;
                     color:  gray;
                 }
+                .contDataModified {
+                    border: 2px solid orange;
+                    background-color: white;
+                    color:  gray;
+                }
 
                 ::ng-deep .mat-form-field-flex>.mat-form-field-infix {
                     padding: 0.2em 0px !important;
@@ -265,6 +270,10 @@ table {
         text-align: center;
         font-size: 11px;
     }
+    .contDataModified {
+        border: 2px solid orange;
+        background-color: white;
+    }
     mat-table {
       max-height: 500px;
     }
@@ -343,6 +352,7 @@ table {
     overflow: auto;  
     margin-top: -4%;
 }
+
 //AJUSTES A LOS ICONOS DE LAS TABLAS Y VERSION ACTUAL
     .btnActions {
         border-color: #185564;
