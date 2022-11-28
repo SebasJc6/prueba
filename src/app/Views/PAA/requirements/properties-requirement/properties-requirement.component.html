@@ -60,11 +60,12 @@
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Dependencia origen de los recursos</p>
-                                        <input class="contData contDataDisabled" formControlName="dependenciaOri">
+                                        <input class="contData contDataDisabled" formControlName="dependenciaOri"  >
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Número de requerimiento</p>
-                                        <input class="contData" formControlName="numeroReq">
+                                        <input class="contData" formControlName="numeroReq"
+                                        [ngClass]="{'contDataDisabled' : numReqDisabled == true }">
                                         <mat-error *ngIf="errorNumReq">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
@@ -884,7 +885,7 @@
         </mat-tab>
         <mat-tab *ngIf="viewsReviews">
             <ng-template mat-tab-label>
-                Versión Revision
+                Versión Revisión
                 <mat-icon class="example-tab-icon">insert_drive_file</mat-icon>
             </ng-template>
             <form [formGroup]="versionReviewForm">
