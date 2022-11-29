@@ -142,11 +142,13 @@ table {
         text-align: center;
         font-size: 12px;
         font-weight: bold;
+        border-left: 1px solid #7497a0;
     }
 
     td {
         text-align: center;
         font-size: 11px;
+        border-left: 1px solid #e0e0e0;
     }
     mat-table {
       max-height: 500px;

@@ -157,7 +157,7 @@ export class PropertiesRequirementComponent implements OnInit {
   aumentoModified?: boolean;
   disminucionModified?: boolean;
   unspscNew?: boolean;
-
+  numReqDisabled: boolean = true;
 
   cantMeses: any[] = [
     //  { idMes: '0', nameMes: ' ' },
@@ -371,7 +371,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
     this.serviceModRequest.getModificationRequestByRequest(+this.dataProjectID, +this.dataSolicitudID).subscribe((data) => {
-
+      console.log('dtaIfno', data);
       this.statusReq = data.data.solicitud_Estado || '';
 
       if (this.typePage == 'Vista') {
@@ -381,6 +381,7 @@ export class PropertiesRequirementComponent implements OnInit {
         this.getDataAprobad(+this.dataProjectID, +this.dataRequirementID);
 
       } else if (this.typePage == 'Nuevo') {
+        this.numReqDisabled = false;
         if (this.AccessUser != 'Revisor') {
           this.dataRequirementNum = this.dataRequirementID;
           this.viewBtnVersion = false;
@@ -725,7 +726,7 @@ export class PropertiesRequirementComponent implements OnInit {
   getDataConsulta(projectId: number, requestId: number, reqTempId: number) {
     // console.log(projectId, requestId, reqTempId)
     this.serviceProRequirement.getAllDataTemporalModified(projectId, requestId, reqTempId).subscribe(dataTemp => {
-      //console.log(dataTemp)
+      console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
       this.reqID = dataTemp.requerimiento.requerimiento_ID
       let dataReviews = dataTemp
@@ -791,6 +792,7 @@ export class PropertiesRequirementComponent implements OnInit {
   }
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number) {
     this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
+    //  console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
 
       this.reqID = dataTemp.requerimiento.requerimiento_ID
@@ -815,6 +817,7 @@ export class PropertiesRequirementComponent implements OnInit {
           codigoPro: dataTemp.proyecto.codigoProyecto,
           dependenciaOri: dataTemp.proyecto.dependenciaOrigen
         })
+        this.proRequirementeForm.controls.infoBasicaForm.controls.numeroReq.disable()
         this.onSelectionChange(dataTemp.requerimiento.actuacion.actuacion_ID, 'actContractual')
         this.errorNumReq = false
         this.errorVerifyNumReq = false
@@ -1395,7 +1398,11 @@ export class PropertiesRequirementComponent implements OnInit {
         dataRevision.area = this.reviews.controls.area.value;
         dataRevision.concepto = this.reviews.controls.concepto.value;
         dataRevision.observacion = this.reviews.controls.observaciones.value || '';
-        dataRevision.revision = false;
+        if (this.reviews.controls.concepto.value == 'Aprobado') {
+          dataRevision.revision = true;
+        } else {
+          dataRevision.revision = false;
+        }
         this.dataTableRevision = dataRevision;
         let repe = this.dataTableRevisiones.filter(u => u.concepto == dataRevision.concepto && u.area == dataRevision.area && u.observacion == dataRevision.observacion)
         if (repe.length != 0) {

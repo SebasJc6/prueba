@@ -47,6 +47,7 @@ export class SidenavListComponent implements OnInit {
     setTimeout(() => {
       this.router.navigate([`/`]);
       this.spinner.hide();
+      localStorage.clear();
     }, 1700);
   }
   
