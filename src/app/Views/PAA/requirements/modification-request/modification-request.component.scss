@@ -436,6 +436,50 @@
     .nameFile {
         width: 90%;
     }
+
+    .footerTable,
+    .mat-header-cell,
+    th {
+        background-color: #185564;
+        color: white;
+        text-align: left;
+        font-size: 12px;
+        font-weight: bold;
+        border-left: 1px solid #7497a0;
+
+        div {
+            align-items: center;
+
+            mat-icon {
+                font-size: 20px;
+                color: white;
+            }
+        }
+    }
+
+    td {
+        text-align: left;
+        font-size: 11px;
+        border-left: 1px solid #e0e0e0;
+
+        button {
+            margin-right: 35%;
+            font-size: 11px;
+
+        }
+
+        div {
+            display: inline-flex;
+
+            .btnActions {
+                border-color: #185564;
+                border: 2px solid #185564;
+                color: #185564;
+                border-radius: 0.5rem;
+                cursor: pointer;
+            }
+        }
+    }
 }
 
 mat-card-actions {
