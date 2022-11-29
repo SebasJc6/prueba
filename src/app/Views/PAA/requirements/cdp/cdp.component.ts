@@ -152,7 +152,13 @@ export class CDPComponent implements OnInit {
 
   //Notificar CDPs
   notifyCDP() {
+   this.serviceCdps.putLockCDPs(Number(this.requerimentId)).subscribe(response => {
+    console.log(response);
+    
+   }, error => {
+    console.log(error);
 
+   });
   }
 
   

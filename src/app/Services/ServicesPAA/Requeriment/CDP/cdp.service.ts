@@ -22,12 +22,12 @@ export class CDPService {
 
 
   putLockCDPs(id_requeriment: number): Observable<any> {
-    let dir = `${this.url}CDPs/${id_requeriment}/Lock`;
+    let dir = `${this.url}${id_requeriment}/Lock`;
     return this.http.put(dir, null);
   }
 
   putEnableCDPs(id_requeriment: number, body: number[]): Observable<any> {
-    let dir = `${this.url}CDPs/${id_requeriment}/Enable`;
+    let dir = `${this.url}${id_requeriment}/Enable`;
     return this.http.put(dir, body);
   }
 }

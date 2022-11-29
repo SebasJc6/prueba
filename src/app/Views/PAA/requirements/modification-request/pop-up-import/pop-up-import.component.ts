@@ -66,7 +66,9 @@ export class PopUpImportComponent implements OnInit {
           let Data: string[] = [];
 
           if (status == 404) {
-            Data = Object.values(res.data);
+            if (res.data != null) {
+              Data = Object.values(res.data);
+            }
           } else if (status == 200) {
             this.idSolicitudImport = res.data.idSolicitud;
           }
@@ -106,19 +108,20 @@ export class PopUpImportComponent implements OnInit {
           
           this.spinner.hide();
         });
+
       } else if (this.id_request !== 0) {
         //Se ejecuta el endpoint de actualizar import
         this.spinner.show();
         this.serviceModRequest.importFilePut(this.id_project, this.id_request, FILE).subscribe(res => {
 
-          console.log(res);
-          
           let message = res.message;
           let status = res.status;
           let Data: string[] = [];
 
           if (status == 404) {
-            Data = Object.values(res.data);
+            if (res.data != null) {
+              Data = Object.values(res.data);
+            }
           }
 
           let erorsMessages = '';
