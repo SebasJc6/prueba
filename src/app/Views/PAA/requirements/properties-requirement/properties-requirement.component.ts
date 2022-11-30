@@ -198,7 +198,7 @@ export class PropertiesRequirementComponent implements OnInit {
       descripcion: new FormControl()
     }),
     clasPresFinaForm: this.formbuilder.group({
-      numModificacion: new FormControl({ value: '', disabled: true }),
+      numModificacion: new FormControl({ value: 0, disabled: true }),
       mes: new FormControl(),
       anioVigRecursos: new FormControl(),
       auxiliar: new FormControl(),
@@ -794,11 +794,11 @@ export class PropertiesRequirementComponent implements OnInit {
   }
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number) {
     this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
-      //  console.log(dataTemp)
+        console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
 
       this.reqID = dataTemp.requerimiento.requerimiento_ID
-
+      this.proRequirementeForm.controls.clasPresFinaForm.controls.numModificacion.setValue(dataTemp.requerimiento.numeroModificacion)
       if (dataTemp != null) {
         this.proRequirementeForm.controls.infoBasicaForm.setValue({
           numeroReq: dataTemp.requerimiento.numeroRequerimiento,
@@ -1432,6 +1432,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
         this.dataTableRevisiones.push(dtl);
         this.dataSourceRevisiones = new MatTableDataSource(this.dataTableRevisiones)
+        this.reviews.reset();
       }
     }
 

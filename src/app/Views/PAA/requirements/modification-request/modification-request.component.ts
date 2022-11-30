@@ -31,6 +31,7 @@ import Swal from 'sweetalert2';
 })
 
 export class ModificationRequestComponent implements OnInit {
+
   viewFilter: boolean = true;
   viewOrder: boolean = false;
   dataProjectID: string = '';
@@ -64,6 +65,7 @@ export class ModificationRequestComponent implements OnInit {
   viewsCalApr: any;
   viewsFiles: any;
   rtnFile: boolean = false;
+
 
   filterModificationRequest = {} as filterModificationRequestI;
   filterForm = new FormGroup({
@@ -101,6 +103,8 @@ export class ModificationRequestComponent implements OnInit {
   fileName: string = '';
   base64File: string = '';
   blockSave: string = '';
+  filterFileName: string = '';
+
   dataFiles: any;
   useNewFile: boolean = false;
   //Propiedad para guardar contrapartidas y requerimientos que se muestran en la tabla
@@ -153,7 +157,7 @@ export class ModificationRequestComponent implements OnInit {
   constructor(
     private serviceFiles: FilesService,
     private activeRoute: ActivatedRoute,
-    public router: Router, 
+    public router: Router,
     public dialog: MatDialog,
     public serviceModRequest: ModificationRequestService,
     private snackBar: MatSnackBar,
@@ -270,7 +274,7 @@ export class ModificationRequestComponent implements OnInit {
   }
 
   //Función que obtiene las vigencias
-  getAllValidiy(id_request: number){
+  getAllValidiy(id_request: number) {
     this.spinner.show();
     this.serviceModRequest.getValidityByRequest(id_request).subscribe(res => {
       this.ArrayValidity = res.data;
@@ -281,8 +285,8 @@ export class ModificationRequestComponent implements OnInit {
     });
   }
 
-//Función que se ejecuta al seleccionar un valor en Vigencias
-  selectValidity(){
+  //Función que se ejecuta al seleccionar un valor en Vigencias
+  selectValidity() {
     this.getModificationRequestByRequestId(+this.dataSolicitudModID, this.dataValidity, this.filterModificationRequest);
   }
 
@@ -534,7 +538,7 @@ export class ModificationRequestComponent implements OnInit {
 
 
   removeDataTbl(valueToFind: any) {
-    
+
     //Alerta de confirmación para Eliminar elemento
     Swal.fire({
       customClass: {
@@ -699,7 +703,7 @@ export class ModificationRequestComponent implements OnInit {
       this.ArrayDataStorage = objectsFromStorageData;
     }
     let classifications: any[] = objectsFromStorage.clasificaciones;
-    
+
     let dataTable = {} as dateTableModificationI;
     dataTable.valorAumenta = 0;
     dataTable.valorDisminuye = 0;
@@ -718,7 +722,7 @@ export class ModificationRequestComponent implements OnInit {
     dataTable.numeroContrato = objectsFromStorage.infoBasica.numeroContrato || 0;
     dataTable.saldoRequerimiento = objectsFromStorage.infoBasica.saldoRequerimiento || 0;
     dataTable.honorarios = objectsFromStorage.infoBasica.valorHonMes || 0;
-    
+
     if (objectsFromStorage.infoBasica.actuacionCont != 1) {
       dataTable.tipoContrato = objectsFromStorage.infoBasica.tipoCont;
       dataTable.perfil = objectsFromStorage.infoBasica.perfil;
@@ -743,11 +747,11 @@ export class ModificationRequestComponent implements OnInit {
         this.addDataTbl();
       }, 2000);
     });
-    
+
     let clasificaciones: any[] = objectsFromStorage.clasificaciones;
     clasificaciones.map(item => {
       dataTable.fuente = item.fuente.fuente_ID;
-    });    
+    });
   }
 
   getCodeSources() {
@@ -925,7 +929,10 @@ export class ModificationRequestComponent implements OnInit {
   });
 
   onFileSelected(event: any) {
+    this.fileName = ''
+    this.base64File = ''
     const captureFile: File = event.target.files[0]
+    this.filterFileName = '';
     this.extraerBase64(captureFile).then((archivo: any) => {
       this.fileName = archivo.nameFile;
       this.base64File = archivo.base;
@@ -934,12 +941,12 @@ export class ModificationRequestComponent implements OnInit {
       this.loadTableFiles();
       this.useNewFile = true;
     });
+
   }
 
 
   loadTableFiles() {
     // this.arrayFile = [] ;
-
     let viewTableFiles = {} as viewTableFilesI;
 
     if (this.dataSolicitudModID == '0') {
@@ -955,7 +962,6 @@ export class ModificationRequestComponent implements OnInit {
       // });
       this.arrayFile.push(viewTableFiles);
       this.dataSourceAttachedFiles = new MatTableDataSource(this.arrayFile);
-
     } else {
       if (this.viewsFiles.length > 0) {
         if (this.fileName == '') {
@@ -966,7 +972,6 @@ export class ModificationRequestComponent implements OnInit {
             inFiles.fileAsBase64 = '';
             this.arrayFile.push(inFiles);
             this.dataSourceAttachedFiles = new MatTableDataSource(this.arrayFile);
-
           });
         } else {
           viewTableFiles.blobName = uuid();
@@ -974,7 +979,6 @@ export class ModificationRequestComponent implements OnInit {
           viewTableFiles.fileAsBase64 = this.base64File;
           this.arrayFile.push(viewTableFiles);
           this.dataSourceAttachedFiles = new MatTableDataSource(this.arrayFile);
-
         }
         //this.arrayFile.push(viewTableFiles);
       } else {
@@ -1013,6 +1017,7 @@ export class ModificationRequestComponent implements OnInit {
     formPost.tags = tags;
     formPost.archivos = files;
 
+
     this.serviceFiles.postFile(formPost).subscribe(res => {
       if (res.status == 200) {
         // this.openSnackBar('Guardado Exitosamente', `El archivos Guardados.`, 'success');
@@ -1039,6 +1044,7 @@ export class ModificationRequestComponent implements OnInit {
 
 
   deleteFile(File: any) {
+
     this.spinner.show();
     var index = this.arrayFile.findIndex((x: any) => x.blobName === File.blobName);
 
@@ -1059,6 +1065,7 @@ export class ModificationRequestComponent implements OnInit {
       this.arrayFile.splice(index, 1);
       this.dataSourceAttachedFiles = new MatTableDataSource(this.arrayFile);
       this.spinner.hide();
+
     }
   }
 
@@ -1086,7 +1093,7 @@ export class ModificationRequestComponent implements OnInit {
     const source = `data:application/pdf;base64,${base64String}`;
     const link = document.createElement("a");
     link.href = source;
-    link.download = `${fileName}.pdf`
+    link.download = `${fileName}`
     link.click();
   }
 
@@ -1115,12 +1122,12 @@ export class ModificationRequestComponent implements OnInit {
       this.spinner.show();
       this.serviceModRequest.postModificationRequestSave(postDataSave).subscribe(res => {
         let idSolicitud = res.data.idSolicitud;
-        
+
         if (res.status == 200) {
           //guardar archivos
           let filesUp: boolean = this.rtnFile
-            this.spinner.hide();
-            this.openSnackBar('Guardado Exitosamente', `Solicitud de modificación guardada con éxito.`, 'success');
+          this.spinner.hide();
+          this.openSnackBar('Guardado Exitosamente', `Solicitud de modificación guardada con éxito.`, 'success');
           //Elimación de los registros en LocalStorage
           ProChartStorage.removeItem(`dataTableItems${this.dataProjectID}${this.dataSolicitudModID}`);
           ProChartStorage.removeItem(`arrayDatos${this.dataProjectID}${this.dataSolicitudModID}`);
@@ -1295,7 +1302,7 @@ export class ModificationRequestComponent implements OnInit {
             } else if (res.status == 400) {
               let Data: string[] = [];
               let erorsMessages = '';
-              if (res.data != null) {   
+              if (res.data != null) {
                 Data = Object.values(res.data);
                 Data.map(item => {
                   erorsMessages += item + '. ';
@@ -1361,7 +1368,7 @@ export class ModificationRequestComponent implements OnInit {
     } else {
       this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `El Proyecto debe estar en estado "Anteproyecto" ó "En Ejecución".`);
     }
-    
+
   }
 
 
@@ -1474,13 +1481,13 @@ export class ModificationRequestComponent implements OnInit {
       key = String.fromCharCode(key);
     }
     const regex = /[0-9]|\./;
-     if (!regex.test(key)) {
+    if (!regex.test(key)) {
       event.returnValue = false;
-       if (event.preventDefault) {
+      if (event.preventDefault) {
         event.preventDefault();
-       }
-     }
+      }
     }
+  }
 }
 
 

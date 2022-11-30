@@ -396,6 +396,8 @@
 
     </div>
 
+    <!-- archivos -->
+
     <div class="attachedFiles">
         <p>Archivos adjuntos</p>
 
@@ -404,7 +406,7 @@
             <mat-icon *ngIf="AccessUser == 'Referente_PAA'" mat-icon-button class="btnActions"
                 matTooltip="Adjunta los archivos" (click)="fileUpload.click()">attach_file</mat-icon>
             &nbsp;<strong>{{ blockSave }}</strong>
-            <input type="file" accept="application/pdf"
+            <input type="file" accept="application/pdf" [(ngModel)]="filterFileName"
                 class="file-input" (change)="onFileSelected($event)" #fileUpload />
         </div>
 
@@ -431,11 +433,7 @@
                     </div>
 
                 </td>
-
             </ng-container>
-
-
-
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="nameFile">
                     Documentos
