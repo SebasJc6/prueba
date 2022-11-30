@@ -158,6 +158,7 @@ export class PropertiesRequirementComponent implements OnInit {
   disminucionModified?: boolean;
   unspscNew?: boolean;
   numReqDisabled: boolean = true;
+  mgp: string = '';
 
   cantMeses: any[] = [
     //  { idMes: '0', nameMes: ' ' },
@@ -360,6 +361,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.mgp = sessionStorage.getItem('mgp') || '';
     //Obtener token para manejar los roles
     this.AccessUser = this.authService.getRolUser();
 
@@ -371,7 +373,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
     this.serviceModRequest.getModificationRequestByRequest(+this.dataProjectID, +this.dataSolicitudID).subscribe((data) => {
-      console.log('dtaIfno', data);
+     // console.log('dtaIfno', data);
       this.statusReq = data.data.solicitud_Estado || '';
 
       if (this.typePage == 'Vista') {
