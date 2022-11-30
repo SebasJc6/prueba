@@ -1042,7 +1042,7 @@ export class PropertiesRequirementComponent implements OnInit {
             ProChartStorage.removeItem('dataTableClacificaciones')
             ProChartStorage.removeItem('dataTableCodigos')
             ProChartStorage.removeItem('dataTableRevisiones')
-            this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
+            this.openSnackBar('Se ha creado correctamente', dataResponse.message, 'success');
             if (sessionStorage.getItem('mga') == 'taskTray') {
               this.router.navigate(['/WAPI/PAA/BandejaDeTareas']);
             } else {
