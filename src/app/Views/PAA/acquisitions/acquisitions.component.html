@@ -30,9 +30,11 @@
       </button>
 
       <button class="btnExcel btn" mat-button>
-        <mat-icon class="btnActions mat-icon" matTooltip="Importar CDP/RP">
+        <mat-icon class="btnActions mat-icon"  matTooltip="Importar CDP/RP">
           attach_money
         </mat-icon>
+        <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                class="file-input" (change)="onFileSelected($event)" #importCDPsRPs />
       </button>
 
     </div>

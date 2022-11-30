@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { dataCDPsI, filterCDPsI } from 'src/app/Models/ModelsPAA/Requeriment/cdp';
+import { dataCDPsI, filterCDPsI, putLockCDPsI } from 'src/app/Models/ModelsPAA/Requeriment/cdp';
 
 @Injectable({
   providedIn: 'root'
@@ -21,13 +21,24 @@ export class CDPService {
   }
 
 
-  putLockCDPs(id_requeriment: number): Observable<any> {
+  putLockCDPs(id_requeriment: number): Observable<putLockCDPsI> {
     let dir = `${this.url}${id_requeriment}/Lock`;
-    return this.http.put(dir, null);
+    return this.http.put<putLockCDPsI>(dir, null);
   }
 
   putEnableCDPs(id_requeriment: number, body: number[]): Observable<any> {
     let dir = `${this.url}${id_requeriment}/Enable`;
     return this.http.put(dir, body);
+  }
+
+  postCDPs(file : any): Observable<any> {
+    let dir = `${this.url}`;
+    return this.http.post(dir, file);
+  }
+
+
+  patchCDPs(file : any): Observable<any> {
+    let dir = `${this.url}`;
+    return this.http.patch(dir, file);
   }
 }

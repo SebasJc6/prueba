@@ -18,7 +18,7 @@
                 <button type="button" mat-raised-button class="btngImport" (click)="fileInput.click()">Importar<img class="imgImport"
                         src="../../../../assets/img/import.png"></button>
                 <input type="file" hidden 
-                    accept="application/xlsx"
+                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     (change)="getFile($event)" #fileInput>
             </span>
 
