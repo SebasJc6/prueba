@@ -373,7 +373,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
     this.serviceModRequest.getModificationRequestByRequest(+this.dataProjectID, +this.dataSolicitudID).subscribe((data) => {
-     // console.log('dtaIfno', data);
+      // console.log('dtaIfno', data);
       this.statusReq = data.data.solicitud_Estado || '';
 
       if (this.typePage == 'Vista') {
@@ -911,7 +911,9 @@ export class PropertiesRequirementComponent implements OnInit {
     })
   }
   cancel() {
-    if (this.typePage == 'Nuevo') {
+    if (sessionStorage.getItem('mga') == 'taskTray') {
+      this.router.navigate(['/WAPI/PAA/BandejaDeTareas']);
+    } else if (this.typePage == 'Nuevo') {
       this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
     } else if (this.typePage == 'Editar') {
       this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
@@ -1041,7 +1043,12 @@ export class PropertiesRequirementComponent implements OnInit {
             ProChartStorage.removeItem('dataTableCodigos')
             ProChartStorage.removeItem('dataTableRevisiones')
             this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
-            this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+            if (sessionStorage.getItem('mga') == 'taskTray') {
+              this.router.navigate(['/WAPI/PAA/BandejaDeTareas']);
+            } else {
+              this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+
+            }
           } else {
             console.log('response', dataResponse)
 
@@ -1082,7 +1089,12 @@ export class PropertiesRequirementComponent implements OnInit {
           if (dataResponse.status == 200) {
             this.loading = true
             this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
-            this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+            if (sessionStorage.getItem('mga') == 'taskTray') {
+              this.router.navigate(['/WAPI/PAA/BandejaDeTareas']);
+            } else {
+              this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+
+            }
             this.loading = false
 
           } else {
@@ -1514,7 +1526,12 @@ export class PropertiesRequirementComponent implements OnInit {
         console.log('No hay nada')
       }
 
-      this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+      if (sessionStorage.getItem('mga') == 'taskTray') {
+        this.router.navigate(['/WAPI/PAA/BandejaDeTareas']);
+      } else {
+        this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+
+      }
     }
 
   }

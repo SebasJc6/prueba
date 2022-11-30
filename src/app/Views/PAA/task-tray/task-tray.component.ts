@@ -153,6 +153,7 @@ export class TaskTrayComponent implements OnInit {
   //Funcionalidad del botón Requerimiento
   propertiesRequirement(numReq: number,projectId:number,solId:number) {
     this.router.navigate(['/WAPI/PAA/PropiedadesRequerimiento/' + projectId + '/'+solId+'/' + numReq+ '/Ajuste'])
+    sessionStorage.setItem('mgp', 'taskTray');
   }
   
 
