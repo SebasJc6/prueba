@@ -1457,6 +1457,8 @@ export class ModificationRequestComponent implements OnInit {
       this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
     } else if (this.StatusRequest == 'Rechazada') {
       this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+    } else if (this.AccessUser === 'Revisor') {
+      this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
     }
   }
 
