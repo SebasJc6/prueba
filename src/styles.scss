@@ -146,6 +146,10 @@ $custom-typography: mat-typography-config($font-family: '"Montserrat", sans-seri
   color: #F3561F !important;
 }
 
+.mat-creacionChips {
+  color: #336eee !important;
+}
+
 .mat-modificationChips[disabled] {
   background-color: rgba(0, 0, 0, 0.12) !important;
 }

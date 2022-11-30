@@ -133,7 +133,7 @@ export class PopUpImportComponent implements OnInit {
             this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
           } else if (status == 200) {
             this.openSnackBar('Guardado Exitosamente', `Solicitud de modificación actualizada y guardada con éxito.`, 'success');
-            this.dialogRef.close();
+            this.router.navigate([`/WAPI/PAA/SolicitudModificacion/${this.id_project}/${this.id_request}`]);
           }
 
           this.spinner.hide();
