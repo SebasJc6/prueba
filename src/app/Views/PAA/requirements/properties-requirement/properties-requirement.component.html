@@ -43,11 +43,23 @@
         <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeSolicitudes']">
           &nbsp;>&nbsp;Modificaciones solicitadas
         </a>
+        <a class="href"  [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
+            &nbsp;>&nbsp;Solicitud modificación
+        </a>
         <a class="href selected">
             &nbsp;>&nbsp;Requerimiento {{dataRequirementNum}}
         </a>
       </div>
       <!-- desde bandeja de tareas -->
+      <div class="mgp" *ngIf="mgp === 'taskTray'">
+        Plan Anual de Adquisiciones
+        <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeTareas']">
+          &nbsp;>&nbsp;Modificaciones solicitadas
+        </a>
+        <a class="href selected">
+            &nbsp;>&nbsp;Requerimiento {{dataRequirementNum}}
+        </a>
+      </div>
 
     <!--BOTON QUE CARGA VERSION ACTUAL-->
     <div *ngIf="viewBtnVersion">
