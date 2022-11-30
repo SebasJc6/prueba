@@ -56,33 +56,33 @@
 
                         <mat-expansion-panel class="menu-panel">
                             <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    <img src="assets/img/PAA.png" alt="PAA">
+                                <mat-panel-title style="margin-left: -2%;">
+                                    <img src="assets/img/PAA.png" alt="PAA">&nbsp;
                                     <span class="title">Plan anual de adquisisiones (PAA)</span>
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div>
                                 <button mat-button class="menu-button" [routerLink]="['PAA/Adquisiciones']"
                                     (click)="sidebar.toggle()">
-                                    <span>PAA</span>
+                                    &nbsp;<span>- PAA</span>
                                 </button>
                             </div>
                             <div *ngIf="AccessUser === 'Referente_PAA'">
                                 <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeTareas']"
                                     (click)="sidebar.toggle()">
-                                    <span>Bandeja de tareas</span>
+                                    &nbsp;<span>- Bandeja de tareas</span>
                                 </button>
                             </div>
                             <div>
                                 <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeSolicitudes']"
                                     (click)="sidebar.toggle()">
-                                    <span>Modificaciones solicitadas</span>
+                                    &nbsp;<span>- Modificaciones solicitadas</span>
                                 </button>
                             </div>
                             <div>
                                 <button mat-button class="menu-button" *ngIf="false" disabled="true" [routerLink]="['']"
                                     (click)="sidebar.toggle()">
-                                    <span>Reportes</span>
+                                    &nbsp;<span>- Reportes</span>
                                 </button>
                             </div>
                         </mat-expansion-panel>
