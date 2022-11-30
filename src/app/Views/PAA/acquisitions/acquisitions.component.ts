@@ -173,13 +173,13 @@ export class AcquisitionsComponent implements OnInit {
     let fil : File = file[0];
 
     if (file != null) {
-        this.importFileBase64(fil);
+        this.importFile(fil);
     }
   }
 
 
   //Importar Documento de CDPs/RPs
-  importFileBase64(file : any) {
+  importFile(file : any) {
     this.serviceCdps.postCDPs(file).subscribe(response => {
       console.log('Res: ', response);
       

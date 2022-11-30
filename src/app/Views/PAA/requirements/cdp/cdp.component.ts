@@ -162,7 +162,7 @@ export class CDPComponent implements OnInit {
       
       if (response.status === 200) {
         if (response.data.hasBlockedAnyCDP) {
-          this.openSnackBar('Notificado Exitosamente', `CDPs bloqueados y notificados con éxito.`, 'success');
+          this.openSnackBar('CDPs Notificados Exitosamente', `Los CDPs "${response.data.cdPs}" han sido bloqueados y notificados con éxito.`, 'success');
         } else {
           this.openSnackBar('Lo sentimos', `No fue posible notificar los CDPs.`, 'error');
         }
@@ -189,9 +189,22 @@ export class CDPComponent implements OnInit {
       });
 
       this.spinner.show();
-      this.serviceCdps.putEnableCDPs(Number(this.requerimentId), ARRAY_CDPS).subscribe(response => {
+      let BODY_CDPS_ENABLE: any = {
+        cdPs: ARRAY_CDPS
+      }
+      this.serviceCdps.putEnableCDPs(Number(this.requerimentId), BODY_CDPS_ENABLE).subscribe(response => {
         console.log(response);
         
+        if (response.status === 200) {
+          if (response.data.hasEnableAnyCDP) {
+            this.openSnackBar('CDPs Habilitados Exitosamente', `Los CDPs "${response.data.cdPs}" fueron habilitados con éxito.`, 'success');
+          } else {
+            this.openSnackBar('Lo sentimos', `No fue posible notificar los CDPs.`, 'error');
+          }
+        } else {
+          this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
+          console.log(response);
+        }
         this.spinner.hide();
       }, error => {
 

@@ -26,7 +26,7 @@ export class CDPService {
     return this.http.put<putLockCDPsI>(dir, null);
   }
 
-  putEnableCDPs(id_requeriment: number, body: number[]): Observable<any> {
+  putEnableCDPs(id_requeriment: number, body: any[]): Observable<any> {
     let dir = `${this.url}${id_requeriment}/Enable`;
     return this.http.put(dir, body);
   }
