@@ -792,7 +792,7 @@ export class PropertiesRequirementComponent implements OnInit {
   }
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number) {
     this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
-    //  console.log(dataTemp)
+      //  console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
 
       this.reqID = dataTemp.requerimiento.requerimiento_ID
@@ -921,6 +921,11 @@ export class PropertiesRequirementComponent implements OnInit {
   }
 
   saveForm() {
+    if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == null || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == '') {
+      this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].setValue(0)
+    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == null || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == '') {
+      this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].setValue(0)
+    }
     /** traer todos los ID del arreglo dataTableCodigos */
     let idsCodigos = this.dataTableCodigos.map((item) => {
       return item.unspsC_ID = item.unspsC_ID
