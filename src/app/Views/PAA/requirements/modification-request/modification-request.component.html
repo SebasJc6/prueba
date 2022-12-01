@@ -192,7 +192,7 @@
 
             <ng-container matColumnDef="numeroRequerimiento">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="numReq">Número requerimiento</th>
-                <td mat-cell *matCellDef="let element">{{element.numeroRequerimiento}}</td>
+                <td mat-cell *matCellDef="let element">{{element.isContrapartida ? '' : element.numeroRequerimiento}}</td>
                 <td class="footerTable" mat-footer-cell *matFooterCellDef></td>
             </ng-container>
 
