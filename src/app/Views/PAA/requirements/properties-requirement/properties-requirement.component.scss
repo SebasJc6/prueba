@@ -32,6 +32,7 @@
     .colorCard1 {
         background-color: #dcf8ff;
     }
+
     .colorCard2 {
         background-color: white;
     }
@@ -48,6 +49,7 @@
                 margin: 1%;
                 margin-top: 0.8%;
                 margin-bottom: 0.8%;
+
                 .tltData {
                     font-size: 14px;
                     margin-bottom: -1.5%;
@@ -55,7 +57,8 @@
                     mat-select {
                         margin-top: 2%;
                     }
-                    .colorSelect{
+
+                    .colorSelect {
                         background-color: white;
                     }
                 }
@@ -67,66 +70,78 @@
                     width: 100%;
                     margin-top: 1.5%;
                 }
-                .contDataArea{
+
+                .contDataArea {
                     border: 2px solid #185564;
                     border-radius: 0.3rem;
                     margin-top: 1.5%;
                     width: 392%;
                     font-family: "Montserrat", sans-serif;
                 }
-                .contDataSelect{
+
+                .contDataSelect {
                     border: 2px solid #185564;
                     border-radius: 0.3rem;
                     height: 33px;
                     width: 100%;
                     margin-top: 1.5%;
                     background-color: white;
+
                     ::ng-deep .mat-select-trigger {
                         margin-top: 2%;
-                      //  vertical-align: center;
+                        //  vertical-align: center;
                     }
-                } .contDataSelectRev{
+                }
+
+                .contDataSelectRev {
                     border: 2px solid #185564;
                     border-radius: 0.3rem;
                     height: 33px;
                     width: 100%;
                     margin-top: 1.5%;
                     background-color: white;
+
                     ::ng-deep .mat-select-trigger {
                         margin-top: 1.5%;
-                      //  vertical-align: center;
+                        //  vertical-align: center;
                     }
                 }
-                .arreglo{
+
+                .arreglo {
                     border: 2px solid #185564;
                     border-radius: 0.3rem;
                     height: 33px;
                     width: 100%;
                     margin-top: 1.5%;
                     background-color: white;
+
                     ::ng-deep .mat-select-trigger {
                         margin-top: 1%;
-                      //  vertical-align: center;
+                        //  vertical-align: center;
                     }
-                }	
-                .contDataAutocomplete{
+                }
+
+                .contDataAutocomplete {
                     border: 2px solid #185564;
                     border-radius: 0.3rem;
                     height: 30px;
                     width: 100%;
                     margin-top: 1.5%;
                     background-color: white;
+
                     ::ng-deep .mat-select-trigger {
                         margin-top: 2%;
                     }
                 }
-                .contDataMod{
+
+                .contDataMod {
                     border: 2px solid #185564;
                     border-radius: 0.3rem;
                     height: 30px;
                     width: 100%;
                     margin-top: 1.5%;
                     background-color: white;
+
                     ::ng-deep .mat-select-trigger {
                         margin-top: 1%;
                     }
@@ -135,12 +150,18 @@
                 .contDataDisabled {
                     border-color: gray;
                     background-color: white;
-                    color:  gray;
+                    color: gray;
                 }
+
                 .contDataModified {
                     border: 2px solid orange;
                     background-color: white;
-                    color:  gray;
+                    color: gray;
+                }
+                .contDataError {
+                    border: 2px solid red;
+                    background-color: white;
+                    color: gray;
                 }
 
                 ::ng-deep .mat-form-field-flex>.mat-form-field-infix {
@@ -151,9 +172,10 @@
                 }
             }
 
-            .dis{
+            .dis {
                 display: inline;
             }
+
             .label1 {
                 width: 25%;
             }
@@ -161,9 +183,11 @@
             .label2 {
                 width: 52%;
             }
+
             .label3 {
                 width: 25%;
             }
+
             .label4 {
                 width: 82%;
             }
@@ -179,20 +203,20 @@
     align-items: center;
 
     button {
-      margin-left: -0.5%;
+        margin-left: -0.5%;
 
-      mat-icon {
-        margin-top: -2%;
-      }
+        mat-icon {
+            margin-top: -2%;
+        }
     }
 
     .href {
-      text-decoration: none;
-      color: #185564;
+        text-decoration: none;
+        color: #185564;
     }
 
     .selected {
-      font-weight: bold;
+        font-weight: bold;
     }
 }
 
@@ -212,22 +236,23 @@
     color: #185564;
 }
 
-.btnCard{
+.btnCard {
     text-align: start;
     margin-left: 3.5%;
     margin-top: 0.5%;
+
     .buton2 {
         background-color: white;
-         margin-top: -8%;
-         border-color: #185564;
-         border: 2px solid #185564;
-         color: #185564;
-         width: 15rem;
-         border-radius: 1.5rem;
-         font-weight: bold;
-         align-items: center;
-         line-height: 0px;
-     }
+        margin-top: -8%;
+        border-color: #185564;
+        border: 2px solid #185564;
+        color: #185564;
+        width: 15rem;
+        border-radius: 1.5rem;
+        font-weight: bold;
+        align-items: center;
+        line-height: 0px;
+    }
 }
 
 mat-card-actions {
@@ -268,7 +293,7 @@ table {
     width: 93.5%;
     margin-left: 3%;
     margin-right: 3%;
-    
+
     th {
         background-color: #185564;
         color: white;
@@ -276,116 +301,134 @@ table {
         font-size: 12px;
         font-weight: bold;
         border-left: 1px solid #7497a0;
-}
+    }
 
     td {
         text-align: center;
         font-size: 11px;
         border-left: 1px solid #e0e0e0;
     }
+
     .contDataModified {
         border: 2px solid orange;
         background-color: white;
     }
+
     mat-table {
-      max-height: 500px;
+        max-height: 500px;
     }
 
     //ESTILOS TABLA CLASIFICACION PRESUPUESTAL
-    .mes{
+    th.mat-header-cell:first-of-type,
+    td.mat-cell:first-of-type,
+    td.mat-footer-cell:first-of-type {
+        padding-left: 0px;
+    }
+
+    th.mat-header-cell:last-of-type,
+    td.mat-cell:last-of-type,
+    td.mat-footer-cell:last-of-type {
+        padding-right: 0px;
+    }
+
+    .mes {
         width: 3%;
     }
-    
-    .vig{
+
+    .vig {
         width: 8%;
     }
-    
-    .aux{
+
+    .aux {
         width: 3%;
     }
-    
-    .det{
+
+    .det {
         width: 20%;
     }
-    
+
     .act {
         width: 6%;
     }
-    
-    .met{
+
+    .met {
         width: 6%;
     }
-    
-    .fue{
+
+    .fue {
         width: 6%;
     }
-    
-    .msp{
+
+    .msp {
         width: 6%;
     }
-    
-    .mga{
+
+    .mga {
         width: 8%;
     }
-    
-    .pos{
+
+    .pos {
         width: 10%;
     }
-    
-    .apr{
+
+    .apr {
         width: 18%;
     }
-    
-    .aum{
+
+    .aum {
         width: 13%;
     }
-    
-    .dis{
+
+    .dis {
         width: 10%;
     }
-    
+
     .acc {
         width: 17%;
     }
 
     //ESTILOS TABLA CLASIFICACION CODIGOS UNSPSC
 
-    .Cod{
+    .Cod {
         width: 20%;
     }
-    
-    .Des{
+
+    .Des {
         width: 70%;
     }
 }
-.tableReviews{
+
+.tableReviews {
     margin-top: 0%;
 }
-.tbleRew{
-    overflow: auto;  
+
+.tbleRew {
+    overflow: auto;
     margin-top: -4%;
 }
 
 //AJUSTES A LOS ICONOS DE LAS TABLAS Y VERSION ACTUAL
-    .btnActions {
-        border-color: #185564;
-        border: 2px solid #185564;
-        color: #185564;
-        border-radius: 0.5rem;
-        margin: 1%;
-    }
-    .Actions{
-        display: flex;
-        margin-left: 10px;
-    }
+.btnActions {
+    border-color: #185564;
+    border: 2px solid #185564;
+    color: #185564;
+    border-radius: 0.5rem;
+    margin: 1%;
+}
+
+.Actions {
+    display: flex;
+    margin-left: 10px;
+}
 
 
 //quitar felchas input tipo number
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
+
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
