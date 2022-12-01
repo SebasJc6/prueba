@@ -47,3 +47,13 @@ export interface filterCDPsI {
     columna: string,
     ascending: boolean
 }
+
+export interface putLockCDPsI {
+    data : {
+                cdPs : number[],
+                hasBlockedAnyCDP : boolean
+            },
+    message : string,
+    status : number,
+    title : string
+}

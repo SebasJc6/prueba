@@ -9,27 +9,25 @@
             <div class="tablaCont" style="display: flex;">
                 <div class="contTxt label1">
                     <p class="tltData"> <strong> Valor que aumenta (antes de IVA) </strong> </p>
-                    <input class="contData " [ngClass]="{'contDataDisabled' : viewDisabledAum== true }" 
-                        type="text"
-                        cdkFocusInitial
-                        [attr.disabled]="viewDisabledAum ? '' : null"
-                        formControlName="aumenta">
+                    <input class="contData " maxlength="20" [ngClass]="{'contDataDisabled' : viewDisabledAum== true }"
+                    [attr.disabled]="viewDisabledAum" 
+                    (keyup)="onPressValueIncreases()"
+                        type="text" formControlName="subAumenta">
                 </div>
 
                 <div class="contTxt label1">
                     <p class="tltData"><strong> Valor que disminuye (antes de IVA) </strong></p>
-                    <input class="contData " [ngClass]="{'contDataDisabled' : viewDisabledDis== true }" 
-                        type="text"
-                        [attr.disabled]="viewDisabledDis ? '' : null"
-                        formControlName="disminuye">
+                    <input class="contData " [ngClass]="{'contDataDisabled' : viewDisabledDis== true }" type="text"
+                    [attr.disabled]="viewDisabledDis" 
+                    maxlength="20"
+                    (keyup)="onPressValueDecreases()"
+                        formControlName="SubDisminuye">
                 </div>
             </div>
             <div class="tablaCont" style="display: flex;">
                 <div class="contTxt label1">
-                    <mat-checkbox class="example-margin" 
-                        [ngClass]="{'contDataDisabled' : isDisabledView== true }" 
-                        [disabled]="isDisabledView"
-                        formControlName="disabled">
+                    <mat-checkbox class="example-margin" [ngClass]="{'contDataDisabled' : isDisabledView== true }"
+                        [disabled]="viewDisabledDis" formControlName="disabled">
                         <strong> Aplica IVA / ARL </strong>
                     </mat-checkbox>
                 </div>
@@ -37,26 +35,20 @@
             <div class="tablaCont" style="display: flex;">
                 <div class="contTxt label1">
                     <p class="tltData"> <strong> IVA </strong> </p>
-                    <input class="contData " [ngClass]="{'contDataDisabled' : isDisabled== true }"
-                        type="text"
-                        [attr.disabled]="isDisabledView ? '' : null"
-                        formControlName="iva">
+                    <input class="contData " [ngClass]="{'contDataDisabled' : isDisabled== true }" type="text"
+                        [attr.disabled]="isDisabledView ? '' : null" formControlName="iva">
                 </div>
 
                 <div class="contTxt label1">
                     <p class="tltData"><strong> ARL</strong></p>
-                    <input class="contData " [ngClass]="{'contDataDisabled' : isDisabled== true }"
-                        type="text" 
-                        [attr.disabled]="isDisabledView ? '' : null"
-                        formControlName="arl">
+                    <input class="contData " [ngClass]="{'contDataDisabled' : isDisabled== true }" type="text"
+                        [attr.disabled]="isDisabledView ? '' : null" formControlName="arl">
                 </div>
             </div>
             <div class="tablaCont" style="display: flex;">
                 <div class="contTxt label2">
                     <p class="tltData"> <strong> Valor (incluye de IVA) </strong> </p>
-                    <input class="contData contDataDisabled"  
-                        type="text" 
-                        formControlName="total">
+                    <input class="contData contDataDisabled" type="text" formControlName="total">
                 </div>
             </div>
 

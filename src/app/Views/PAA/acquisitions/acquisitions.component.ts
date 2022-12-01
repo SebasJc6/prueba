@@ -11,6 +11,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { CDPService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/cdp.service';
 
 export interface ChipColor {
   name: string;
@@ -64,6 +65,7 @@ export class AcquisitionsComponent implements OnInit {
   constructor(
     private serviceProject: ProjectService, 
     public router: Router, private authService: AuthenticationService,
+    private serviceCdps: CDPService,
     private spinner: NgxSpinnerService,) {
 
   }
@@ -140,8 +142,53 @@ export class AcquisitionsComponent implements OnInit {
     }, error => {
       this.spinner.hide();
     });
-
   }
+
+
+  //Funcion para convertir un archivo a Base 64
+  extraerBase64 = async ($event: any) => new Promise((resolve) => {
+    try {
+      const reader = new FileReader();
+      reader.readAsDataURL($event);
+      reader.onload = () => {
+        resolve({
+          nameFile: $event.name,
+          base: reader.result?.toString().split(',')[1]
+        });
+      };
+      reader.onerror = error => {
+        resolve({
+          base: error
+        });
+      };
+    } catch (e) {
+      return e;
+    }
+  });
+
+
+  //Obtener archivo y pasarlo a Base64
+  onFileSelected(event: any) {
+    const file: FileList = event.target.files;
+    let fil : File = file[0];
+
+    if (file != null) {
+        this.importFile(fil);
+    }
+  }
+
+
+  //Importar Documento de CDPs/RPs
+  importFile(file : any) {
+    this.serviceCdps.postCDPs(file).subscribe(response => {
+      console.log('Res: ', response);
+      
+    }, error => {
+      console.log('Error: ', error);
+      
+    });
+  }
+
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;

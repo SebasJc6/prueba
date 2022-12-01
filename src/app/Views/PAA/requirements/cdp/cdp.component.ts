@@ -2,12 +2,14 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { filterCDPsI, itemsCDPsI } from 'src/app/Models/ModelsPAA/Requeriment/cdp';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { CDPService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/cdp.service';
+import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 
 @Component({
   selector: 'app-cdp',
@@ -21,6 +23,7 @@ export class CDPComponent implements OnInit {
     private serviceModRequest: ModificationRequestService,
     private serviceCdps: CDPService,
     private spinner: NgxSpinnerService,
+    private snackBar: MatSnackBar,
     private authService: AuthenticationService) { }
 
   displayedColumns: string[] = [
@@ -70,6 +73,8 @@ export class CDPComponent implements OnInit {
   
   CDPsChecked: itemsCDPsI[] = [];
   selection = new SelectionModel<itemsCDPsI>(true, []);
+
+  enableHabilit: boolean = false;
   
   
   //CAMPOS PARA EL FILTRO
@@ -152,19 +157,74 @@ export class CDPComponent implements OnInit {
 
   //Notificar CDPs
   notifyCDP() {
-   this.serviceCdps.putLockCDPs(Number(this.requerimentId)).subscribe(response => {
-    console.log(response);
-    
-   }, error => {
-    console.log(error);
-
-   });
+    this.spinner.show();
+    this.serviceCdps.putLockCDPs(Number(this.requerimentId)).subscribe(response => {
+      
+      if (response.status === 200) {
+        if (response.data.hasBlockedAnyCDP) {
+          this.openSnackBar('CDPs Notificados Exitosamente', `Los CDPs "${response.data.cdPs}" han sido bloqueados y notificados con éxito.`, 'success');
+        } else {
+          this.openSnackBar('Lo sentimos', `No fue posible notificar los CDPs.`, 'error');
+        }
+      } else {
+        this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
+        console.log(response);
+      }
+      this.spinner.hide();
+    }, error => {
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.spinner.hide();
+    });
   }
 
   
   //Habilitar CDPs
   enableCDP(){
+    this.CDPsChecked = this.selection.selected;
+    
+    if (this.CDPsChecked.length > 0) {
+      let ARRAY_CDPS: number[] = [];
+      this.CDPsChecked.forEach(element => {
+        ARRAY_CDPS.push(element.cdP_ID);
+      });
 
+      this.spinner.show();
+      let BODY_CDPS_ENABLE: any = {
+        cdPs: ARRAY_CDPS
+      }
+      this.serviceCdps.putEnableCDPs(Number(this.requerimentId), BODY_CDPS_ENABLE).subscribe(response => {
+        console.log(response);
+        
+        if (response.status === 200) {
+          if (response.data.hasEnableAnyCDP) {
+            this.openSnackBar('CDPs Habilitados Exitosamente', `Los CDPs "${response.data.cdPs}" fueron habilitados con éxito.`, 'success');
+          } else {
+            this.openSnackBar('Lo sentimos', `No fue posible notificar los CDPs.`, 'error');
+          }
+        } else {
+          this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
+          console.log(response);
+        }
+        this.spinner.hide();
+      }, error => {
+
+        if (error.error.status == 422) {
+          let Data: string[] = [];
+          let erorsMessages = '';
+          if (error.error.data != null) {   
+            Data = Object.values(error.error.data);
+            Data.map(item => {
+              erorsMessages += item + '. ';
+            });
+          }
+          this.openSnackBar('Lo sentimos', error.error.message, 'error', erorsMessages);
+        }
+        console.log(error);
+        this.spinner.hide();
+      });
+    } else {
+      this.openSnackBar('Lo sentimos', 'Seleccione al menos un CDP bloqueado para ser habilitado.', 'error');
+    }
   }
 
 
@@ -201,7 +261,6 @@ export class CDPComponent implements OnInit {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.length;
 
-    this.CDPsChecked = this.selection.selected;
     return numSelected === numRows;
   }
 
@@ -264,6 +323,17 @@ export class CDPComponent implements OnInit {
 
   regresar() {
     this.router.navigate([`/WAPI/PAA/Requerimientos/${this.dataProjectID}`]);
+  }
+
+
+  //Metodo para llamar alertas
+  openSnackBar(title: string, message: string, type: string, message2?: string) {
+    this.snackBar.openFromComponent(AlertsComponent, {
+      data: { title, message, message2, type },
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: [type],
+    });
   }
 
 

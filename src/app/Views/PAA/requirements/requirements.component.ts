@@ -204,10 +204,11 @@ export class RequirementsComponent implements OnInit {
   
   propertiesRequirement(requirementId: number) {
     this.router.navigate(['/WAPI/PAA/PropiedadesRequerimiento/' + this.dataProjectID + '/0/' + requirementId+ '/Vista']);
+    sessionStorage.setItem('mgp', 'requerimiento');
   }
 
   CDP(requirementId: number) {
-    // this.router.navigate([`/WAPI/PAA/CDP/${this.dataProjectID}/${requirementId}`]);
+    //this.router.navigate([`/WAPI/PAA/CDP/${this.dataProjectID}/${requirementId}`]);
   }
 
   StockOrders(requirementId: number) {
@@ -216,6 +217,7 @@ export class RequirementsComponent implements OnInit {
 
   modificatioRequest() {
     this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/0' ]);
+    sessionStorage.setItem('mgp', 'solicitud');
   }
 
 

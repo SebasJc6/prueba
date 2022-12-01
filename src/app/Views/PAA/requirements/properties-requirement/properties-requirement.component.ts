@@ -158,6 +158,7 @@ export class PropertiesRequirementComponent implements OnInit {
   disminucionModified?: boolean;
   unspscNew?: boolean;
   numReqDisabled: boolean = true;
+  mgp: string = '';
 
   cantMeses: any[] = [
     //  { idMes: '0', nameMes: ' ' },
@@ -197,7 +198,7 @@ export class PropertiesRequirementComponent implements OnInit {
       descripcion: new FormControl()
     }),
     clasPresFinaForm: this.formbuilder.group({
-      numModificacion: new FormControl({ value: '', disabled: true }),
+      numModificacion: new FormControl({ value: 0, disabled: true }),
       mes: new FormControl(),
       anioVigRecursos: new FormControl(),
       auxiliar: new FormControl(),
@@ -360,6 +361,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.mgp = sessionStorage.getItem('mgp') || '';
     //Obtener token para manejar los roles
     this.AccessUser = this.authService.getRolUser();
 
@@ -371,7 +373,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
     this.serviceModRequest.getModificationRequestByRequest(+this.dataProjectID, +this.dataSolicitudID).subscribe((data) => {
-      console.log('dtaIfno', data);
+      // console.log('dtaIfno', data);
       this.statusReq = data.data.solicitud_Estado || '';
 
       if (this.typePage == 'Vista') {
@@ -792,11 +794,11 @@ export class PropertiesRequirementComponent implements OnInit {
   }
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number) {
     this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
-    //  console.log(dataTemp)
+        console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
 
       this.reqID = dataTemp.requerimiento.requerimiento_ID
-
+      this.proRequirementeForm.controls.clasPresFinaForm.controls.numModificacion.setValue(dataTemp.requerimiento.numeroModificacion)
       if (dataTemp != null) {
         this.proRequirementeForm.controls.infoBasicaForm.setValue({
           numeroReq: dataTemp.requerimiento.numeroRequerimiento,
@@ -909,7 +911,9 @@ export class PropertiesRequirementComponent implements OnInit {
     })
   }
   cancel() {
-    if (this.typePage == 'Nuevo') {
+    if (sessionStorage.getItem('mga') == 'taskTray') {
+      this.router.navigate(['/WAPI/PAA/BandejaDeTareas']);
+    } else if (this.typePage == 'Nuevo') {
       this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
     } else if (this.typePage == 'Editar') {
       this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
@@ -921,6 +925,11 @@ export class PropertiesRequirementComponent implements OnInit {
   }
 
   saveForm() {
+    if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == null || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == '') {
+      this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].setValue(0)
+    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == null || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == '') {
+      this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].setValue(0)
+    }
     /** traer todos los ID del arreglo dataTableCodigos */
     let idsCodigos = this.dataTableCodigos.map((item) => {
       return item.unspsC_ID = item.unspsC_ID
@@ -1033,8 +1042,13 @@ export class PropertiesRequirementComponent implements OnInit {
             ProChartStorage.removeItem('dataTableClacificaciones')
             ProChartStorage.removeItem('dataTableCodigos')
             ProChartStorage.removeItem('dataTableRevisiones')
-            this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
-            this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+            this.openSnackBar('Se ha creado correctamente', dataResponse.message, 'success');
+            if (sessionStorage.getItem('mga') == 'taskTray') {
+              this.router.navigate(['/WAPI/PAA/BandejaDeTareas']);
+            } else {
+              this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+
+            }
           } else {
             console.log('response', dataResponse)
 
@@ -1075,7 +1089,12 @@ export class PropertiesRequirementComponent implements OnInit {
           if (dataResponse.status == 200) {
             this.loading = true
             this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
-            this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+            if (sessionStorage.getItem('mga') == 'taskTray') {
+              this.router.navigate(['/WAPI/PAA/BandejaDeTareas']);
+            } else {
+              this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+
+            }
             this.loading = false
 
           } else {
@@ -1413,6 +1432,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
         this.dataTableRevisiones.push(dtl);
         this.dataSourceRevisiones = new MatTableDataSource(this.dataTableRevisiones)
+        this.reviews.reset();
       }
     }
 
@@ -1507,7 +1527,12 @@ export class PropertiesRequirementComponent implements OnInit {
         console.log('No hay nada')
       }
 
-      this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+      if (sessionStorage.getItem('mga') == 'taskTray') {
+        this.router.navigate(['/WAPI/PAA/BandejaDeTareas']);
+      } else {
+        this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + +this.dataSolicitudID])
+
+      }
     }
 
   }

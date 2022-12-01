@@ -99,6 +99,7 @@ export class RequestTrayComponent implements OnInit {
   modificatioRequest(ProjectId : number, requestId: number){
     this.dataProjectID = ProjectId;
     this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + requestId ])
+    sessionStorage.setItem('mgp', 'request-tray');
   }
 
   //FILTRO

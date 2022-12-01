@@ -3,7 +3,8 @@
 <div class="container center-h center-v">
 
     <!--MIGA PAN-->
-    <div class="mgp">
+    <!-- desde requerimiento -->
+    <div class="mgp" *ngIf="mgp === 'requerimiento'">
         Plan Anual de Adquisiciones
         <a class="href" [routerLink]="['/WAPI/PAA/Adquisiciones']">
             &nbsp;>&nbsp;{{codProject}}
@@ -16,6 +17,49 @@
             &nbsp;>&nbsp;Requerimiento {{dataRequirementNum}}
         </a>
     </div>
+    <!-- desde solicitud -->
+    <div class="mgp" *ngIf="mgp === 'solicitud'">
+        Plan Anual de Adquisiciones
+        <a class="href" [routerLink]="['/WAPI/PAA/Adquisiciones']">
+            &nbsp;>&nbsp;{{codProject}}
+            -&nbsp;{{nomProject}}
+        </a>
+        <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos',dataProjectID]">
+            &nbsp;>&nbsp;Requerimientos
+        </a>
+        <a class="href" *ngIf="+dataSolicitudID === 0" [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + 0]">
+            &nbsp;>&nbsp;Solicitud modificación
+        </a>
+        <a class="href"  *ngIf="+dataSolicitudID !== 0"  [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
+            &nbsp;>&nbsp;Solicitud modificación
+        </a>
+        <a class="href selected">
+            &nbsp;>&nbsp;Requerimiento {{dataRequirementNum}}
+        </a>
+    </div>
+    <!-- desde modificaciones solicitadas -->
+    <div class="mgp" *ngIf="mgp === 'request-tray'">
+        Plan Anual de Adquisiciones
+        <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeSolicitudes']">
+          &nbsp;>&nbsp;Modificaciones solicitadas
+        </a>
+        <a class="href"  [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
+            &nbsp;>&nbsp;Solicitud modificación
+        </a>
+        <a class="href selected">
+            &nbsp;>&nbsp;Requerimiento {{dataRequirementNum}}
+        </a>
+      </div>
+      <!-- desde bandeja de tareas -->
+      <div class="mgp" *ngIf="mgp === 'taskTray'">
+        Plan Anual de Adquisiciones
+        <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeTareas']">
+          &nbsp;>&nbsp;Bandeja de tareas
+        </a>
+        <a class="href selected">
+            &nbsp;>&nbsp;Requerimiento {{dataRequirementNum}}
+        </a>
+      </div>
 
     <!--BOTON QUE CARGA VERSION ACTUAL-->
     <div *ngIf="viewBtnVersion">
@@ -60,12 +104,12 @@
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Dependencia origen de los recursos</p>
-                                        <input class="contData contDataDisabled" formControlName="dependenciaOri"  >
+                                        <input class="contData contDataDisabled" formControlName="dependenciaOri">
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Número de requerimiento</p>
                                         <input class="contData" formControlName="numeroReq"
-                                        [ngClass]="{'contDataDisabled' : numReqDisabled == true }">
+                                            [ngClass]="{'contDataDisabled' : numReqDisabled == true }">
                                         <mat-error *ngIf="errorNumReq">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
@@ -226,6 +270,7 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Descripción (Objeto del contrato)</p>
                                         <textarea class="contDataArea" #input maxlength="3000"
+                                        rows="6" 
                                             formControlName="descripcion"></textarea>
                                         <mat-hint align="end">{{input.value.length || 0}}/3000</mat-hint>
                                         <mat-error *ngIf="errorDescripcionCont">
@@ -708,7 +753,7 @@
                                         <div class="tablaCont">
                                             <div class="contTxt label2">
                                                 <p class="tltData">Área</p>
-                                                <mat-select formControlName="area" class="contDataSelect"
+                                                <mat-select formControlName="area" class="contDataSelectRev"
                                                     (valueChange)="onSelectionChange($event , 'areaRevicion')"
                                                     [displayWith]="displayFnArea">
                                                     <mat-option [value]="item" *ngFor="let item of allReviewsArea">
@@ -720,7 +765,7 @@
                                             </div>
                                             <div class="contTxt label2">
                                                 <p class="tltData">Concepto</p>
-                                                <mat-select class="contDataSelect" formControlName="concepto"
+                                                <mat-select class="contDataSelectRev" formControlName="concepto"
                                                     (valueChange)="onSelectionChange($event , 'conceptoRevicion')">
                                                     <mat-option *ngFor="let item of allConcepts" [value]="item">{{item}}
                                                     </mat-option>
@@ -1069,6 +1114,7 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Descripción (Objeto del contrato)</p>
                                         <textarea class="contDataArea contDataDisabled"
+                                        rows="6" 
                                             [ngClass]="{'contDataModified' : descripcionModified == true }"
                                             formControlName="descripcionRew"></textarea>
                                         <mat-error *ngIf="errorDescripcionCont">
@@ -1372,7 +1418,7 @@
                                         <div class="tablaCont">
                                             <div class="contTxt label2">
                                                 <p class="tltData">Área</p>
-                                                <mat-select formControlName="area" class="contDataSelect"
+                                                <mat-select formControlName="area" class="contDataSelectRev"
                                                     (valueChange)="onSelectionChange($event , 'areaRevicion')"
                                                     [displayWith]="displayFnArea">
                                                     <mat-option [value]="item" *ngFor="let item of allReviewsArea">
@@ -1384,7 +1430,7 @@
                                             </div>
                                             <div class="contTxt label2">
                                                 <p class="tltData">Concepto</p>
-                                                <mat-select class="contDataSelect" formControlName="concepto"
+                                                <mat-select class="contDataSelectRev" formControlName="concepto"
                                                     (valueChange)="onSelectionChange($event , 'conceptoRevicion')">
                                                     <mat-option *ngFor="let item of allConcepts" [value]="item">{{item}}
                                                     </mat-option>
@@ -1487,8 +1533,8 @@
                                     </table>
                                 </div>
                                 <!-- FIN TABLA -->
-                                  <!-- TABLA REVISIONES -->
-                                  <div class="tableReviews" *ngIf="viewTableReviews">
+                                <!-- TABLA REVISIONES -->
+                                <div class="tableReviews" *ngIf="viewTableReviews">
                                     <table mat-table [dataSource]="dataSourceRevisionesView" class="mat-elevation-z8"
                                         matSort>
 
@@ -1715,6 +1761,7 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Descripción (Objeto del contrato)</p>
                                         <textarea class="contDataArea contDataDisabled"
+                                        rows="6" 
                                             formControlName="descripcionAct"></textarea>
                                         <mat-error *ngIf="errorDescripcionCont">
                                             Campo <strong>Obligatorio</strong>
