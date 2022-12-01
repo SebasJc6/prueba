@@ -396,7 +396,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
     this.serviceModRequest.getModificationRequestByRequest(+this.dataProjectID, +this.dataSolicitudID).subscribe((data) => {
-      //  console.log('dtaIfno', data);
+     // console.log('dtaIfno', data);
       this.statusReq = data.data.solicitud_Estado || '';
 
       if (this.typePage == 'Vista') {
@@ -851,9 +851,9 @@ export class PropertiesRequirementComponent implements OnInit {
         // this.viewVersion = false
       }
 
-    },error => {
+    }, error => {
       console.log(error)
-      
+
     })
   }
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number) {
@@ -1013,8 +1013,49 @@ export class PropertiesRequirementComponent implements OnInit {
           }
         });
       } else
-        if (sessionStorage.getItem('mga') == 'taskTray') {
-          this.router.navigate(['/WAPI/PAA/BandejaDeTareas']);
+        if (this.typePage == 'Ajuste' && this.statusReq == 'En Ajuste') {
+          //Alerta de confirmación
+          Swal.fire({
+            customClass: {
+              confirmButton: 'swalBtnColor',
+              denyButton: 'swalBtnColor'
+            },
+            title: '¿Esta seguro que desea cancerlar?',
+            text: ' Esta acción eliminará los ultimos cambios realizados',
+            showDenyButton: true,
+            denyButtonText: 'NO',
+            confirmButtonText: 'SI',
+            allowOutsideClick: false
+          }).then((result) => {
+            if (result.value) {
+
+              if (sessionStorage.getItem('mga') == 'taskTray') {
+                this.router.navigate(['/WAPI/PAA/BandejaDeTareas']);
+              } else {
+                this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+              }
+            }
+          });
+        } else    if (this.typePage == 'Editar' && this.statusReq == 'En Ajuste') {
+          //Alerta de confirmación
+          Swal.fire({
+            customClass: {
+              confirmButton: 'swalBtnColor',
+              denyButton: 'swalBtnColor'
+            },
+            title: '¿Esta seguro que desea cancerlar?',
+            text: ' Esta acción eliminará los ultimos cambios realizados',
+            showDenyButton: true,
+            denyButtonText: 'NO',
+            confirmButtonText: 'SI',
+            allowOutsideClick: false
+          }).then((result) => {
+            if (result.value) {
+
+                this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+              
+            }
+          });
         } else if (this.typePage == 'Nuevo') {
           this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
         } else if (this.typePage == 'Editar') {
@@ -1271,6 +1312,60 @@ export class PropertiesRequirementComponent implements OnInit {
           }
           this.spinner.hide();
         }, err => {
+          //valodacion de errores genericos
+          let dataError = err.error.data
+          if (dataError['Requerimiento.Numero de requerimiento'] != undefined) {
+            this.genericNumReq = true
+          }
+          if (dataError['Requerimiento.Dependencia destino'] != undefined) {
+            this.genericDependenciaDes = true
+          }
+          if (dataError['Requerimiento.Modalidad de seleccion'] != undefined) {
+            this.genericModalidadSel = true
+          }
+          if (dataError['Requerimiento.Tipo de Contrato'] != undefined) {
+            this.genericTipoCont = true
+          }
+          if (dataError['Requerimiento.Perfil'] != undefined) {
+            this.genericPerfil = true
+          }
+          if (dataError['Requerimiento.Honorarios'] != undefined) {
+            this.genericValorHonMes = true
+          }
+          if (dataError['Requerimiento.Actuacion'] != undefined) {
+            this.genericActuacionCont = true
+          }
+          if (dataError['Requerimiento.Duracion Mes'] != undefined) {
+            this.genericDuracionMes = true
+          }
+          if (dataError['Requerimiento.Duracion dias'] != undefined) {
+            this.genericDuracionDias = true
+          }
+          if (dataError['Requerimiento.Mes estimado inicio de seleccion'] != undefined) {
+            this.genericMesSeleccion = true
+          }
+          if (dataError['Requerimiento.Mes estimado presentacion de ofertas'] != undefined) {
+            this.genericMesOfertas = true
+          }
+          if (dataError['Requerimiento.Mes estimado inicio de Ejecucion'] != undefined) {
+            this.genericMesContrato = true
+          }
+          if (dataError['Requerimiento.Cantidad de contratos'] != undefined) {
+            this.genericCantidadCont = true
+          }
+          if (dataError['Requerimiento.Descripción'] != undefined) {
+            this.genericDescripcion = true
+          }
+          if (dataError['Requerimiento.Numero de contrato'] != undefined) {
+            this.genericNumeroCont = true
+          }
+          if (dataError['Cadenas presupuestales'] != undefined) {
+            this.genericClasificaciones = true
+          }
+          if (dataError['Codigos UNSPSC'] != undefined) {
+            this.genericCodigos = true
+          }
+
           this.spinner.hide()
           let Data: string[] = [];
           Data = Object.values(err.error.data);
@@ -1278,7 +1373,7 @@ export class PropertiesRequirementComponent implements OnInit {
           Data.map(item => {
             errorMessages += item + '. ';
           });
-          this.openSnackBar('Error', JSON.stringify(err.error.data), 'error');
+          this.openSnackBar('Error', err.error.message, 'error', errorMessages);
           this.spinner.hide();
         })
 
