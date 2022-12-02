@@ -982,7 +982,7 @@ export class PropertiesRequirementComponent implements OnInit {
           confirmButton: 'swalBtnColor',
           denyButton: 'swalBtnColor'
         },
-        title: '¿Esta seguro que desea cancerlar?',
+        title: '¿Esta seguro que desea cancelar?',
         text: ' Esta acción eliminará los ultimos cambios realizados',
         showDenyButton: true,
         denyButtonText: 'NO',
@@ -1001,7 +1001,7 @@ export class PropertiesRequirementComponent implements OnInit {
             confirmButton: 'swalBtnColor',
             denyButton: 'swalBtnColor'
           },
-          title: '¿Esta seguro que desea cancerlar?',
+          title: '¿Esta seguro que desea cancelar?',
           text: ' Esta acción eliminará los ultimos cambios realizados',
           showDenyButton: true,
           denyButtonText: 'NO',
@@ -1020,7 +1020,7 @@ export class PropertiesRequirementComponent implements OnInit {
               confirmButton: 'swalBtnColor',
               denyButton: 'swalBtnColor'
             },
-            title: '¿Esta seguro que desea cancerlar?',
+            title: '¿Esta seguro que desea cancelar?',
             text: ' Esta acción eliminará los ultimos cambios realizados',
             showDenyButton: true,
             denyButtonText: 'NO',
@@ -1043,7 +1043,7 @@ export class PropertiesRequirementComponent implements OnInit {
               confirmButton: 'swalBtnColor',
               denyButton: 'swalBtnColor'
             },
-            title: '¿Esta seguro que desea cancerlar?',
+            title: '¿Esta seguro que desea cancelar?',
             text: ' Esta acción eliminará los ultimos cambios realizados',
             showDenyButton: true,
             denyButtonText: 'NO',

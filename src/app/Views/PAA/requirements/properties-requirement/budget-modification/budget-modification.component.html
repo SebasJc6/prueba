@@ -1,7 +1,7 @@
 <div class="container center-h center-v">
 
     <mat-card-title class="title">
-        <strong> Modificacíon valor cadena presupuestal</strong>
+        <strong> Modificación valor cadena presupuestal</strong>
     </mat-card-title>
 
     <div class="contForm">
@@ -10,7 +10,6 @@
                 <div class="contTxt label1">
                     <p class="tltData"> <strong> Valor que aumenta (antes de IVA) </strong> </p>
                     <input class="contData " maxlength="20" [ngClass]="{'contDataDisabled' : viewDisabledAum== true }"
-                    [attr.disabled]="viewDisabledAum" 
                     (keyup)="onPressValueIncreases()"
                         type="text" formControlName="subAumenta">
                 </div>
@@ -18,7 +17,6 @@
                 <div class="contTxt label1">
                     <p class="tltData"><strong> Valor que disminuye (antes de IVA) </strong></p>
                     <input class="contData " [ngClass]="{'contDataDisabled' : viewDisabledDis== true }" type="text"
-                    [attr.disabled]="viewDisabledDis" 
                     maxlength="20"
                     (keyup)="onPressValueDecreases()"
                         formControlName="SubDisminuye">
