@@ -158,6 +158,7 @@
                     background-color: white;
                     color: gray;
                 }
+
                 .contDataError {
                     border: 2px solid red;
                     background-color: white;
@@ -336,7 +337,7 @@ table {
     }
 
     .vig {
-        width: 8%;
+        width: 4%;
     }
 
     .aux {
@@ -348,43 +349,55 @@ table {
     }
 
     .act {
-        width: 6%;
+        width: 3%;
     }
 
     .met {
-        width: 6%;
+        width: 3%;
     }
 
     .fue {
-        width: 6%;
+        width: 3%;
     }
 
     .msp {
-        width: 6%;
+        width: 3%;
     }
 
     .mga {
-        width: 8%;
+        width: 4%;
     }
 
     .pos {
-        width: 10%;
+        width: 7%;
     }
 
     .apr {
-        width: 18%;
+        width: 7%;
     }
 
     .aum {
-        width: 13%;
+        width: 7%;
     }
 
     .dis {
-        width: 10%;
+        width: 7%;
+    }
+
+    .aproDef {
+        width: 7%;
+    }
+
+    .Com {
+        width: 7%;
+    }
+
+    .Gir {
+        width: 7%;
     }
 
     .acc {
-        width: 17%;
+        width: 5%;
     }
 
     //ESTILOS TABLA CLASIFICACION CODIGOS UNSPSC
