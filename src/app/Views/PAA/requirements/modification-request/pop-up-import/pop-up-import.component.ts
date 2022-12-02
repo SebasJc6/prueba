@@ -86,7 +86,8 @@ export class PopUpImportComponent implements OnInit {
             this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           }
 
-          this.spinner.hide();
+            this.dialogRef.close();
+            this.spinner.hide();
         }, error => {
           let status = error.error.status;
 

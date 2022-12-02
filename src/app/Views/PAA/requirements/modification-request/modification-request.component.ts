@@ -882,6 +882,7 @@ export class ModificationRequestComponent implements OnInit {
     dialogRef.afterClosed().subscribe((res: boolean) => {
       if (this.dataSolicitudModID != '0') {
         this.getModificationRequestByRequestId(Number(this.dataSolicitudModID), this.dataValidity, this.filterModificationRequest);
+        this.getRequestAndProject(Number(this.dataProjectID), Number(this.dataSolicitudModID));
       }
     });
   }
