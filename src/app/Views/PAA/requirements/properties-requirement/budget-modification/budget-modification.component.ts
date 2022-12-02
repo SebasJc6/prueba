@@ -173,7 +173,6 @@ export class BudgetModificationComponent implements OnInit {
       this.valueFormSubmit.controls['arl'].setValue(VALUE_ARL);
       this.valueFormSubmit.controls['total'].setValue(VALUE_TOTAL);
     } else if (this.data.type == 'editar') {
-      console.log('entro editar',this.data.type);
       this.valueFormSubmit.controls.subAumenta.enable();
       this.valueFormSubmit.controls['SubDisminuye'].enabled;
       this.isDisabledView = false;
