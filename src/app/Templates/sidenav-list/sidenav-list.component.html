@@ -10,7 +10,7 @@
             </div>
 
             <div class="user">
-                <mat-icon style="color: white;">person</mat-icon>
+                <mat-icon style="color: #185564;">person</mat-icon>
 
                 <h3 class="name"><strong>{{UserName}}</strong> </h3>
 
@@ -28,10 +28,10 @@
                 </div>
                 <div class="menu-item">
                     <mat-accordion multi>
-                        <mat-expansion-panel class="menu-panel" *ngIf="false">
+                        <mat-expansion-panel class="menu-panel">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
-                                    <img src="assets/img/PDD.png" alt="PDD">
+                                    <img class="logo" src="assets/img/PDD.png" alt="PDD">
                                     <span class="title">Plan de desarrollo (PDD)</span>
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
@@ -56,8 +56,8 @@
                         <mat-expansion-panel class="menu-panel">
                             <mat-expansion-panel-header>
                                 <mat-panel-title style="margin-left: -2%;">
-                                    <img src="assets/img/PAA.png" alt="PAA">&nbsp;
-                                    <span class="title">Plan anual de adquisisiones (PAA)</span>
+                                    <img class="logo" src="assets/img/PAA.png" alt="PAA">&nbsp;
+                                    <span class="title">Plan anual de adquisiciones (PAA)</span>
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div>
@@ -79,7 +79,7 @@
                                 </button>
                             </div>
                             <div>
-                                <button mat-button class="menu-button" *ngIf="false" disabled="true" [routerLink]="['']"
+                                <button mat-button class="menu-button" disabled="true" [routerLink]="['']"
                                     (click)="sidebar.toggle()">
                                     &nbsp;<span>- Reportes</span>
                                 </button>
@@ -87,10 +87,10 @@
                         </mat-expansion-panel>
 
 
-                        <mat-expansion-panel class="menu-panel" *ngIf="false">
+                        <mat-expansion-panel class="menu-panel">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
-                                    <img src="assets/img/POAI.png" alt="POAI">
+                                    <img class="logo" src="assets/img/POAI.png" alt="POAI">
                                     <span class="title">Plan operativo de inversiones (POAI)</span>
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
@@ -100,10 +100,10 @@
                         </mat-expansion-panel>
 
 
-                        <mat-expansion-panel class="menu-panel" *ngIf="false">
+                        <mat-expansion-panel class="menu-panel">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
-                                    <img src="assets/img/SEGAPLAN.png" alt="SEGAPLAN">
+                                    <img class="logo" src="assets/img/SEGAPLAN.png" alt="SEGAPLAN">
                                     <span class="title">Seguimiento plan de desarrolo (SEGPLAN)</span>
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
