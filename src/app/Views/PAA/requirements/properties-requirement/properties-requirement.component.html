@@ -27,10 +27,12 @@
         <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos',dataProjectID]">
             &nbsp;>&nbsp;Requerimientos
         </a>
-        <a class="href" *ngIf="+dataSolicitudID === 0" [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + 0]">
+        <a class="href" *ngIf="+dataSolicitudID === 0"
+            [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + 0]">
             &nbsp;>&nbsp;Solicitud modificación
         </a>
-        <a class="href"  *ngIf="+dataSolicitudID !== 0"  [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
+        <a class="href" *ngIf="+dataSolicitudID !== 0"
+            [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
             &nbsp;>&nbsp;Solicitud modificación
         </a>
         <a class="href selected">
@@ -41,25 +43,25 @@
     <div class="mgp" *ngIf="mgp === 'request-tray'">
         Plan Anual de Adquisiciones
         <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeSolicitudes']">
-          &nbsp;>&nbsp;Modificaciones solicitadas
+            &nbsp;>&nbsp;Modificaciones solicitadas
         </a>
-        <a class="href"  [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
+        <a class="href" [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
             &nbsp;>&nbsp;Solicitud modificación
         </a>
         <a class="href selected">
             &nbsp;>&nbsp;Requerimiento {{dataRequirementNum}}
         </a>
-      </div>
-      <!-- desde bandeja de tareas -->
-      <div class="mgp" *ngIf="mgp === 'taskTray'">
+    </div>
+    <!-- desde bandeja de tareas -->
+    <div class="mgp" *ngIf="mgp === 'taskTray'">
         Plan Anual de Adquisiciones
         <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeTareas']">
-          &nbsp;>&nbsp;Bandeja de tareas
+            &nbsp;>&nbsp;Bandeja de tareas
         </a>
         <a class="href selected">
             &nbsp;>&nbsp;Requerimiento {{dataRequirementNum}}
         </a>
-      </div>
+    </div>
 
     <!--BOTON QUE CARGA VERSION ACTUAL-->
     <div *ngIf="viewBtnVersion">
@@ -108,8 +110,9 @@
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Número de requerimiento</p>
-                                        <input class="contData" formControlName="numeroReq"
-                                            [ngClass]="{'contDataDisabled' : numReqDisabled == true }">
+                                        <input class="contData" formControlName="numeroReq" [ngClass]="{
+                                                'contDataDisabled' : numReqDisabled == true,
+                                                'contDataError' : genericNumReq == true }">
                                         <mat-error *ngIf="errorNumReq">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
@@ -120,6 +123,8 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Dependencia destino de los recursos</p>
                                         <input type="text" class="contDataAutocomplete" [matAutocomplete]="auto"
+                                            [ngClass]="{
+                                            'contDataError' : genericDependenciaDes == true }"
                                             formControlName="dependenciaDes">
                                         <mat-error *ngIf="errorDependencia">
                                             Campo <strong>Obligatorio</strong>
@@ -135,7 +140,9 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Mes estimado inicio de proceso de selección</p>
-                                        <mat-select formControlName="mesSeleccion" class="contDataAutocomplete">
+                                        <mat-select formControlName="mesSeleccion" class="contDataAutocomplete"
+                                            [ngClass]="{
+                                            'contDataError' : genericMesSeleccion == true }">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
                                                 selected="item.codigo">
                                                 {{item.idMes}} {{item.nameMes}}</mat-option>
@@ -146,7 +153,8 @@
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Mes estimado presentacion de ofertas</p>
-                                        <mat-select formControlName="mesOfertas" class="contDataAutocomplete">
+                                        <mat-select formControlName="mesOfertas" class="contDataAutocomplete" [ngClass]="{
+                                            'contDataError' : genericMesOfertas == true }">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
                                                 selected="item.codigo">
                                                 {{item.idMes}} {{item.nameMes}}</mat-option>
@@ -156,8 +164,10 @@
                                         </mat-error>
                                     </div>
                                     <div class="contTxt label1">
-                                        <p class="tltData">Mes de incio de ejecución del contrato</p>
-                                        <mat-select formControlName="mesContrato" class="contDataAutocomplete">
+                                        <p class="tltData">Mes de inicio de ejecución del contrato</p>
+                                        <mat-select formControlName="mesContrato" class="contDataAutocomplete"
+                                            [ngClass]="{
+                                            'contDataError' : genericMesContrato == true }">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
                                                 selected="item.codigo">
                                                 {{item.idMes}} {{item.nameMes}}</mat-option>
@@ -168,12 +178,14 @@
                                     </div>
                                     <div class="contTxt label3 ">
                                         <p class="tltData">Duración estimada del contrato</p>
-                                        <input type="number" class="contData" style="width: 20%;"
+                                        <input type="number" class="contData" style="width: 20%;" [ngClass]="{
+                                            'contDataError' : genericDuracionMes == true }"
                                             formControlName="duracionMes">
 
                                         meses&nbsp;&nbsp;
 
-                                        <input type="number" class="contData" style="width: 20%;"
+                                        <input type="number" class="contData" style="width: 20%;" [ngClass]="{
+                                            'contDataError' : genericDuracionDias == true }"
                                             formControlName="duracionDias" maxlength="2" min="1" max="29">
 
                                         Dias
@@ -190,7 +202,8 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label2">
                                         <p class="tltData">Modalidad de selección</p>
-                                        <mat-select formControlName="modalidadSel" class="contDataMod">
+                                        <mat-select formControlName="modalidadSel" class="contDataMod" [ngClass]="{
+                                            'contDataError' : genericModalidadSel == true }">
                                             <mat-option [value]="item.modalidad_Sel_ID"
                                                 *ngFor="let item of allSelectionMode">
                                                 {{item.codigo}}</mat-option>
@@ -213,6 +226,7 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Actuación Contractual</p>
                                         <mat-select formControlName="actuacionCont" class="contDataAutocomplete"
+                                            [ngClass]="{'contDataError' : genericActuacionCont == true }"
                                             (valueChange)="onSelectionChange($event , 'actContractual')">
                                             <mat-option [value]="item.actuacion_ID"
                                                 *ngFor="let item of allContractualAction">
@@ -224,8 +238,8 @@
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Número de contrato</p>
-                                        <input class="contData" formControlName="numeroCont"
-                                            [ngClass]="{'contDataDisabled' : disabledInicial == true }">
+                                        <input class="contData" formControlName="numeroCont" [ngClass]="{'contDataDisabled' : disabledInicial == true 
+                                        , 'contDataError' : genericNumeroCont == true }">
 
                                     </div>
                                 </div>
@@ -233,8 +247,8 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Tipo de contrato</p>
-                                        <mat-select formControlName="tipoCont" class="contDataAutocomplete"
-                                            [ngClass]="{'contDataDisabled' : disabledAdicion == true }">
+                                        <mat-select formControlName="tipoCont" class="contDataAutocomplete" [ngClass]="{'contDataDisabled' : disabledAdicion == true,
+                                        'contDataError' : genericTipoCont == true}">
                                             <mat-option [value]="item.tipoContrato_ID"
                                                 *ngFor="let item of listContacType">
                                                 {{item.nombre}}</mat-option>
@@ -242,8 +256,8 @@
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Perfil</p>
-                                        <mat-select formControlName="perfil" class="contDataAutocomplete"
-                                            [ngClass]="{'contDataDisabled' : disabledAdicion == true }">
+                                        <mat-select formControlName="perfil" class="contDataAutocomplete" [ngClass]="{'contDataDisabled' : disabledAdicion == true ,
+                                        'contDataError' : genericPerfil == true}">
                                             <mat-option [value]="item.perfil_ID" *ngFor="let item of allProfile">
                                                 {{item.nombre_Perfil}}</mat-option>
                                         </mat-select>
@@ -251,15 +265,16 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Valor Honorarios / mes</p>
                                         <input class="contData" formControlName="valorHonMes"
-                                            value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}"
-                                            [ngClass]="{'contDataDisabled' : disabledAdicion == true }">
+                                            value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}" [ngClass]="{'contDataDisabled' : disabledAdicion == true,
+                                            'contDataError' : genericValorHonMes == true }">
                                         <mat-error *ngIf="errorRangeSararial">
                                             <strong>{{msjVerifyRangeSararial}}</strong>
                                         </mat-error>
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Cantidad de contratos</p>
-                                        <input class="contData" formControlName="cantidadCont">
+                                        <input class="contData" formControlName="cantidadCont" [ngClass]="{
+                                            'contDataError' : genericCantidadCont == true }">
                                         <mat-error *ngIf="errorCantContrato">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
@@ -269,8 +284,8 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Descripción (Objeto del contrato)</p>
-                                        <textarea class="contDataArea" #input maxlength="3000"
-                                        rows="6" 
+                                        <textarea class="contDataArea" #input maxlength="3000" rows="6" [ngClass]="{
+                                            'contDataError' : genericDescripcion == true }"
                                             formControlName="descripcion"></textarea>
                                         <mat-hint align="end">{{input.value.length || 0}}/3000</mat-hint>
                                         <mat-error *ngIf="errorDescripcionCont">
@@ -1002,7 +1017,7 @@
 
                                     </div>
                                     <div class="contTxt label1">
-                                        <p class="tltData">Mes de incio de ejecución del contrato</p>
+                                        <p class="tltData">Mes de inicio de ejecución del contrato</p>
                                         <mat-select formControlName="mesContratoRew"
                                             [ngClass]="{'contDataModified' : mesEstmadoInicioEjecucionModified == true }"
                                             class="contDataAutocomplete contDataDisabled">
@@ -1113,8 +1128,7 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Descripción (Objeto del contrato)</p>
-                                        <textarea class="contDataArea contDataDisabled"
-                                        rows="6" 
+                                        <textarea class="contDataArea contDataDisabled" rows="6"
                                             [ngClass]="{'contDataModified' : descripcionModified == true }"
                                             formControlName="descripcionRew"></textarea>
                                         <mat-error *ngIf="errorDescripcionCont">
@@ -1662,7 +1676,7 @@
 
                                     </div>
                                     <div class="contTxt label1">
-                                        <p class="tltData">Mes de incio de ejecución del contrato</p>
+                                        <p class="tltData">Mes de inicio de ejecución del contrato</p>
                                         <mat-select formControlName="mesContratoAct"
                                             class="contDataAutocomplete contDataDisabled">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
@@ -1744,9 +1758,7 @@
                                         <p class="tltData">Valor Honorarios / mes</p>
                                         <input class="contData contDataDisabled" formControlName="valorHonMesAct"
                                             value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}">
-                                        <mat-error *ngIf="errorRangeSararial">
-                                            <strong>{{msjVerifyRangeSararial}}</strong>
-                                        </mat-error>
+                                    
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Cantidad de contratos</p>
@@ -1760,8 +1772,7 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Descripción (Objeto del contrato)</p>
-                                        <textarea class="contDataArea contDataDisabled"
-                                        rows="6" 
+                                        <textarea class="contDataArea contDataDisabled" rows="6"
                                             formControlName="descripcionAct"></textarea>
                                         <mat-error *ngIf="errorDescripcionCont">
                                             Campo <strong>Obligatorio</strong>

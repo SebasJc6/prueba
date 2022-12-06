@@ -12,6 +12,8 @@ import { ThemePalette } from '@angular/material/core';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CDPService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/cdp.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 
 export interface ChipColor {
   name: string;
@@ -66,6 +68,7 @@ export class AcquisitionsComponent implements OnInit {
     private serviceProject: ProjectService, 
     public router: Router, private authService: AuthenticationService,
     private serviceCdps: CDPService,
+    private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,) {
 
   }
@@ -173,8 +176,27 @@ export class AcquisitionsComponent implements OnInit {
     let fil : File = file[0];
 
     if (file != null) {
-        this.importFile(fil);
+      let FILE = new FormData();
+      FILE.append('file', fil);
+
+      this.importFile(FILE);
     }
+  }
+
+  //Convertir archivo de Base64 a File
+  convertBase64ToFile(dataurl : any, filename : string) {
+ 
+    let arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), 
+        n = bstr.length, 
+        u8arr = new Uint8Array(n);
+        
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    
+    return new File([u8arr], filename, {type:mime});
   }
 
 
@@ -183,6 +205,14 @@ export class AcquisitionsComponent implements OnInit {
     this.serviceCdps.postCDPs(file).subscribe(response => {
       console.log('Res: ', response);
       
+      if (response.status === 200) {
+        if (response.data.hasWarnings) {
+          
+        }
+      } else if(response.status === 422) {
+        this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
+        //TODO: Descargar archivo de errores
+      }
     }, error => {
       console.log('Error: ', error);
       
@@ -281,6 +311,17 @@ export class AcquisitionsComponent implements OnInit {
       this.getAllProjects(this.filterProjects);
       this.isApproved = true;
     })
+  }
+
+
+  //Metodo para llamar alertas
+  openSnackBar(title: string, message: string, type: string, message2?: string) {
+    this.snackBar.openFromComponent(AlertsComponent, {
+      data: { title, message, message2, type },
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: [type],
+    });
   }
 
   //Expresion regular para validar que solo se ingresen numeros en la paginación

@@ -51,6 +51,8 @@ export class BudgetModificationComponent implements OnInit {
     this.valueForm(this.data.element);
     this.currencyInput();
     if (this.data.type == 'editar') {
+      this.viewDisabledAum = false;
+      this.viewDisabledDis = false;
     } else if (this.data.type == 'ver') {
       // this.valueFormSubmit.get('subAumenta')?.disabled();
       this.viewDisabledAum = true;
@@ -99,7 +101,7 @@ export class BudgetModificationComponent implements OnInit {
   }
 
   onPressValueIncreases() {
-    if (this.data.type == 'editar') {
+    if (this.data.type == "editar") {
       //  this.valueFormSubmit.controls['subAumenta'].setValue(value);
       let valorAumenta = this.valueFormSubmit.controls['subAumenta'].value;
       this.formSubmit.subAumento = this.quitCurrencyPipe(valorAumenta || '0');
@@ -144,8 +146,10 @@ export class BudgetModificationComponent implements OnInit {
     if (this.data.type == 'ver') {
       this.viewDisabledAum = true;
       this.viewDisabledDis = true;
-      this.valueFormSubmit.controls.subAumenta.disabled;
-      this.valueFormSubmit.controls['SubDisminuye'].disabled;
+      this.valueFormSubmit.controls.subAumenta.disable();
+      this.valueFormSubmit.controls['SubDisminuye'].disable();
+      this.valueFormSubmit.controls.iva.disable();
+      this.valueFormSubmit.controls['arl'].disable();
       this.isDisabledView = true;
       //Dar formato al valor que Aumenta
       const aumenta = String(event.subAumento);
@@ -169,6 +173,8 @@ export class BudgetModificationComponent implements OnInit {
       this.valueFormSubmit.controls['arl'].setValue(VALUE_ARL);
       this.valueFormSubmit.controls['total'].setValue(VALUE_TOTAL);
     } else if (this.data.type == 'editar') {
+      this.valueFormSubmit.controls.subAumenta.enable();
+      this.valueFormSubmit.controls['SubDisminuye'].enabled;
       this.isDisabledView = false;
       this.formSubmit = event;
       this.iva = this.formSubmit.iva;
@@ -191,14 +197,14 @@ export class BudgetModificationComponent implements OnInit {
       const arl = String(event.arl);
       const VALUE_ARL = this.assignCurrencyPipe(arl);
       //Dar formato al valor total
-      // const total = String(event.apropiacionDefinitiva);
-      // const VALUE_TOTAL = this.assignCurrencyPipe(total);
+      const total = String(event.subAumento + event.subDisminucion + event.iva + event.arl);
+      const VALUE_TOTAL = this.assignCurrencyPipe(total);
 
       this.valueFormSubmit.controls['subAumenta'].setValue(VALUE_AUMENTA);
       this.valueFormSubmit.controls['SubDisminuye'].setValue(VALUE_DISMINUYE);
       this.valueFormSubmit.controls['iva'].setValue(VALUE_IVA);
       this.valueFormSubmit.controls['arl'].setValue(VALUE_ARL);
-      // this.valueFormSubmit.controls['total'].setValue(VALUE_TOTAL);
+       this.valueFormSubmit.controls['total'].setValue(VALUE_TOTAL);
       this.currencyInput();
     }
 

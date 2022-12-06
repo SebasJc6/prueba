@@ -86,7 +86,8 @@ export class PopUpImportComponent implements OnInit {
             this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
           }
 
-          this.spinner.hide();
+            this.dialogRef.close();
+            this.spinner.hide();
         }, error => {
           let status = error.error.status;
 
@@ -105,7 +106,7 @@ export class PopUpImportComponent implements OnInit {
           } else {
             this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
           }
-          
+          this.dialogRef.close();
           this.spinner.hide();
         });
 
@@ -133,9 +134,8 @@ export class PopUpImportComponent implements OnInit {
             this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
           } else if (status == 200) {
             this.openSnackBar('Guardado Exitosamente', `Solicitud de modificación actualizada y guardada con éxito.`, 'success');
-            this.router.navigate([`/WAPI/PAA/SolicitudModificacion/${this.id_project}/${this.id_request}`]);
           }
-
+          this.dialogRef.close();
           this.spinner.hide();
         }, error => {
           let status = error.error.status;
@@ -155,6 +155,7 @@ export class PopUpImportComponent implements OnInit {
           } else {
             this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
           }
+          this.dialogRef.close();
           this.spinner.hide();
         });
 

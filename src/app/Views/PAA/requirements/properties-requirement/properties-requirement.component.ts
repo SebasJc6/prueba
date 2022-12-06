@@ -19,6 +19,7 @@ import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.ser
 import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
 import { ReviewsService } from 'src/app/Services/ServicesPAA/propertiesRequirement/reviews/reviews.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
+import Swal from 'sweetalert2';
 import { v4 as uuid } from 'uuid';
 import { BudgetModificationComponent } from './budget-modification/budget-modification.component';
 
@@ -317,6 +318,24 @@ export class PropertiesRequirementComponent implements OnInit {
   dataSourceRevisionesView!: MatTableDataSource<dataSourceRevisionesI>;
   dataSourceClasificacionesRew!: MatTableDataSource<dataSourceClasificacionesI>;
   dataSourceCodigosRew!: MatTableDataSource<getAllUNSPSCDataI>;
+  //variables para errores genericos
+  genericNumReq: boolean = false;
+  genericDependenciaDes: boolean = false;
+  genericMesSeleccion: boolean = false;
+  genericMesOfertas: boolean = false;
+  genericMesContrato: boolean = false;
+  genericDuracionMes: boolean = false;
+  genericDuracionDias: boolean = false;
+  genericModalidadSel: boolean = false;
+  genericActuacionCont: boolean = false;
+  genericNumeroCont: boolean = false;
+  genericTipoCont: boolean = false;
+  genericPerfil: boolean = false;
+  genericValorHonMes: boolean = false;
+  genericCantidadCont: boolean = false;
+  genericDescripcion: boolean = false;
+  genericCodigos: boolean = false;
+  genericClasificaciones: boolean = false;
 
   constructor(
     public serviceProject: ProjectService,
@@ -361,6 +380,10 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    ProChartStorage.removeItem('dataTableClacificaciones')
+    ProChartStorage.removeItem('dataTableCodigos')
+    ProChartStorage.removeItem('dataTableRevisiones')
     this.mgp = sessionStorage.getItem('mgp') || '';
     //Obtener token para manejar los roles
     this.AccessUser = this.authService.getRolUser();
@@ -373,7 +396,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
     this.serviceModRequest.getModificationRequestByRequest(+this.dataProjectID, +this.dataSolicitudID).subscribe((data) => {
-      // console.log('dtaIfno', data);
+     // console.log('dtaIfno', data);
       this.statusReq = data.data.solicitud_Estado || '';
 
       if (this.typePage == 'Vista') {
@@ -517,32 +540,38 @@ export class PropertiesRequirementComponent implements OnInit {
       distinctUntilChanged(),
     ).subscribe(value => {
       this.errorDependencia = value.length > 0 ? false : true;
+      this.genericDependenciaDes = false
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.mesSeleccion.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
       this.errorMesSeleccion = value.length > 0 ? false : true;
+      this.genericMesSeleccion = false
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.mesOfertas.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
       this.errorMesOferta = value.length > 0 ? false : true;
+      this.genericMesOfertas = false
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.mesContrato.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
       this.errorMesContrato = false
+      this.genericMesContrato = false
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.duracionMes.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
       this.errorDuratioMes = false
+      this.genericDuracionMes = false
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.duracionDias.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
       this.errorDurationDia = false
       this.viewErrorDiaMax = false
+      this.genericDuracionDias = false
 
       if (value > 29) {
         this.viewErrorDiaMax = true
@@ -552,21 +581,52 @@ export class PropertiesRequirementComponent implements OnInit {
       distinctUntilChanged(),
     ).subscribe(value => {
       this.errorModalidad = false
+      this.genericModalidadSel = false
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.actuacionCont.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
       this.errorActuacion = false
+      this.genericActuacionCont = false
+    })
+    this.proRequirementeForm.controls.infoBasicaForm.controls.numeroCont.valueChanges.pipe(
+      distinctUntilChanged(),
+    ).subscribe(value => {
+      this.genericNumeroCont = false
+    })
+    this.proRequirementeForm.controls.infoBasicaForm.controls.tipoCont.valueChanges.pipe(
+      distinctUntilChanged(),
+    ).subscribe(value => {
+      this.genericTipoCont = false
+    })
+    this.proRequirementeForm.controls.infoBasicaForm.controls.perfil.valueChanges.pipe(
+      distinctUntilChanged(),
+    ).subscribe(value => {
+      this.genericPerfil = false
+      if (this.proRequirementeForm.controls.infoBasicaForm.controls.valorHonMes.value != null && this.proRequirementeForm.controls.infoBasicaForm.controls.valorHonMes.value != undefined) {
+        let valueHonorario = this.proRequirementeForm.controls.infoBasicaForm.controls.valorHonMes.value
+        this.serviceProRequirement.verifyRangeSararial(value, valueHonorario, 2022).subscribe(data => {
+          if (data.data == false) {
+            this.errorRangeSararial = true;
+            this.msjVerifyRangeSararial = data.message
+          } else {
+            this.errorRangeSararial = false;
+            this.msjVerifyRangeSararial = data.message
+          }
+        })
+      }
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.cantidadCont.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
       this.errorCantContrato = false
+      this.genericCantidadCont = false
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.descripcion.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
       this.errorDescripcionCont = false
+      this.genericDescripcion = false
     })
 
 
@@ -689,6 +749,7 @@ export class PropertiesRequirementComponent implements OnInit {
       this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].valueChanges.pipe(
         distinctUntilChanged()
       ).subscribe(val => {
+        this.genericNumReq = false
         this.serviceProRequirement.verifyNumReq(+this.dataProjectID, val).subscribe(data => {
           this.errorNumReq = false
           if (data.data == false) {
@@ -714,6 +775,7 @@ export class PropertiesRequirementComponent implements OnInit {
     this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].valueChanges.pipe(
       distinctUntilChanged()
     ).subscribe(val => {
+      this.genericValorHonMes = false
       this.serviceProRequirement.verifyRangeSararial(this.idPerfil, val, 2022).subscribe(data => {
         if (data.data == false) {
           this.errorRangeSararial = true;
@@ -728,7 +790,7 @@ export class PropertiesRequirementComponent implements OnInit {
   getDataConsulta(projectId: number, requestId: number, reqTempId: number) {
     // console.log(projectId, requestId, reqTempId)
     this.serviceProRequirement.getAllDataTemporalModified(projectId, requestId, reqTempId).subscribe(dataTemp => {
-      console.log(dataTemp)
+      // console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
       this.reqID = dataTemp.requerimiento.requerimiento_ID
       let dataReviews = dataTemp
@@ -780,7 +842,6 @@ export class PropertiesRequirementComponent implements OnInit {
 
         // const dependenciaDestinoModified = dataReviews.requerimiento.dependenciaDestinoModified
         this.cadenasPresupuestalesVerRew = dataReviews.cadenasPresupuestales
-        console.log(this.cadenasPresupuestalesVerRew)
         this.dataSourceClasificacionesRew = new MatTableDataSource(this.cadenasPresupuestalesVerRew)
 
         this.codigosVerRew = dataReviews.codsUNSPSC
@@ -790,11 +851,14 @@ export class PropertiesRequirementComponent implements OnInit {
         // this.viewVersion = false
       }
 
+    }, error => {
+      console.log(error)
+
     })
   }
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number) {
     this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
-        console.log(dataTemp)
+      // console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
 
       this.reqID = dataTemp.requerimiento.requerimiento_ID
@@ -911,20 +975,100 @@ export class PropertiesRequirementComponent implements OnInit {
     })
   }
   cancel() {
-    if (sessionStorage.getItem('mga') == 'taskTray') {
-      this.router.navigate(['/WAPI/PAA/BandejaDeTareas']);
-    } else if (this.typePage == 'Nuevo') {
-      this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
-    } else if (this.typePage == 'Editar') {
-      this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
-    } else if (this.typePage == 'Revision') {
-      this.router.navigate(['/WAPI/PAA/BandejaDeTareas/'])
-    } else if (this.typePage == 'Vista') {
-      this.router.navigate(['/WAPI/PAA/Requerimientos/' + this.dataProjectID])
-    }
+    if (this.typePage == 'Nuevo') {
+      //Alerta de confirmación
+      Swal.fire({
+        customClass: {
+          confirmButton: 'swalBtnColor',
+          denyButton: 'swalBtnColor'
+        },
+        title: '¿Esta seguro que desea cancelar?',
+        text: ' Esta acción eliminará los ultimos cambios realizados',
+        showDenyButton: true,
+        denyButtonText: 'NO',
+        confirmButtonText: 'SI',
+        allowOutsideClick: false
+      }).then((result) => {
+        if (result.value) {
+          this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+        }
+      });
+    } else
+      if (this.typePage == 'Editar' && this.statusReq == 'En Creación') {
+        //Alerta de confirmación
+        Swal.fire({
+          customClass: {
+            confirmButton: 'swalBtnColor',
+            denyButton: 'swalBtnColor'
+          },
+          title: '¿Esta seguro que desea cancelar?',
+          text: ' Esta acción eliminará los ultimos cambios realizados',
+          showDenyButton: true,
+          denyButtonText: 'NO',
+          confirmButtonText: 'SI',
+          allowOutsideClick: false
+        }).then((result) => {
+          if (result.value) {
+            this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+          }
+        });
+      } else
+        if (this.typePage == 'Ajuste' && this.statusReq == 'En Ajuste') {
+          //Alerta de confirmación
+          Swal.fire({
+            customClass: {
+              confirmButton: 'swalBtnColor',
+              denyButton: 'swalBtnColor'
+            },
+            title: '¿Esta seguro que desea cancelar?',
+            text: ' Esta acción eliminará los ultimos cambios realizados',
+            showDenyButton: true,
+            denyButtonText: 'NO',
+            confirmButtonText: 'SI',
+            allowOutsideClick: false
+          }).then((result) => {
+            if (result.value) {
+
+              if (sessionStorage.getItem('mga') == 'taskTray') {
+                this.router.navigate(['/WAPI/PAA/BandejaDeTareas']);
+              } else {
+                this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+              }
+            }
+          });
+        } else    if (this.typePage == 'Editar' && this.statusReq == 'En Ajuste') {
+          //Alerta de confirmación
+          Swal.fire({
+            customClass: {
+              confirmButton: 'swalBtnColor',
+              denyButton: 'swalBtnColor'
+            },
+            title: '¿Esta seguro que desea cancelar?',
+            text: ' Esta acción eliminará los ultimos cambios realizados',
+            showDenyButton: true,
+            denyButtonText: 'NO',
+            confirmButtonText: 'SI',
+            allowOutsideClick: false
+          }).then((result) => {
+            if (result.value) {
+
+                this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+              
+            }
+          });
+        } else if (this.typePage == 'Nuevo') {
+          this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+        } else if (this.typePage == 'Editar') {
+          this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+        } else if (this.typePage == 'Revision') {
+          this.router.navigate(['/WAPI/PAA/BandejaDeTareas/'])
+        } else if (this.typePage == 'Vista') {
+          this.router.navigate(['/WAPI/PAA/Requerimientos/' + this.dataProjectID])
+        }
   }
 
   saveForm() {
+    this.spinner.show();
     if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == null || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == '') {
       this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].setValue(0)
     } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == null || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == '') {
@@ -1031,8 +1175,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
       if (this.typePage == 'Nuevo') {
         this.serviceProRequirement.postVerifyDataSaveI(this.formVerify).subscribe(dataResponse => {
-
-          console.log('response', dataResponse)
+          this.spinner.hide()
           if (dataResponse.status == 200) {
             var stringToStoreCom = JSON.stringify(this.formVerifyComplete);
             ProChartStorage.setItem("formVerifyComplete", stringToStoreCom);
@@ -1050,19 +1193,75 @@ export class PropertiesRequirementComponent implements OnInit {
 
             }
           } else {
-            console.log('response', dataResponse)
+            // console.log('response', dataResponse)
 
 
             this.openSnackBar('Error', dataResponse.message, 'error');
           }
         }, err => {
+          this.spinner.hide()
+
+          let dataError = err.error.data
+
+          //valodacion de errores genericos
+          if (dataError['Requerimiento.Numero de requerimiento'] != undefined) {
+            this.genericNumReq = true
+          }
+          if (dataError['Requerimiento.Dependencia destino'] != undefined) {
+            this.genericDependenciaDes = true
+          }
+          if (dataError['Requerimiento.Modalidad de seleccion'] != undefined) {
+            this.genericModalidadSel = true
+          }
+          if (dataError['Requerimiento.Tipo de Contrato'] != undefined) {
+            this.genericTipoCont = true
+          }
+          if (dataError['Requerimiento.Perfil'] != undefined) {
+            this.genericPerfil = true
+          }
+          if (dataError['Requerimiento.Honorarios'] != undefined) {
+            this.genericValorHonMes = true
+          }
+          if (dataError['Requerimiento.Actuacion'] != undefined) {
+            this.genericActuacionCont = true
+          }
+          if (dataError['Requerimiento.Duracion Mes'] != undefined) {
+            this.genericDuracionMes = true
+          }
+          if (dataError['Requerimiento.Duracion dias'] != undefined) {
+            this.genericDuracionDias = true
+          }
+          if (dataError['Requerimiento.Mes estimado inicio de seleccion'] != undefined) {
+            this.genericMesSeleccion = true
+          }
+          if (dataError['Requerimiento.Mes estimado presentacion de ofertas'] != undefined) {
+            this.genericMesOfertas = true
+          }
+          if (dataError['Requerimiento.Mes estimado inicio de Ejecucion'] != undefined) {
+            this.genericMesContrato = true
+          }
+          if (dataError['Requerimiento.Cantidad de contratos'] != undefined) {
+            this.genericCantidadCont = true
+          }
+          if (dataError['Requerimiento.Descripción'] != undefined) {
+            this.genericDescripcion = true
+          }
+          if (dataError['Requerimiento.Numero de contrato'] != undefined) {
+            this.genericNumeroCont = true
+          }
+          if (dataError['Cadenas presupuestales'] != undefined) {
+            this.genericClasificaciones = true
+          }
+          if (dataError['Codigos UNSPSC'] != undefined) {
+            this.genericCodigos = true
+          }
+
           let Data: string[] = [];
           Data = Object.values(err.error.data);
           let errorMessages = '';
           Data.map(item => {
             errorMessages += item + '. ';
           });
-          console.log('err', err)
           this.openSnackBar('Error', err.error.message, 'error', errorMessages);
         })
       } else {
@@ -1085,8 +1284,11 @@ export class PropertiesRequirementComponent implements OnInit {
         this.formModificationRequest.deleteContraIDs = []
         this.spinner.show();
         this.serviceProRequirement.putModificationRequestSend(this.formModificationRequest).subscribe(dataResponse => {
-          console.log('response', dataResponse)
+          this.spinner.hide()
+
+          // console.log('response', dataResponse)
           if (dataResponse.status == 200) {
+
             this.loading = true
             this.openSnackBar('Se ha guardado correctamente', dataResponse.message, 'success');
             if (sessionStorage.getItem('mga') == 'taskTray') {
@@ -1098,7 +1300,8 @@ export class PropertiesRequirementComponent implements OnInit {
             this.loading = false
 
           } else {
-            console.log('dats', dataResponse)
+            this.spinner.hide()
+
             let Data: string[] = [];
             Data = Object.values(dataResponse.data);
             let erorsMessages = '';
@@ -1109,8 +1312,68 @@ export class PropertiesRequirementComponent implements OnInit {
           }
           this.spinner.hide();
         }, err => {
-          console.log('err', err)
-          this.openSnackBar('Error', JSON.stringify(err.error.data), 'error');
+          //valodacion de errores genericos
+          let dataError = err.error.data
+          if (dataError['Requerimiento.Numero de requerimiento'] != undefined) {
+            this.genericNumReq = true
+          }
+          if (dataError['Requerimiento.Dependencia destino'] != undefined) {
+            this.genericDependenciaDes = true
+          }
+          if (dataError['Requerimiento.Modalidad de seleccion'] != undefined) {
+            this.genericModalidadSel = true
+          }
+          if (dataError['Requerimiento.Tipo de Contrato'] != undefined) {
+            this.genericTipoCont = true
+          }
+          if (dataError['Requerimiento.Perfil'] != undefined) {
+            this.genericPerfil = true
+          }
+          if (dataError['Requerimiento.Honorarios'] != undefined) {
+            this.genericValorHonMes = true
+          }
+          if (dataError['Requerimiento.Actuacion'] != undefined) {
+            this.genericActuacionCont = true
+          }
+          if (dataError['Requerimiento.Duracion Mes'] != undefined) {
+            this.genericDuracionMes = true
+          }
+          if (dataError['Requerimiento.Duracion dias'] != undefined) {
+            this.genericDuracionDias = true
+          }
+          if (dataError['Requerimiento.Mes estimado inicio de seleccion'] != undefined) {
+            this.genericMesSeleccion = true
+          }
+          if (dataError['Requerimiento.Mes estimado presentacion de ofertas'] != undefined) {
+            this.genericMesOfertas = true
+          }
+          if (dataError['Requerimiento.Mes estimado inicio de Ejecucion'] != undefined) {
+            this.genericMesContrato = true
+          }
+          if (dataError['Requerimiento.Cantidad de contratos'] != undefined) {
+            this.genericCantidadCont = true
+          }
+          if (dataError['Requerimiento.Descripción'] != undefined) {
+            this.genericDescripcion = true
+          }
+          if (dataError['Requerimiento.Numero de contrato'] != undefined) {
+            this.genericNumeroCont = true
+          }
+          if (dataError['Cadenas presupuestales'] != undefined) {
+            this.genericClasificaciones = true
+          }
+          if (dataError['Codigos UNSPSC'] != undefined) {
+            this.genericCodigos = true
+          }
+
+          this.spinner.hide()
+          let Data: string[] = [];
+          Data = Object.values(err.error.data);
+          let errorMessages = '';
+          Data.map(item => {
+            errorMessages += item + '. ';
+          });
+          this.openSnackBar('Error', err.error.message, 'error', errorMessages);
           this.spinner.hide();
         })
 
@@ -1438,7 +1701,6 @@ export class PropertiesRequirementComponent implements OnInit {
 
     if (type == 'Delete') {
       if (typeof idReviews !== 'string') {
-        console.log('idReviews numerico')
         let reviewsDelete = {} as deleteReviewsI
         reviewsDelete.modificacion_ID = +this.dataRequirementID
         reviewsDelete.revisiones = [idReviews]
@@ -1457,8 +1719,6 @@ export class PropertiesRequirementComponent implements OnInit {
           this.spinner.hide();
         });
       } else {
-        console.log('"No es numérico"')
-        console.log(this.dataTableRevisiones)
 
         var fromStorage = this.dataTableRevisiones
         var index = fromStorage.findIndex((x: any) => x.revision_ID === idReviews);
@@ -1505,7 +1765,6 @@ export class PropertiesRequirementComponent implements OnInit {
       });
 
       if (this.reviewsCheck.length != 0) {
-        console.log('this.reviewsCheck', this.reviewsCheck)
         let putUpdateReviews = {} as putUpdateReviewsI
         putUpdateReviews.modificacion_ID = +this.dataRequirementID
         putUpdateReviews.revisiones = this.reviewsCheck
@@ -1524,7 +1783,6 @@ export class PropertiesRequirementComponent implements OnInit {
           this.spinner.hide();
         });
       } else {
-        console.log('No hay nada')
       }
 
       if (sessionStorage.getItem('mga') == 'taskTray') {
@@ -1552,9 +1810,7 @@ export class PropertiesRequirementComponent implements OnInit {
       } else {
         this.reviewsCheck.push(objectReviews)
       }
-      console.log('reviewsCheck', this.reviewsCheck)
     } else {
-      console.log('No hace nada')
     }
 
   }
