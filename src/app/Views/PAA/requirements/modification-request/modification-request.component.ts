@@ -387,16 +387,6 @@ export class ModificationRequestComponent implements OnInit {
       requeriment.tipoContrato_Id = element.data.requerimiento.tipoContrato.tipoContrato_ID;
       requeriment.version = element.data.requerimiento.version;
 
-      //Quitar para Fase 2, ya no es necesario Mandar estos Campos (No Funciona en Dev)
-      apropiacionInicial.anioV0 = element.data.apropiacionInicial.anioV0;
-      apropiacionInicial.anioV1 = element.data.apropiacionInicial.anioV1;
-      apropiacionInicial.anioV2 = element.data.apropiacionInicial.anioV2;
-      apropiacionInicial.apropIni_ID = element.data.apropiacionInicial.apropIni_ID;
-      apropiacionInicial.valor0 = element.data.apropiacionInicial.valor0;
-      apropiacionInicial.valor1 = element.data.apropiacionInicial.valor1;
-      apropiacionInicial.valor2 = element.data.apropiacionInicial.valor2;
-      apropiacionInicial.valorTotal = element.data.apropiacionInicial.valorTotal;
-
       element.data.codsUNSPSC.map(elem => {
         let codigosUNS = {} as codsUNSPSC;
         codigosUNS.unspsC_ID = elem.unspsC_ID;
