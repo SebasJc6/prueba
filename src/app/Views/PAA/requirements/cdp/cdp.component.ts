@@ -159,6 +159,7 @@ export class CDPComponent implements OnInit {
   notifyCDP() {
     this.spinner.show();
     this.serviceCdps.putLockCDPs(Number(this.requerimentId)).subscribe(response => {
+      console.log(response);
       
       if (response.status === 200) {
         if (response.data.hasBlockedAnyCDP) {

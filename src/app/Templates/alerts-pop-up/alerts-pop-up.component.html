@@ -32,3 +32,63 @@
         </div>
     </div>
 </div>
+
+
+<!-- VE 5: ALERT  ADVERTENCIA SELECT -->
+<div *ngIf="data.type === 'warningSelect'">
+    <div class="card">
+        <img class="logo" src="assets/img/danger.png">
+        <h1 class="title" style="color: rgb(255, 208, 0);" mat-dialog-title>{{data.title}}</h1>
+        
+        <div class="" mat-dialog-content>
+          <p>{{data.message}}</p>
+        </div>
+
+        <div class="" mat-dialog-content>
+            <div class="contTxt label1">
+                <mat-select class="contDataSelect">
+                    <mat-option ></mat-option>
+                </mat-select>
+            </div>
+        </div>
+
+        <div class="buttons" style="margin-top: 5%;" mat-dialog-actions>
+            <button mat-button class="butonWarningInput btn" (click)="closeDialog(5)" cdkFocusInitial>EXPORTAR</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- VE 6: ALERT  ADVERTENCIA SELECT X2 -->
+<div *ngIf="data.type === 'warningSelect2'">
+    <div class="card">
+        <img class="logo" src="assets/img/danger.png">
+        <h1 class="title" style="color: rgb(255, 208, 0);" mat-dialog-title>{{data.title}}</h1>
+        
+        <div class="" mat-dialog-content>
+          <p>{{data.message}}</p>
+        </div>
+
+        <div class="" mat-dialog-content>
+            <div class="contTxt label1">
+                <mat-select class="contDataSelect">
+                    <mat-option ></mat-option>
+                </mat-select>
+            </div>
+        </div>
+
+        <div class="" mat-dialog-content>
+            <div class="contTxt label1">
+                <p class="tltData">Año</p>
+                <mat-select class="contDataSelect">
+                    <mat-option ></mat-option>
+                </mat-select>
+            </div>
+        </div>
+
+        <div class="buttons" style="margin-top: 3%;" mat-dialog-actions>
+            <button mat-button class="butonWarningInput btn" (click)="closeDialog(5)" cdkFocusInitial>EXPORTAR</button>
+        </div>
+    </div>
+</div>
