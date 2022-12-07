@@ -109,7 +109,7 @@
                     [disabled]="(AccessUser == 'Referente_Planeacion') ? false : true">
                     </mat-checkbox>
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
+                <td mat-footer-cell *matFooterCellDef class="footerTable"></td>
             </ng-container>
     
             <ng-container matColumnDef="Vigencia">
@@ -119,7 +119,7 @@
                 <td mat-cell *matCellDef="let element">
                     <p>{{element.vigencia}}</p>
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
+                <td mat-footer-cell *matFooterCellDef class="footerTable"></td>
             </ng-container>
     
             <ng-container matColumnDef="NumOrden">
@@ -129,7 +129,7 @@
                 <td mat-cell *matCellDef="let element">
                     <p>{{element.vigencia}}</p>
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
+                <td mat-footer-cell *matFooterCellDef class="footerTable"></td>
             </ng-container>
     
             <ng-container matColumnDef="FechaOrdenPago">
@@ -139,7 +139,7 @@
                 <td mat-cell *matCellDef="let element">
                     <p>{{element.fechaCDP}}</p>
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado">
+                <td mat-footer-cell *matFooterCellDef class="footerTable total">
                     <p style="margin-top: 8%;">TOTAL GENERAL</p>
                 </td>
             </ng-container>
@@ -151,7 +151,7 @@
                 <td mat-cell *matCellDef="let element">
                     <p>{{element.valorinicial | currency:"COP":'symbol-narrow': '1.0-0'}}</p>
                 </td> 
-                <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
+                <td mat-footer-cell *matFooterCellDef class="footerTable total"></td>
             </ng-container>
     
             <ng-container matColumnDef="ValorOrdenPago">
@@ -161,7 +161,7 @@
                 <td mat-cell *matCellDef="let element">
                     <p>{{element.valorAnulacion | currency:"COP":'symbol-narrow': '1.0-0'}}</p>
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado">
+                <td mat-footer-cell *matFooterCellDef class="footerTable total">
                     <p style="margin-top: 5%;">{{paymentOrderValue | currency:"COP":'symbol-narrow': '1.0-0'}} </p>
                 </td>
             </ng-container>
@@ -173,7 +173,7 @@
                 <td mat-cell *matCellDef="let element">
                     <p>{{element.fechaAnulacion}} </p>
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado">
+                <td mat-footer-cell *matFooterCellDef class="footerTable total">
                     <p style="margin-top: 5%;">{{distributedValue | currency:"COP":'symbol-narrow': '1.0-0'}} </p>
                 </td>
             </ng-container>
@@ -185,7 +185,7 @@
                 <td mat-cell *matCellDef="let element">
                     <p>{{element.valorFinal | currency:"COP":'symbol-narrow': '1.0-0'}}</p>
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado">
+                <td mat-footer-cell *matFooterCellDef class="footerTable total">
                     <p style="margin-top: 9.5%;">{{balanceDistribute | currency:"COP":'symbol-narrow': '1.0-0'}} </p>
                 </td>
             </ng-container>
@@ -197,7 +197,7 @@
                 <td mat-cell *matCellDef="let element">
                     <p>{{element.cantidadRPs}}</p>
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
+                <td mat-footer-cell *matFooterCellDef class="footerTable total"></td>
             </ng-container>
     
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

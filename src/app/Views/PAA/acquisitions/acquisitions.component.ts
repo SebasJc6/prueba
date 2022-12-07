@@ -90,6 +90,8 @@ export class AcquisitionsComponent implements OnInit {
   //Objeto con la informacion de acceso del Usuario
   AccessUser: string = '';
 
+  //Propiedad para reiniciar el input Importar CDPs/RPs y cargar el mismo archivo varias veces
+  filterFileName: string = '';
   
   ngOnInit(): void {
     this.ngAfterViewInit();
@@ -174,7 +176,7 @@ export class AcquisitionsComponent implements OnInit {
   onFileSelected(event: any) {
     const file: FileList = event.target.files;
     let fil : File = file[0];
-
+    this.filterFileName = '';
     if (file != null) {
       let FILE = new FormData();
       FILE.append('file', fil);
@@ -183,39 +185,41 @@ export class AcquisitionsComponent implements OnInit {
     }
   }
 
-  //Convertir archivo de Base64 a File
-  convertBase64ToFile(dataurl : any, filename : string) {
- 
-    let arr = dataurl.split(','),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), 
-        n = bstr.length, 
-        u8arr = new Uint8Array(n);
-        
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    
-    return new File([u8arr], filename, {type:mime});
+  //Convertir archivo de Base64 a .xlsx y descargarlo
+  convertBase64ToFileDownload(base64String: string, fileName: string) {
+    const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64String}`;
+    const link = document.createElement("a");
+    link.href = source;
+    link.download = `${fileName}`;
+    link.click();
   }
 
 
   //Importar Documento de CDPs/RPs
   importFile(file : any) {
+    this.spinner.show();
     this.serviceCdps.postCDPs(file).subscribe(response => {
       console.log('Res: ', response);
       
       if (response.status === 200) {
         if (response.data.hasWarnings) {
-          
+          this.openSnackBar('Advertencia', `Se guardaron los registros y surgieron advertencias. Descargando archivo de advertencias ${response.data.warnings.fileName}`, 'warning');
+          this.convertBase64ToFileDownload(response.data.warnings.fileAsBase64, response.data.warnings.fileName);
+        } else {
+          this.openSnackBar('Guardado Exitosamente', `CDPs/RPs importados con éxito.`, 'success');
         }
       } else if(response.status === 422) {
         this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
-        //TODO: Descargar archivo de errores
+        this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
+      } else if (response.status === 423) {
+        this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
+        this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
       }
+      this.spinner.hide();
     }, error => {
-      console.log('Error: ', error);
-      
+      // console.log('Error: ', error);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.spinner.hide();
     });
   }
 

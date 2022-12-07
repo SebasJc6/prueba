@@ -1,9 +1,11 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
+import { AlertsPopUpComponent } from 'src/app/Templates/alerts-pop-up/alerts-pop-up.component';
 
 @Component({
   selector: 'app-stock-orders',
@@ -13,7 +15,8 @@ import { AuthenticationService } from 'src/app/Services/Authentication/authentic
 export class StockOrdersComponent implements OnInit {
 
   constructor( private activeRoute: ActivatedRoute,
-    public router: Router, 
+    public router: Router,
+    public dialog: MatDialog,
     private authService: AuthenticationService, ) { }
 
   displayedColumns: string[] = [
@@ -182,9 +185,20 @@ export class StockOrdersComponent implements OnInit {
   
   //Habilitar Giros
   enableOrder(){
-
+    this.openDialog('Advertencia', 'Seleccione el reporte que desea exportar', 'warningSelect2')
   }
 
+  openDialog(title: string, message: string, type: string, message2?: string): void {
+    const dialogRef = this.dialog.open(AlertsPopUpComponent, {
+      width: '1000px',
+      height: '580px',
+      data: { title: title, message: message, type: type, message2: message2 },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+
+    });
+  }
 
   regresar() {
     this.router.navigate([`/WAPI/PAA/Requerimientos/${this.dataProjectID}`]);
