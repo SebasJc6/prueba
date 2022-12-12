@@ -2,16 +2,19 @@
     <!--Miga de Pan-->
     <div class="mgp">
         Plan Anual de Adquisiciones
-        <!-- <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
+        <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
             &nbsp;>&nbsp;{{codProject}}
             -&nbsp;{{nomProject}}
-        </a>
-        <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
+          </a>
+          <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
             &nbsp;>&nbsp;Requerimientos
-        </a>
-        <a class="href selected" [routerLink]="['/WAPI/PAA/CDP/', dataProjectID, requerimentId]">
+          </a>
+          <a class="href" [routerLink]="['/WAPI/PAA/CDP/', dataProjectID, idReq]">
             &nbsp;>&nbsp; CDP
-        </a> -->
+          </a>
+          <a class="href selected" [routerLink]="['/WAPI/PAA/RP/', dataProjectID, idReq, idCDP]">
+            &nbsp;>&nbsp; RP
+            </a>
     </div>
     <div style="overflow: auto;">
 
@@ -140,7 +143,7 @@
         </mat-accordion>
 
         <mat-card-actions>
-            <button class="buton btn" mat-button mat-icon-button >
+            <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
                 Regresar
             </button>
             <button class="buton btn" mat-button mat-icon-button (click)="saveRPs()">

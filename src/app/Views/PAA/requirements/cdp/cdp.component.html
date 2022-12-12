@@ -128,7 +128,7 @@
           <p>CDP</p>
         </th>
         <td mat-cell *matCellDef="let element">
-          <p> <a [routerLink]="['/WAPI/PAA/RP', requerimentId,element.cdP_ID]"> {{element.numeroCDP}} </a> </p>
+          <p> <a [routerLink]="['/WAPI/PAA/RP',dataProjectID, requerimentId,element.cdP_ID]"  > {{element.numeroCDP}} </a> </p>
         </td>
         <td mat-footer-cell *matFooterCellDef class="footerTable"></td>
       </ng-container>
