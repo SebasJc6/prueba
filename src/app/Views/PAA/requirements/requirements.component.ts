@@ -65,6 +65,11 @@ export class RequirementsComponent implements OnInit {
     'numrequired',
     'dependenci',
     'description',
+    'mesinicio',
+    'apropiacion',
+    'valorcdp',
+    'valorrp',
+    'saldorequerimiento',
     'estado',
     'accion',
   ];
