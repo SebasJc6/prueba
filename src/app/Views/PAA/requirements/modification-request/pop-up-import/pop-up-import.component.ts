@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 
@@ -22,7 +21,6 @@ export class PopUpImportComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<PopUpImportComponent>,
     public serviceModRequest: ModificationRequestService,
     private snackBar: MatSnackBar,
-    private spinner: NgxSpinnerService,
     public router: Router,
     @Inject(MAT_DIALOG_DATA) private dataImport: any,) { dialogRef.disableClose = true; }
 
@@ -58,7 +56,6 @@ export class PopUpImportComponent implements OnInit {
 
       //Verificar que la Solicitud de Modificación no exista
       if (this.id_request === 0) {
-        this.spinner.show();
         this.serviceModRequest.importFile(this.id_project, FILE).subscribe(res => {
 
           let message = res.message;
@@ -87,7 +84,6 @@ export class PopUpImportComponent implements OnInit {
           }
 
             this.dialogRef.close();
-            this.spinner.hide();
         }, error => {
           let status = error.error.status;
 
@@ -107,12 +103,10 @@ export class PopUpImportComponent implements OnInit {
             this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
           }
           this.dialogRef.close();
-          this.spinner.hide();
         });
 
       } else if (this.id_request !== 0) {
         //Se ejecuta el endpoint de actualizar import
-        this.spinner.show();
         this.serviceModRequest.importFilePut(this.id_project, this.id_request, FILE).subscribe(res => {
 
           let message = res.message;
@@ -136,7 +130,6 @@ export class PopUpImportComponent implements OnInit {
             this.openSnackBar('Guardado Exitosamente', `Solicitud de modificación actualizada y guardada con éxito.`, 'success');
           }
           this.dialogRef.close();
-          this.spinner.hide();
         }, error => {
           let status = error.error.status;
 
@@ -156,7 +149,6 @@ export class PopUpImportComponent implements OnInit {
             this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
           }
           this.dialogRef.close();
-          this.spinner.hide();
         });
 
       }

@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { itemsModificationSummaryI, pageModificationSummaryI } from 'src/app/Models/ModelsPAA/modificatioRequest/modification-summary/modification-summary';
 import { Sources } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
@@ -19,8 +18,7 @@ export class ModificationSummaryComponent implements OnInit {
   constructor(  public router: Router,
     private summaryService: ModificationSummaryService,
     private activeRoute: ActivatedRoute,
-    private serviceModRequest: ModificationRequestService,
-    private spinner: NgxSpinnerService,) { }
+    private serviceModRequest: ModificationRequestService,) { }
   
     dataProjectID: string = '';
     dataSolicitudModID: string = '';
@@ -89,7 +87,6 @@ export class ModificationSummaryComponent implements OnInit {
   }
 
   getSummary(solModId: number, fuenteId: number, pageSummary: pageModificationSummaryI) {
-    this.spinner.show();
     this.summaryService.getSummary(solModId, fuenteId, pageSummary).subscribe(request => {      
         this.dataSource = request.data.items;
         this.Increases = request.data.calculados[0].valor;
@@ -101,9 +98,7 @@ export class ModificationSummaryComponent implements OnInit {
           take: pageSummary.take,
           page: pageSummary.page
         });
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
   }
 

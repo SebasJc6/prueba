@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { abstractDataI, abstractDataYearI, responsibleAbstractI } from 'src/app/Models/ModelsPAA/Abstract/abstract';
 import { AbstractService } from 'src/app/Services/ServicesPAA/Abstract/abstract.service';
 
@@ -15,8 +14,7 @@ export class AbstractComponent implements OnInit {
   constructor(
     public serviceAbsctract: AbstractService,
     public router: Router,
-    private activeRoute: ActivatedRoute,
-    private spinner: NgxSpinnerService,) { }
+    private activeRoute: ActivatedRoute,) { }
 
   dataProjectID = '';
 
@@ -34,7 +32,6 @@ export class AbstractComponent implements OnInit {
 
 
   getAbstract(projectId: string) {
-    this.spinner.show();
     this.serviceAbsctract.getAbstract(projectId).subscribe(request => {
       this.year = request.data.anios[0];
       this.abstractData = request.data;
@@ -42,9 +39,7 @@ export class AbstractComponent implements OnInit {
       this.arrayYears = request.data.anios;
 
       this.getAbstractYear();
-    this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
   }
 

@@ -4,7 +4,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { dataTableRequerimentI, filterRequerimentI } from 'src/app/Models/ModelsPAA/Requeriment/Requeriment.interface';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
@@ -29,8 +28,7 @@ export class RequirementsComponent implements OnInit {
     public router: Router,
     private activeRoute: ActivatedRoute,
     private authService: AuthenticationService,
-    private serviceModRequest: ModificationRequestService,
-    private spinner: NgxSpinnerService,) { }
+    private serviceModRequest: ModificationRequestService,) { }
 
   //Objeto con la informacion de acceso del Usuario
   AccessUser: string = '';
@@ -93,12 +91,9 @@ export class RequirementsComponent implements OnInit {
   }
 
   getStatusProject(projectId: number) {
-    this.spinner.show();
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
       this.ProjectState = data.data.proyecto_Estado;
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
   }
 
@@ -143,7 +138,6 @@ export class RequirementsComponent implements OnInit {
     this.filterRequertiments.Descripcion = this.filterForm.get('Descripcion')?.value || '';
     this.filterRequertiments.columna = this.filterForm.get('columna')?.value || '';
     this.filterRequertiments.ascending = this.filterForm.get('ascending')?.value || false;
-    this.spinner.show();
     this.serviceRequeriment.getRequerimentsByProject(projectId, filterRequertiments).subscribe((data) => {
       this.viewRequeriments = data;
       this.dataSource = new MatTableDataSource(this.viewRequeriments.data.requerimientos.items);
@@ -157,9 +151,7 @@ export class RequirementsComponent implements OnInit {
         page: filterRequertiments.page
       });
       this.numberPagination = this.viewRequeriments.data.requerimientos.pages
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
   }
 
