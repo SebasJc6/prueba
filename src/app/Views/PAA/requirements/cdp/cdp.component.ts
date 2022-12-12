@@ -158,7 +158,7 @@ export class CDPComponent implements OnInit {
   //Notificar CDPs
   notifyCDP() {
     this.spinner.show();
-    this.serviceCdps.putLockCDPs(Number(this.requerimentId)).subscribe(response => {
+    this.serviceCdps.patchLockCDPs(Number(this.requerimentId)).subscribe(response => {
       console.log(response);
       
       if (response.status === 200) {
@@ -193,7 +193,7 @@ export class CDPComponent implements OnInit {
       let BODY_CDPS_ENABLE: any = {
         cdPs: ARRAY_CDPS
       }
-      this.serviceCdps.putEnableCDPs(Number(this.requerimentId), BODY_CDPS_ENABLE).subscribe(response => {
+      this.serviceCdps.patchEnableCDPs(Number(this.requerimentId), BODY_CDPS_ENABLE).subscribe(response => {
         console.log(response);
         
         if (response.status === 200) {

@@ -21,14 +21,14 @@ export class CDPService {
   }
 
 
-  putLockCDPs(id_requeriment: number): Observable<putLockCDPsI> {
+  patchLockCDPs(id_requeriment: number): Observable<putLockCDPsI> {
     let dir = `${this.url}${id_requeriment}/Lock`;
-    return this.http.put<putLockCDPsI>(dir, null);
+    return this.http.patch<putLockCDPsI>(dir, null);
   }
 
-  putEnableCDPs(id_requeriment: number, body: any[]): Observable<any> {
+  patchEnableCDPs(id_requeriment: number, body: any[]): Observable<any> {
     let dir = `${this.url}${id_requeriment}/Enable`;
-    return this.http.put(dir, body);
+    return this.http.patch(dir, body);
   }
 
   postCDPs(file : any): Observable<any> {
