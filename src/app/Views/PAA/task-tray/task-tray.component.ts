@@ -4,7 +4,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { filterTaskTrayI, itemsTaskTrayI } from 'src/app/Models/ModelsPAA/task-tray/task-tray';
 import { TaskTrayService } from 'src/app/Services/ServicesPAA/task-tray/task-tray.service';
 
@@ -19,8 +18,7 @@ export class TaskTrayComponent implements OnInit {
   constructor(private snackBar: MatSnackBar, 
     public dialog: MatDialog, 
     private taskTrayService: TaskTrayService,
-    public router: Router,
-    private spinner: NgxSpinnerService,) { }
+    public router: Router,) { }
 
   //INFORMACION PARA LA TABLA CLASIFICACION PRESUPUESTAL
   displayedColumns: string[] = ['fecha', 'codProject', 'numRequeriment', 'cantAjust', 'requeriment'];
@@ -69,7 +67,6 @@ export class TaskTrayComponent implements OnInit {
     this.filterTaskTray.columna = this.filterForm.get('columna')?.value || '';
     this.filterTaskTray.ascending = this.filterForm.get('ascending')?.value || false;
 
-    this.spinner.show();
     this.taskTrayService.getTaskTray(filterTaskTray).subscribe(request => {      
       this.dataSource = request.data.items;
       this.numberPage = request.data.page;
@@ -78,9 +75,7 @@ export class TaskTrayComponent implements OnInit {
         take: filterTaskTray.take,
         page: filterTaskTray.page
       });
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
   }
 

@@ -5,7 +5,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { CounterpartInterface, editCounterpartI } from 'src/app/Models/ModelsPAA/modificatioRequest/counterpart/counterpart-interface';
 import { postModificRequestCounterpartI, putModificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
@@ -28,8 +27,7 @@ export class CounterpartComponent implements OnInit {
     public dialogRef: MatDialogRef<CounterpartComponent>,
     private authService: AuthenticationService,
     private currencyPipe: CurrencyPipe,
-    @Inject(MAT_DIALOG_DATA) public dataCounterparts: any,
-    private spinner: NgxSpinnerService,) { dialogRef.disableClose = true;}
+    @Inject(MAT_DIALOG_DATA) public dataCounterparts: any,) { dialogRef.disableClose = true;}
 
   //Arreglo que guarda la información del proyecto para mostrar en la lista desplegable
   states: CounterpartInterface[] = [];
@@ -220,16 +218,13 @@ export class CounterpartComponent implements OnInit {
       putDataSave.deleteContraIDs = [];
 
       //Validar esta parte
-      this.spinner.show();
       this.serviceModRequest.putModificationRequestSave(putDataSave).subscribe(res => {
         if (res.status == 200) {
           this.openSnackBar('Guardado Exitosamente', `Contrapartida actualizada.`, 'success');
           this.router.navigate([`/WAPI/PAA/SolicitudModificacion/${this.dataCounterparts.id_project}/${res.data.idSolicitud}`]);
           this.dialogRef.close();
         }
-        this.spinner.hide();
       }, error => {
-        this.spinner.hide();
       });
     }else {
       this.counterpart.fuente_ID = this.counterpartForm.value.fuentes || '';

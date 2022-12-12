@@ -4,7 +4,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { filterCDPsI, itemsCDPsI } from 'src/app/Models/ModelsPAA/Requeriment/cdp';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
@@ -22,7 +21,6 @@ export class CDPComponent implements OnInit {
     public router: Router,
     private serviceModRequest: ModificationRequestService,
     private serviceCdps: CDPService,
-    private spinner: NgxSpinnerService,
     private snackBar: MatSnackBar,
     private authService: AuthenticationService) { }
 
@@ -113,13 +111,10 @@ export class CDPComponent implements OnInit {
 
   //Obtener la información del proyecto para mostrar en miga de pan
   getModificationRequet(projectId: number) {
-    this.spinner.show();
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
       this.codProject = data.data.proyecto_COD;
       this.nomProject = data.data.nombreProyecto;
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
   }
 
@@ -131,7 +126,6 @@ export class CDPComponent implements OnInit {
     this.filterCDPs.columna = this.filterForm.get('columna')?.value || '';
     this.filterCDPs.ascending = this.filterForm.get('ascending')?.value || false;
 
-    this.spinner.show();
     this.serviceCdps.getCDPsByRequerimentId(id_requeriment, filterForm).subscribe(request => {
       if (request.hasItems) {
         this.dataSource = request.items;
@@ -148,16 +142,13 @@ export class CDPComponent implements OnInit {
           page: filterForm.page
         });
       }
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
   }
 
 
   //Notificar CDPs
   notifyCDP() {
-    this.spinner.show();
     this.serviceCdps.patchLockCDPs(Number(this.requerimentId)).subscribe(response => {
       console.log(response);
       
@@ -171,10 +162,8 @@ export class CDPComponent implements OnInit {
         this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
         console.log(response);
       }
-      this.spinner.hide();
     }, error => {
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
-      this.spinner.hide();
     });
   }
 
@@ -189,7 +178,6 @@ export class CDPComponent implements OnInit {
         ARRAY_CDPS.push(element.cdP_ID);
       });
 
-      this.spinner.show();
       let BODY_CDPS_ENABLE: any = {
         cdPs: ARRAY_CDPS
       }
@@ -206,7 +194,6 @@ export class CDPComponent implements OnInit {
           this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
           console.log(response);
         }
-        this.spinner.hide();
       }, error => {
 
         if (error.error.status == 422) {
@@ -221,7 +208,6 @@ export class CDPComponent implements OnInit {
           this.openSnackBar('Lo sentimos', error.error.message, 'error', erorsMessages);
         }
         console.log(error);
-        this.spinner.hide();
       });
     } else {
       this.openSnackBar('Lo sentimos', 'Seleccione al menos un CDP bloqueado para ser habilitado.', 'error');

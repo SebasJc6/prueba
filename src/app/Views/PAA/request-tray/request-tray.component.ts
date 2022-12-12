@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { filterRequestTrayI, itemsRequestTrayI } from 'src/app/Models/ModelsPAA/request-tray/request-tray';
 import { RequestTrayService } from 'src/app/Services/ServicesPAA/request-tray/request-tray.service';
 
@@ -14,7 +13,7 @@ import { RequestTrayService } from 'src/app/Services/ServicesPAA/request-tray/re
 export class RequestTrayComponent implements OnInit {
 
   constructor(private requestTrayService: RequestTrayService,
-    public router: Router, private spinner: NgxSpinnerService,) { }
+    public router: Router,) { }
 
   //INFORMACION PARA LA TABLA CLASIFICACION PRESUPUESTAL
   displayedColumns: string[] = ['solicitud', 'vigencia', 'fPresentacion', 'codigoP', 'proyecto', 'version', 'solicitante', 'estado', 'fAprobacion', 'accion'];
@@ -79,7 +78,6 @@ export class RequestTrayComponent implements OnInit {
     this.filterRequestTray.columna = this.filterForm.get('columna')?.value || '';
     this.filterRequestTray.ascending = this.filterForm.get('ascending')?.value || false;
 
-    this.spinner.show();
     this.requestTrayService.getRequestTray(filterRequestTray).subscribe(request => {
       this.dataSource = request.data.items;
       this.numberPage = request.data.page;
@@ -90,9 +88,7 @@ export class RequestTrayComponent implements OnInit {
         page: filterRequestTray.page
       });
       
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
   }
 

@@ -10,7 +10,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { CDPService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/cdp.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
@@ -68,8 +67,7 @@ export class AcquisitionsComponent implements OnInit {
     private serviceProject: ProjectService, 
     public router: Router, private authService: AuthenticationService,
     private serviceCdps: CDPService,
-    private snackBar: MatSnackBar,
-    private spinner: NgxSpinnerService,) {
+    private snackBar: MatSnackBar,) {
 
   }
   filterProjects = {} as filterProjectI;
@@ -126,7 +124,6 @@ export class AcquisitionsComponent implements OnInit {
     this.filterProjects.columna = this.filterForm.get('columna')?.value || '';
     this.filterProjects.ascending = this.filterForm.get('ascending')?.value || false;
 
-    this.spinner.show();
     this.serviceProject.getAllProjectsFilter(filterProjects).subscribe(data => {
       this.viewProjects = data
       this.dataSource = new MatTableDataSource(this.viewProjects.data.items);
@@ -143,9 +140,7 @@ export class AcquisitionsComponent implements OnInit {
         this.colorChip = 'closeChips'
       }
 
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
   }
 
@@ -197,7 +192,6 @@ export class AcquisitionsComponent implements OnInit {
 
   //Importar Documento de CDPs/RPs
   importFile(file : any) {
-    this.spinner.show();
     this.serviceCdps.postCDPs(file).subscribe(response => {
       console.log('Res: ', response);
       
@@ -215,11 +209,9 @@ export class AcquisitionsComponent implements OnInit {
         this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
         this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
       }
-      this.spinner.hide();
     }, error => {
       // console.log('Error: ', error);
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
-      this.spinner.hide();
     });
   }
 
