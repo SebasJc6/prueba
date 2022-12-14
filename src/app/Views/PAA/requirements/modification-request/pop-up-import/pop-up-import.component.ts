@@ -49,7 +49,7 @@ export class PopUpImportComponent implements OnInit {
 
 
   importFile() {
-    if (this.Justificacion !== '' && this.fileTmp !== undefined) {
+    if (this.fileTmp !== undefined) {
       let FILE = new FormData();
       FILE.append('File', this.fileTmp.file);
       FILE.append('Observacion', this.Justificacion);
@@ -154,7 +154,7 @@ export class PopUpImportComponent implements OnInit {
       }
 
     } else {
-      this.openSnackBar('Error', `Debe agreagar un Archivo y una Justificación para Importar`, 'error');
+      this.openSnackBar('Error', `Debe agreagar un archivo excel para importar.`, 'error');
     }
   }
 

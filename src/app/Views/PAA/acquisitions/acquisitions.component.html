@@ -25,9 +25,11 @@
         </button>
         
         <button class="btn" style="float: right;" mat-button  *ngIf="AccessUser == 'Referente_Planeacion'">
-          <mat-icon class="btnActions mat-icon" matTooltip="Importar Giros">
+          <mat-icon class="btnActions mat-icon" (click)="importGiros.click()" matTooltip="Importar Giros">
             autorenew
           </mat-icon>
+          <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          class="file-input" (change)="onFileStockOrders($event)" [(ngModel)]="fileStockOrders" #importGiros/>
         </button>
         
         <button class="btn" style="float: right;" mat-button  *ngIf="AccessUser == 'Referente_Planeacion'">
@@ -35,7 +37,7 @@
             attach_money
           </mat-icon>
           <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          class="file-input" (change)="onFileSelected($event)" [(ngModel)]="filterFileName" #importCDPsRPs />
+          class="file-input" (change)="onFileSelected($event)" [(ngModel)]="fileCDPsRPs" #importCDPsRPs />
         </button>
       </div>
 
