@@ -3,9 +3,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { filterStockOrdersI, itemsStockOrdersI } from 'src/app/Models/ModelsPAA/Requeriment/StockOrders/stock-orders-interfaces';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
+import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
+import { StockOrdersService } from 'src/app/Services/ServicesPAA/Requeriment/Stock-Orders/stock-orders.service';
 import { AlertsPopUpComponent } from 'src/app/Templates/alerts-pop-up/alerts-pop-up.component';
+import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 
 @Component({
   selector: 'app-stock-orders',
@@ -17,6 +22,9 @@ export class StockOrdersComponent implements OnInit {
   constructor( private activeRoute: ActivatedRoute,
     public router: Router,
     public dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private serviceStockOrders: StockOrdersService,
+    private serviceModRequest: ModificationRequestService,
     private authService: AuthenticationService, ) { }
 
   displayedColumns: string[] = [
@@ -35,7 +43,7 @@ export class StockOrdersComponent implements OnInit {
   AccessUser: string = '';
 
   //Información que se muestra en la tabla
-  dataSource: any[] = []; //TODO: -----------------------------------------
+  dataSource: itemsStockOrdersI[] = [];
   //ValorOrdenPago
   paymentOrderValue: number = 0;
   //Valor distribuido
@@ -58,7 +66,7 @@ export class StockOrdersComponent implements OnInit {
   selection = new SelectionModel<any>(true, []); //TODO: -----------------------------------------
 
   //CAMPOS PARA EL FILTRO
-  filterCDPs = {} as any; //TODO: --------------------------------------
+  filterStockOrders = {} as filterStockOrdersI;
   filterForm = new FormGroup({
     vigencia: new FormControl(),
     numeroOrden: new FormControl(),
@@ -83,11 +91,57 @@ export class StockOrdersComponent implements OnInit {
   ngOnInit(): void {
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
     this.requerimentId = this.activeRoute.snapshot.paramMap.get('idReq') || '';
-    this.filterCDPs.page = "1";
-    this.filterCDPs.take = 20;
+    this.filterStockOrders.page = "1";
+    this.filterStockOrders.take = 20;
+    this.getModificationRequet(Number(this.dataProjectID));
+    this.getAllStockOrdersByRequerimentId(Number(this.requerimentId), this.filterStockOrders);
 
     //Obtener token para manejar los roles
     this.AccessUser = this.authService.getRolUser();
+  }
+
+
+  //Obtener la información del proyecto para mostrar en miga de pan
+  getModificationRequet(projectId: number) {
+    this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
+      this.codProject = data.data.proyecto_COD;
+      this.nomProject = data.data.nombreProyecto;
+    }, error => {
+    });
+  }
+
+  getAllStockOrdersByRequerimentId(id_requeriment: number, filterForm: filterStockOrdersI) {
+    this.filterStockOrders.Vigencia = this.filterForm.value.vigencia || '';
+    this.filterStockOrders.NumeroOrden = this.filterForm.value.numeroOrden || '';
+    this.filterStockOrders.RP = this.filterForm.value.RP || '';
+    this.filterStockOrders.FechaGiro = this.filterForm.get('fechaOrdenPago')?.value || '';
+    this.filterStockOrders.columna = this.filterForm.get('columna')?.value || '';
+    this.filterStockOrders.ascending = this.filterForm.get('ascending')?.value || false;
+
+    this.serviceStockOrders.getStockOrdersByRequeriments(id_requeriment, filterForm).subscribe(data => {
+      console.log(data);
+      if (data.status === 404) {
+        this.openSnackBar('Lo sentimos', `${data.message}`, 'error');
+      } else if (data.status === 200) {
+        if (data.data.hasItems) {
+          this.dataSource = data.data.items;
+          this.paymentOrderValue = data.data.calculados[0].valor;
+          this.distributedValue = data.data.calculados[1].valor;
+          this.balanceDistribute = data.data.calculados[2].valor;
+          this.numberPage = data.data.page;
+          this.numberPages = data.data.pages;
+          this.paginationForm.setValue({
+            take: filterForm.take,
+            page: filterForm.page
+          });
+        } else {
+          this.openSnackBar('Lo sentimos', `No hay giros asociados a este requerimiento.`, 'error');
+        }
+      }
+    }, error => {
+      console.log(error);
+      
+    });
   }
 
 
@@ -100,13 +154,14 @@ export class StockOrdersComponent implements OnInit {
   }
 
   getFilter() {
-    // this.filterCDPs.Vigencia = this.filterForm.value.vigencia || '';
-    // this.filterCDPs.CDP = this.filterForm.value.numeroCDP || '';
-    // this.filterCDPs.Fecha_CDP = this.filterForm.get('fechaCDP')?.value || '';
-    // this.filterCDPs.columna = this.filterForm.get('columna')?.value || '';
-    // this.filterCDPs.ascending = this.filterForm.get('ascending')?.value || false;
+    this.filterStockOrders.Vigencia = this.filterForm.value.vigencia || '';
+    this.filterStockOrders.NumeroOrden = this.filterForm.value.numeroOrden || '';
+    this.filterStockOrders.RP = this.filterForm.value.RP || '';
+    this.filterStockOrders.FechaGiro = this.filterForm.get('fechaOrdenPago')?.value || '';
+    this.filterStockOrders.columna = this.filterForm.get('columna')?.value || '';
+    this.filterStockOrders.ascending = this.filterForm.get('ascending')?.value || false;
 
-    // this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
+    this.getAllStockOrdersByRequerimentId(Number(this.requerimentId), this.filterStockOrders);
     this.closeFilter();
   }
 
@@ -138,18 +193,18 @@ export class StockOrdersComponent implements OnInit {
 
   //PAGINACIÓN
   getPagination() {
-    this.filterCDPs.page = this.paginationForm.get('page')?.value;
-    this.filterCDPs.take = this.paginationForm.get('take')?.value;
+    this.filterStockOrders.page = this.paginationForm.get('page')?.value;
+    this.filterStockOrders.take = this.paginationForm.get('take')?.value;
 
-    // this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
+    this.getAllStockOrdersByRequerimentId(Number(this.requerimentId), this.filterStockOrders);
   }
 
 
   nextPage() {
     if (this.numberPage < this.numberPages) {
       this.numberPage++;
-      this.filterCDPs.page = this.numberPage.toString();
-      // this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
+      this.filterStockOrders.page = this.numberPage.toString();
+      this.getAllStockOrdersByRequerimentId(Number(this.requerimentId), this.filterStockOrders);
     }
   }
 
@@ -157,23 +212,23 @@ export class StockOrdersComponent implements OnInit {
   prevPage() {
     if (this.numberPage > 1) {
       this.numberPage--;
-      this.filterCDPs.page = this.numberPage.toString();
-      // this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
+      this.filterStockOrders.page = this.numberPage.toString();
+      this.getAllStockOrdersByRequerimentId(Number(this.requerimentId), this.filterStockOrders);
     }
   }
 
 
   firstPage() {
     this.numberPage = 1;
-    this.filterCDPs.page = this.numberPage.toString();
-    // this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
+    this.filterStockOrders.page = this.numberPage.toString();
+    this.getAllStockOrdersByRequerimentId(Number(this.requerimentId), this.filterStockOrders);
   }
 
 
   latestPage() {
     this.numberPage = this.numberPages;
-    this.filterCDPs.page = this.numberPage.toString();
-    // this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
+    this.filterStockOrders.page = this.numberPage.toString();
+    this.getAllStockOrdersByRequerimentId(Number(this.requerimentId), this.filterStockOrders);
   }
 
   
@@ -185,23 +240,53 @@ export class StockOrdersComponent implements OnInit {
   
   //Habilitar Giros
   enableOrder(){
-    this.openDialog('Advertencia', 'Seleccione el reporte que desea exportar', 'warningSelect2')
+    // this.openDialog('Advertencia', 'Seleccione el reporte que desea exportar', 'warningSelect2')
   }
 
-  openDialog(title: string, message: string, type: string, message2?: string): void {
-    const dialogRef = this.dialog.open(AlertsPopUpComponent, {
-      width: '1000px',
-      height: '580px',
-      data: { title: title, message: message, type: type, message2: message2 },
-    });
+  // openDialog(title: string, message: string, type: string, message2?: string): void {
+  //   const dialogRef = this.dialog.open(AlertsPopUpComponent, {
+  //     width: '1000px',
+  //     height: '580px',
+  //     data: { title: title, message: message, type: type, message2: message2 },
+  //   });
 
-    dialogRef.afterClosed().subscribe((result) => {
+  //   dialogRef.afterClosed().subscribe((result) => {
 
-    });
-  }
+  //   });
+  // }
 
   regresar() {
     this.router.navigate([`/WAPI/PAA/Requerimientos/${this.dataProjectID}`]);
   }
+
+
+  //Metodo para llamar alertas
+  openSnackBar(title: string, message: string, type: string, message2?: string) {
+    this.snackBar.openFromComponent(AlertsComponent, {
+      data: { title, message, message2, type },
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: [type],
+    });
+  }
+
+
+  //Expresion regular para validar que solo se ingresen numeros en la paginación
+  validateFormat(event: any) {
+    let key;
+    if (event.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      key = event.keyCode;
+      key = String.fromCharCode(key);
+    }
+    const regex = /[0-9]|\./;
+     if (!regex.test(key)) {
+      event.returnValue = false;
+       if (event.preventDefault) {
+        event.preventDefault();
+       }
+     }
+    }
 
 }

@@ -13,6 +13,7 @@ import { AuthenticationService } from 'src/app/Services/Authentication/authentic
 import { CDPService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/cdp.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
+import { StockOrdersService } from 'src/app/Services/ServicesPAA/Requeriment/Stock-Orders/stock-orders.service';
 
 export interface ChipColor {
   name: string;
@@ -67,6 +68,7 @@ export class AcquisitionsComponent implements OnInit {
     private serviceProject: ProjectService, 
     public router: Router, private authService: AuthenticationService,
     private serviceCdps: CDPService,
+    private serviceStockOrders: StockOrdersService,
     private snackBar: MatSnackBar,) {
 
   }
@@ -89,7 +91,9 @@ export class AcquisitionsComponent implements OnInit {
   AccessUser: string = '';
 
   //Propiedad para reiniciar el input Importar CDPs/RPs y cargar el mismo archivo varias veces
-  filterFileName: string = '';
+  fileCDPsRPs: string = '';
+
+  fileStockOrders: string = '';
   
   ngOnInit(): void {
     this.ngAfterViewInit();
@@ -145,33 +149,11 @@ export class AcquisitionsComponent implements OnInit {
   }
 
 
-  //Funcion para convertir un archivo a Base 64
-  extraerBase64 = async ($event: any) => new Promise((resolve) => {
-    try {
-      const reader = new FileReader();
-      reader.readAsDataURL($event);
-      reader.onload = () => {
-        resolve({
-          nameFile: $event.name,
-          base: reader.result?.toString().split(',')[1]
-        });
-      };
-      reader.onerror = error => {
-        resolve({
-          base: error
-        });
-      };
-    } catch (e) {
-      return e;
-    }
-  });
-
-
-  //Obtener archivo y pasarlo a Base64
+  //Obtener archivo CDPs/RPs
   onFileSelected(event: any) {
     const file: FileList = event.target.files;
     let fil : File = file[0];
-    this.filterFileName = '';
+    this.fileCDPsRPs = '';
     if (file != null) {
       let FILE = new FormData();
       FILE.append('file', fil);
@@ -215,6 +197,45 @@ export class AcquisitionsComponent implements OnInit {
     });
   }
 
+
+  //Obtener archivo Giros
+  onFileStockOrders(event: any) {
+    const file: FileList = event.target.files;
+    let fil : File = file[0];
+    this.fileStockOrders = '';
+    if (file != null) {
+      let FILE = new FormData();
+      FILE.append('file', fil);
+
+      this.importFileStockOrders(FILE);
+    }
+  }
+
+
+  //Importar Documento de CDPs/RPs
+  importFileStockOrders(file : any) {
+    this.serviceStockOrders.postStockOrders(file).subscribe(response => {
+      console.log('Res: ', response);
+      
+      if (response.status === 200) {
+        if (response.data.hasWarnings) {
+          this.openSnackBar('Advertencia', `Se guardaron los registros y surgieron advertencias. Descargando archivo de advertencias ${response.data.warnings.fileName}`, 'warning');
+          this.convertBase64ToFileDownload(response.data.warnings.fileAsBase64, response.data.warnings.fileName);
+        } else {
+          this.openSnackBar('Guardado Exitosamente', `Giros importados con éxito.`, 'success');
+        }
+      } else if(response.status === 422) {
+        this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
+        this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
+      } else if (response.status === 423) {
+        this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
+        this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
+      }
+    }, error => {
+      // console.log('Error: ', error);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+    });
+  }
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
