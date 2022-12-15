@@ -62,8 +62,8 @@ export class StockOrdersComponent implements OnInit {
   viewFilter: boolean = true;
   viewOrder: boolean = false;
 
-  OrdersChecked: any[] = [];  //TODO: -----------------------------------------
-  selection = new SelectionModel<any>(true, []); //TODO: -----------------------------------------
+  OrdersChecked: itemsStockOrdersI[] = [];
+  selection = new SelectionModel<itemsStockOrdersI>(true, []);
 
   //CAMPOS PARA EL FILTRO
   filterStockOrders = {} as filterStockOrdersI;
@@ -118,18 +118,17 @@ export class StockOrdersComponent implements OnInit {
     this.filterStockOrders.columna = this.filterForm.get('columna')?.value || '';
     this.filterStockOrders.ascending = this.filterForm.get('ascending')?.value || false;
 
-    this.serviceStockOrders.getStockOrdersByRequeriments(id_requeriment, filterForm).subscribe(data => {
-      console.log(data);
-      if (data.status === 404) {
-        this.openSnackBar('Lo sentimos', `${data.message}`, 'error');
-      } else if (data.status === 200) {
-        if (data.data.hasItems) {
-          this.dataSource = data.data.items;
-          this.paymentOrderValue = data.data.calculados[0].valor;
-          this.distributedValue = data.data.calculados[1].valor;
-          this.balanceDistribute = data.data.calculados[2].valor;
-          this.numberPage = data.data.page;
-          this.numberPages = data.data.pages;
+    this.serviceStockOrders.getStockOrdersByRequeriments(id_requeriment, filterForm).subscribe(request => {
+      if (request.status === 404) {
+        this.openSnackBar('Lo sentimos', `${request.message}`, 'error');
+      } else if (request.status === 200) {
+        if (request.data.hasItems) {
+          this.dataSource = request.data.items;
+          this.paymentOrderValue = request.data.calculados[0].valor;
+          this.distributedValue = request.data.calculados[1].valor;
+          this.balanceDistribute = request.data.calculados[2].valor;
+          this.numberPage = request.data.page;
+          this.numberPages = request.data.pages;
           this.paginationForm.setValue({
             take: filterForm.take,
             page: filterForm.page
@@ -183,7 +182,7 @@ export class StockOrdersComponent implements OnInit {
     this.dataSource.forEach(row => this.selection.select(row));
   }
 
-  checkboxLabel(row?: any): string { //TODO: ------------------------------------
+  checkboxLabel(row?: itemsStockOrdersI): string {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
@@ -234,13 +233,68 @@ export class StockOrdersComponent implements OnInit {
   
   //Notificar Giros
   notifyOrder() {
-
+    this.serviceStockOrders.patchLockStockOrders(Number(this.requerimentId)).subscribe(response => {
+      console.log(response);
+      if (response.status === 200) {
+        if (response.data.hasBlockedAnyGiro) {
+          this.openSnackBar('Giros Notificados Exitosamente', `Los Giros "${response.data.giros}" han sido bloqueados y notificados con éxito.`, 'success');
+        } else {
+          this.openSnackBar('Lo sentimos', `No fue posible notificar los Giros.`, 'error');
+        }
+      } else {
+        this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
+        console.log(response);
+      }
+    }, error => {
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+    });
   }
 
   
   //Habilitar Giros
   enableOrder(){
-    // this.openDialog('Advertencia', 'Seleccione el reporte que desea exportar', 'warningSelect2')
+    this.OrdersChecked = this.selection.selected;
+
+    if (this.OrdersChecked.length > 0) {
+      let ARRAY_GIROS: number[] = [];
+      this.OrdersChecked.forEach(element => {
+        ARRAY_GIROS.push(element.giro_ID);
+      });
+
+      let BODY_GIROS_ENABLE: any = {
+        Giros: ARRAY_GIROS
+      }
+
+      this.serviceStockOrders.patchEnableOrders(Number(this.requerimentId), BODY_GIROS_ENABLE).subscribe(response => {
+        console.log(response);
+        
+        if (response.status === 200) {
+          if (response.data.hasEnableAnyGiro) {
+            this.openSnackBar('Giros Habilitados Exitosamente', `Los Giros "${response.data.giros}" fueron habilitados con éxito.`, 'success');
+          } else {
+            this.openSnackBar('Lo sentimos', `No fue posible habilitar los Giros.`, 'error');
+          }
+        } else {
+          this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
+          console.log(response);
+        }
+      }, error => {
+        if (error.error.status == 422) {
+          let Data: string[] = [];
+          let erorsMessages = '';
+          if (error.error.data != null) {   
+            Data = Object.values(error.error.data);
+            Data.map(item => {
+              erorsMessages += item + '. ';
+            });
+          }
+          this.openSnackBar('Lo sentimos', error.error.message, 'error', erorsMessages);
+        }
+        console.log(error);
+      });
+    } else {
+      this.openSnackBar('Lo sentimos', 'Seleccione al menos un CDP bloqueado para ser habilitado.', 'error');
+    }
   }
 
   // openDialog(title: string, message: string, type: string, message2?: string): void {

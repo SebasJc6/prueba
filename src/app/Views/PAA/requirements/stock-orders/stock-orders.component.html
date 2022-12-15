@@ -237,9 +237,23 @@
 
     <div style="margin-top: 3%;">
         <mat-card-actions>
-          <button class="buton btn" mat-button mat-icon-button (click)="regresar()">REGRESAR</button>
-          <button class="buton btn" mat-button mat-icon-button (click)="notifyOrder()">NOTIFICAR</button>
-          <button class="buton btn" mat-button mat-icon-button (click)="enableOrder()">HABILITAR</button>
+            <button class="buton btn" 
+                mat-button mat-icon-button
+                (click)="regresar()">
+                    REGRESAR
+            </button>
+            <button class="buton btn" 
+                mat-button mat-icon-button
+                *ngIf="(AccessUser === 'Referente_PAA')"
+                (click)="notifyOrder()">
+                    NOTIFICAR
+            </button>
+            <button class="buton btn" 
+                mat-button mat-icon-button
+                *ngIf="(AccessUser === 'Referente_Planeacion')"
+                (click)="enableOrder()">
+                    HABILITAR
+            </button>
         </mat-card-actions>
       </div>
 
