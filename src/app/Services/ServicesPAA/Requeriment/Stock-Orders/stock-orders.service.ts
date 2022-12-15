@@ -24,4 +24,14 @@ export class StockOrdersService {
     let dir = `${this.url}`;
     return this.http.post(dir, file);
   }
+
+  patchLockStockOrders(id_requeriment: number): Observable<any> {
+    let dir = `${this.url}${id_requeriment}/Lock`;
+    return this.http.patch<any>(dir, null);
+  }
+
+  patchEnableOrders(id_requeriment: number, body: any[]): Observable<any> {
+    let dir = `${this.url}${id_requeriment}/Enable`;
+    return this.http.patch(dir, body);
+  }
 }

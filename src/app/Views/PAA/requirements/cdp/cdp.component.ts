@@ -141,6 +141,8 @@ export class CDPComponent implements OnInit {
           take: filterForm.take,
           page: filterForm.page
         });
+      } else {
+        this.openSnackBar('Lo sentimos', `No hay CDPs asociados a este requerimiento.`, 'error');
       }
     }, error => {
     });
@@ -150,8 +152,6 @@ export class CDPComponent implements OnInit {
   //Notificar CDPs
   notifyCDP() {
     this.serviceCdps.patchLockCDPs(Number(this.requerimentId)).subscribe(response => {
-      console.log(response);
-      
       if (response.status === 200) {
         if (response.data.hasBlockedAnyCDP) {
           this.openSnackBar('CDPs Notificados Exitosamente', `Los CDPs "${response.data.cdPs}" han sido bloqueados y notificados con éxito.`, 'success');
@@ -188,7 +188,7 @@ export class CDPComponent implements OnInit {
           if (response.data.hasEnableAnyCDP) {
             this.openSnackBar('CDPs Habilitados Exitosamente', `Los CDPs "${response.data.cdPs}" fueron habilitados con éxito.`, 'success');
           } else {
-            this.openSnackBar('Lo sentimos', `No fue posible notificar los CDPs.`, 'error');
+            this.openSnackBar('Lo sentimos', `No fue posible habilitar los CDPs.`, 'error');
           }
         } else {
           this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');

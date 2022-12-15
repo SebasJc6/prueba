@@ -232,7 +232,7 @@ export class AcquisitionsComponent implements OnInit {
         this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
       }
     }, error => {
-      // console.log('Error: ', error);
+      console.log('Error: ', error);
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     });
   }
