@@ -355,6 +355,7 @@ export class ModificationRequestComponent implements OnInit {
     this.dataRequerimentApproved.forEach(element => {
       project_Id = element.data.proyecto.proj_ID;
 
+      requeriment.anioContrato = element.data.requerimiento.anioContrato;
       requeriment.actuacion_Id = element.data.requerimiento.actuacion.actuacion_ID;
       requeriment.cantidadDeContratos = element.data.requerimiento.cantidadDeContratos;
       requeriment.dependenciaDestino_Id = element.data.requerimiento.dependenciaDestino.dependencia_ID;
