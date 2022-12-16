@@ -68,6 +68,7 @@ import { PopUpImportComponent } from './Views/PAA/requirements/modification-requ
 import { RpComponent } from './Views/PAA/requirements/cdp/rp/rp.component';
 import { StockOrdersComponent } from './Views/PAA/requirements/stock-orders/stock-orders.component';
 import { SpinnerInterceptorService } from './Services/Authentication/Interceptor/spinner-interceptor.service';
+import { OrdersComponent } from './Views/PAA/requirements/stock-orders/orders/orders.component';
 
 
 const materialModules = [
@@ -131,7 +132,8 @@ const materialModules = [
     BudgetModificationComponent,
     PopUpImportComponent,
     RpComponent,
-    StockOrdersComponent
+    StockOrdersComponent,
+    OrdersComponent
 
   ],
   imports: [

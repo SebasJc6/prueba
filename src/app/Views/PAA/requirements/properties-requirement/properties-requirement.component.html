@@ -132,7 +132,7 @@
                                         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
                                             (optionSelected)="onSelectionChange($event, 'dependenciaDes')">
                                             <mat-option [value]="option" *ngFor="let option of listDependencies">
-                                                {{option.codigo}}
+                                                {{option.codigo+ ' - ' + option.detalle}}
                                             </mat-option>
                                         </mat-autocomplete>
                                     </div>
@@ -211,17 +211,6 @@
                                         <mat-error *ngIf="errorModalidad">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
-                                        <!-- <input type="text" class="contDataAutocomplete" [matAutocomplete]="auto2"
-                                            formControlName="modalidadSel">
-                                        <mat-error *ngIf="errorModalidad">
-                                            Campo <strong>Obligatorio</strong>
-                                        </mat-error>
-                                        <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn"
-                                            (optionSelected)="onSelectionChange($event, 'modalidadSel')">
-                                            <mat-option [value]="item" *ngFor="let item of listSelcMode">
-                                                {{item.codigo}}
-                                            </mat-option>
-                                        </mat-autocomplete> -->
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Actuación Contractual</p>
@@ -236,12 +225,20 @@
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
                                     </div>
-                                    <div class="contTxt label1">
+                                    <div class="contTxt label5">
                                         <p class="tltData">Número de contrato</p>
-                                        <input class="contData" formControlName="numeroCont" [ngClass]="{'contDataDisabled' : disabledInicial == true 
+                                        <input class="contData1" formControlName="numeroCont" [ngClass]="{'contDataDisabled' : disabledInicial == true 
                                         , 'contDataError' : genericNumeroCont == true }">
-
                                     </div>
+                                    <div class="contTxt label5">
+                                        <p class="tltData">Año</p>
+                                        <mat-select formControlName="anioContrato" class="contDataSelect2"
+                                        [ngClass]="{'contDataDisabled' : disabledInicial == true }">
+                                            <mat-option [value]="item" *ngFor="let item of years">
+                                                {{item}}</mat-option>
+                                        </mat-select>
+                                    </div>
+
                                 </div>
 
                                 <div class="tablaCont">
@@ -421,7 +418,8 @@
 
                                     <div class="contTxt label1">
                                         <p class="tltData">MGA</p>
-                                        <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoMGA"
+                                        <input class="contData contDataDisabled" formControlName="mga">
+                                        <!-- <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoMGA"
                                             formControlName="mga">
                                         <mat-error *ngIf="errorMGA">
                                             Campo <strong>Obligatorio</strong>
@@ -431,11 +429,13 @@
                                             <mat-option [value]="option" *ngFor="let option of listMGA">
                                                 {{option.codigoMGA}}
                                             </mat-option>
-                                        </mat-autocomplete>
+                                        </mat-autocomplete>-->
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">POSPRE</p>
-                                        <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoPOSPRE"
+                                        <input class="contData contDataDisabled" formControlName="pospre">
+
+                                        <!-- <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoPOSPRE"
                                             formControlName="pospre">
                                         <mat-error *ngIf="errorPOSPRE">
                                             Campo <strong>Obligatorio</strong>
@@ -445,7 +445,7 @@
                                             <mat-option [value]="option" *ngFor="let option of listPOSPRE">
                                                 {{option.codigo}}
                                             </mat-option>
-                                        </mat-autocomplete>
+                                        </mat-autocomplete> -->
                                     </div>
 
                                 </div>
@@ -708,40 +708,45 @@
                                 <mat-card class="colorCard2">
 
                                     <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
-                                    <div class="formCont" formGroupName="initialAppro">
+                                    <div class="formCont" [formGroup]="initialAppro">
                                         <div class="tablaCont">
-                                            <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 0</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia0">
-                                            </div>
 
                                             <div class="contTxt label1">
-                                                <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor0">
-                                            </div>
+                                                <p class="tltTitleData">Apropiación inicial</p>
 
-                                            <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 1</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia1">
-                                            </div>
-                                            <div class="contTxt label1">
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor1">
+                                                <input class="contData contDataDisabled"
+                                                    formControlName="valorApropiacion_Incial">
                                             </div>
                                         </div>
-
                                         <div class="tablaCont">
+
                                             <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 2</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia2">
+                                                <p class="tltTitleData">Apropiación disponible</p>
+
+                                                <p class="tltData">Año vigencia </p>
+                                                <!-- <input class="contData contDataDisabled" formControlName="vigencia2"> -->
+                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect">
+                                                    <mat-option [value]="item" *ngFor="let item of initialAppYaers">
+                                                        {{item}}</mat-option>
+                                                </mat-select>
                                             </div>
                                             <div class="contTxt label1">
+                                                <p class="tltTitleData arreg"> </p>
+
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor2">
+                                                <input class="contData contDataDisabled"
+                                                    formControlName="valorApropiacionAnio">
                                             </div>
-                                            <div class="contTxt label2">
-                                                <p class="tltData">Valor total</p>
-                                                <input class="contData contDataDisabled" formControlName="valorTotal">
+                                        </div>
+                                        <div class="tablaCont">
+
+                                            <div class="contTxt label1">
+                                                <p class="tltTitleData">Apropiación final</p>
+
+                                                <p class="tltData">Valor</p>
+                                                <input class="contData contDataDisabled"
+                                                    formControlName="valorApropiacion_Final">
                                             </div>
                                         </div>
                                     </div>
@@ -749,7 +754,6 @@
                             </mat-expansion-panel>
                         </mat-accordion>
                     </mat-expansion-panel>
-
                     <!-- SECCION REVISIONES -->
                     <mat-expansion-panel class="menu-panel" *ngIf="viewsSeccionReviews">
                         <mat-expansion-panel-header>
@@ -1078,11 +1082,19 @@
                                         </mat-select>
 
                                     </div>
-                                    <div class="contTxt label1">
+                                    <div class="contTxt label5">
                                         <p class="tltData">Número de contrato</p>
                                         <input class="contData contDataDisabled" formControlName="numeroContRew"
                                             [ngClass]="{'contDataModified' : numeroDeContratoModified == true }">
 
+                                    </div>                                  
+                                    <div class="contTxt label5">
+                                        <p class="tltData">Año</p>
+                                        <mat-select formControlName="anioContratoRew" class="contDataSelect2 contDataDisabled"
+                                        [ngClass]="{'contDataModified' : anioContratoModified == true }">
+                                            <mat-option [value]="item" *ngFor="let item of years">
+                                                {{item}}</mat-option>
+                                        </mat-select>
                                     </div>
                                 </div>
 
@@ -1368,43 +1380,46 @@
 
                                 <!-- FORMULARIO APROPIACION INICIAL -->
                                 <mat-card class="colorCard2">
-
                                     <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
-                                    <div class="formCont">
+                                    <div class="formCont" [formGroup]="initialAppro">
                                         <div class="tablaCont">
-                                            <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 0</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia0Rew">
-                                            </div>
 
                                             <div class="contTxt label1">
-                                                <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor0Rew">
-                                            </div>
+                                                <p class="tltTitleData">Apropiación inicial</p>
 
-                                            <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 1</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia1Rew">
-                                            </div>
-                                            <div class="contTxt label1">
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor1Rew">
+                                                <input class="contData contDataDisabled"
+                                                    formControlName="valorApropiacion_Incial">
                                             </div>
                                         </div>
-
                                         <div class="tablaCont">
+
                                             <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 2</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia2Rew">
+                                                <p class="tltTitleData">Apropiación disponible</p>
+
+                                                <p class="tltData">Año vigencia </p>
+                                                <!-- <input class="contData contDataDisabled" formControlName="vigencia2"> -->
+                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect">
+                                                    <mat-option [value]="item" *ngFor="let item of initialAppYaers">
+                                                        {{item}}</mat-option>
+                                                </mat-select>
                                             </div>
                                             <div class="contTxt label1">
+                                                <p class="tltTitleData arreg"> </p>
+
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor2Rew">
-                                            </div>
-                                            <div class="contTxt label2">
-                                                <p class="tltData">Valor total</p>
                                                 <input class="contData contDataDisabled"
-                                                    formControlName="valorTotalRew">
+                                                    formControlName="valorApropiacionAnio">
+                                            </div>
+                                        </div>
+                                        <div class="tablaCont">
+
+                                            <div class="contTxt label1">
+                                                <p class="tltTitleData">Apropiación final</p>
+
+                                                <p class="tltData">Valor</p>
+                                                <input class="contData contDataDisabled"
+                                                    formControlName="valorApropiacion_Final">
                                             </div>
                                         </div>
                                     </div>
@@ -1729,10 +1744,18 @@
                                         </mat-select>
 
                                     </div>
-                                    <div class="contTxt label1">
+                                    <div class="contTxt label5">
                                         <p class="tltData">Número de contrato</p>
                                         <input class="contData contDataDisabled" formControlName="numeroContAct">
 
+                                    </div>
+                                    <div class="contTxt label5">
+                                        <p class="tltData">Año</p>
+                                        <mat-select formControlName="anioContratoAct" class="contDataSelect2 contDataDisabled"
+                                        [ngClass]="{'contDataModified' : anioContratoModified == true }">
+                                            <mat-option [value]="item" *ngFor="let item of years">
+                                                {{item}}</mat-option>
+                                        </mat-select>
                                     </div>
                                 </div>
 
@@ -1758,7 +1781,7 @@
                                         <p class="tltData">Valor Honorarios / mes</p>
                                         <input class="contData contDataDisabled" formControlName="valorHonMesAct"
                                             value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}">
-                                    
+
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Cantidad de contratos</p>
@@ -1988,41 +2011,45 @@
                                 <mat-card class="colorCard2">
 
                                     <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
-                                    <div class="formCont">
+                                    <div class="formCont" [formGroup]="initialAppro">
                                         <div class="tablaCont">
-                                            <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 0</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia0Act">
-                                            </div>
 
                                             <div class="contTxt label1">
-                                                <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor0Act">
-                                            </div>
+                                                <p class="tltTitleData">Apropiación inicial</p>
 
-                                            <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 1</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia1Act">
-                                            </div>
-                                            <div class="contTxt label1">
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor1Act">
+                                                <input class="contData contDataDisabled"
+                                                    formControlName="valorApropiacion_Incial">
                                             </div>
                                         </div>
-
                                         <div class="tablaCont">
+
                                             <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 2</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia2Act">
+                                                <p class="tltTitleData">Apropiación disponible</p>
+
+                                                <p class="tltData">Año vigencia </p>
+                                                <!-- <input class="contData contDataDisabled" formControlName="vigencia2"> -->
+                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect">
+                                                    <mat-option [value]="item" *ngFor="let item of initialAppYaers">
+                                                        {{item}}</mat-option>
+                                                </mat-select>
                                             </div>
                                             <div class="contTxt label1">
+                                                <p class="tltTitleData arreg"> </p>
+
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor2Act">
-                                            </div>
-                                            <div class="contTxt label2">
-                                                <p class="tltData">Valor total</p>
                                                 <input class="contData contDataDisabled"
-                                                    formControlName="valorTotalAct">
+                                                    formControlName="valorApropiacionAnio">
+                                            </div>
+                                        </div>
+                                        <div class="tablaCont">
+
+                                            <div class="contTxt label1">
+                                                <p class="tltTitleData">Apropiación final</p>
+
+                                                <p class="tltData">Valor</p>
+                                                <input class="contData contDataDisabled"
+                                                    formControlName="valorApropiacion_Final">
                                             </div>
                                         </div>
                                     </div>

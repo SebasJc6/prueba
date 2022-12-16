@@ -143,6 +143,7 @@ export interface postDataModCodsUNSPSC {
 }
 
 export interface postDataModifRequerimentsI {
+  anioContrato: number,
   req_ID: number,
   numeroRequerimiento: number,
   numeroModificacion: number,

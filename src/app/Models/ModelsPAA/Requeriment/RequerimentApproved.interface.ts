@@ -85,6 +85,7 @@ export interface proyectoI {
 }
 
 export interface requerimientoI {
+    anioContrato: number,
     req_ID: number,
     numeroRequerimiento: number,
     numeroModificacion: number,

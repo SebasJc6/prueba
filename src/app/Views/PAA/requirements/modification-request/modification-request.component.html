@@ -453,11 +453,12 @@
 
     <div style="margin-top: 3%;">
         <mat-card-actions>
-            <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false"  class="buton btn" mat-button mat-icon-button
+            <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false"  class="buton btn" 
+                style="margin-left: 2%; margin-right: 2%;" mat-button mat-icon-button
                 (click)="guardar()">
                 Guardar
             </button>
-            <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste')) ? true : false" class="buton btn" style="margin-left: 1.8%;" mat-button mat-icon-button (click)="enviar()">
+            <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste')) ? true : false" class="buton btn" mat-button mat-icon-button (click)="enviar()">
                 Enviar
             </button>
             <!-- <div> -->
