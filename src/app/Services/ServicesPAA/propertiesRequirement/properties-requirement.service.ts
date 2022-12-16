@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, skipWhile, tap } from 'rxjs/operators'
 import { environment } from 'src/environments/environment';
-import { getAllActivitiesI, getAllAuxiliarI, getAllContacTypeI, getAllContractualActionI, getAllDependenciesI, getAllFuentesI, getAllMGAI, getAllPOSPREI, getAllProfileI, getAllReviewsAreaI, getAllSelectionModeDataI, getAllSelectionModeI, getAllUNSPSCI, getConceptsI, getDataAprobadaI, getDataTemporalI, getDataTemporalModifiedI, getInfoToCreateReqI, responseVerifyDataSaveI, saveDataEditI, verifyDataSaveI, verifyReqI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
+import { getAllActivitiesI, getAllAnioI, getAllAuxiliarI, getAllContacTypeI, getAllContractualActionI, getAllDependenciesI, getAllFuentesI, getAllMGAI, getAllPOSPREI, getAllProfileI, getAllReviewsAreaI, getAllSelectionModeDataI, getAllSelectionModeI, getAllUNSPSCI, getConceptsI, getDataAprobadaI, getDataTemporalI, getDataTemporalModifiedI, getInfoToCreateReqI, responseVerifyDataSaveI, saveDataEditI, verifyDataSaveI, verifyReqI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from '../../Authentication/authentication.service';
 
@@ -44,6 +44,10 @@ export class PropertiesRequirementService {
     let dir = this.genericUrl + 'Actuacion'
     return this.http.get<getAllContractualActionI>(dir);
   }
+  getAniosBycontrato(numCont: number): Observable<getAllAnioI> {
+    let dir = this.genericUrl + 'Contrato/' + numCont + '/Anios'
+    return this.http.get<getAllAnioI>(dir)
+  }
 
   getAllContacType(): Observable<getAllContacTypeI> {
     let dir = this.genericUrl + 'TipoContrato'
@@ -84,9 +88,16 @@ export class PropertiesRequirementService {
     let dir = this.genericUrl + 'MGA/Elastic?cod=' + value
     return this.http.get<getAllMGAI>(dir)
   }
-
+  getMGAById(id: number): Observable<getAllMGAI> {
+    let dir = this.genericUrl + 'MGA/' + id
+    return this.http.get<getAllMGAI>(dir)
+  }
   getPOSPREElastic(value: string): Observable<getAllPOSPREI> {
     let dir = this.genericUrl + 'POSPRE/Elastic?cod=' + value
+    return this.http.get<getAllPOSPREI>(dir)
+  }
+  getPOSPREById(id: number): Observable<getAllPOSPREI> {
+    let dir = this.genericUrl + 'POSPRE/' + id
     return this.http.get<getAllPOSPREI>(dir)
   }
 
@@ -136,4 +147,6 @@ export class PropertiesRequirementService {
     let dir = this.logicUrl + 'Solicitud/' + requestId + '/Proyecto/' + projectId + '/Temporal/' + reqTempId + '/Modificaciones'
     return this.http.get<getDataTemporalModifiedI>(dir)
   }
+
+
 }

@@ -11,11 +11,12 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { concat, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { postDataModificationsI, postDataModifRequerimentsI, postDataModReqI, postModificationRequestI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
-import { dataSourceClasificacionesI, dataSourceRevisionesI, getAllAuxiliarDataI, getAllUNSPSCDataI, getInfoToCreateReqDataI, saveDataEditDatosI, requerimientoI, saveDataEditI, verifyDatacompleteI, verifyDataSaveI, getDataTemporalModifiedI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
+import { dataSourceClasificacionesI, dataSourceRevisionesI, getAllAuxiliarDataI, getAllUNSPSCDataI, getInfoToCreateReqDataI, saveDataEditDatosI, requerimientoI, saveDataEditI, verifyDatacompleteI, verifyDataSaveI, getDataTemporalModifiedI, getAllMGADataI, getAllPOSPREDataI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
 import { deleteReviewsI, postReviewsI, putUpdateReviewsI, reviewsI, revisionesI } from 'src/app/Models/ModelsPAA/propertiesRequirement/Reviews/reviews.interface';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
+import { InitialApropriationService } from 'src/app/Services/ServicesPAA/propertiesRequirement/initialApropriation/initial-apropriation.service';
 import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
 import { ReviewsService } from 'src/app/Services/ServicesPAA/propertiesRequirement/reviews/reviews.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
@@ -38,7 +39,7 @@ export class PropertiesRequirementComponent implements OnInit {
   dataProjectID: string = '';
   codProject: number = 0;
   nomProject: string = '';
-  dependenciaRec: string = '';
+  dependenciaRec: any
   typePage: string = '';
   getInfoToProject = {} as getInfoToCreateReqDataI;
   allDependencies: any
@@ -149,6 +150,7 @@ export class PropertiesRequirementComponent implements OnInit {
   modalidadSeleccionModified?: boolean;
   actuacionModified?: boolean;
   numeroDeContratoModified?: boolean;
+  anioContratoModified?: boolean;
   tipoContratoModified?: boolean;
   perfilModified?: boolean;
   honorariosModified?: boolean;
@@ -160,6 +162,11 @@ export class PropertiesRequirementComponent implements OnInit {
   unspscNew?: boolean;
   numReqDisabled: boolean = true;
   mgp: string = '';
+
+  years: number[] = []
+  mgaValue = {} as getAllMGADataI;
+  pospreValue = {} as getAllPOSPREDataI;
+  initialAppYaers: number[] = []
 
   cantMeses: any[] = [
     //  { idMes: '0', nameMes: ' ' },
@@ -192,6 +199,7 @@ export class PropertiesRequirementComponent implements OnInit {
       modalidadSel: new FormControl(),
       actuacionCont: new FormControl(),
       numeroCont: new FormControl(),
+      anioContrato: new FormControl(),
       tipoCont: new FormControl(),
       perfil: new FormControl(),
       valorHonMes: new FormControl(),
@@ -213,18 +221,15 @@ export class PropertiesRequirementComponent implements OnInit {
     codigosForm: this.formbuilder.group({
       codCategoria: new FormControl(),
       descCategoria: new FormControl({ value: '', disabled: true })
-    }),
-    initialAppro: this.formbuilder.group({
-      apropIni_ID: new FormControl({ value: 1, disabled: true }),
-      vigencia0: new FormControl({ value: 2020, disabled: true }),
-      valor0: new FormControl({ value: 20000000, disabled: true }),
-      vigencia1: new FormControl({ value: 2021, disabled: true }),
-      valor1: new FormControl({ value: 40000000, disabled: true }),
-      vigencia2: new FormControl({ value: 2022, disabled: true }),
-      valor2: new FormControl({ value: 60000000, disabled: true }),
-      valorTotal: new FormControl({ value: 120000000, disabled: true })
-    }),
+    })
 
+  })
+
+  initialAppro = new FormGroup({
+    anio_Vigencia: new FormControl(),
+    valorApropiacionAnio: new FormControl({ value: 0, disabled: true }),
+    valorApropiacion_Final: new FormControl({ value: 0, disabled: true }),
+    valorApropiacion_Incial: new FormControl({ value: 0, disabled: true }),
   })
   reviews = new FormGroup({
     area: new FormControl(),
@@ -245,19 +250,14 @@ export class PropertiesRequirementComponent implements OnInit {
     modalidadSelAct: new FormControl({ value: {}, disabled: true }),
     actuacionContAct: new FormControl({ value: 0, disabled: true }),
     numeroContAct: new FormControl({ value: '', disabled: true }),
+    anioContratoAct: new FormControl({ value: 0, disabled: true }),
     tipoContAct: new FormControl({ value: 0, disabled: true }),
     perfilAct: new FormControl({ value: 0, disabled: true }),
     valorHonMesAct: new FormControl({ value: '', disabled: true }),
     cantidadContAct: new FormControl({ value: 0, disabled: true }),
     descripcionAct: new FormControl({ value: '', disabled: true }),
 
-    vigencia0Act: new FormControl({ value: 2020, disabled: true }),
-    valor0Act: new FormControl({ value: 20000000, disabled: true }),
-    vigencia1Act: new FormControl({ value: 2021, disabled: true }),
-    valor1Act: new FormControl({ value: 40000000, disabled: true }),
-    vigencia2Act: new FormControl({ value: 2022, disabled: true }),
-    valor2Act: new FormControl({ value: 60000000, disabled: true }),
-    valorTotalAct: new FormControl({ value: 120000000, disabled: true })
+
   })
 
   versionReviewForm = new FormGroup({
@@ -273,19 +273,14 @@ export class PropertiesRequirementComponent implements OnInit {
     modalidadSelRew: new FormControl({ value: {}, disabled: true }),
     actuacionContRew: new FormControl({ value: 0, disabled: true }),
     numeroContRew: new FormControl({ value: '', disabled: true }),
+    anioContratoRew: new FormControl({ value: 0, disabled: true }),
     tipoContRew: new FormControl({ value: 0, disabled: true }),
     perfilRew: new FormControl({ value: 0, disabled: true }),
     valorHonMesRew: new FormControl({ value: '', disabled: true }),
     cantidadContRew: new FormControl({ value: 0, disabled: true }),
     descripcionRew: new FormControl({ value: '', disabled: true }),
 
-    vigencia0Rew: new FormControl({ value: 2020, disabled: true }),
-    valor0Rew: new FormControl({ value: 20000000, disabled: true }),
-    vigencia1Rew: new FormControl({ value: 2021, disabled: true }),
-    valor1Rew: new FormControl({ value: 40000000, disabled: true }),
-    vigencia2Rew: new FormControl({ value: 2022, disabled: true }),
-    valor2Rew: new FormControl({ value: 60000000, disabled: true }),
-    valorTotalRew: new FormControl({ value: 120000000, disabled: true })
+
   })
   submitted = false;
   public selectedIndex = 0;
@@ -341,6 +336,7 @@ export class PropertiesRequirementComponent implements OnInit {
     public serviceProject: ProjectService,
     public serviceProRequirement: PropertiesRequirementService,
     public serviceModRequest: ModificationRequestService,
+    public servicesinitialApp: InitialApropriationService,
     public serviceReviews: ReviewsService,
     public router: Router,
     private activeRoute: ActivatedRoute,
@@ -396,7 +392,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
     this.serviceModRequest.getModificationRequestByRequest(+this.dataProjectID, +this.dataSolicitudID).subscribe((data) => {
-     // console.log('dtaIfno', data);
+      // console.log('dtaIfno', data);
       this.statusReq = data.data.solicitud_Estado || '';
 
       if (this.typePage == 'Vista') {
@@ -593,6 +589,17 @@ export class PropertiesRequirementComponent implements OnInit {
       distinctUntilChanged(),
     ).subscribe(value => {
       this.genericNumeroCont = false
+      if (value == null) { } else
+        if (value != '') {
+          this.serviceProRequirement.getAniosBycontrato(value).subscribe(res => {
+            this.years = res.data
+          })
+        }
+    })
+    this.proRequirementeForm.controls.infoBasicaForm.controls.anioContrato.valueChanges.pipe(
+      distinctUntilChanged(),
+    ).subscribe(value => {
+
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.tipoCont.valueChanges.pipe(
       distinctUntilChanged(),
@@ -605,15 +612,19 @@ export class PropertiesRequirementComponent implements OnInit {
       this.genericPerfil = false
       if (this.proRequirementeForm.controls.infoBasicaForm.controls.valorHonMes.value != null && this.proRequirementeForm.controls.infoBasicaForm.controls.valorHonMes.value != undefined) {
         let valueHonorario = this.proRequirementeForm.controls.infoBasicaForm.controls.valorHonMes.value
-        this.serviceProRequirement.verifyRangeSararial(value, valueHonorario, 2022).subscribe(data => {
-          if (data.data == false) {
-            this.errorRangeSararial = true;
-            this.msjVerifyRangeSararial = data.message
-          } else {
-            this.errorRangeSararial = false;
-            this.msjVerifyRangeSararial = data.message
+        if (valueHonorario == null || valueHonorario ==0) { } else
+          if (value != 0) {
+            this.serviceProRequirement.verifyRangeSararial(value, valueHonorario, 2022).subscribe(data => {
+              if (data.data == false) {
+                this.errorRangeSararial = true;
+                this.msjVerifyRangeSararial = data.message
+              } else {
+                this.errorRangeSararial = false;
+                this.msjVerifyRangeSararial = data.message
+              }
+            })
           }
-        })
+
       }
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.cantidadCont.valueChanges.pipe(
@@ -634,12 +645,15 @@ export class PropertiesRequirementComponent implements OnInit {
   getInfoToCreateReq(projectId: number) {
     this.spinner.show();
     this.serviceProRequirement.getInfoToCreateReq(projectId).subscribe((dataProject) => {
+      // console.log(dataProject);
       this.getInfoToProject = dataProject.data;
       this.codProject = this.getInfoToProject.codigoProyecto;
       this.nomProject = this.getInfoToProject.nombreProyecto;
-      this.dependenciaRec = this.getInfoToProject.dependenciaOrigen;
+      let depOrige = this.getInfoToProject.dependenciaOrigen.codigo
+      this.dependenciaRec = depOrige
       this.proRequirementeForm.controls.infoBasicaForm.controls['codigoPro'].setValue(this.codProject);
-      this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaOri'].setValue(this.dependenciaRec);
+      let concatDepe = this.getInfoToProject.dependenciaOrigen.codigo.concat(' ' + this.getInfoToProject.dependenciaOrigen.detalle)
+      this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaOri'].setValue(concatDepe);
       this.spinner.hide();
     }, error => {
       this.spinner.hide();
@@ -652,9 +666,12 @@ export class PropertiesRequirementComponent implements OnInit {
       // debounceTime(1000), // Espera 1 segundo antes de emitir el valor del input
       distinctUntilChanged()  // Evita que se emita el valor si es igual al ultimo valor que se emitió
     ).subscribe(val => {
-      this.serviceProRequirement.getDependenceElastic(val || '').subscribe((dataDependencie) => {
-        this.listDependencies = dataDependencie.data;
-      })
+      if (val == null) { } else
+        if (val != '') {
+          this.serviceProRequirement.getDependenceElastic(val || '').subscribe((dataDependencie) => {
+            this.listDependencies = dataDependencie.data;
+          })
+        }
     }) || '';
   }
 
@@ -750,16 +767,19 @@ export class PropertiesRequirementComponent implements OnInit {
         distinctUntilChanged()
       ).subscribe(val => {
         this.genericNumReq = false
-        this.serviceProRequirement.verifyNumReq(+this.dataProjectID, val).subscribe(data => {
-          this.errorNumReq = false
-          if (data.data == false) {
-            this.errorVerifyNumReq = true
-            this.msjVerifyNumReq = data.title
-          } else {
-            this.errorVerifyNumReq = false
-            this.msjVerifyNumReq = ''
-          }
-        })
+        if (val != '') {
+          this.serviceProRequirement.verifyNumReq(+this.dataProjectID, val).subscribe(data => {
+            this.errorNumReq = false
+            if (data.data == false) {
+              this.errorVerifyNumReq = true
+              this.msjVerifyNumReq = data.title
+            } else {
+              this.errorVerifyNumReq = false
+              this.msjVerifyNumReq = ''
+            }
+          })
+        }
+
       })
     }
 
@@ -776,29 +796,35 @@ export class PropertiesRequirementComponent implements OnInit {
       distinctUntilChanged()
     ).subscribe(val => {
       this.genericValorHonMes = false
-      this.serviceProRequirement.verifyRangeSararial(this.idPerfil, val, 2022).subscribe(data => {
-        if (data.data == false) {
-          this.errorRangeSararial = true;
-          this.msjVerifyRangeSararial = data.message
-        } else {
-          this.errorRangeSararial = false;
-          this.msjVerifyRangeSararial = data.message
+      if (val == null) { } else
+        if (val != 0) {
+          this.serviceProRequirement.verifyRangeSararial(this.idPerfil, val, 2022).subscribe(data => {
+            if (data.data == false) {
+              this.errorRangeSararial = true;
+              this.msjVerifyRangeSararial = data.message
+            } else {
+              this.errorRangeSararial = false;
+              this.msjVerifyRangeSararial = data.message
+            }
+          })
         }
-      })
+
     })
   }
   getDataConsulta(projectId: number, requestId: number, reqTempId: number) {
-    // console.log(projectId, requestId, reqTempId)
     this.serviceProRequirement.getAllDataTemporalModified(projectId, requestId, reqTempId).subscribe(dataTemp => {
-      // console.log(dataTemp)
+      console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
       this.reqID = dataTemp.requerimiento.requerimiento_ID
       let dataReviews = dataTemp
       if (dataReviews != null) {
+        this.serviceProRequirement.getAniosBycontrato(+dataReviews.requerimiento.numeroDeContrato).subscribe(res => {
+          this.years = res.data
+        })
 
         this.versionReviewForm.setValue({
           codigoProRew: dataReviews.proyecto.codigoProyecto,
-          dependenciaOriRew: dataReviews.proyecto.dependenciaOrigen,
+          dependenciaOriRew: dataReviews.proyecto.dependenciaOrigen.codigo.concat(' ', dataReviews.proyecto.dependenciaOrigen.detalle),
           numeroReqRew: dataReviews.requerimiento.numeroRequerimiento.toString(),
           dependenciaDesRew: dataReviews.requerimiento.dependenciaDestino,
           mesSeleccionRew: dataReviews.requerimiento.mesEstimadoInicioSeleccion.toString(),
@@ -809,20 +835,15 @@ export class PropertiesRequirementComponent implements OnInit {
           modalidadSelRew: dataReviews.requerimiento.modalidadSeleccion.modalidad_Sel_ID,
           actuacionContRew: dataReviews.requerimiento.actuacion.actuacion_ID,
           numeroContRew: dataReviews.requerimiento.numeroDeContrato,
+          anioContratoRew: dataReviews.requerimiento.anioContrato,
           tipoContRew: dataReviews.requerimiento.tipoContrato.tipoContrato_ID,
           perfilRew: dataReviews.requerimiento.perfil.perfil_ID,
           valorHonMesRew: dataReviews.requerimiento.honorarios.toString(),
           cantidadContRew: dataReviews.requerimiento.cantidadDeContratos,
           descripcionRew: dataReviews.requerimiento.descripcion,
 
-          vigencia0Rew: dataReviews.apropiacionInicial.anioV0,
-          valor0Rew: dataReviews.apropiacionInicial.valor0,
-          vigencia1Rew: dataReviews.apropiacionInicial.anioV1,
-          valor1Rew: dataReviews.apropiacionInicial.valor1,
-          vigencia2Rew: dataReviews.apropiacionInicial.anioV2,
-          valor2Rew: dataReviews.apropiacionInicial.valor2,
-          valorTotalRew: dataReviews.apropiacionInicial.valorTotal
         })
+        this.initialAppYaers = dataReviews.aniosVigencia
 
         this.numeroRequerimientoModified = dataReviews.requerimiento.numeroRequerimientoModified
         this.dependenciaDestinoModified = dataReviews.requerimiento.dependenciaDestinoModified
@@ -834,6 +855,7 @@ export class PropertiesRequirementComponent implements OnInit {
         this.modalidadSeleccionModified = dataReviews.requerimiento.modalidadSeleccionModified
         this.actuacionModified = dataReviews.requerimiento.actuacionModified
         this.numeroDeContratoModified = dataReviews.requerimiento.numeroDeContratoModified
+        this.anioContratoModified = dataReviews.requerimiento.anioContratoModified
         this.tipoContratoModified = dataReviews.requerimiento.tipoContratoModified
         this.perfilModified = dataReviews.requerimiento.perfilModified
         this.honorariosModified = dataReviews.requerimiento.honorariosModified
@@ -846,6 +868,15 @@ export class PropertiesRequirementComponent implements OnInit {
 
         this.codigosVerRew = dataReviews.codsUNSPSC
         this.dataSourceCodigosRew = new MatTableDataSource(this.codigosVerRew);
+        this.servicesinitialApp.getAllInitialApropriationTemp(reqTempId, dataReviews.aniosVigencia[0], requestId).subscribe(data => {
+          console.log(data)
+          this.initialAppro.setValue({
+            valorApropiacion_Incial: data.data.valorApropiacion_Incial,
+            anio_Vigencia: data.data.anio_Vigencia,
+            valorApropiacionAnio: data.data.valorApropiacionAnio,
+            valorApropiacion_Final: data.data.valorApropiacion_Final,
+          })
+        })
       } else {
         // this.openSnackBar('Error', dataReviews.Message, 'error')
         // this.viewVersion = false
@@ -858,7 +889,7 @@ export class PropertiesRequirementComponent implements OnInit {
   }
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number) {
     this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
-      // console.log(dataTemp)
+      console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
 
       this.reqID = dataTemp.requerimiento.requerimiento_ID
@@ -875,14 +906,16 @@ export class PropertiesRequirementComponent implements OnInit {
           modalidadSel: dataTemp.requerimiento.modalidadSeleccion.modalidad_Sel_ID,
           actuacionCont: dataTemp.requerimiento.actuacion.actuacion_ID,
           numeroCont: dataTemp.requerimiento.numeroDeContrato || '',
+          anioContrato: dataTemp.requerimiento.anioContrato,
           tipoCont: dataTemp.requerimiento.tipoContrato.tipoContrato_ID,
           perfil: dataTemp.requerimiento.perfil.perfil_ID,
           valorHonMes: dataTemp.requerimiento.honorarios.toString() || '',
           cantidadCont: dataTemp.requerimiento.cantidadDeContratos || '',
           descripcion: dataTemp.requerimiento.descripcion,
           codigoPro: dataTemp.proyecto.codigoProyecto,
-          dependenciaOri: dataTemp.proyecto.dependenciaOrigen
+          dependenciaOri: dataTemp.proyecto.dependenciaOrigen.codigo.concat(' ', dataTemp.proyecto.dependenciaOrigen.detalle),
         })
+        this.initialAppYaers = dataTemp.aniosVigencia
         this.proRequirementeForm.controls.infoBasicaForm.controls.numeroReq.disable()
         this.onSelectionChange(dataTemp.requerimiento.actuacion.actuacion_ID, 'actContractual')
         this.errorNumReq = false
@@ -911,16 +944,26 @@ export class PropertiesRequirementComponent implements OnInit {
         var fromStorageCod = ProChartStorage.getItem("dataTableCodigos");
         this.reloadDataTbl(fromStorageCod, 'codigos');
 
-        this.proRequirementeForm.controls.initialAppro.setValue({
-          apropIni_ID: dataTemp.apropiacionInicial.apropIni_ID,
-          vigencia0: dataTemp.apropiacionInicial.anioV0,
-          valor0: dataTemp.apropiacionInicial.valor0,
-          vigencia1: dataTemp.apropiacionInicial.anioV1,
-          valor1: dataTemp.apropiacionInicial.valor1,
-          vigencia2: dataTemp.apropiacionInicial.anioV2,
-          valor2: dataTemp.apropiacionInicial.valor2,
-          valorTotal: dataTemp.apropiacionInicial.valorTotal
+        this.servicesinitialApp.getAllInitialApropriationTemp(+this.dataRequirementID, dataTemp.aniosVigencia[0], +this.dataSolicitudID).subscribe(data => {
+          console.log(data)
+          this.initialAppro.setValue({
+            valorApropiacion_Incial: data.data.valorApropiacion_Incial,
+            anio_Vigencia: data.data.anio_Vigencia,
+            valorApropiacionAnio: data.data.valorApropiacionAnio,
+            valorApropiacion_Final: data.data.valorApropiacion_Final,
+          })
         })
+
+        // this.initialAppro.setValue({
+        //   apropIni_ID: dataTemp.apropiacionInicial.apropIni_ID,
+        //   vigencia0: dataTemp.apropiacionInicial.anioV0,
+        //   valor0: dataTemp.apropiacionInicial.valor0,
+        //   vigencia1: dataTemp.apropiacionInicial.anioV1,
+        //   valor1: dataTemp.apropiacionInicial.valor1,
+        //   vigencia2: dataTemp.apropiacionInicial.anioV2,
+        //   valor2: dataTemp.apropiacionInicial.valor2,
+        //   valorTotal: dataTemp.apropiacionInicial.valorTotal
+        // })
       } else {
 
       }
@@ -929,14 +972,16 @@ export class PropertiesRequirementComponent implements OnInit {
 
   getDataAprobad(projectId: number, requerimetId: number) {
     this.serviceProRequirement.getDataAprobad(projectId, requerimetId).subscribe(dataAprobad => {
-      //  console.log(dataAprobad)
+      console.log(dataAprobad)
       let dataApro = dataAprobad.data
       if (dataAprobad.data != null) {
         this.dataRequirementNum = dataApro.requerimiento.numeroRequerimiento.toString();
-
+        this.serviceProRequirement.getAniosBycontrato(+dataApro.requerimiento.numeroDeContrato).subscribe(res => {
+          this.years = res.data
+        })
         this.versionActualForm.setValue({
           codigoProAct: dataApro.proyecto.codigoProyecto,
-          dependenciaOriAct: dataApro.proyecto.dependenciaOrigen,
+          dependenciaOriAct: dataApro.proyecto.dependenciaOrigen.codigo.concat(' ', dataApro.proyecto.dependenciaOrigen.detalle),
           numeroReqAct: dataApro.requerimiento.numeroRequerimiento.toString(),
           dependenciaDesAct: dataApro.requerimiento.dependenciaDestino,
           mesSeleccionAct: dataApro.requerimiento.mesEstimadoInicioSeleccion.toString(),
@@ -947,26 +992,30 @@ export class PropertiesRequirementComponent implements OnInit {
           modalidadSelAct: dataApro.requerimiento.modalidadSeleccion.modalidad_Sel_ID,
           actuacionContAct: dataApro.requerimiento.actuacion.actuacion_ID,
           numeroContAct: dataApro.requerimiento.numeroDeContrato,
+          anioContratoAct: dataApro.requerimiento.anioContrato,
           tipoContAct: dataApro.requerimiento.tipoContrato.tipoContrato_ID,
           perfilAct: dataApro.requerimiento.perfil.perfil_ID,
           valorHonMesAct: dataApro.requerimiento.honorarios.toString(),
           cantidadContAct: dataApro.requerimiento.cantidadDeContratos,
           descripcionAct: dataApro.requerimiento.descripcion,
 
-          vigencia0Act: dataApro.apropiacionInicial.anioV0,
-          valor0Act: dataApro.apropiacionInicial.valor0,
-          vigencia1Act: dataApro.apropiacionInicial.anioV1,
-          valor1Act: dataApro.apropiacionInicial.valor1,
-          vigencia2Act: dataApro.apropiacionInicial.anioV2,
-          valor2Act: dataApro.apropiacionInicial.valor2,
-          valorTotalAct: dataApro.apropiacionInicial.valorTotal
-        })
 
+        })
+        this.initialAppYaers = dataApro.aniosVigencia
         this.cadenasPresupuestalesVerAct = dataApro.cadenasPresupuestales
         this.dataSourceClasificacionesAct = new MatTableDataSource(this.cadenasPresupuestalesVerAct)
 
         this.codigosVerAct = dataApro.codsUNSPSC
         this.dataSourceCodigosAct = new MatTableDataSource(this.codigosVerAct);
+        this.servicesinitialApp.getAllInitialApropriation(requerimetId, dataApro.aniosVigencia[0]).subscribe(data => {
+          console.log(data)
+          this.initialAppro.setValue({
+            valorApropiacion_Incial: data.data.valorApropiacion_Incial,
+            anio_Vigencia: data.data.anio_Vigencia,
+            valorApropiacionAnio: data.data.valorApropiacionAnio,
+            valorApropiacion_Final: data.data.valorApropiacion_Final,
+          })
+        })
       } else if (dataAprobad.data == null) {
         this.openSnackBar('Error', dataAprobad.message, 'error')
         this.viewVersion = false
@@ -1036,7 +1085,7 @@ export class PropertiesRequirementComponent implements OnInit {
               }
             }
           });
-        } else    if (this.typePage == 'Editar' && this.statusReq == 'En Ajuste') {
+        } else if (this.typePage == 'Editar' && this.statusReq == 'En Ajuste') {
           //Alerta de confirmación
           Swal.fire({
             customClass: {
@@ -1052,8 +1101,8 @@ export class PropertiesRequirementComponent implements OnInit {
           }).then((result) => {
             if (result.value) {
 
-                this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
-              
+              this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + this.dataSolicitudID])
+
             }
           });
         } else if (this.typePage == 'Nuevo') {
@@ -1159,6 +1208,7 @@ export class PropertiesRequirementComponent implements OnInit {
         requerimientoForm.honorarios = +this.proRequirementeForm.controls.infoBasicaForm.value.valorHonMes
       } else {
         requerimientoForm.numeroDeContrato = this.proRequirementeForm.controls.infoBasicaForm.value.numeroCont
+        requerimientoForm.anioContrato = this.proRequirementeForm.controls.infoBasicaForm.value.anioContrato
         requerimientoForm.tipoContrato_Id = 0
         requerimientoForm.perfil_Id = 0
         requerimientoForm.honorarios = 0
@@ -1171,7 +1221,6 @@ export class PropertiesRequirementComponent implements OnInit {
 
       this.formVerify.cadenasPresupuestales = this.dataClasificacion
       this.formVerify.codsUNSPSC = this.dataCodigos
-      this.formVerify.apropiacionInicial = this.proRequirementeForm.controls.initialAppro.value
 
       if (this.typePage == 'Nuevo') {
         this.serviceProRequirement.postVerifyDataSaveI(this.formVerify).subscribe(dataResponse => {
@@ -1384,13 +1433,18 @@ export class PropertiesRequirementComponent implements OnInit {
 
   //funciones para retornar el valor al autocomplete
   displayFn(value: any) {
-    return value ? value.codigo : ''
+    if (value == null) {
+      return value ? value.codigo.concat(' ', value.detalle) : value
+    } else if (value != null) {
+      return value ? value.codigo.concat(' ', value.detalle) : value && value.codigo ? value.codigo.concat(' ', value.descripcion) : ''
+    } else
+      return value.codigo ? value.codigo.concat(' ', value.descripcion) : ''
   }
   displayFnAux(value: any) {
     return value ? value.codigoAuxiliar : ''
   }
   displayFnFte(value: any) {
-    return value ? value.codigoFuente.concat(' - ', value.descripcion) : ''
+    return value.codigoFuente ? value.codigoFuente.concat('  ', value.descripcion) : ''
   }
   displayFnAct(value: any) {
     return value ? value.codigoAct : ''
@@ -1415,6 +1469,7 @@ export class PropertiesRequirementComponent implements OnInit {
         this.disabledAdicion = true
         this.disabledInicial = false
         this.proRequirementeForm.controls.infoBasicaForm.controls['numeroCont'].enable();
+        this.proRequirementeForm.controls.infoBasicaForm.controls['anioContrato'].enable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['tipoCont'].disable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].disable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].disable();
@@ -1425,10 +1480,12 @@ export class PropertiesRequirementComponent implements OnInit {
         this.disabledAdicion = false
         this.disabledInicial = true
         this.proRequirementeForm.controls.infoBasicaForm.controls['numeroCont'].disable();
+        this.proRequirementeForm.controls.infoBasicaForm.controls['anioContrato'].disable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['tipoCont'].enable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].enable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].enable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['numeroCont'].setValue('');
+        this.proRequirementeForm.controls.infoBasicaForm.controls['anioContrato'].setValue('');
 
       }
     }
@@ -1462,9 +1519,27 @@ export class PropertiesRequirementComponent implements OnInit {
     if (tipo == 'actividad') {
       this.activityId = event.value.actividad_ID
       this.errorActi = false;
+      this.spinner.show();
       this.proRequirementeForm.controls.clasPresFinaForm.patchValue({
         meta: event.value.metaODS
       })
+      console.log(event)
+      this.serviceProRequirement.getMGAById(event.value.mga_ID).subscribe(res => {
+        console.log(res)
+        this.proRequirementeForm.controls.clasPresFinaForm.patchValue({
+          mga: res.data.codigoMGA
+        })
+        this.mgaValue = res.data
+      })
+      this.serviceProRequirement.getPOSPREById(event.value.pospre_ID).subscribe(res => {
+        console.log(res)
+        this.proRequirementeForm.controls.clasPresFinaForm.patchValue({
+          pospre: res.data.codigo
+        })
+        this.pospreValue = res.data
+        this.spinner.hide();
+      })
+
     }
     if (tipo == 'MGA') {
       this.MGAId = event.option.value.mgA_ID
@@ -1524,6 +1599,15 @@ export class PropertiesRequirementComponent implements OnInit {
       } else {
         this.dataTableClasificacion = this.proRequirementeForm.controls.clasPresFinaForm.value
         this.dataTableClasificacion['uuid'] = uuid();
+        // this.dataTableClasificacion['mes'] = this.proRequirementeForm.controls.clasPresFinaForm.controls['mes'].value;
+        // this.dataTableClasificacion['anioVigRecursos'] = this.proRequirementeForm.controls.clasPresFinaForm.controls['anioVigRecursos'].value;
+        // this.dataTableClasificacion['auxiliar'] = this.proRequirementeForm.controls.clasPresFinaForm.controls['auxiliar'].value;
+        // this.dataTableClasificacion['fuente'] = this.proRequirementeForm.controls.clasPresFinaForm.controls['fuente'].value;
+        // this.dataTableClasificacion['actividad'] = this.proRequirementeForm.controls.clasPresFinaForm.controls['actividad'].value;
+        // this.dataTableClasificacion['meta'] =  this.proRequirementeForm.controls.clasPresFinaForm.controls['meta'].value;
+
+        this.dataTableClasificacion['mga'] = this.mgaValue
+        this.dataTableClasificacion['pospre'] = this.pospreValue
         this.dataTableClasificacion['apropiacionDisponible'] = 0;
         this.dataTableClasificacion['aumento'] = 0;
         this.dataTableClasificacion['disminucion'] = 0;
@@ -1534,6 +1618,7 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dataTableClasificacion['subDisminucion'] = 0;
         this.dataTableClasificacion['iva'] = 0;
         this.dataTableClasificacion['arl'] = 0;
+        console.log(this.dataTableClasificacion)
         let repe = this.dataTableClasificaciones.filter(u => u.uuid == this.dataTableClasificacion['uuid'])
         if (repe.length != 0) {
           this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')

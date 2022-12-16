@@ -11,7 +11,10 @@ export interface getInfoToCreateReqDataI {
     estado: string,
     nombreProyecto: string,
     numeroModificacion: number,
-    dependenciaOrigen: string
+    dependenciaOrigen: {
+        codigo:string,
+        detalle:string
+    }
 }
 
 
@@ -52,6 +55,15 @@ export interface getAllContractualActionDataI {
     actuacion_ID: number,
     tipo: string
 }
+
+//anio contrato
+export interface getAllAnioI {
+    status: number,
+    message: string,
+    title: string,
+    data: []
+}
+
 //tipo de contrato
 export interface getAllContacTypeI {
     status: number,
@@ -118,6 +130,8 @@ export interface getAllActivitiesDataI {
     actividad_ID: number,
     codigo: string,
     metaODS: string,
+    pospre_ID: number,
+    mga_ID: number
 }
 
 //MGA
@@ -274,6 +288,7 @@ export interface requerimientoI {
     modalidadSeleccion_Id: number,
     actuacion_Id: number,
     numeroDeContrato: string,
+    anioContrato: number,
     tipoContrato_Id: number,
     perfil_Id: number,
     honorarios: number,
@@ -323,6 +338,7 @@ export interface getDataTemporalI {
             tipo: string
         },
         numeroDeContrato: string,
+        anioContrato: number,
         tipoContrato: {
             tipoContrato_ID: number,
             nombre: string
@@ -340,16 +356,7 @@ export interface getDataTemporalI {
     cadenasPresupuestalesTemporal: cadenasPresupuestalesI[],
     cadenasPresupuestales: cadenasPresupuestalesI[],
 
-    apropiacionInicial: {
-        apropIni_ID: number,
-        anioV0: number,
-        valor0: number,
-        anioV1: number,
-        valor1: number,
-        anioV2: number,
-        valor2: number,
-        valorTotal: number
-    },
+    aniosVigencia: number[],
     codsUNSPSC: [
         {
             unspsC_ID: number,
@@ -478,6 +485,7 @@ export interface cadenaPresupuestalI {
 
 export interface getDataTemporalModifiedI {
     proyecto: getInfoToCreateReqDataI,
+    aniosVigencia:number[],
     requerimiento: {
         project_ID: number,
         req_ID: number,
@@ -489,6 +497,7 @@ export interface getDataTemporalModifiedI {
         dependenciaDestino: {
             dependencia_ID: number,
             codigo: string
+            detalle: string
         },
         dependenciaDestinoModified: boolean,
         
@@ -522,6 +531,9 @@ export interface getDataTemporalModifiedI {
         numeroDeContrato: string,
         numeroDeContratoModified: boolean,
 
+        anioContrato: number,
+        anioContratoModified: boolean,
+
         tipoContrato: {
             tipoContrato_ID: number,
             nombre: string
@@ -546,6 +558,7 @@ export interface getDataTemporalModifiedI {
         version: number,
         estado: string,
     },
+  
     cadenasPresupuestales: cadenasPresupuestalesModifiedI[],
 
     apropiacionInicial: {
