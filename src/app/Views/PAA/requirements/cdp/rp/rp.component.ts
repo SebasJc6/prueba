@@ -78,6 +78,7 @@ export class RpComponent implements OnInit {
     this.spinner.show();
     this.serviceRP.postRPs(idCDP, formRPs).subscribe(
       res => {
+        // console.log(res);
         if (res.status == 200) {
           this.openSnackBar('Se ha guardado correctamente', res.message, 'success');
           this.spinner.hide();

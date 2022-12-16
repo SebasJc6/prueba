@@ -19,6 +19,6 @@ export class RpService {
   }
   postRPs(idCDP:number,formRPs :postRPsI):Observable<any>{
     let dir = `${this.url}${idCDP}/RP`;
-    return this.http.post<any>(dir, formRPs);
+    return this.http.put<any>(dir, formRPs);
   }
 }
