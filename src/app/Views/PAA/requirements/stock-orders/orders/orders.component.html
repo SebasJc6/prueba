@@ -1,1 +1,154 @@
-<p>orders works!</p>
+<div class="container center-h center-v">
+    <div class="mgp">
+        Plan Anual de Adquisiciones
+        <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
+            &nbsp;>&nbsp;{{codProject}}
+            -&nbsp;{{nomProject}}
+        </a>
+        <!-- <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
+            &nbsp;>&nbsp;Requerimientos
+          </a>
+          <a class="href" [routerLink]="['/WAPI/PAA/CDP/', dataProjectID, idReq]
+          ">
+            &nbsp;>&nbsp; CDP
+          </a>
+          <a class="href selected" [routerLink]="['/WAPI/PAA/RP/', dataProjectID, idReq, idCDP]">
+            &nbsp;>&nbsp; RP
+            </a> -->
+    </div>
+
+    <!-- TITULO -->
+    <div class="opciones">
+        <mat-card-title class="export">
+            <strong>GIRO - RP</strong>
+        </mat-card-title>
+    </div>
+
+    <div class="colorCard2">
+
+        <div class="formCont">
+            <div class="tablaCont">
+                <div class="contTxt label1">
+                    <p class="tltData">Número orden de pago</p>
+                    <input class="contData contDataDisabled" disabled>
+                </div>
+                <div class="contTxt label1">
+                    <p class="tltData">Fecha orden de pago</p>
+                    <input class="contData contDataDisabled" disabled>
+                </div>
+
+                <div class="contTxt label1">
+                    <p class="tltData">Número de contrato</p>
+                    <input class="contData contDataDisabled" disabled>
+                </div>
+                <div class="contTxt label1">
+                    <p class="tltData">Valor RP</p>
+                    <input class="contData contDataDisabled" disabled>
+                </div>
+            </div>
+
+            <div class="tablaCont">
+                <div class="contTxt label1">
+                    <p class="tltData">Valor giro acumulado</p>
+                    <input class="contData contDataDisabled" disabled>
+                </div>
+                <div class="contTxt label1">
+                    <p class="tltData">Saldo por girar</p>
+                    <input class="contData contDataDisabled" disabled>
+                </div>
+                <div class="contTxt label1">
+                    <p class="tltData">Valor orden de pago</p>
+                    <input class="contData contDataDisabled" disabled>
+                </div>
+                <div class="contTxt label1">
+                    <p class="tltData">Pendiente por distribuir</p>
+                    <input class="contData contDataDisabled" disabled>
+                </div>
+            </div>
+            <div class="tablaCont">
+                <div class="contTxt label2">
+                    <p class="tltData">Codigo fuente financiamiento</p>
+                    <input class="contData contDataDisabled" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <span class="title">Actividades</span>
+        </div>
+
+
+        <div style="overflow: auto;  ">
+            <!-- <table mat-table class="mat-elevation-z8" [dataSource]="rp.actividades" matSort>
+                <ng-container matColumnDef="codigoActividad">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="codAct">
+                        Código actividad
+                    <td mat-cell *matCellDef="let element"> {{element.actividad}}</td>
+                </ng-container>
+                <ng-container matColumnDef="pospre">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="pos">
+                        POSPRE
+                    <td mat-cell *matCellDef="let element">{{element.pospre}}</td>
+                </ng-container>
+                <ng-container matColumnDef="mga">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="mga">
+                        MGA
+                    <td mat-cell *matCellDef="let element">{{element.mga}}</td>
+                </ng-container>
+                <ng-container matColumnDef="auxiliar">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="aux">
+                        Auxiliar
+                    <td mat-cell *matCellDef="let element">{{element.auxiliar}}</td>
+                </ng-container>
+                <ng-container matColumnDef="fuente">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="fue">
+                        Fuente
+                    <td mat-cell *matCellDef="let element">{{element.fuente}}</td>
+                </ng-container>
+                <ng-container matColumnDef="valorRP">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="aprDis">
+                        Valor RP
+                    <td mat-cell *matCellDef="let element">{{element.apropiacionDisponible
+                        |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
+                </ng-container>
+                <ng-container matColumnDef="girosAcumulados">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="aprDis">
+                        Giros acumulados
+                    <td mat-cell *matCellDef="let element">{{element.apropiacionDisponible
+                        |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
+                </ng-container>
+                <ng-container matColumnDef="saldoGirar">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="aprDis">
+                        Saldo a girar
+                    <td mat-cell *matCellDef="let element">{{element.apropiacionDisponible
+                        |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
+                </ng-container>
+                <ng-container matColumnDef="valorGirar">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="valDis">
+                        Valor a girar
+                    <td mat-cell *matCellDef="let element">
+                        <input class="contDataTabla" #valoresDistribuidos  value="{{element.valoresDistribuidos}}" (change)="valueChange(rp.rP_ID,element.clasificacion_ID,+valoresDistribuidos.value)">
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="nuevoSaldo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="aprDis">
+                        Nuevo saldo
+                    <td mat-cell *matCellDef="let element">{{element.apropiacionDisponible
+                        |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="actividadesColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: actividadesColumns"></tr>
+            </table> -->
+        </div>
+
+        <mat-card-actions>
+            <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
+                Regresar
+            </button>
+            <button class="buton btn" mat-button mat-icon-button (click)="saveGiro()">
+                guardar
+            </button>
+        </mat-card-actions>
+
+    </div>
+</div>
