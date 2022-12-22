@@ -204,3 +204,29 @@ table {
   .pagination a:hover:not(.active) {
     background-color: #ddd;
   }
+
+
+  /* RESPONSIVE*/
+  @media only screen and (max-width: 500px) {
+    .table thead {
+      display: none;
+    }
+
+    .table, .table tbody, .table tr, .table td {
+      display: block;
+      width: 100%;
+    }
+
+    .table tr{
+      margin-bottom: 15px;
+    }
+
+    .table td{
+      text-align: right;
+      padding-left: 50%;
+      text-align: right;
+      position: relative;
+    }
+
+
+  }

@@ -9,14 +9,14 @@
     </a>
   </div>
 
-  <div style="overflow: auto;">
     <div class="opciones">
       <mat-card-title class="export">
         <strong> PLAN ANUAL DE ADQUISICIONES </strong>
       </mat-card-title>
 
+    <div class="div__buttons__actions">
       <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">Filtrar</button>
-      
+    
       <div class="sections__buttons__icons">
         <button class="btn" style="float: right;" mat-button>
           <mat-icon class="imgExcel mat-icon" matTooltip="Exportar Excel">
@@ -40,85 +40,85 @@
           class="file-input" (change)="onFileSelected($event)" [(ngModel)]="fileCDPsRPs" #importCDPsRPs />
         </button>
       </div>
-
     </div>
-    
-    <div>
-      <div class="top">
-        <mat-card *ngIf="!viewFilter">
-          <div class="close">
-            <button mat-icon-button (click)="closeFilter()" color="warn">
-              <mat-icon [inline]='true'>close</mat-icon>
-            </button>
-          </div>
-          <div [formGroup]="filterForm">
-            <mat-accordion multi>
-              <mat-expansion-panel class="menu-panel">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    <span class="title">Ordernar Por:</span>
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <div class="filter">
-                  <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
-                    <mat-radio-button value="DependenciaOrigen">Subsecretaria</mat-radio-button>
-                    <mat-radio-button value="CodigoProyecto">Código Proyecto</mat-radio-button>
-                    <mat-radio-button value="Nombre">Nombre Proyecto</mat-radio-button>
-                    <mat-radio-button value="EstadoDesc">Estado</mat-radio-button>
-                  </mat-radio-group>
-                </div>
-                <mat-divider></mat-divider>
-                <div class="Order" *ngIf="viewOrder">
-                  Descendente<mat-slide-toggle formControlName="ascending"> Ascendente</mat-slide-toggle>
-                </div>
 
-              </mat-expansion-panel>
 
-              <mat-expansion-panel class="menu-panel">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    <span class="title">Buscar Por:</span>
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <div class="form">
-                  <mat-form-field appearance="outline">
-                    <mat-label class="text__opacity">Subsecretaria</mat-label>
-                    <input matInput formControlName="DependenciaOrigen" type="text">
-                  </mat-form-field>
-                  &nbsp;
-                  <mat-form-field style="width: 15%;" appearance="outline">
-                    <mat-label class="text__opacity">Código Proyecto</mat-label>
-                    <input matInput formControlName="CodigoProyecto" type="number">
-                  </mat-form-field>
-                  &nbsp;
-                  <mat-form-field style="width: 30%;" appearance="outline">
-                    <mat-label class="text__opacity">Nombre Proyecto</mat-label>
-                    <input matInput formControlName="Nombre">
-                  </mat-form-field>
-                  &nbsp;
-                  <mat-form-field appearance="outline">
-                    <mat-label class="text__opacity">Estado</mat-label>
-                    <mat-select formControlName="EstadoDesc">
-                      <mat-option [value]="Item" *ngFor="let Item of estadoFilter">{{Item}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </mat-expansion-panel>
-            </mat-accordion>
-
-            <button class="FilSear" mat-button (click)="getFilter()">
-              Filtrar
-            </button>
-            <button class="FilSear" mat-button (click)="clearFilter()">
-              Limpiar
-            </button>
-          </div>
-        </mat-card>
+  </div>
+  
+  <div class="top">
+    <mat-card *ngIf="!viewFilter">
+      <div class="close">
+        <button mat-icon-button (click)="closeFilter()" color="warn">
+          <mat-icon [inline]='true'>close</mat-icon>
+        </button>
       </div>
-    </div>
+      <div [formGroup]="filterForm">
+        <mat-accordion multi>
+          <mat-expansion-panel class="menu-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span class="title">Ordernar Por:</span>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="filter">
+              <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
+                <mat-radio-button value="DependenciaOrigen">Subsecretaria</mat-radio-button>
+                <mat-radio-button value="CodigoProyecto">Código Proyecto</mat-radio-button>
+                <mat-radio-button value="Nombre">Nombre Proyecto</mat-radio-button>
+                <mat-radio-button value="EstadoDesc">Estado</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="Order" *ngIf="viewOrder">
+              Descendente<mat-slide-toggle formControlName="ascending"> Ascendente</mat-slide-toggle>
+            </div>
+
+          </mat-expansion-panel>
+
+          <mat-expansion-panel class="menu-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span class="title">Buscar Por:</span>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="form">
+              <mat-form-field appearance="outline">
+                <mat-label class="text__opacity">Subsecretaria</mat-label>
+                <input matInput formControlName="DependenciaOrigen" type="text">
+              </mat-form-field>
+              &nbsp;
+              <mat-form-field appearance="outline">
+                <mat-label class="text__opacity">Código Proyecto</mat-label>
+                <input matInput formControlName="CodigoProyecto" type="number">
+              </mat-form-field>
+              &nbsp;
+              <mat-form-field appearance="outline">
+                <mat-label class="text__opacity">Nombre Proyecto</mat-label>
+                <input matInput formControlName="Nombre">
+              </mat-form-field>
+              &nbsp;
+              <mat-form-field appearance="outline">
+                <mat-label class="text__opacity">Estado</mat-label>
+                <mat-select formControlName="EstadoDesc">
+                  <mat-option [value]="Item" *ngFor="let Item of estadoFilter">{{Item}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <button class="FilSear" mat-button (click)="getFilter()">
+          Filtrar
+        </button>
+        <button class="FilSear" mat-button (click)="clearFilter()">
+          Limpiar
+        </button>
+      </div>
+    </mat-card>
+  </div>
 
 
-
+  <div style="overflow: auto;">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
       <ng-container matColumnDef="select">
@@ -182,7 +182,7 @@
             'mat-closeChips' : element.estadoDesc == 'Cerrado',
             'mat-actionChips' : element.estadoDesc == 'En Ejecución',
             'mat-beforeChips' : element.estadoDesc == 'Anteproyecto'}">fiber_manual_record</mat-icon>
-            {{ element.estadoDesc }}
+            <span class="span__states">{{ element.estadoDesc }}</span>
           </button>
         </td>
       </ng-container>
@@ -215,40 +215,38 @@
         <tr>
       </ng-container>
 
-
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   </div>
+</div>
 
-  <div class="pagination " [formGroup]="paginationForm">
+<div class="pagination " [formGroup]="paginationForm">
 
-    <mat-form-field class="take" appearance="legacy" matTooltip="Items por página">
-      <mat-select formControlName="take" (selectionChange)="getPagination()">
-        <mat-option [value]="Item" *ngFor="let Item of pageSizeOptions">{{Item}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <a (click)="firstPage()">
-      <mat-icon matTooltip="Primer página">first_page</mat-icon>
-    </a>
-    <a (click)="prevPage()">
-      <mat-icon matTooltip="Anterior">chevron_left</mat-icon>
-    </a>
-    <mat-form-field class="page" appearance="legacy">
-      <mat-label>página</mat-label>
-      <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page">
-      <button matSuffix (click)="getPagination()" mat-icon-button>
-        <mat-icon matTooltip="Buscar Página">youtube_searched_for</mat-icon>
-      </button>
-      <mat-hint> {{numberPage}} de {{numberPages}}</mat-hint>
-    </mat-form-field>
-    <a (click)="nextPage()">
-      <mat-icon matTooltip="Siguiente">chevron_right</mat-icon>
-    </a>
-    <a (click)="latestPage()">
-      <mat-icon matTooltip="Ultima página">last_page</mat-icon>
-    </a>
-
-  </div>
+  <mat-form-field class="take" appearance="legacy" matTooltip="Items por página">
+    <mat-select formControlName="take" (selectionChange)="getPagination()">
+      <mat-option [value]="Item" *ngFor="let Item of pageSizeOptions">{{Item}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <a (click)="firstPage()">
+    <mat-icon matTooltip="Primer página">first_page</mat-icon>
+  </a>
+  <a (click)="prevPage()">
+    <mat-icon matTooltip="Anterior">chevron_left</mat-icon>
+  </a>
+  <mat-form-field class="page" appearance="legacy">
+    <mat-label>página</mat-label>
+    <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page">
+    <button matSuffix (click)="getPagination()" mat-icon-button>
+      <mat-icon matTooltip="Buscar Página">youtube_searched_for</mat-icon>
+    </button>
+    <mat-hint> {{numberPage}} de {{numberPages}}</mat-hint>
+  </mat-form-field>
+  <a (click)="nextPage()">
+    <mat-icon matTooltip="Siguiente">chevron_right</mat-icon>
+  </a>
+  <a (click)="latestPage()">
+    <mat-icon matTooltip="Ultima página">last_page</mat-icon>
+  </a>
 
 </div>
