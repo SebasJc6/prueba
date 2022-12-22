@@ -1538,16 +1538,13 @@ export class PropertiesRequirementComponent implements OnInit {
       this.proRequirementeForm.controls.clasPresFinaForm.patchValue({
         meta: event.value.metaODS
       })
-      console.log(event)
       this.serviceProRequirement.getMGAById(event.value.mga_ID).subscribe(res => {
-        console.log(res)
         this.proRequirementeForm.controls.clasPresFinaForm.patchValue({
           mga: res.data.codigoMGA
         })
         this.mgaValue = res.data
       })
       this.serviceProRequirement.getPOSPREById(event.value.pospre_ID).subscribe(res => {
-        console.log(res)
         this.proRequirementeForm.controls.clasPresFinaForm.patchValue({
           pospre: res.data.codigo
         })
@@ -1633,7 +1630,6 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dataTableClasificacion['subDisminucion'] = 0;
         this.dataTableClasificacion['iva'] = 0;
         this.dataTableClasificacion['arl'] = 0;
-        console.log(this.dataTableClasificacion)
         let repe = this.dataTableClasificaciones.filter(u => u.uuid == this.dataTableClasificacion['uuid'])
         if (repe.length != 0) {
           this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
@@ -1746,6 +1742,29 @@ export class PropertiesRequirementComponent implements OnInit {
     }
   }
 
+  changeInitilYears(event : any){
+      this.errInitialAppYaers = false
+    this.servicesinitialApp.getAllInitialApropriation(+this.dataRequirementID, event.value).subscribe(data => {
+      if(data.status == 200){
+      this.initialAppro.setValue({
+        valorApropiacion_Incial: data.data.valorApropiacion_Incial,
+        anio_Vigencia: data.data.anio_Vigencia,
+        valorApropiacionAnio: data.data.valorApropiacionAnio,
+        valorApropiacion_Final: data.data.valorApropiacion_Final,
+      })
+    } else if(data.status == 404){
+      let Data: string[] = [];
+      Data = Object.values(data.data);
+      let errorMessages = '';
+      Data.map(item => {
+        errorMessages += item + '. ';
+      });
+      this.errInitialAppYaers = true
+      this.msjInitialAppYaers = errorMessages
+      // this.openSnackBar('Error', data.message, 'error')
+    }
+    })
+  }
   getAllReviews(Modificacion_ID: number) {
     this.reviewsUpTemporal = [];
     this.serviceReviews.getAllReviews(Modificacion_ID).subscribe((data: any) => {
