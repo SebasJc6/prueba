@@ -49,8 +49,7 @@ const routes: Routes = [
           },
           { path: 'RP/:idPro/:idReq/:idCDP', component: RpComponent, canActivate: [VigilantSessionsGuard] },
           { path: 'StockOrders/:idPro/:idReq', component: StockOrdersComponent, canActivate: [VigilantSessionsGuard] },
-          { path: 'Giros', component: OrdersComponent, canActivate: [VigilantSessionsGuard] },
-          // { path: 'Giros/:idPro/:idReq/:idGir', component: OrdersComponent, canActivate: [VigilantSessionsGuard] },
+          { path: 'Giros/:idPro/:idReq/:idGir', component: OrdersComponent, canActivate: [VigilantSessionsGuard] },
           { path: 'SolicitudModificacion/:idPro/:idSol', component: ModificationRequestComponent, canActivate: [VigilantSessionsGuard] },
           { path: 'ResumenModificacion/:idPro/:idSol', component: ModificationSummaryComponent, canActivate: [VigilantSessionsGuard] }
         ]

@@ -167,6 +167,8 @@ export class PropertiesRequirementComponent implements OnInit {
   mgaValue = {} as getAllMGADataI;
   pospreValue = {} as getAllPOSPREDataI;
   initialAppYaers: number[] = []
+  errInitialAppYaers: boolean = false;
+  msjInitialAppYaers: any;
 
   cantMeses: any[] = [
     //  { idMes: '0', nameMes: ' ' },
@@ -1002,6 +1004,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
         })
         this.initialAppYaers = dataApro.aniosVigencia
+        console.log(this.initialAppYaers)
         this.cadenasPresupuestalesVerAct = dataApro.cadenasPresupuestales
         this.dataSourceClasificacionesAct = new MatTableDataSource(this.cadenasPresupuestalesVerAct)
 
@@ -1009,12 +1012,24 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dataSourceCodigosAct = new MatTableDataSource(this.codigosVerAct);
         this.servicesinitialApp.getAllInitialApropriation(requerimetId, dataApro.aniosVigencia[0]).subscribe(data => {
           console.log(data)
+          if(data.status == 200){
           this.initialAppro.setValue({
             valorApropiacion_Incial: data.data.valorApropiacion_Incial,
             anio_Vigencia: data.data.anio_Vigencia,
             valorApropiacionAnio: data.data.valorApropiacionAnio,
             valorApropiacion_Final: data.data.valorApropiacion_Final,
           })
+        } else if(data.status == 404){
+          let Data: string[] = [];
+          Data = Object.values(data.data);
+          let errorMessages = '';
+          Data.map(item => {
+            errorMessages += item + '. ';
+          });
+          this.errInitialAppYaers = true
+          this.msjInitialAppYaers = errorMessages
+          // this.openSnackBar('Error', data.message, 'error')
+        }
         })
       } else if (dataAprobad.data == null) {
         this.openSnackBar('Error', dataAprobad.message, 'error')
