@@ -122,6 +122,7 @@ export class StockOrdersComponent implements OnInit {
       if (request.status === 404) {
         this.openSnackBar('Lo sentimos', `${request.message}`, 'error');
       } else if (request.status === 200) {
+        console.log(request);
         if (request.data.hasItems) {
           this.dataSource = request.data.items;
           this.paymentOrderValue = request.data.calculados[0].valor;

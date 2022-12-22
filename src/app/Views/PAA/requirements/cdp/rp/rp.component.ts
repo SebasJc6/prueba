@@ -59,11 +59,16 @@ export class RpComponent implements OnInit {
     cadenaRPs.clasificacion_ID = clasificacionId;
     cadenaRPs.valoresDistribuidos = value;
     let cadenasRP = [] as Array<cadenaRPsI>;
+    
+    cadenasRP.map((item: any) => {
+      if (item.clasificacion_ID == clasificacionId) {
+        item.valoresDistribuidos = value;
+      }
+    });
     cadenasRP.push(cadenaRPs);
     this.RPs['rP_ID'] = idRP;
     this.RPs['cadenas'] = cadenasRP;
     this.elementsRP.push(this.RPs);
-
   }
 
   getRPs(idReq: number, idCDP: number) {

@@ -195,7 +195,7 @@
                     <p>Giros</p>
                 </th>
                 <td mat-cell *matCellDef="let element">
-                    <p>{{element.giro_ID}}</p>
+                    <p> <a [routerLink]="['/WAPI/PAA/Giros',dataProjectID, requerimentId,element.giro_ID]"  > {{element.giro_ID}} </a></p>
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="footerTable total"></td>
             </ng-container>

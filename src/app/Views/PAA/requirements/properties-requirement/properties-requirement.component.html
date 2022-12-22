@@ -726,10 +726,13 @@
 
                                                 <p class="tltData">Año vigencia </p>
                                                 <!-- <input class="contData contDataDisabled" formControlName="vigencia2"> -->
-                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect">
+                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect" (selectionChange)="changeInitilYears($event)">
                                                     <mat-option [value]="item" *ngFor="let item of initialAppYaers">
                                                         {{item}}</mat-option>
                                                 </mat-select>
+                                                <mat-error *ngIf="errInitialAppYaers">
+                                                    <strong>{{msjInitialAppYaers}}</strong>
+                                                </mat-error>
                                             </div>
                                             <div class="contTxt label1">
                                                 <p class="tltTitleData arreg"> </p>
@@ -1399,10 +1402,13 @@
 
                                                 <p class="tltData">Año vigencia </p>
                                                 <!-- <input class="contData contDataDisabled" formControlName="vigencia2"> -->
-                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect">
+                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect" (selectionChange)="changeInitilYears($event)">
                                                     <mat-option [value]="item" *ngFor="let item of initialAppYaers">
                                                         {{item}}</mat-option>
                                                 </mat-select>
+                                                <mat-error *ngIf="errInitialAppYaers">
+                                                    <strong>{{msjInitialAppYaers}}</strong>
+                                                </mat-error>
                                             </div>
                                             <div class="contTxt label1">
                                                 <p class="tltTitleData arreg"> </p>
@@ -2029,10 +2035,13 @@
 
                                                 <p class="tltData">Año vigencia </p>
                                                 <!-- <input class="contData contDataDisabled" formControlName="vigencia2"> -->
-                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect">
+                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect" (selectionChange)="changeInitilYears($event)">
                                                     <mat-option [value]="item" *ngFor="let item of initialAppYaers">
                                                         {{item}}</mat-option>
                                                 </mat-select>
+                                                <mat-error *ngIf="errInitialAppYaers">
+                                                    <strong>{{msjInitialAppYaers}}</strong>
+                                                </mat-error>
                                             </div>
                                             <div class="contTxt label1">
                                                 <p class="tltTitleData arreg"> </p>
