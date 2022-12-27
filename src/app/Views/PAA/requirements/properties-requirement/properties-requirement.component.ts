@@ -170,6 +170,8 @@ export class PropertiesRequirementComponent implements OnInit {
   errInitialAppYaers: boolean = false;
   msjInitialAppYaers: any;
 
+  isDataTemporal: boolean = false;
+
   cantMeses: any[] = [
     //  { idMes: '0', nameMes: ' ' },
     { idMes: '1', nameMes: 'Enero' },
@@ -614,7 +616,7 @@ export class PropertiesRequirementComponent implements OnInit {
       this.genericPerfil = false
       if (this.proRequirementeForm.controls.infoBasicaForm.controls.valorHonMes.value != null && this.proRequirementeForm.controls.infoBasicaForm.controls.valorHonMes.value != undefined) {
         let valueHonorario = this.proRequirementeForm.controls.infoBasicaForm.controls.valorHonMes.value
-        if (valueHonorario == null || valueHonorario ==0) { } else
+        if (valueHonorario == null || valueHonorario == 0) { } else
           if (value != 0) {
             this.serviceProRequirement.verifyRangeSararial(value, valueHonorario, 2022).subscribe(data => {
               if (data.data == false) {
@@ -814,6 +816,8 @@ export class PropertiesRequirementComponent implements OnInit {
     })
   }
   getDataConsulta(projectId: number, requestId: number, reqTempId: number) {
+    this.isDataTemporal = true
+
     this.serviceProRequirement.getAllDataTemporalModified(projectId, requestId, reqTempId).subscribe(dataTemp => {
       console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
@@ -890,6 +894,7 @@ export class PropertiesRequirementComponent implements OnInit {
     })
   }
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number) {
+    this.isDataTemporal = true
     this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
       console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
@@ -1012,24 +1017,24 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dataSourceCodigosAct = new MatTableDataSource(this.codigosVerAct);
         this.servicesinitialApp.getAllInitialApropriation(requerimetId, dataApro.aniosVigencia[0]).subscribe(data => {
           console.log(data)
-          if(data.status == 200){
-          this.initialAppro.setValue({
-            valorApropiacion_Incial: data.data.valorApropiacion_Incial,
-            anio_Vigencia: data.data.anio_Vigencia,
-            valorApropiacionAnio: data.data.valorApropiacionAnio,
-            valorApropiacion_Final: data.data.valorApropiacion_Final,
-          })
-        } else if(data.status == 404){
-          let Data: string[] = [];
-          Data = Object.values(data.data);
-          let errorMessages = '';
-          Data.map(item => {
-            errorMessages += item + '. ';
-          });
-          this.errInitialAppYaers = true
-          this.msjInitialAppYaers = errorMessages
-          // this.openSnackBar('Error', data.message, 'error')
-        }
+          if (data.status == 200) {
+            this.initialAppro.setValue({
+              valorApropiacion_Incial: data.data.valorApropiacion_Incial,
+              anio_Vigencia: data.data.anio_Vigencia,
+              valorApropiacionAnio: data.data.valorApropiacionAnio,
+              valorApropiacion_Final: data.data.valorApropiacion_Final,
+            })
+          } else if (data.status == 404) {
+            let Data: string[] = [];
+            Data = Object.values(data.data);
+            let errorMessages = '';
+            Data.map(item => {
+              errorMessages += item + '. ';
+            });
+            this.errInitialAppYaers = true
+            this.msjInitialAppYaers = errorMessages
+            // this.openSnackBar('Error', data.message, 'error')
+          }
         })
       } else if (dataAprobad.data == null) {
         this.openSnackBar('Error', dataAprobad.message, 'error')
@@ -1742,28 +1747,40 @@ export class PropertiesRequirementComponent implements OnInit {
     }
   }
 
-  changeInitilYears(event : any){
-      this.errInitialAppYaers = false
-    this.servicesinitialApp.getAllInitialApropriation(+this.dataRequirementID, event.value).subscribe(data => {
-      if(data.status == 200){
-      this.initialAppro.setValue({
-        valorApropiacion_Incial: data.data.valorApropiacion_Incial,
-        anio_Vigencia: data.data.anio_Vigencia,
-        valorApropiacionAnio: data.data.valorApropiacionAnio,
-        valorApropiacion_Final: data.data.valorApropiacion_Final,
+  changeInitilYears(event: any) {
+    this.errInitialAppYaers = false
+    if (this.isDataTemporal = true) {
+      this.servicesinitialApp.getAllInitialApropriationTemp(+this.dataRequirementID, event.value, +this.dataSolicitudID).subscribe(data => {
+        this.initialAppro.setValue({
+          valorApropiacion_Incial: data.data.valorApropiacion_Incial,
+          anio_Vigencia: data.data.anio_Vigencia,
+          valorApropiacionAnio: data.data.valorApropiacionAnio,
+          valorApropiacion_Final: data.data.valorApropiacion_Final,
+        })
       })
-    } else if(data.status == 404){
-      let Data: string[] = [];
-      Data = Object.values(data.data);
-      let errorMessages = '';
-      Data.map(item => {
-        errorMessages += item + '. ';
-      });
-      this.errInitialAppYaers = true
-      this.msjInitialAppYaers = errorMessages
-      // this.openSnackBar('Error', data.message, 'error')
+    } else {
+      this.servicesinitialApp.getAllInitialApropriation(+this.dataRequirementID, event.value).subscribe(data => {
+        if (data.status == 200) {
+          this.initialAppro.setValue({
+            valorApropiacion_Incial: data.data.valorApropiacion_Incial,
+            anio_Vigencia: data.data.anio_Vigencia,
+            valorApropiacionAnio: data.data.valorApropiacionAnio,
+            valorApropiacion_Final: data.data.valorApropiacion_Final,
+          })
+        } else if (data.status == 404) {
+          let Data: string[] = [];
+          Data = Object.values(data.data);
+          let errorMessages = '';
+          Data.map(item => {
+            errorMessages += item + '. ';
+          });
+          this.errInitialAppYaers = true
+          this.msjInitialAppYaers = errorMessages
+          // this.openSnackBar('Error', data.message, 'error')
+        }
+      })
     }
-    })
+
   }
   getAllReviews(Modificacion_ID: number) {
     this.reviewsUpTemporal = [];
