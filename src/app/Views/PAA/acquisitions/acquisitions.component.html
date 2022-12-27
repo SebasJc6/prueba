@@ -9,10 +9,10 @@
     </a>
   </div>
 
-    <div class="opciones">
-      <mat-card-title class="export">
-        <strong> PLAN ANUAL DE ADQUISICIONES </strong>
-      </mat-card-title>
+  <div class="opciones">
+    <mat-card-title class="export">
+      <strong> PLAN ANUAL DE ADQUISICIONES </strong>
+    </mat-card-title>
 
     <div class="div__buttons__actions">
       <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">Filtrar</button>
@@ -41,7 +41,6 @@
         </button>
       </div>
     </div>
-
 
   </div>
   
@@ -118,7 +117,7 @@
   </div>
 
 
-  <div style="overflow: auto;">
+  <div class="table">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
       <ng-container matColumnDef="select">
@@ -219,34 +218,35 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   </div>
-</div>
 
-<div class="pagination " [formGroup]="paginationForm">
 
-  <mat-form-field class="take" appearance="legacy" matTooltip="Items por página">
-    <mat-select formControlName="take" (selectionChange)="getPagination()">
-      <mat-option [value]="Item" *ngFor="let Item of pageSizeOptions">{{Item}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <a (click)="firstPage()">
-    <mat-icon matTooltip="Primer página">first_page</mat-icon>
-  </a>
-  <a (click)="prevPage()">
-    <mat-icon matTooltip="Anterior">chevron_left</mat-icon>
-  </a>
-  <mat-form-field class="page" appearance="legacy">
-    <mat-label>página</mat-label>
-    <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page">
-    <button matSuffix (click)="getPagination()" mat-icon-button>
-      <mat-icon matTooltip="Buscar Página">youtube_searched_for</mat-icon>
-    </button>
-    <mat-hint> {{numberPage}} de {{numberPages}}</mat-hint>
-  </mat-form-field>
-  <a (click)="nextPage()">
-    <mat-icon matTooltip="Siguiente">chevron_right</mat-icon>
-  </a>
-  <a (click)="latestPage()">
-    <mat-icon matTooltip="Ultima página">last_page</mat-icon>
-  </a>
+  <div class="pagination " [formGroup]="paginationForm">
 
+    <mat-form-field class="take" appearance="legacy" matTooltip="Items por página">
+      <mat-select formControlName="take" (selectionChange)="getPagination()">
+        <mat-option [value]="Item" *ngFor="let Item of pageSizeOptions">{{Item}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <a (click)="firstPage()">
+      <mat-icon matTooltip="Primer página">first_page</mat-icon>
+    </a>
+    <a (click)="prevPage()">
+      <mat-icon matTooltip="Anterior">chevron_left</mat-icon>
+    </a>
+    <mat-form-field class="page" appearance="legacy">
+      <mat-label>página</mat-label>
+      <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page">
+      <button matSuffix (click)="getPagination()" mat-icon-button>
+        <mat-icon matTooltip="Buscar Página">youtube_searched_for</mat-icon>
+      </button>
+      <mat-hint> {{numberPage}} de {{numberPages}}</mat-hint>
+    </mat-form-field>
+    <a (click)="nextPage()">
+      <mat-icon matTooltip="Siguiente">chevron_right</mat-icon>
+    </a>
+    <a (click)="latestPage()">
+      <mat-icon matTooltip="Ultima página">last_page</mat-icon>
+    </a>
+  
+  </div>
 </div>

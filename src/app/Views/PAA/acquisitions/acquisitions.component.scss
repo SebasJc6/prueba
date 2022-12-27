@@ -267,8 +267,6 @@ table {
 }
 
 
-
-
 .actionsCont {
   width: 20%;
 }
@@ -276,7 +274,7 @@ table {
 
 .pagination {
   display: inline-table;
-  margin-top: 2%;
+  margin-top: 2rem;
   margin-bottom: 6rem;
 
   .take {
@@ -288,7 +286,6 @@ table {
     width: 53px;
     text-align: center;
     float: left;
-
   }
 
 }
@@ -335,22 +332,25 @@ mat-chip {
 }
 
 @media only screen and (max-width: 700px) {
-  .div__buttons__actions {
-    float: right;
-    display: flex;
-    flex-direction: row;
-    margin-top: 2rem;
-    margin-left: 1rem;
-    margin-bottom: 1rem;
-  }
+ .div__buttons__actions {
+  //  float: left;
+   display: inline-table;
+   margin-top: 2rem;
+   margin-left: 1rem;
+   margin-bottom: 1rem;
+ }
 
-  .pagination{
-    margin-left: -10px;
-  }
+ .table {
+   overflow-x: scroll;
+ }
 
-  .top {
-    display: grid;
-    position: relative;
-    margin-top: 2rem;
-  }
+ .pagination{
+   margin-left: -10px;
+ }
+
+ .top {
+   display: grid;
+   position: relative;
+   margin-top: 2rem;
+ }
 }

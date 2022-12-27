@@ -195,7 +195,12 @@
                     <p>Giros</p>
                 </th>
                 <td mat-cell *matCellDef="let element">
-                    <p> <a [routerLink]="['/WAPI/PAA/Giros',dataProjectID, requerimentId,element.giro_ID]"  > {{element.giro_ID}} </a></p>
+                    <mat-icon mat-icon-button 
+                        class="btnActions" matTooltip="Giros"
+                        [routerLink]="['/WAPI/PAA/Giros',dataProjectID, requerimentId,element.giro_ID]">
+                        autorenew
+                    </mat-icon>
+                    <!-- <p> <a [routerLink]="['/WAPI/PAA/Giros',dataProjectID, requerimentId,element.giro_ID]"  > {{element.giro_ID}} </a></p> -->
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="footerTable total"></td>
             </ng-container>
