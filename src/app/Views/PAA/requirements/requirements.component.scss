@@ -119,7 +119,6 @@
   }
 }
 
-
 .title {
   color: #185564;
   margin: 0px auto;
@@ -218,15 +217,13 @@ table {
       }
     }
   }
-
-
 }
-
 
 
 .pagination {
   display: inline-table;
-  margin-top: 2%;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 
 
   .take {
@@ -265,7 +262,6 @@ table {
 }
 
 
-
 mat-card-actions {
   display: block;
   margin-bottom: 5%;
@@ -291,21 +287,48 @@ mat-card-actions {
   }
 }
 
-
 //quitar felchas input tipo number
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
-
   -webkit-appearance: none;
-
   margin: 0;
-
 }
-
-
 
 input[type=number] {
 
   -moz-appearance: textfield;
 
 }
+
+.actionsDi {
+  margin-bottom: 5rem;
+}
+
+/* RESPONSIVE*/
+@media only screen and (max-width: 800px) {
+  .div__buttons__actions {
+    display: inline-table;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+ 
+  .table {
+    overflow-x: scroll;
+  }
+ 
+  .pagination{
+    margin-left: -10px;
+  }
+ 
+  .top {
+    display: grid;
+    position: relative;
+    margin-bottom: 1rem;
+  }
+ }
+
+ @media only screen and (max-width: 374px) {
+   .pagination{
+     margin-left: -25px;
+   }
+ }

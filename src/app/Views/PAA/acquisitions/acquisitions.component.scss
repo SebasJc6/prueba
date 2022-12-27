@@ -186,7 +186,7 @@ table {
   }
 
   .estd {
-    width: 11%;
+    width: 8%;
   }
 
   .acc {
@@ -325,18 +325,10 @@ mat-chip {
 
 
 /* RESPONSIVE*/
-@media only screen and (max-width: 1100px) {
-  .span__states {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 800px) {
  .div__buttons__actions {
-  //  float: left;
    display: inline-table;
    margin-top: 2rem;
-   margin-left: 1rem;
    margin-bottom: 1rem;
  }
 
@@ -351,6 +343,12 @@ mat-chip {
  .top {
    display: grid;
    position: relative;
-   margin-top: 2rem;
+   margin-bottom: 1rem;
  }
+}
+
+@media only screen and (max-width: 374px) {
+  .pagination{
+    margin-left: -25px;
+  }
 }
