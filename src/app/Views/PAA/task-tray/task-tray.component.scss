@@ -145,8 +145,8 @@ table {
 //PAGINACION
 .pagination {
     display: inline-table;
-    margin-top: 2%;
-    margin-bottom: 8%;
+    margin-top: 2rem;
+    margin-bottom: 6rem;
   
     .take {
       width: 40px;
@@ -181,3 +181,33 @@ table {
   .pagination a:hover:not(.active) {
     background-color: #ddd;
   }
+
+
+  /* RESPONSIVE*/
+  @media only screen and (max-width: 800px) {
+    .div__buttons__actions {
+      display: inline-table;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+   
+    .table {
+      overflow-x: scroll;
+    }
+   
+    .pagination{
+      margin-left: -10px;
+    }
+   
+    .top {
+      display: grid;
+      position: relative;
+      margin-bottom: 1rem;
+    }
+   }
+ 
+   @media only screen and (max-width: 374px) {
+     .pagination{
+       margin-left: -25px;
+     }
+   }
