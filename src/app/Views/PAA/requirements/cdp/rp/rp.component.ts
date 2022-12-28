@@ -28,6 +28,8 @@ export class RpComponent implements OnInit {
   codProject: number = 0;
   nomProject: string = '';
   //cadenasRP: Array<cadenaRPsI> = [];
+
+  isLocked: boolean = false;
   constructor(
     private activeRoute: ActivatedRoute,
     public router: Router,
