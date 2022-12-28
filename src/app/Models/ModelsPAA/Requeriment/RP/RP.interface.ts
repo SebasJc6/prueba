@@ -19,6 +19,7 @@ export interface dataRPsI {
     valorAnulado: number;
     valorDistribuir: number;
     valorInicial: number;
+    isLocked    : boolean;
     actividades: actividadI[];
 }
 

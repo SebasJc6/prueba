@@ -127,7 +127,7 @@
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="valDis">
                                         Valores distribuidos
                                     <td mat-cell *matCellDef="let element">
-                                        <input class="contDataTabla" #valoresDistribuidos  value="{{element.valoresDistribuidos}}" (change)="valueChange(rp.rP_ID,element.clasificacion_ID,+valoresDistribuidos.value)">
+                                        <input class="contDataTabla" #valoresDistribuidos  value="{{element.valoresDistribuidos}}" (change)="valueChange(rp.rP_ID,element.clasificacion_ID,+valoresDistribuidos.value)" [attr.disabled]="element.isLocked == true">
                                     </td>
                                 </ng-container>
                                 <tr mat-header-row *matHeaderRowDef="actividadesColumns"></tr>
