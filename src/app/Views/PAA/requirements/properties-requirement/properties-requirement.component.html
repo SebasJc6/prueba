@@ -112,7 +112,8 @@
                                         <p class="tltData">Número de requerimiento</p>
                                         <input class="contData" formControlName="numeroReq" [ngClass]="{
                                                 'contDataDisabled' : numReqDisabled == true,
-                                                'contDataError' : genericNumReq == true }">
+                                                'contDataError' : genericNumReq == true }"
+                                                type="number" onKeyPress="if(this.value.length==5) return false;">
                                         <mat-error *ngIf="errorNumReq">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
@@ -180,13 +181,14 @@
                                         <p class="tltData">Duración estimada del contrato</p>
                                         <input type="number" class="contData" style="width: 20%;" [ngClass]="{
                                             'contDataError' : genericDuracionMes == true }"
-                                            formControlName="duracionMes">
+                                            formControlName="duracionMes"
+                                            onKeyPress="if(this.value.length==2) return false;">
 
                                         meses&nbsp;&nbsp;
 
                                         <input type="number" class="contData" style="width: 20%;" [ngClass]="{
                                             'contDataError' : genericDuracionDias == true }"
-                                            formControlName="duracionDias" maxlength="2" min="1" max="29">
+                                            formControlName="duracionDias"  onKeyPress="if(this.value.length==2) return false;">
 
                                         Dias
                                         <br>
@@ -228,7 +230,8 @@
                                     <div class="contTxt label5">
                                         <p class="tltData">Número de contrato</p>
                                         <input class="contData1" formControlName="numeroCont" [ngClass]="{'contDataDisabled' : disabledInicial == true 
-                                        , 'contDataError' : genericNumeroCont == true }">
+                                        , 'contDataError' : genericNumeroCont == true }"
+                                        onKeyPress="if(this.value.length==15) return false;">
                                     </div>
                                     <div class="contTxt label5">
                                         <p class="tltData">Año</p>
@@ -263,7 +266,8 @@
                                         <p class="tltData">Valor Honorarios / mes</p>
                                         <input class="contData" formControlName="valorHonMes"
                                             value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}" [ngClass]="{'contDataDisabled' : disabledAdicion == true,
-                                            'contDataError' : genericValorHonMes == true }">
+                                            'contDataError' : genericValorHonMes == true }"
+                                             onKeyPress="if(this.value.length==17) return false;">
                                         <mat-error *ngIf="errorRangeSararial">
                                             <strong>{{msjVerifyRangeSararial}}</strong>
                                         </mat-error>
@@ -271,7 +275,8 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Cantidad de contratos</p>
                                         <input class="contData" formControlName="cantidadCont" [ngClass]="{
-                                            'contDataError' : genericCantidadCont == true }">
+                                            'contDataError' : genericCantidadCont == true }"
+                                            type="number"  onKeyPress="if(this.value.length==1) return false;">
                                         <mat-error *ngIf="errorCantContrato">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
