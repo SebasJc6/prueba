@@ -20,7 +20,7 @@
   <div class="contForm ">
 <!-- FORMULARIO -->
     <form>
-      <div class="tablaCont" style="display: flex;">
+      <div class="tablaCont" >
         <div class="contTxt label1">
           <p class="tltData">Código del proyecto</p>
           <input class="contData contDataDisabled" value="{{abstractData.codigoProyecto}}" disabled>
@@ -37,7 +37,7 @@
         </div>
       </div>
 
-      <div class="tablaCont" style="display: flex;">
+      <div class="tablaCont">
         <div class="contTxt label2">
           <p class="tltData">Nombre del responsable</p>
           <input class="contData contDataDisabled" value="{{responsibleAbstractData.nombre}}" disabled>
@@ -54,7 +54,7 @@
         </div>
       </div>
 
-      <div class="tablaCont" style="display: flex;">
+      <div class="tablaCont" >
         <div class="contTxt label2">
           <p class="tltData">Unidad de contratación</p>
           <input class="contData contDataDisabled" value="{{abstractData.unidadContratacion}}" disabled>
@@ -66,8 +66,8 @@
         </div> -->
         
         <div class="contTxt label1">
-          <p class="tltData" style="margin-bottom: 4%;">Año</p>
-          <div class="contData" style="margin-top: -3.7%;">
+          <p class="tltData label__year">Año</p>
+          <div class="contData div__year">
             <mat-select class="sltData"
               [(ngModel)]="year"
               name="year" 
@@ -85,14 +85,14 @@
         </div>
       </div>
 
-      <div class="tablaCont" style="display: flex;">
+      <div class="tablaCont" >
           <div class="contTxt label3">
             <p class="tltData">Nombre del Proyecto de Inversión</p>
             <input class="contData contDataDisabled" value="{{abstractData.nombreProyecto}}" disabled>
           </div>
       </div>
 
-      <div class="tablaCont" style="display: flex;">
+      <div class="tablaCont" >
           <div class="contTxt label1">
             <p class="tltData">Apropiación Inicial</p>
             <input class="contData contDataDisabled" [value]="abstractDataInfoYear.apropiacionInicial | currency:'COP':'symbol-narrow': '1.0-0'" disabled>
@@ -115,7 +115,7 @@
       </div>
 
 
-      <div class="tablaCont" style="display: flex;">
+      <div class="tablaCont" >
           <div class="contTxt label1">
             <p class="tltData">Por Ejecutar</p>
             <input class="contData contDataDisabled" [value]="abstractDataInfoYear.porEjecutar | currency:'COP':'symbol-narrow': '1.0-0'" disabled>
@@ -138,7 +138,7 @@
       </div>
 
 
-      <div class="tablaCont" style="display: flex;">
+      <div class="tablaCont" >
           <div class="contTxt label1">
             <p class="tltData">Giros de Reserva</p>
             <input class="contData contDataDisabled" [value]="abstractDataInfoYear.girosReserva | currency:'COP':'symbol-narrow': '1.0-0'" disabled>

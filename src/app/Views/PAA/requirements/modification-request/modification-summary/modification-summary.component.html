@@ -31,7 +31,7 @@
        </div>
 
         <!--TABLA GRANDE CON FOOTER-->
-        <div style="overflow: auto;">
+        <div class="table">
           <table mat-table class="tablePrin mat-elevation-z8" [dataSource]="dataSource">
             <ng-container matColumnDef="pospre">
               <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>POSPRE</p>  </th>
@@ -112,9 +112,7 @@
   
     </div>
 
-      <div style="margin-top: 3%;">
-        <mat-card-actions>
+        <mat-card-actions class="actions__buttons">
           <button class="buton btn" mat-button mat-icon-button (click)="regresar()">REGRESAR</button>
         </mat-card-actions>
-      </div>
 </div>

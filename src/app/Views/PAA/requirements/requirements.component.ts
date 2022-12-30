@@ -139,6 +139,8 @@ export class RequirementsComponent implements OnInit {
     this.filterRequertiments.columna = this.filterForm.get('columna')?.value || '';
     this.filterRequertiments.ascending = this.filterForm.get('ascending')?.value || false;
     this.serviceRequeriment.getRequerimentsByProject(projectId, filterRequertiments).subscribe((data) => {
+      console.log(data);
+      
       this.viewRequeriments = data;
       this.dataSource = new MatTableDataSource(this.viewRequeriments.data.requerimientos.items);
       this.codProject = this.viewRequeriments.data.codigoProyecto;
