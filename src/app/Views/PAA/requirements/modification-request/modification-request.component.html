@@ -27,66 +27,74 @@
         </mat-card-title>
     </div>
 
-    <div class="ActionsUp">
-        <div class="btnUpAction">
-            <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false"  class="buton btn" mat-button mat-icon-button
-                style="cursor: pointer;"
-                matTooltip="Nuevo Requerimiento"
-                (click)="newRequeriment()">
-                Nuevo
-            </button>
-            <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="buton btn" mat-button mat-icon-button
-                style="cursor: pointer;"
-                matTooltip="Modificar Requerimiento"
-                (click)="Addrequirement()">
-                Modificar
-            </button>
-            <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="buton btn" mat-button mat-icon-button
-                style="cursor: pointer;"
-                matTooltip="Incluir Contrapartida"
-                (click)="Addcounterpart()">
-                Contrapartida
-            </button>
-            <button *ngIf="(dataSolicitudModID !== '0') ? true : false" class="buton btn" mat-button mat-icon-button
-                style="cursor: pointer;"
-                (click)="ResumenModificacion()">
-                Resumen
-            </button>
-            <button class="Fil" #btnFiltrar mat-button (click)="openFilter()" *ngIf="viewFilter">
-                Filtrar
-            </button>
-            <span class="btnExcel" *ngIf="(dataSolicitudModID !== '0') ? true : false">
-                <button mat-button (click)="exportFile()">
-                    <mat-icon class="imgExcel mat-icon" matTooltip="Exportar Excel">
-                        <img class="imgExcel" src="../../../../assets/img/excel.jpg">
-                    </mat-icon>
-                </button>
-            </span>
-            <span *ngIf="(AccessUser === 'Referente_Planeacion'  && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="btngImport">
-                <button mat-button class="btn" (click)="openChargeFile()">
-                    <mat-icon class="imgImport mat-icon" matTooltip="Importar Excel">
-                        <img class="imgImport" src="../../../../assets/img/import.png">
-                    </mat-icon>
-                </button>
-            </span>
-        </div>
-    </div>
 
-    <div class="top">
+    <div class="actions__form">
+        <div class="ActionsUp">
+            <div class="btnUpAction">
+                <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false"  class="buton btn" mat-button mat-icon-button
+                    style="cursor: pointer;"
+                    matTooltip="Nuevo Requerimiento"
+                    (click)="newRequeriment()">
+                    Nuevo
+                </button>
+                <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="buton btn" mat-button mat-icon-button
+                    style="cursor: pointer;"
+                    matTooltip="Modificar Requerimiento"
+                    (click)="Addrequirement()">
+                    Modificar
+                </button>
+                <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="buton btn" mat-button mat-icon-button
+                    style="cursor: pointer;"
+                    matTooltip="Incluir Contrapartida"
+                    (click)="Addcounterpart()">
+                    Contrapartida
+                </button>
+                <button *ngIf="(dataSolicitudModID !== '0') ? true : false" class="buton btn" mat-button mat-icon-button
+                    style="cursor: pointer;"
+                    (click)="ResumenModificacion()">
+                    Resumen
+                </button>
+    
+                <div class="div__buttons__actions">
+    
+                    <button class="Fil" #btnFiltrar mat-button (click)="openFilter()" *ngIf="viewFilter">
+                        Filtrar
+                    </button>
+        
+                    <span class="btnExcel" *ngIf="(dataSolicitudModID !== '0') ? true : false">
+                        <button mat-button (click)="exportFile()">
+                            <mat-icon class="imgExcel mat-icon" matTooltip="Exportar Excel">
+                                <img class="imgExcel" src="../../../../assets/img/excel.jpg">
+                            </mat-icon>
+                        </button>
+                    </span>
+    
+                    <span *ngIf="(AccessUser === 'Referente_Planeacion'  && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="btngImport">
+                        <button mat-button class="btn" (click)="openChargeFile()">
+                            <mat-icon class="imgImport mat-icon" matTooltip="Importar Excel">
+                                <img class="imgImport" src="../../../../assets/img/import.png">
+                            </mat-icon>
+                        </button>
+                    </span>
+                </div>
+            </div>
+    
+        </div>
+    
         <form action="">
             <div class="tablaCont">
                 <div class="contTxt label1">
                     <p class="tltData">Código del proyecto</p>
                     <input class="contData" value="{{codProject}}" disabled>
                 </div>
-
+    
                 <div class="contTxt label1">
                     <p class="tltData">Número Modificación</p>
                     <input class="contData" value="{{numModification}}" disabled>
                 </div>
-
-                <div class="contTxt label1" *ngIf="dataSolicitudModID != '0'">
-                    <p class="tltData">Vigencia a afectar</p>
+    
+                <div class="contTxt div__select" *ngIf="dataSolicitudModID != '0'">
+                    <p class="tltData label__select">Vigencia a afectar</p>
                     <mat-select class="contDataSelect"
                         [(ngModel)]="dataValidity" name="validity"
                         (selectionChange)="selectValidity()">
@@ -95,7 +103,10 @@
                 </div>
             </div>
         </form>
+    </div>
 
+
+    <div class="top">
         <!-- Opción filtrar -->
         <mat-card *ngIf="!viewFilter">
             <div class="close">
@@ -138,35 +149,35 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div class="form">
-                            <mat-form-field style="width: 10%;" appearance="outline">
+                            <mat-form-field appearance="outline">
                                 <mat-label class="text__opacity">Número de requerimiento</mat-label>
                                 <input matInput formControlName="NumeroRequerimiento" type="number">
                             </mat-form-field>
-                            <mat-form-field style="width: 10%;" appearance="outline">
+                            <mat-form-field appearance="outline">
                                 <mat-label class="text__opacity">Dependencia destino de recursos</mat-label>
                                 <input matInput formControlName="DependenciaDestino" type="number">
                             </mat-form-field>
-                            <mat-form-field style="width: 25%;" appearance="outline">
+                            <mat-form-field appearance="outline">
                                 <mat-label class="text__opacity">Descripción</mat-label>
                                 <input matInput formControlName="Descripcion">
                             </mat-form-field>
-                            <mat-form-field style="width: 20%;" appearance="outline">
+                            <mat-form-field appearance="outline">
                                 <mat-label class="text__opacity">Modalidad de Selección</mat-label>
                                 <input matInput formControlName="ModalidadSeleccion">
                             </mat-form-field>
-                            <mat-form-field style="width: 15%;" appearance="outline">
+                            <mat-form-field appearance="outline">
                                 <mat-label class="text__opacity">Actuacion Contractual</mat-label>
                                 <input matInput formControlName="ActuacionContractual">
                             </mat-form-field>
-                            <mat-form-field style="width: 10%;" appearance="outline">
+                            <mat-form-field appearance="outline">
                                 <mat-label class="text__opacity">Numero Contrato</mat-label>
                                 <input matInput formControlName="NumeroContrato">
                             </mat-form-field>
-                            <mat-form-field style="width: 20%;" appearance="outline">
+                            <mat-form-field appearance="outline">
                                 <mat-label class="text__opacity">Tipo Contrato</mat-label>
                                 <input matInput formControlName="TipoContrato">
                             </mat-form-field>
-                            <mat-form-field style="width: 15%;" appearance="outline">
+                            <mat-form-field appearance="outline">
                                 <mat-label class="text__opacity">Perfil</mat-label>
                                 <input matInput formControlName="Perfil">
                             </mat-form-field>
@@ -187,7 +198,7 @@
 
     </div>
 
-    <div style="overflow: auto;">
+    <div class="table">
         <table class="tablePrin mat-elevation-z8" mat-table [dataSource]="dataSourcePrin">
 
             <ng-container matColumnDef="numeroRequerimiento">
@@ -451,7 +462,7 @@
 
     </div>
 
-    <div style="margin-top: 3%;">
+    <div class="actions__buttons">
         <mat-card-actions>
             <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false"  class="buton btn" 
                 style="margin-left: 2%; margin-right: 2%;" mat-button mat-icon-button

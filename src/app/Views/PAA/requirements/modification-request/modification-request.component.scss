@@ -50,6 +50,7 @@
     text-align: left;
     margin-left: 2%;
     margin-right: 2%;
+    margin-bottom: 1rem;
 
     .btnUpAction {
         .buton {
@@ -104,19 +105,17 @@
             cursor: pointer;
         }
     }
-
 }
 
 
-
-.top {
-    margin-top: 2%;
-    margin-left: 4%;
-    margin-right: 6%;
+.actions__form{
+    display: grid;
 
     .tablaCont {
         display: flex;
         color: black;
+        margin-left: 4%;
+        margin-right: 6%;
 
         .contTxt {
             text-align: left;
@@ -153,9 +152,20 @@
         }
 
         .label1 {
-            width: 15%;
+            width: 11rem;
+        }
+
+        .div__select{
+            width: 10.2rem;
         }
     }
+}
+
+
+.top {
+    margin-top: 1rem;
+    margin-left: 4%;
+    margin-right: 6%;
 
     mat-card {
         .close {
@@ -316,7 +326,7 @@
                 border-radius: 0.5rem;
                 margin: 1%;
                 color: white;
-              }
+            }
         }
     }
 
@@ -512,7 +522,99 @@ mat-card-actions {
     display: none;
   }
 
-  .mat-button:first-child {
+.mat-button:first-child {
     margin-left: 18.375px;
     margin-right: 18.375px;
-  }
+}
+
+
+.actions__buttons{
+    margin-top: 2rem;
+    margin-bottom: 6rem;
+}
+
+
+.div__buttons__actions{
+    margin-top: -3.7rem;
+    display: block;
+}
+
+
+/* RESPONSIVE*/
+@media only screen and (max-width: 1225px) {
+    .div__buttons__actions {
+      display: inline-flex;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      position: relative;
+      flex-direction: row-reverse;
+    }
+}
+
+
+@media only screen and (max-width: 1110px) {
+    .table {
+        overflow-x: scroll;
+    }
+}
+
+
+@media only screen and (max-width: 560px) {
+    .btnUpAction{
+        display: grid;
+        place-items: center;
+        margin-left: -1rem;
+    }
+
+    
+    .actions__form{
+        .tablaCont{
+            display: grid;
+            place-items: center;
+        }
+    }
+
+
+    .div__select{
+        width: 10.2rem;
+        margin-left: -1rem;
+
+        .label__select{
+            margin-left: 4px;
+        }
+    }
+    
+    .div__buttons__actions{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mat-button:first-child {
+        margin-left: 0px;
+        margin-right: 18.375px;
+    }
+
+    .pagination{
+        margin-left: -10px;
+    }
+}
+
+
+@media only screen and (max-width: 500px) {
+
+    .div__buttons__actions {
+        flex-direction: row-reverse;
+    }
+
+    .tltPrin{
+        margin-left: -1rem;
+    }
+}
+
+
+@media only screen and (max-width: 374px) {
+    .pagination{
+      margin-left: -25px;
+    }
+}
