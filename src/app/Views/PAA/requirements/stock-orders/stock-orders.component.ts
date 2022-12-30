@@ -122,7 +122,6 @@ export class StockOrdersComponent implements OnInit {
       if (request.status === 404) {
         this.openSnackBar('Lo sentimos', `${request.message}`, 'error');
       } else if (request.status === 200) {
-        console.log(request);
         if (request.data.hasItems) {
           this.dataSource = request.data.items;
           this.paymentOrderValue = request.data.calculados[0].valor;
@@ -139,7 +138,6 @@ export class StockOrdersComponent implements OnInit {
         }
       }
     }, error => {
-      console.log(error);
       
     });
   }
@@ -235,7 +233,6 @@ export class StockOrdersComponent implements OnInit {
   //Notificar Giros
   notifyOrder() {
     this.serviceStockOrders.patchLockStockOrders(Number(this.requerimentId)).subscribe(response => {
-      console.log(response);
       if (response.status === 200) {
         if (response.data.hasBlockedAnyGiro) {
           this.openSnackBar('Giros Notificados Exitosamente', `Los Giros "${response.data.giros}" han sido bloqueados y notificados con éxito.`, 'success');
@@ -244,7 +241,6 @@ export class StockOrdersComponent implements OnInit {
         }
       } else {
         this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
-        console.log(response);
       }
     }, error => {
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
@@ -267,7 +263,6 @@ export class StockOrdersComponent implements OnInit {
       }
 
       this.serviceStockOrders.patchEnableOrders(Number(this.requerimentId), BODY_GIROS_ENABLE).subscribe(response => {
-        console.log(response);
         
         if (response.status === 200) {
           if (response.data.hasEnableAnyGiro) {
@@ -277,7 +272,6 @@ export class StockOrdersComponent implements OnInit {
           }
         } else {
           this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
-          console.log(response);
         }
       }, error => {
         if (error.error.status == 422) {
@@ -291,7 +285,6 @@ export class StockOrdersComponent implements OnInit {
           }
           this.openSnackBar('Lo sentimos', error.error.message, 'error', erorsMessages);
         }
-        console.log(error);
       });
     } else {
       this.openSnackBar('Lo sentimos', 'Seleccione al menos un CDP bloqueado para ser habilitado.', 'error');

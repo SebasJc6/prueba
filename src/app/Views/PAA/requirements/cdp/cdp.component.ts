@@ -160,7 +160,6 @@ export class CDPComponent implements OnInit {
         }
       } else {
         this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
-        console.log(response);
       }
     }, error => {
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
@@ -182,7 +181,6 @@ export class CDPComponent implements OnInit {
         cdPs: ARRAY_CDPS
       }
       this.serviceCdps.patchEnableCDPs(Number(this.requerimentId), BODY_CDPS_ENABLE).subscribe(response => {
-        console.log(response);
         
         if (response.status === 200) {
           if (response.data.hasEnableAnyCDP) {
@@ -192,7 +190,6 @@ export class CDPComponent implements OnInit {
           }
         } else {
           this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
-          console.log(response);
         }
       }, error => {
 
@@ -207,7 +204,6 @@ export class CDPComponent implements OnInit {
           }
           this.openSnackBar('Lo sentimos', error.error.message, 'error', erorsMessages);
         }
-        console.log(error);
       });
     } else {
       this.openSnackBar('Lo sentimos', 'Seleccione al menos un CDP bloqueado para ser habilitado.', 'error');
