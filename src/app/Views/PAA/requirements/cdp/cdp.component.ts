@@ -127,16 +127,16 @@ export class CDPComponent implements OnInit {
     this.filterCDPs.ascending = this.filterForm.get('ascending')?.value || false;
 
     this.serviceCdps.getCDPsByRequerimentId(id_requeriment, filterForm).subscribe(request => {
-      if (request.hasItems) {
-        this.dataSource = request.items;
-        this.initialValue = request.calculados[0].valor;
-        this.cancellationValue = request.calculados[1].valor;
-        this.finalvalue = request.calculados[2].valor;
-        this.valueRP = request.calculados[3].valor;
-        this.distributedValue = request.calculados[4].valor;
-        this.diference = request.calculados[5].valor;
-        this.numberPages = request.pages;
-        this.numberPage = request.page;
+      if (request.data.hasItems) {
+        this.dataSource = request.data.items;
+        this.initialValue = request.data.calculados[0].valor;
+        this.cancellationValue = request.data.calculados[1].valor;
+        this.finalvalue = request.data.calculados[2].valor;
+        this.valueRP = request.data.calculados[3].valor;
+        this.distributedValue = request.data.calculados[4].valor;
+        this.diference = request.data.calculados[5].valor;
+        this.numberPages = request.data.pages;
+        this.numberPage = request.data.page;
         this.paginationForm.setValue({
           take: filterForm.take,
           page: filterForm.page
@@ -160,7 +160,6 @@ export class CDPComponent implements OnInit {
         }
       } else {
         this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
-        console.log(response);
       }
     }, error => {
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
@@ -182,7 +181,6 @@ export class CDPComponent implements OnInit {
         cdPs: ARRAY_CDPS
       }
       this.serviceCdps.patchEnableCDPs(Number(this.requerimentId), BODY_CDPS_ENABLE).subscribe(response => {
-        console.log(response);
         
         if (response.status === 200) {
           if (response.data.hasEnableAnyCDP) {
@@ -192,7 +190,6 @@ export class CDPComponent implements OnInit {
           }
         } else {
           this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
-          console.log(response);
         }
       }, error => {
 
@@ -207,7 +204,6 @@ export class CDPComponent implements OnInit {
           }
           this.openSnackBar('Lo sentimos', error.error.message, 'error', erorsMessages);
         }
-        console.log(error);
       });
     } else {
       this.openSnackBar('Lo sentimos', 'Seleccione al menos un CDP bloqueado para ser habilitado.', 'error');

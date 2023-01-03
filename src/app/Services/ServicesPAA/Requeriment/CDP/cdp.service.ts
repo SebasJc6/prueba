@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { dataCDPsI, filterCDPsI, putLockCDPsI } from 'src/app/Models/ModelsPAA/Requeriment/cdp';
+import { filterCDPsI, getCDPsI, putLockCDPsI } from 'src/app/Models/ModelsPAA/Requeriment/cdp';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +13,11 @@ export class CDPService {
 
   constructor(private http: HttpClient) { }
 
-  getCDPsByRequerimentId(id_requeriment: number, filterForm: filterCDPsI): Observable<dataCDPsI> {
+  getCDPsByRequerimentId(id_requeriment: number, filterForm: filterCDPsI): Observable<getCDPsI> {
     let dir = `${this.url}${id_requeriment}/CDP?Vigencia=${filterForm.Vigencia}
     &CDP=${filterForm.CDP}&Fecha_CDP=${filterForm.Fecha_CDP}&page=${filterForm.page}
     &take=${filterForm.take}&columna=${filterForm.columna}&ascending=${filterForm.ascending}`;
-    return this.http.get<dataCDPsI>(dir);
+    return this.http.get<getCDPsI>(dir);
   }
 
 
