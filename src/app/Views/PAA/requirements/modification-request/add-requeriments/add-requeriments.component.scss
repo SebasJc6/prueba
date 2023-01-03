@@ -63,6 +63,10 @@
   .text__opacity {
     opacity: .6;
   }
+
+  .mat-form-field {
+    display: block;
+  }
 }
 
 table {
@@ -139,8 +143,6 @@ table {
       }
     }
   }
-
-
 }
 
 
@@ -160,7 +162,6 @@ table {
     float: left;
 
   }
-
 }
 
 
@@ -177,7 +178,6 @@ table {
   color: #185564;
   border-radius: 0.5rem;
   border: 2px solid #185564;
-
 }
 
 .pagination a:hover:not(.active) {
@@ -221,10 +221,4 @@ input[type=number]::-webkit-inner-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
-}
-
-@media only screen and (max-width: 1000px) {
-  .table {
-      // overflow-x: scroll;
-  }
 }
