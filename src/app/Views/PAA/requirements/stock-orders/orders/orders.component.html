@@ -72,81 +72,86 @@
             </div>
         </div>
 
-        <div class="conTitle">
-            <span class="title">Actividades</span>
+
+        <div class="title__table">
+            <div class="conTitle">
+                <span class="title">Actividades</span>
+            </div>
+    
+            <div class="table">
+                <table mat-table class="mat-elevation-z8" [dataSource]="dataGiros.actividades" matSort>
+                    <ng-container matColumnDef="codigoActividad">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="codAct">
+                            Código actividad
+                        <td mat-cell *matCellDef="let element"> {{element.actividad}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="pospre">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="pos">
+                            POSPRE
+                        <td mat-cell *matCellDef="let element">{{element.pospre}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="mga">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="mga">
+                            MGA
+                        <td mat-cell *matCellDef="let element">{{element.mga}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="auxiliar">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="aux">
+                            Auxiliar
+                        <td mat-cell *matCellDef="let element">{{element.auxiliar}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="fuente">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="fue">
+                            Fuente
+                        <td mat-cell *matCellDef="let element">{{element.fuente}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="valorRP">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="valRP">
+                            Valor RP
+                        <td mat-cell *matCellDef="let element">{{element.valorRP
+                            |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="girosAcumulados">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="girAcum">
+                            Giros acumulados
+                        <td mat-cell *matCellDef="let element">{{element.girosAcumulados
+                            |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="saldoGirar">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="salGir">
+                            Saldo a girar
+                        <td mat-cell *matCellDef="let element">{{element.saldoGirar
+                            |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="valorGirar">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="valGir">
+                            Valor a girar
+                        <td mat-cell *matCellDef="let element">
+                            <input class="contDataTabla" #valoresDistribuidos value="{{element.valorGirar}}" (change)="valueChange(dataGiros.giro_ID,element.clasificacion_ID,+valoresDistribuidos.value)">
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="nuevoSaldo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="nueSal">
+                            Nuevo saldo
+                        <td mat-cell *matCellDef="let element">{{element.nuevoSaldo
+                            |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="actividadesColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: actividadesColumns"></tr>
+                </table>
+            </div>
         </div>
 
-        <div style="overflow: auto;  ">
-            <table mat-table class="mat-elevation-z8" [dataSource]="dataGiros.actividades" matSort>
-                <ng-container matColumnDef="codigoActividad">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="codAct">
-                        Código actividad
-                    <td mat-cell *matCellDef="let element"> {{element.actividad}}</td>
-                </ng-container>
-                <ng-container matColumnDef="pospre">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="pos">
-                        POSPRE
-                    <td mat-cell *matCellDef="let element">{{element.pospre}}</td>
-                </ng-container>
-                <ng-container matColumnDef="mga">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="mga">
-                        MGA
-                    <td mat-cell *matCellDef="let element">{{element.mga}}</td>
-                </ng-container>
-                <ng-container matColumnDef="auxiliar">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="aux">
-                        Auxiliar
-                    <td mat-cell *matCellDef="let element">{{element.auxiliar}}</td>
-                </ng-container>
-                <ng-container matColumnDef="fuente">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="fue">
-                        Fuente
-                    <td mat-cell *matCellDef="let element">{{element.fuente}}</td>
-                </ng-container>
-                <ng-container matColumnDef="valorRP">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="valRP">
-                        Valor RP
-                    <td mat-cell *matCellDef="let element">{{element.valorRP
-                        |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
-                </ng-container>
-                <ng-container matColumnDef="girosAcumulados">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="girAcum">
-                        Giros acumulados
-                    <td mat-cell *matCellDef="let element">{{element.girosAcumulados
-                        |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
-                </ng-container>
-                <ng-container matColumnDef="saldoGirar">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="salGir">
-                        Saldo a girar
-                    <td mat-cell *matCellDef="let element">{{element.saldoGirar
-                        |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
-                </ng-container>
-                <ng-container matColumnDef="valorGirar">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="valGir">
-                        Valor a girar
-                    <td mat-cell *matCellDef="let element">
-                        <input class="contDataTabla" #valoresDistribuidos  value="{{element.valorGirar}}" (change)="valueChange(dataGiros.giro_ID,element.clasificacion_ID,+valoresDistribuidos.value)">
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="nuevoSaldo">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="nueSal">
-                        Nuevo saldo
-                    <td mat-cell *matCellDef="let element">{{element.nuevoSaldo
-                        |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="actividadesColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: actividadesColumns"></tr>
-            </table>
+        <div class="actions__buttons">
+            <mat-card-actions>
+                <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
+                    Regresar
+                </button>
+                <button class="buton btn" mat-button mat-icon-button (click)="saveGiro()">
+                    guardar
+                </button>
+            </mat-card-actions>
         </div>
-
-        <mat-card-actions>
-            <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
-                Regresar
-            </button>
-            <button class="buton btn" mat-button mat-icon-button (click)="saveGiro()">
-                guardar
-            </button>
-        </mat-card-actions>
 
     </div>
 </div>

@@ -15,8 +15,7 @@
     </a>
   </div>
 
-  <!-- DIV  FILTRO Y TABLA CERTIFICADO DE DISPONIBILIDAD PRESUPUESTAL (CDP)-->
-  <div style="overflow: auto;">
+  <!-- DIV  FILTRO -->
 
     <!-- TITULO -->
     <div class="opciones">
@@ -24,7 +23,9 @@
         <strong>CERTIFICADO DE DISPONIBILIDAD PRESUPUESTAL (CDP)</strong>
       </mat-card-title>
 
-      <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">Filtrar</button>
+      <div class="div__buttons__actions">
+        <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">Filtrar</button>
+      </div>
     </div>
 
     <!-- FILTRO -->
@@ -65,15 +66,15 @@
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="form">
-                  <mat-form-field style="width: 15%;" appearance="outline">
+                  <mat-form-field appearance="outline">
                     <mat-label class="text__opacity">Vigencia</mat-label>
                     <input matInput formControlName="vigencia" type="number">
                   </mat-form-field>
-                  <mat-form-field style="width: 15%;" appearance="outline">
+                  <mat-form-field appearance="outline">
                     <mat-label class="text__opacity">CDP</mat-label>
                     <input matInput formControlName="numeroCDP" type="number">
                   </mat-form-field>
-                  <mat-form-field style="width: 15%;" appearance="outline">
+                  <mat-form-field appearance="outline">
                     <mat-label class="text__opacity">Fecha CDP</mat-label>
                     <input matInput formControlName="fechaCDP" type="date">
                   </mat-form-field>
@@ -92,7 +93,8 @@
       </div>
     </div>
 
-    <!--TABLA GRANDE CON FOOTER-->
+  <!-- DIV TABLA CERTIFICADO DE DISPONIBILIDAD PRESUPUESTAL (CDP)-->
+  <div class="table">
     <table mat-table class="tablePrin mat-elevation-z8" [dataSource]="dataSource">
 
       <ng-container matColumnDef="select">
@@ -271,7 +273,7 @@
     </a>
   </div>
 
-  <div style="margin-top: 3%;">
+  <div class="actions__buttons">
     <mat-card-actions>
       <button class="buton btn" 
         mat-button mat-icon-button 
