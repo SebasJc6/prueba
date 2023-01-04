@@ -15,84 +15,85 @@
         </a>
     </div>
 
-    <div style="overflow: auto;">
+    <!-- TITULO -->
+    <div class="opciones">
+    <mat-card-title class="export">
+        <strong>INVENTARIO GIROS</strong>
+    </mat-card-title>
 
-        <!-- TITULO -->
-        <div class="opciones">
-        <mat-card-title class="export">
-            <strong>INVENTARIO GIROS</strong>
-        </mat-card-title>
-
+    <div class="div__buttons__actions">
         <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">Filtrar</button>
-        </div>
+    </div>
+    </div>
 
-        <!-- FILTRO -->
-        <div>
-            <div class="top">
-                <mat-card *ngIf="!viewFilter">
-                    <div class="close">
-                    <button mat-icon-button (click)="closeFilter()" color="warn">
-                        <mat-icon [inline]='true'>close</mat-icon>
-                    </button>
+    <!-- FILTRO -->
+    <div>
+        <div class="top">
+            <mat-card *ngIf="!viewFilter">
+                <div class="close">
+                <button mat-icon-button (click)="closeFilter()" color="warn">
+                    <mat-icon [inline]='true'>close</mat-icon>
+                </button>
+                </div>
+                <div [formGroup]="filterForm">
+                <mat-accordion multi>
+                    <mat-expansion-panel class="menu-panel">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                        <span class="title">Ordernar Por:</span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="filter">
+                        <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
+                        <mat-radio-button value="vigencia">Vigencia</mat-radio-button>
+                        <mat-radio-button value="numeroOrden">Núm. de Orden</mat-radio-button>
+                        <mat-radio-button value="RP">RP</mat-radio-button>
+                        <!-- <mat-radio-button value="FechaCDP">Fecha CDP</mat-radio-button> -->
+                        </mat-radio-group>
                     </div>
-                    <div [formGroup]="filterForm">
-                    <mat-accordion multi>
-                        <mat-expansion-panel class="menu-panel">
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                            <span class="title">Ordernar Por:</span>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <div class="filter">
-                            <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
-                            <mat-radio-button value="vigencia">Vigencia</mat-radio-button>
-                            <mat-radio-button value="numeroOrden">Núm. de Orden</mat-radio-button>
-                            <mat-radio-button value="RP">RP</mat-radio-button>
-                            <!-- <mat-radio-button value="FechaCDP">Fecha CDP</mat-radio-button> -->
-                            </mat-radio-group>
-                        </div>
-                        <mat-divider></mat-divider>
-                        <div class="Order" *ngIf="viewOrder">
-                            Decendente<mat-slide-toggle formControlName="ascending"> Acendente</mat-slide-toggle>
-                        </div>
-        
-                        </mat-expansion-panel>
-        
-                        <mat-expansion-panel class="menu-panel">
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                            <span class="title">Buscar Por:</span>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <div class="form">
-                            <mat-form-field style="width: 15%;" appearance="outline">
-                            <mat-label class="text__opacity">Vigencia</mat-label>
-                            <input matInput formControlName="vigencia" type="number">
-                            </mat-form-field>
-                            <mat-form-field style="width: 15%;" appearance="outline">
-                            <mat-label class="text__opacity">Núm. de orden</mat-label>
-                            <input matInput formControlName="numeroOrden" type="text">
-                            </mat-form-field>
-                            <mat-form-field style="width: 15%;" appearance="outline">
-                            <mat-label class="text__opacity">Fecha orden de pago</mat-label>
-                            <input matInput formControlName="fechaOrdenPago" type="date">
-                            </mat-form-field>
-                            <mat-form-field style="width: 15%;" appearance="outline">
-                                <mat-label class="text__opacity">RP</mat-label>
-                                <input matInput formControlName="RP" type="number">
-                            </mat-form-field>
-                        </div>
-                        </mat-expansion-panel>
-                    </mat-accordion>
-        
-                    <button class="FilSear" mat-button (click)="getFilter()">
-                        Filtrar
-                    </button>
+                    <mat-divider></mat-divider>
+                    <div class="Order" *ngIf="viewOrder">
+                        Decendente<mat-slide-toggle formControlName="ascending"> Acendente</mat-slide-toggle>
                     </div>
-                </mat-card>
-            </div>
+    
+                    </mat-expansion-panel>
+    
+                    <mat-expansion-panel class="menu-panel">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                        <span class="title">Buscar Por:</span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="form">
+                        <mat-form-field appearance="outline">
+                        <mat-label class="text__opacity">Vigencia</mat-label>
+                        <input matInput formControlName="vigencia" type="number">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                        <mat-label class="text__opacity">Núm. de orden</mat-label>
+                        <input matInput formControlName="numeroOrden" type="text">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                        <mat-label class="text__opacity">Fecha orden de pago</mat-label>
+                        <input matInput formControlName="fechaOrdenPago" type="date">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label class="text__opacity">RP</mat-label>
+                            <input matInput formControlName="RP" type="number">
+                        </mat-form-field>
+                    </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+    
+                <button class="FilSear" mat-button (click)="getFilter()">
+                    Filtrar
+                </button>
+                </div>
+            </mat-card>
         </div>
+    </div>
 
+    <div class="table">
         <!--TABLA GRANDE CON FOOTER-->
         <table mat-table class="tablePrin mat-elevation-z8" [dataSource]="dataSource">
 
@@ -240,7 +241,7 @@
         </a>
     </div>
 
-    <div style="margin-top: 3%;">
+    <div class="actions__buttons">
         <mat-card-actions>
             <button class="buton btn" 
                 mat-button mat-icon-button
