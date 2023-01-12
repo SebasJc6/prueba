@@ -7,13 +7,13 @@
         </a>
         <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
             &nbsp;>&nbsp;Requerimientos
-          </a>
-          <a class="href " [routerLink]="['/WAPI/PAA/StockOrders/', dataProjectID, idReq]">
+        </a>
+        <a class="href " [routerLink]="['/WAPI/PAA/StockOrders/', dataProjectID, idReq]">
             &nbsp;>&nbsp; Inventario Giros
-            </a>
-            <a class="href selected" [routerLink]="['/WAPI/PAA/RP/', dataProjectID, idReq, idGir]">
-                &nbsp;>&nbsp; Giro - RP{{numRP}}
-                </a>
+        </a>
+        <a class="href selected" [routerLink]="['/WAPI/PAA/RP/', dataProjectID, idReq, idGir]">
+            &nbsp;>&nbsp; Giro - RP{{numRP}}
+        </a>
     </div>
 
     <!-- TITULO -->
@@ -23,7 +23,7 @@
         </mat-card-title>
     </div>
 
-    <div >
+    <form [formGroup]="formValues">
 
         <div class="formCont">
             <div class="tablaCont">
@@ -42,116 +42,119 @@
                 </div>
                 <div class="contTxt label1">
                     <p class="tltData">Valor RP</p>
-                    <input class="contData contDataDisabled" disabled value="{{dataGiros.valorRP }}">
+                    <input class="contData contDataDisabled" disable 
+                     formControlName="valorRP" type="text" >
                 </div>
             </div>
 
             <div class="tablaCont">
                 <div class="contTxt label1">
                     <p class="tltData">Valor giro acumulado</p>
-                    <input class="contData contDataDisabled" disabled value="{{dataGiros.valorGiroAcumulado}}">
+                    <input class="contData contDataDisabled" disable 
+                    formControlName="valorGiro" >
                 </div>
                 <div class="contTxt label1">
                     <p class="tltData">Saldo por girar</p>
-                    <input class="contData contDataDisabled" disabled value="{{dataGiros.saldoPorGirar}}">
+                    <input class="contData contDataDisabled" disable
+                    formControlName="saldoGirar">
                 </div>
                 <div class="contTxt label1">
                     <p class="tltData">Valor orden de pago</p>
-                    <input class="contData contDataDisabled" disabled value="{{dataGiros.valorOrdenPago}}">
+                    <input class="contData contDataDisabled" disable 
+                    formControlName="valorOrden">
                 </div>
                 <div class="contTxt label1">
                     <p class="tltData">Pendiente por distribuir</p>
-                    <input class="contData contDataDisabled" disabled value="{{dataGiros.pendienteDistribuir}}">
+                    <input class="contData contDataDisabled" disable
+                    formControlName="pendienteDistribuir">
                 </div>
             </div>
             <div class="tablaCont">
                 <div class="contTxt label2">
-                    <p class="tltData">Codigo fuente financiamiento</p>
+                    <p class="tltData">Código fuente financiamiento</p>
                     <input class="contData contDataDisabled" disabled value="{{dataGiros.fuente}}">
                 </div>
             </div>
         </div>
 
 
-        <div class="title__table">
+
+        <div style="overflow: auto;  ">
             <div class="conTitle">
                 <span class="title">Actividades</span>
             </div>
-    
-            <div class="table">
-                <table mat-table class="mat-elevation-z8" [dataSource]="dataGiros.actividades" matSort>
-                    <ng-container matColumnDef="codigoActividad">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="codAct">
-                            Código actividad
-                        <td mat-cell *matCellDef="let element"> {{element.actividad}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="pospre">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="pos">
-                            POSPRE
-                        <td mat-cell *matCellDef="let element">{{element.pospre}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="mga">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="mga">
-                            MGA
-                        <td mat-cell *matCellDef="let element">{{element.mga}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="auxiliar">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="aux">
-                            Auxiliar
-                        <td mat-cell *matCellDef="let element">{{element.auxiliar}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="fuente">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="fue">
-                            Fuente
-                        <td mat-cell *matCellDef="let element">{{element.fuente}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="valorRP">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="valRP">
-                            Valor RP
-                        <td mat-cell *matCellDef="let element">{{element.valorRP
-                            |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="girosAcumulados">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="girAcum">
-                            Giros acumulados
-                        <td mat-cell *matCellDef="let element">{{element.girosAcumulados
-                            |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="saldoGirar">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="salGir">
-                            Saldo a girar
-                        <td mat-cell *matCellDef="let element">{{element.saldoGirar
-                            |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="valorGirar">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="valGir">
-                            Valor a girar
-                        <td mat-cell *matCellDef="let element">
-                            <input class="contDataTabla" #valoresDistribuidos value="{{element.valorGirar}}" (change)="valueChange(dataGiros.giro_ID,element.clasificacion_ID,+valoresDistribuidos.value)">
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="nuevoSaldo">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="nueSal">
-                            Nuevo saldo
-                        <td mat-cell *matCellDef="let element">{{element.nuevoSaldo
-                            |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
-                    </ng-container>
-                    <tr mat-header-row *matHeaderRowDef="actividadesColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: actividadesColumns"></tr>
-                </table>
-            </div>
+            <table mat-table class="mat-elevation-z8" [dataSource]="dataGiros.actividades" matSort>
+                <ng-container matColumnDef="codigoActividad">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="codAct">
+                        Código actividad
+                    <td mat-cell *matCellDef="let element"> {{element.actividad}}</td>
+                </ng-container>
+                <ng-container matColumnDef="pospre">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="pos">
+                        POSPRE
+                    <td mat-cell *matCellDef="let element">{{element.pospre}}</td>
+                </ng-container>
+                <ng-container matColumnDef="mga">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="mga">
+                        MGA
+                    <td mat-cell *matCellDef="let element">{{element.mga}}</td>
+                </ng-container>
+                <ng-container matColumnDef="auxiliar">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="aux">
+                        Auxiliar
+                    <td mat-cell *matCellDef="let element">{{element.auxiliar}}</td>
+                </ng-container>
+                <ng-container matColumnDef="fuente">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="fue">
+                        Fuente
+                    <td mat-cell *matCellDef="let element">{{element.fuente}}</td>
+                </ng-container>
+                <ng-container matColumnDef="valorRP">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="valRP">
+                        Valor RP
+                    <td mat-cell *matCellDef="let element">{{element.valorRP
+                        |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
+                </ng-container>
+                <ng-container matColumnDef="girosAcumulados">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="girAcum">
+                        Giros acumulados
+                    <td mat-cell *matCellDef="let element">{{element.girosAcumulados
+                        |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
+                </ng-container>
+                <ng-container matColumnDef="saldoGirar">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="salGir">
+                        Saldo a girar
+                    <td mat-cell *matCellDef="let element">{{element.saldoGirar
+                        |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
+                </ng-container>
+                <ng-container matColumnDef="valorGirar">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="valGir">
+                        Valor a girar
+                    <td mat-cell *matCellDef="let element">
+                        <input class="contDataTabla tam" #valoresDistribuidos value="{{element.valorGirar}}"
+                            (keyup)="valueChange(dataGiros.giro_ID,element.clasificacion_ID,+valoresDistribuidos.value)"
+                            [disabled]="dataGiros.isLocked == true">
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="nuevoSaldo">                                      
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="nueSal">
+                        Nuevo saldo
+                    <td mat-cell *matCellDef="let element">{{element.nuevoSaldo
+                        |currency:"COP":'symbol-narrow' :'1.0-0' }}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="actividadesColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: actividadesColumns"></tr>
+            </table>
         </div>
 
-        <div class="actions__buttons">
-            <mat-card-actions>
-                <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
-                    Regresar
-                </button>
-                <button class="buton btn" mat-button mat-icon-button (click)="saveGiro()">
-                    guardar
-                </button>
-            </mat-card-actions>
-        </div>
+        <mat-card-actions>
+            <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
+                Regresar
+            </button>
+            <button class="buton btn" mat-button mat-icon-button (click)="saveGiro()">
+                guardar
+            </button>
+        </mat-card-actions>
 
-    </div>
+    </form>
 </div>
