@@ -7,59 +7,59 @@
     <div class="mgp" *ngIf="mgp === 'requerimiento'">
         Plan Anual de Adquisiciones
         <a class="href" [routerLink]="['/WAPI/PAA/Adquisiciones']">
-            &nbsp;>&nbsp;<p>{{codProject}}</p>
-            -&nbsp; <p>{{nomProject}}</p>
+            >{{codProject}}
+            -= {{nomProject}}
         </a>
         <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos',dataProjectID]">
-            &nbsp;>&nbsp;Requerimientos
+            >Requerimientos
         </a>
         <a class="href selected">
-            &nbsp;>&nbsp;Requerimiento {{dataRequirementNum}}
+            >Requerimiento {{dataRequirementNum}}
         </a>
     </div>
     <!-- desde solicitud -->
     <div class="mgp" *ngIf="mgp === 'solicitud'">
         Plan Anual de Adquisiciones
         <a class="href" [routerLink]="['/WAPI/PAA/Adquisiciones']">
-            &nbsp;>&nbsp;{{codProject}}
-            -&nbsp;{{nomProject}}
+            >{{codProject}}
+            -{{nomProject}}
         </a>
         <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos',dataProjectID]">
-            &nbsp;>&nbsp;Requerimientos
+            >Requerimientos
         </a>
         <a class="href" *ngIf="+dataSolicitudID === 0"
             [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + 0]">
-            &nbsp;>&nbsp;Solicitud modificación
+            >Solicitud modificación
         </a>
         <a class="href" *ngIf="+dataSolicitudID !== 0"
             [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
-            &nbsp;>&nbsp;Solicitud modificación
+            >Solicitud modificación
         </a>
         <a class="href selected">
-            &nbsp;>&nbsp;Requerimiento {{dataRequirementNum}}
+            >Requerimiento {{dataRequirementNum}}
         </a>
     </div>
     <!-- desde modificaciones solicitadas -->
     <div class="mgp" *ngIf="mgp === 'request-tray'">
         Plan Anual de Adquisiciones
         <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeSolicitudes']">
-            &nbsp;>&nbsp;Modificaciones solicitadas
+            >Modificaciones solicitadas
         </a>
         <a class="href" [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
-            &nbsp;>&nbsp;Solicitud modificación
+            >Solicitud modificación
         </a>
         <a class="href selected">
-            &nbsp;>&nbsp;Requerimiento {{dataRequirementNum}}
+            >Requerimiento {{dataRequirementNum}}
         </a>
     </div>
     <!-- desde bandeja de tareas -->
     <div class="mgp" *ngIf="mgp === 'taskTray'">
         Plan Anual de Adquisiciones
         <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeTareas']">
-            &nbsp;>&nbsp;Bandeja de tareas
+            >Bandeja de tareas
         </a>
         <a class="href selected">
-            &nbsp;>&nbsp;Requerimiento {{dataRequirementNum}}
+            >Requerimiento {{dataRequirementNum}}
         </a>
     </div>
 
@@ -184,7 +184,7 @@
                                             formControlName="duracionMes"
                                             onKeyPress="if(this.value.length==2) return false;">
 
-                                        meses&nbsp;&nbsp;
+                                        meses
 
                                         <input type="number" class="contData" style="width: 20%;" [ngClass]="{
                                             'contDataError' : genericDuracionDias == true }"
@@ -1045,7 +1045,7 @@
                                             [ngClass]="{'contDataModified' : duracionMesModified == true }"
                                             formControlName="duracionMesRew">
 
-                                        meses&nbsp;&nbsp;
+                                        meses
 
                                         <input type="number" class="contData contDataDisabled" style="width: 20%;"
                                             [ngClass]="{'contDataModified' : duracionDiasModified == true }"
