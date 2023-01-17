@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { VigilantRolesGuard } from './Services/Authentication/Guards/vigilant-roles.guard';
 import { VigilantSessionsGuard } from './Services/Authentication/Guards/vigilant-sessions.guard';
 import { SidenavListComponent } from './Templates/sidenav-list/sidenav-list.component';
 import { DashboardComponent } from './Views/dashboard/dashboard.component';
@@ -22,6 +23,7 @@ import { RequirementsComponent } from './Views/PAA/requirements/requirements.com
 import { OrdersComponent } from './Views/PAA/requirements/stock-orders/orders/orders.component';
 import { StockOrdersComponent } from './Views/PAA/requirements/stock-orders/stock-orders.component';
 import { TaskTrayComponent } from './Views/PAA/task-tray/task-tray.component';
+import { PageNotFoundComponent } from './Views/page-not-found/page-not-found.component';
 
 
 const routes: Routes = [
@@ -36,7 +38,7 @@ const routes: Routes = [
         path: 'PAA',
         children: [
           { path: 'Adquisiciones', component: AcquisitionsComponent, canActivate: [VigilantSessionsGuard] },
-          { path: 'BandejaDeTareas', component: TaskTrayComponent, canActivate: [VigilantSessionsGuard] },
+          { path: 'BandejaDeTareas', component: TaskTrayComponent, canActivate: [VigilantSessionsGuard, VigilantRolesGuard] },
           { path: 'BandejaDeSolicitudes', component: RequestTrayComponent, canActivate: [VigilantSessionsGuard] },
           { path: 'Requerimientos/:data', component: RequirementsComponent, canActivate: [VigilantSessionsGuard] },
           { path: 'PropiedadesRequerimiento/:idPro/:idSol/:idReq/:type', component: PropertiesRequirementComponent, canActivate: [VigilantSessionsGuard] },
@@ -53,7 +55,8 @@ const routes: Routes = [
           { path: 'SolicitudModificacion/:idPro/:idSol', component: ModificationRequestComponent, canActivate: [VigilantSessionsGuard] },
           { path: 'ResumenModificacion/:idPro/:idSol', component: ModificationSummaryComponent, canActivate: [VigilantSessionsGuard] }
         ]
-      }
+      },
+      { path: '**', component: PageNotFoundComponent, canActivate:  [VigilantSessionsGuard]}
     ]
   },
 
