@@ -1,4 +1,6 @@
+import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { dataGirosI, distribuidosI, postGirosI } from 'src/app/Models/ModelsPAA/Requeriment/StockOrders/Orders/orders.interface';
@@ -23,14 +25,25 @@ export class OrdersComponent implements OnInit {
 
   dataGiros = {} as dataGirosI;
   giros = {} as postGirosI;
+  ngValorGirar: string = '';
 
   actividadesColumns: string[] = ['codigoActividad', 'pospre', 'mga', 'auxiliar', 'fuente', 'valorRP', 'girosAcumulados', 'saldoGirar', 'valorGirar', 'nuevoSaldo'];
+
+  formValues = new FormGroup({
+    valorRP: new FormControl(''),
+    valorGiro: new FormControl(''),
+    saldoGirar: new FormControl(''),
+    valorOrden: new FormControl(''),
+    pendienteDistribuir: new FormControl(''),
+    valorGirar: new FormControl(''),
+  });
 
   constructor(private activeRoute: ActivatedRoute,
     public router: Router,
     private serviceOrder: OrdersService,
     private snackBar: MatSnackBar,
-    private serviceModRequest: ModificationRequestService,) { }
+    private serviceModRequest: ModificationRequestService,
+    private currencyPipe: CurrencyPipe,) { }
 
   ngOnInit(): void {
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
@@ -40,7 +53,32 @@ export class OrdersComponent implements OnInit {
     this.getModificationRequet(Number(this.dataProjectID));
 
   }
+  ngModelChange(event: any) {
+    console.log(event);
+  }
+  //use pipe to display currency
+  currencyFormat() {
+    this.formValues.valueChanges.subscribe(data => {
+      if (data.valorRP) {
+        this.formValues.patchValue({
+          valorRP: this.assignCurrencyPipe(data.valorRP)
+        }, { emitEvent: false });
+      }
+    });
+    this.assignCurrencyPipe(this.ngValorGirar);
+    console.log(this.ngValorGirar);
+  }
+  //Función para asignar formato de moneda a un numero y retorna el numero formatrado
+  assignCurrencyPipe(number: string) {
+    const NUMBER_ASSIGN = this.currencyPipe.transform(number.replace(/\D/g, '').replace(/^-1+/, ''), 'COP', 'symbol-narrow', '1.0-0');
+    return NUMBER_ASSIGN;
+  }
 
+  //Función que quita el formato de moneda y retorna un numero
+  quitCurrencyPipe(element: string): number {
+    const ELEMENT_QUIT = element.replace(/\$+/g, '').replace(/,/g, "");
+    return Number(ELEMENT_QUIT);
+  }
   //Obtener la información del proyecto para mostrar en miga de pan
   getModificationRequet(projectId: number) {
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
@@ -52,11 +90,22 @@ export class OrdersComponent implements OnInit {
 
   getGiro(idReq: number, idGiro: number) {
     this.serviceOrder.getGiro(idReq, idGiro).subscribe((data: any) => {
+      console.log(data);
       this.numRP = data.data.numeroRP;
       this.dataGiros = data.data;
+      this.formValues.controls.valorRP.setValue(this.assignCurrencyPipe(data.data.valorRP.toString()));
+      this.formValues.controls.valorGiro.setValue(this.assignCurrencyPipe(data.data.valorGiroAcumulado.toString()));
+      this.formValues.controls.saldoGirar.setValue(this.assignCurrencyPipe(data.data.saldoPorGirar.toString()));
+      this.formValues.controls.valorOrden.setValue(this.assignCurrencyPipe(data.data.valorOrdenPago.toString()));
+      this.formValues.controls.pendienteDistribuir.setValue(this.assignCurrencyPipe(data.data.pendienteDistribuir.toString()));
+
     });
+    this.currencyFormat();
+
   }
   valueChange(idGiro: number, clasificacionId: number, value: number) {
+    let valueformat = this.assignCurrencyPipe(value.toString());
+    console.log(valueformat);
     let valDistribuidos = {} as distribuidosI;
     valDistribuidos.clasificacion_ID = clasificacionId;
     valDistribuidos.valorGirar = value;
@@ -66,12 +115,14 @@ export class OrdersComponent implements OnInit {
       if (item.clasificacion_ID == clasificacionId) {
         item.valorGirar = value;
       }
+      return valueformat;
     });
     distribuidos.push(valDistribuidos);
     this.giros['requerimiento_ID'] = +this.idReq;
     this.giros['giro_ID'] = idGiro;
     this.giros['distribuidos'] = distribuidos;
   }
+
   cancel() {
     this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
   }

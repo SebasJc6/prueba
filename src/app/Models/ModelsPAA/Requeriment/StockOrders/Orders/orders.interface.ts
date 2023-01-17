@@ -16,6 +16,7 @@ export interface dataGirosI{
     valorOrdenPago : number;
     valorRP : number;
     actividades: actividadI[];
+    isLocked: boolean;
 }
 export interface actividadI{
     actividad: string;
