@@ -69,6 +69,7 @@ import { RpComponent } from './Views/PAA/requirements/cdp/rp/rp.component';
 import { StockOrdersComponent } from './Views/PAA/requirements/stock-orders/stock-orders.component';
 import { SpinnerInterceptorService } from './Services/Authentication/Interceptor/spinner-interceptor.service';
 import { OrdersComponent } from './Views/PAA/requirements/stock-orders/orders/orders.component';
+import { PageNotFoundComponent } from './Views/page-not-found/page-not-found.component';
 
 
 const materialModules = [
@@ -133,7 +134,8 @@ const materialModules = [
     PopUpImportComponent,
     RpComponent,
     StockOrdersComponent,
-    OrdersComponent
+    OrdersComponent,
+    PageNotFoundComponent
 
   ],
   imports: [

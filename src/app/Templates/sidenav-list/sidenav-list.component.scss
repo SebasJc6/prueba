@@ -4,7 +4,7 @@
     scrollbar-width: thin;
 }
 mat-sidenav{
-    background:  #c2f8ff;
+    background:  #3FBEE2;
     width: 230px;
     height: 100%;
     
@@ -101,7 +101,7 @@ mat-icon {
     
     mat-accordion {
         mat-expansion-panel {
-            background-color:  #c2f8ff;
+            background-color:  #3FBEE2;
 
             mat-expansion-panel-header {
                 height: 80px;
@@ -135,7 +135,7 @@ mat-icon {
     }
 
     .menu-button:hover {
-        background: #2e6775;
+        background: #185564;
     }
 
     .menu-button:focus {
@@ -149,7 +149,7 @@ mat-icon {
     }
 
     .menu-panel:hover {
-        background: #306c7a;
+        background: #185564;
 
         .title {
             color: #fff;

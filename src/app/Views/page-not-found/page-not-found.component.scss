@@ -1,0 +1,55 @@
+//CONTAINER
+.container {
+    display: grid;
+    margin-left: 3%;
+    margin-right: 3%;
+    text-align: center;
+    height: 75vh;
+}
+
+
+//DIV CONTENEDO
+div {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.error__title {
+    height: 300px;
+    font-size: 15rem;
+    margin-top: revert
+}
+
+.error_subtitle {
+    font-size: 2em;
+}
+
+.div__error_subtitle{
+    float: inline-end !important;
+}
+
+/* RESPONSIVE*/
+@media only screen and (max-width: 500px) {
+    .error__title {
+        font-size: 12rem;
+    }
+}
+
+@media only screen and (max-width: 370px) {
+    .error__title {
+        font-size: 9.3rem;
+    }
+
+    .error_subtitle {
+        font-size: 1.5em;
+    }
+}
+
+
+@media only screen and (max-height: 640px) {
+    .div__error_subtitle{
+        margin-top: -10em;
+    }
+}
