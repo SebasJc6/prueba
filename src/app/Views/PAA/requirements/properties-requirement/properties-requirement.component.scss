@@ -44,6 +44,14 @@
             margin-right: 2%;
             color: black;
 
+            .arrContDias {
+             
+
+                .arregCont2 {
+                    margin-left: 4%;
+                }
+            }
+
             .contTxt {
                 text-align: left;
                 margin: 1%;
@@ -73,6 +81,8 @@
                 .arreg {
                     margin-top: 7%;
                 }
+
+
 
                 .contData {
                     border: 2px solid #185564;
@@ -235,30 +245,71 @@
 }
 
 //MIGA PAN
-.mgp {
-    float: start;
+//MIGA PAN
+.mpg {
     display: flex;
-    color: #185564;
-
-    button {
-        margin-left: -0.5%;
-
-        mat-icon {
-            margin-top: -2%;
-        }
-    }
-
-    .href {
-        text-decoration: none;
-        color: #185564;
-        display: flex;
-
-    }
-
-    .selected {
-        font-weight: bold;
-    }
+    position: fixed;
 }
+
+ul.breadcrumb {
+    padding: 10px 16px;
+    list-style: none;
+}
+
+ul.breadcrumb li {
+    display: inline;
+    font-size: 14px;
+}
+
+ul.breadcrumb li+li:before {
+    padding: 4px;
+    color: #185564;
+    font-weight: bold;
+    content: ">";
+}
+
+ul.breadcrumb li a {
+    color: #185564;
+    text-decoration: none;
+}
+
+ul.breadcrumb li a:hover {
+    color: #185564;
+    text-decoration: underline;
+}
+
+.href {
+    color: #185564;
+}
+
+.selected {
+    font-weight: bold;
+}
+
+// .mgp {
+//     float: start;
+//     display: flex;
+//     color: #185564;
+
+//     button {
+//         margin-left: -0.5%;
+
+//         mat-icon {
+//             margin-top: -2%;
+//         }
+//     }
+
+//     .href {
+//         text-decoration: none;
+//         color: #185564;
+//         display: flex;
+
+//     }
+
+//     .selected {
+//         font-weight: bold;
+//     }
+// }
 
 
 .center-h {
@@ -487,17 +538,38 @@ input[type=number] {
 
 
 /* RESPONSIVE*/
+@media only screen and (max-width: 1470px) {
+    .arrContDias {
+        font-size: 13px !important;        
+       
+    }
+    .tltData {
+        font-size: 13px !important;
+    }
+}
 @media only screen and (max-width: 820px) {
     .mgp {
-        font-size: 12px !important;
+        ul.breadcrumb li {
+            font-size: 13px !important;
 
-        
+            .nomProject {
+                visibility: inherit;
+            }
+        }
+
     }
+
 
     .tablaCont {
         flex-direction: column;
         align-items: center;
-
+        .arrContDias {
+            font-size: 12px !important;
+             
+            .arregCont2 {
+                margin-left: 0 !important;
+            }
+        }
         .contTxt {
             margin: 0;
 
@@ -513,7 +585,8 @@ input[type=number] {
             .contDataArea {
                 width: 100% !important;
             }
-            .contDataSelect2{
+
+            .contDataSelect2 {
                 ::ng-deep .mat-select-trigger {
                     margin-top: 1.5% !important;
                     //  vertical-align: center;

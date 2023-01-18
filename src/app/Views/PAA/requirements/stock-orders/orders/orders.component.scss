@@ -5,29 +5,41 @@
     text-align: center;
 }
 
-.mgp {
-    float: start;
+//MIGA DE PAN
+.mpg{
     display: flex;
+    position: fixed;
+  }
+  ul.breadcrumb {
+    padding: 10px 16px;
+    list-style: none;
+  }
+  ul.breadcrumb li {
+    display: inline;
+    font-size: 14px;
+  }
+  ul.breadcrumb li+li:before {
+    padding: 4px;
     color: #185564;
-    align-items: center;
-
-    button {
-        margin-left: -0.5%;
-
-        mat-icon {
-            margin-top: -2%;
-        }
-    }
-
-    .href {
-        text-decoration: none;
-        color: #185564;
-    }
-
-    .selected {
-        font-weight: bold;
-    }
-}
+    font-weight: bold;
+    content: ">";
+  }
+  ul.breadcrumb li a {
+    color: #185564;
+    text-decoration: none;
+  }
+  ul.breadcrumb li a:hover {
+    color: #185564;
+    text-decoration: underline;
+  }
+  
+  .href {
+    color: #185564;
+  }
+  
+  .selected {
+    font-weight: bold;
+  }
 
 .center-h {
     justify-content: center;
@@ -271,6 +283,12 @@ mat-card-actions {
 
 /* RESPONSIVE*/
 @media only screen and (max-width: 780px) {
+    ul.breadcrumb li {
+        font-size: 13px !important;
+        .nomProject{
+            visibility: inherit;
+        }
+      }
     .table {
         overflow-x: scroll;
     }

@@ -1,20 +1,30 @@
-<div class="container center-h center-v">
-    <div class="mgp">
-        Plan Anual de Adquisiciones
-        <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
-            &nbsp;>&nbsp;{{codProject}}
-            -&nbsp;{{nomProject}}
+<ul class="breadcrumb">
+    <li>Plan Anual de Adquisiciones</li>
+  
+    <li> <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
+            <span>{{codProject}} </span>
+            <span class="nomProject">- {{nomProject}} </span>
         </a>
-        <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
-            &nbsp;>&nbsp;Requerimientos
-          </a>
-          <a class="href " [routerLink]="['/WAPI/PAA/StockOrders/', dataProjectID, idReq]">
-            &nbsp;>&nbsp; Inventario Giros
-            </a>
-            <a class="href selected" [routerLink]="['/WAPI/PAA/RP/', dataProjectID, idReq, idGir]">
-                &nbsp;>&nbsp; Giro - RP{{numRP}}
-                </a>
-    </div>
+    </li>
+    <li>
+        <a class="href selected" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
+            <span>Requerimientos</span>
+        </a>
+    </li>
+    <li>
+        <a class="href " [routerLink]="['/WAPI/PAA/StockOrders/', dataProjectID, idReq]">
+         <span>Inventario Giros</span> 
+        </a>
+      </li>
+      <li>
+        <a class="href " [routerLink]="['/WAPI/PAA/RP/', dataProjectID, idReq, idGir]">
+            <span>Giro - RP{{numRP}}</span> 
+        </a>
+    </li>
+  </ul>
+  
+<div class="container center-h center-v">
+
 
     <!-- TITULO -->
     <div class="opciones">

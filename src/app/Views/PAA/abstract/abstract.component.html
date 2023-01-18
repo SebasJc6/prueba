@@ -1,15 +1,19 @@
-<app-spinner></app-spinner>
+<ul class="breadcrumb">
+  <li>Plan Anual de Adquisiciones</li>
+
+  <li> <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
+          <span>{{abstractData.codigoProyecto}} </span>
+          <span class="nomProject">- {{abstractData.nombreProyecto}} </span>
+      </a>
+  </li>
+  <li>
+      <a class="href selected" [routerLink]="['/WAPI/PAA/Resumen', dataProjectID]">
+          <span>RESUMEN EJECUCION PRESUPUESTAL - FFDS </span>
+      </a>
+  </li>
+</ul>
 <div class="container center-h center-v">
-  <div class="mgp">
-    Plan Anual de Adquisiciones
-    <a class="href "  [routerLink]="['/WAPI/PAA/Adquisiciones']">
-      &nbsp;>&nbsp;{{abstractData.codigoProyecto}}
-      -&nbsp;{{abstractData.nombreProyecto}}
-    </a>
-    <a class="href selected"  [routerLink]="['/WAPI/PAA/Resumen', dataProjectID]">
-      &nbsp;>&nbsp;RESUMEN EJECUCION PRESUPUESTAL - FFDS 
-    </a>
-  </div>
+ 
 
   <div class="export">
     <mat-card-title style="color: #185564;">
