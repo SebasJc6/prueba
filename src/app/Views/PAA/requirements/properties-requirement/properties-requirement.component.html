@@ -1,67 +1,105 @@
+<!--MIGA PAN-->
+<!-- desde requerimiento -->
+<div class="mgp" *ngIf="mgp === 'requerimiento'">
+
+    <ul class="breadcrumb">
+        <li>Plan Anual de Adquisiciones</li>
+
+        <li> <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
+                <span>{{codProject}} </span>
+                <span class="nomProject">- {{nomProject}} </span>
+            </a>
+        </li>
+        <li>
+            <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
+                <span>Requerimientos</span>
+            </a>
+        </li>
+        <li>
+            <a class="href selected">
+                <span>Requerimiento {{dataRequirementNum}}</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<!-- desde solicitud -->
+<div class="mgp" *ngIf="mgp === 'solicitud'">
+    <ul class="breadcrumb">
+        <li>Plan Anual de Adquisiciones</li>
+
+        <li> <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
+                <span>{{codProject}} </span>
+                <span class="nomProject">- {{nomProject}} </span>
+            </a>
+        </li>
+        <li>
+            <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
+                <span>Requerimientos</span>
+            </a>
+        </li>
+        <li>
+            <a class="href" *ngIf="+dataSolicitudID === 0"
+                [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + 0]">
+                <span>Solicitud modificación</span>
+            </a>
+            <a class="href" *ngIf="+dataSolicitudID !== 0"
+                [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
+                <span>Solicitud modificación</span>
+            </a>
+        </li>
+        <li>
+            <a class="href selected">
+                >Requerimiento {{dataRequirementNum}}
+            </a>
+        </li>
+    </ul>
+
+</div>
+<!-- desde modificaciones solicitadas -->
+<div class="mgp" *ngIf="mgp === 'request-tray'">
+
+    <ul class="breadcrumb">
+        <li>Plan Anual de Adquisiciones</li>
+
+        <li> <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeSolicitudes']">
+                <span>Modificaciones solicitadas</span>
+            </a>
+        </li>
+        <li>
+            <a class="href" [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
+                <span>Solicitud modificación</span>
+            </a>
+        </li>
+        <li>
+            <a class="href selected">
+                <span>Requerimiento {{dataRequirementNum}}</span>
+            </a>
+        </li>
+    </ul>
+
+</div>
+<!-- desde bandeja de tareas -->
+<div class="mgp" *ngIf="mgp === 'taskTray'">
+    <ul class="breadcrumb">
+        <li>Plan Anual de Adquisiciones</li>
+
+        <li> <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeTareas']">
+                <span>Bandeja de tareas</span>
+            </a>
+        </li>
+        <li>
+            <a class="href selected">
+                <span>Requerimiento {{dataRequirementNum}}</span>
+            </a>
+        </li>
+    </ul>
+
+</div>
+
 <!--CONTENEDOR TOTAL COMPONENTE PROPIEDADES DEL REQUERIMIENTO-->
-<app-spinner></app-spinner>
+
 <div class="container center-h center-v">
 
-    <!--MIGA PAN-->
-    <!-- desde requerimiento -->
-    <div class="mgp" *ngIf="mgp === 'requerimiento'">
-        Plan Anual de Adquisiciones
-        <a class="href" [routerLink]="['/WAPI/PAA/Adquisiciones']">
-            >{{codProject}}
-            -= {{nomProject}}
-        </a>
-        <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos',dataProjectID]">
-            >Requerimientos
-        </a>
-        <a class="href selected">
-            >Requerimiento {{dataRequirementNum}}
-        </a>
-    </div>
-    <!-- desde solicitud -->
-    <div class="mgp" *ngIf="mgp === 'solicitud'">
-        Plan Anual de Adquisiciones
-        <a class="href" [routerLink]="['/WAPI/PAA/Adquisiciones']">
-            >{{codProject}}
-            -{{nomProject}}
-        </a>
-        <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos',dataProjectID]">
-            >Requerimientos
-        </a>
-        <a class="href" *ngIf="+dataSolicitudID === 0"
-            [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + 0]">
-            >Solicitud modificación
-        </a>
-        <a class="href" *ngIf="+dataSolicitudID !== 0"
-            [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
-            >Solicitud modificación
-        </a>
-        <a class="href selected">
-            >Requerimiento {{dataRequirementNum}}
-        </a>
-    </div>
-    <!-- desde modificaciones solicitadas -->
-    <div class="mgp" *ngIf="mgp === 'request-tray'">
-        Plan Anual de Adquisiciones
-        <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeSolicitudes']">
-            >Modificaciones solicitadas
-        </a>
-        <a class="href" [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
-            >Solicitud modificación
-        </a>
-        <a class="href selected">
-            >Requerimiento {{dataRequirementNum}}
-        </a>
-    </div>
-    <!-- desde bandeja de tareas -->
-    <div class="mgp" *ngIf="mgp === 'taskTray'">
-        Plan Anual de Adquisiciones
-        <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeTareas']">
-            >Bandeja de tareas
-        </a>
-        <a class="href selected">
-            >Requerimiento {{dataRequirementNum}}
-        </a>
-    </div>
 
     <!--BOTON QUE CARGA VERSION ACTUAL-->
     <div *ngIf="viewBtnVersion">
@@ -112,8 +150,8 @@
                                         <p class="tltData">Número de requerimiento</p>
                                         <input class="contData" formControlName="numeroReq" [ngClass]="{
                                                 'contDataDisabled' : numReqDisabled == true,
-                                                'contDataError' : genericNumReq == true }"
-                                                type="number" onKeyPress="if(this.value.length==5) return false;">
+                                                'contDataError' : genericNumReq == true }" type="number"
+                                            onKeyPress="if(this.value.length==5) return false;">
                                         <mat-error *ngIf="errorNumReq">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
@@ -177,20 +215,21 @@
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
                                     </div>
-                                    <div class="contTxt label3 ">
+                                    <div class="contTxt label3 arrContDias">
                                         <p class="tltData">Duración estimada del contrato</p>
-                                        <input type="number" class="contData" style="width: 20%;" [ngClass]="{
+                                        <input type="number" class="contData" style="width: 15%;" [ngClass]="{
                                             'contDataError' : genericDuracionMes == true }"
                                             formControlName="duracionMes"
                                             onKeyPress="if(this.value.length==2) return false;">
 
-                                        meses
+                                        <span>Meses</span>
 
-                                        <input type="number" class="contData" style="width: 20%;" [ngClass]="{
+                                        <input type="number" class="contData arregCont2" style="width: 15%;" [ngClass]="{
                                             'contDataError' : genericDuracionDias == true }"
-                                            formControlName="duracionDias"  onKeyPress="if(this.value.length==2) return false;">
+                                            formControlName="duracionDias"
+                                            onKeyPress="if(this.value.length==2) return false;">
 
-                                        Dias
+                                        <span>Días</span>
                                         <br>
                                         <mat-error *ngIf="errorDuratioMes">
                                             Campo <strong>Obligatorio</strong>
@@ -231,12 +270,12 @@
                                         <p class="tltData">Número de contrato</p>
                                         <input class="contData1" formControlName="numeroCont" [ngClass]="{'contDataDisabled' : disabledInicial == true 
                                         , 'contDataError' : genericNumeroCont == true }"
-                                        onKeyPress="if(this.value.length==15) return false;">
+                                            onKeyPress="if(this.value.length==15) return false;">
                                     </div>
                                     <div class="contTxt label5">
                                         <p class="tltData">Año</p>
                                         <mat-select formControlName="anioContrato" class="contDataSelect2"
-                                        [ngClass]="{'contDataDisabled' : disabledInicial == true }">
+                                            [ngClass]="{'contDataDisabled' : disabledInicial == true }">
                                             <mat-option [value]="item" *ngFor="let item of years">
                                                 {{item}}</mat-option>
                                         </mat-select>
@@ -267,7 +306,7 @@
                                         <input class="contData" formControlName="valorHonMes"
                                             value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}" [ngClass]="{'contDataDisabled' : disabledAdicion == true,
                                             'contDataError' : genericValorHonMes == true }"
-                                             onKeyPress="if(this.value.length==17) return false;">
+                                            onKeyPress="if(this.value.length==17) return false;">
                                         <mat-error *ngIf="errorRangeSararial">
                                             <strong>{{msjVerifyRangeSararial}}</strong>
                                         </mat-error>
@@ -275,8 +314,8 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Cantidad de contratos</p>
                                         <input class="contData" formControlName="cantidadCont" [ngClass]="{
-                                            'contDataError' : genericCantidadCont == true }"
-                                            type="number"  onKeyPress="if(this.value.length==1) return false;">
+                                            'contDataError' : genericCantidadCont == true }" type="number"
+                                            onKeyPress="if(this.value.length==1) return false;">
                                         <mat-error *ngIf="errorCantContrato">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
@@ -731,7 +770,8 @@
 
                                                 <p class="tltData">Año vigencia </p>
                                                 <!-- <input class="contData contDataDisabled" formControlName="vigencia2"> -->
-                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect" (selectionChange)="changeInitilYears($event)">
+                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect"
+                                                    (selectionChange)="changeInitilYears($event)">
                                                     <mat-option [value]="item" *ngFor="let item of initialAppYaers">
                                                         {{item}}</mat-option>
                                                 </mat-select>
@@ -1039,19 +1079,19 @@
                                         </mat-select>
 
                                     </div>
-                                    <div class="contTxt label3 ">
+                                    <div class="contTxt label3 arrContDias ">
                                         <p class="tltData">Duración estimada del contrato</p>
                                         <input type="number" class="contData contDataDisabled" style="width: 20%;"
                                             [ngClass]="{'contDataModified' : duracionMesModified == true }"
                                             formControlName="duracionMesRew">
+                                        <span>Meses</span>
 
-                                        meses
 
                                         <input type="number" class="contData contDataDisabled" style="width: 20%;"
                                             [ngClass]="{'contDataModified' : duracionDiasModified == true }"
                                             formControlName="duracionDiasRew" maxlength="2" min="1" max="29">
+                                        <span>Días</span>
 
-                                        Dias
                                     </div>
                                 </div>
 
@@ -1095,11 +1135,12 @@
                                         <input class="contData contDataDisabled" formControlName="numeroContRew"
                                             [ngClass]="{'contDataModified' : numeroDeContratoModified == true }">
 
-                                    </div>                                  
+                                    </div>
                                     <div class="contTxt label5">
                                         <p class="tltData">Año</p>
-                                        <mat-select formControlName="anioContratoRew" class="contDataSelect2 contDataDisabled"
-                                        [ngClass]="{'contDataModified' : anioContratoModified == true }">
+                                        <mat-select formControlName="anioContratoRew"
+                                            class="contDataSelect2 contDataDisabled"
+                                            [ngClass]="{'contDataModified' : anioContratoModified == true }">
                                             <mat-option [value]="item" *ngFor="let item of years">
                                                 {{item}}</mat-option>
                                         </mat-select>
@@ -1407,7 +1448,8 @@
 
                                                 <p class="tltData">Año vigencia </p>
                                                 <!-- <input class="contData contDataDisabled" formControlName="vigencia2"> -->
-                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect" (selectionChange)="changeInitilYears($event)">
+                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect"
+                                                    (selectionChange)="changeInitilYears($event)">
                                                     <mat-option [value]="item" *ngFor="let item of initialAppYaers">
                                                         {{item}}</mat-option>
                                                 </mat-select>
@@ -1711,17 +1753,17 @@
                                         </mat-select>
 
                                     </div>
-                                    <div class="contTxt label3 ">
+                                    <div class="contTxt label3 arrContDias">
                                         <p class="tltData">Duración estimada del contrato</p>
                                         <input type="number" class="contData contDataDisabled" style="width: 20%;"
                                             formControlName="duracionMesAct">
 
-                                       <p>Meses</p> 
+                                        <span>Meses</span>
 
                                         <input type="number" class="contData contDataDisabled" style="width: 20%;"
                                             formControlName="duracionDiasAct" maxlength="2" min="1" max="29">
 
-                                      <p>Dias</p>  
+                                        <span>Días</span>
                                     </div>
                                 </div>
 
@@ -1762,8 +1804,9 @@
                                     </div>
                                     <div class="contTxt label5">
                                         <p class="tltData">Año</p>
-                                        <mat-select formControlName="anioContratoAct" class="contDataSelect2 contDataDisabled"
-                                        [ngClass]="{'contDataModified' : anioContratoModified == true }">
+                                        <mat-select formControlName="anioContratoAct"
+                                            class="contDataSelect2 contDataDisabled"
+                                            [ngClass]="{'contDataModified' : anioContratoModified == true }">
                                             <mat-option [value]="item" *ngFor="let item of years">
                                                 {{item}}</mat-option>
                                         </mat-select>
@@ -2040,7 +2083,8 @@
 
                                                 <p class="tltData">Año vigencia </p>
                                                 <!-- <input class="contData contDataDisabled" formControlName="vigencia2"> -->
-                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect" (selectionChange)="changeInitilYears($event)">
+                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect"
+                                                    (selectionChange)="changeInitilYears($event)">
                                                     <mat-option [value]="item" *ngFor="let item of initialAppYaers">
                                                         {{item}}</mat-option>
                                                 </mat-select>

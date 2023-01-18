@@ -90,7 +90,6 @@ export class OrdersComponent implements OnInit {
 
   getGiro(idReq: number, idGiro: number) {
     this.serviceOrder.getGiro(idReq, idGiro).subscribe((data: any) => {
-      console.log(data);
       this.numRP = data.data.numeroRP;
       this.dataGiros = data.data;
       this.formValues.controls.valorRP.setValue(this.assignCurrencyPipe(data.data.valorRP.toString()));
@@ -127,8 +126,13 @@ export class OrdersComponent implements OnInit {
     this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
   }
   saveGiro() {
-    console.log('savegiros');
-    this.postGiros();
+    if(!this.giros){
+      this.postGiros();
+  
+    }else{
+      this.openSnackBar('Giro', 'No se han realizado cambios', 'success');
+      this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
+    }
   }
 
   postGiros() {

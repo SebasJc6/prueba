@@ -1,21 +1,30 @@
-<div class="container center-h center-v">
-    <!--Miga de Pan-->
-    <div class="mgp">
-        Plan Anual de Adquisiciones
-        <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
-            &nbsp;>&nbsp;{{codProject}}
-            -&nbsp;{{nomProject}}
+<ul class="breadcrumb">
+    <li>Plan Anual de Adquisiciones</li>
+  
+    <li> <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
+            <span>{{codProject}} </span>
+            <span class="nomProject">- {{nomProject}} </span>
         </a>
-        <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
-            &nbsp;>&nbsp;Requerimientos
+    </li>
+    <li>
+        <a class="href " [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
+            <span>Requerimientos</span>
         </a>
-        <a class="href" [routerLink]="['/WAPI/PAA/CDP/', dataProjectID, idReq]">
-            &nbsp;>&nbsp; CDP
+    </li>
+    <li>
+        <a class="href " [routerLink]="['/WAPI/PAA/CDP/', dataProjectID, idReq]">
+         <span>CDP</span> 
         </a>
+      </li>
+      <li>
         <a class="href selected" [routerLink]="['/WAPI/PAA/RP/', dataProjectID, idReq, idCDP]">
-            &nbsp;>&nbsp; RP
+            <span>RP</span> 
         </a>
-    </div>
+      </li>
+  </ul>
+
+<div class="container center-h center-v">
+
 
     <!-- TITULO -->
     <div class="opciones">
