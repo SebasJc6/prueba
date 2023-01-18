@@ -70,6 +70,7 @@ import { StockOrdersComponent } from './Views/PAA/requirements/stock-orders/stoc
 import { SpinnerInterceptorService } from './Services/Authentication/Interceptor/spinner-interceptor.service';
 import { OrdersComponent } from './Views/PAA/requirements/stock-orders/orders/orders.component';
 import { PageNotFoundComponent } from './Views/page-not-found/page-not-found.component';
+import { ReportsComponent } from './Views/PAA/reports/reports.component';
 
 
 const materialModules = [
@@ -135,7 +136,8 @@ const materialModules = [
     RpComponent,
     StockOrdersComponent,
     OrdersComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ReportsComponent
 
   ],
   imports: [

@@ -9,6 +9,7 @@ import { HomeComponent } from './Views/home/home.component';
 import { LoginComponent } from './Views/login/login.component';
 import { AbstractComponent } from './Views/PAA/abstract/abstract.component';
 import { AcquisitionsComponent } from './Views/PAA/acquisitions/acquisitions.component';
+import { ReportsComponent } from './Views/PAA/reports/reports.component';
 import { RequestTrayComponent } from './Views/PAA/request-tray/request-tray.component';
 import { CDPComponent } from './Views/PAA/requirements/cdp/cdp.component';
 import { RpComponent } from './Views/PAA/requirements/cdp/rp/rp.component';
@@ -53,7 +54,8 @@ const routes: Routes = [
           { path: 'StockOrders/:idPro/:idReq', component: StockOrdersComponent, canActivate: [VigilantSessionsGuard] },
           { path: 'Giros/:idPro/:idReq/:idGir', component: OrdersComponent, canActivate: [VigilantSessionsGuard] },
           { path: 'SolicitudModificacion/:idPro/:idSol', component: ModificationRequestComponent, canActivate: [VigilantSessionsGuard] },
-          { path: 'ResumenModificacion/:idPro/:idSol', component: ModificationSummaryComponent, canActivate: [VigilantSessionsGuard] }
+          { path: 'ResumenModificacion/:idPro/:idSol', component: ModificationSummaryComponent, canActivate: [VigilantSessionsGuard] },
+          { path: 'Reportes', component: ReportsComponent, canActivate: [VigilantSessionsGuard]}
         ]
       },
       { path: '**', component: PageNotFoundComponent, canActivate:  [VigilantSessionsGuard]}
