@@ -4,6 +4,10 @@
     margin-left: 95%;
     margin-top: -2.3%;
    }
+
+.close__button {
+  margin-left: 90%;
+}
    
    .title {
      font-weight: 700;
@@ -82,9 +86,9 @@
 
  .contTxt {
   text-align: left;
-  width: 40%;
+  width: 60%;
   margin: 1%;
-  margin-left: 30%;
+  margin-left: 20%;
 
   .tltData {
     font-size: 14px;
@@ -101,6 +105,11 @@
       ::ng-deep .mat-select-trigger {
         height: 32px;
         padding: 5px;
+      }
+
+      .example-additional-selection {
+        opacity: 0.75;
+        font-size: 0.75em;
       }
     }
 }
