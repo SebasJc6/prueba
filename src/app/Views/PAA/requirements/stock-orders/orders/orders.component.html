@@ -52,26 +52,26 @@
                 </div>
                 <div class="contTxt label1">
                     <p class="tltData">Valor RP</p>
-                    <input class="contData contDataDisabled" disabled value="{{dataGiros.valorRP }}">
+                    <input class="contData contDataDisabled" disabled value="{{dataGiros.valorRP | currency:'COP':'symbol-narrow' :'1.0-0'}}">
                 </div>
             </div>
 
             <div class="tablaCont">
                 <div class="contTxt label1">
                     <p class="tltData">Valor giro acumulado</p>
-                    <input class="contData contDataDisabled" disabled value="{{dataGiros.valorGiroAcumulado}}">
+                    <input class="contData contDataDisabled" disabled value="{{dataGiros.valorGiroAcumulado | currency:'COP':'symbol-narrow' :'1.0-0'}}">
                 </div>
                 <div class="contTxt label1">
                     <p class="tltData">Saldo por girar</p>
-                    <input class="contData contDataDisabled" disabled value="{{dataGiros.saldoPorGirar}}">
+                    <input class="contData contDataDisabled" disabled value="{{dataGiros.saldoPorGirar | currency:'COP':'symbol-narrow' :'1.0-0'}}">
                 </div>
                 <div class="contTxt label1">
                     <p class="tltData">Valor orden de pago</p>
-                    <input class="contData contDataDisabled" disabled value="{{dataGiros.valorOrdenPago}}">
+                    <input class="contData contDataDisabled" disabled value="{{dataGiros.valorOrdenPago | currency:'COP':'symbol-narrow' :'1.0-0'}}">
                 </div>
                 <div class="contTxt label1">
                     <p class="tltData">Pendiente por distribuir</p>
-                    <input class="contData contDataDisabled" disabled value="{{dataGiros.pendienteDistribuir}}">
+                    <input class="contData contDataDisabled" disabled value="{{dataGiros.pendienteDistribuir | currency:'COP':'symbol-narrow' :'1.0-0'}}">
                 </div>
             </div>
             <div class="tablaCont">
