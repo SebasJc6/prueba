@@ -74,19 +74,19 @@
                     <div class="tablaCont">
                         <div class="contTxt label1">
                             <p class="tltData">Valor inicial</p>
-                            <input class="contData contDataDisabled" disabled value="{{rp.valorInicial}}">
+                            <input class="contData contDataDisabled" disabled value="{{rp.valorInicial | currency:'COP':'symbol-narrow' :'1.0-0'}}">
                         </div>
                         <div class="contTxt label1">
                             <p class="tltData">Valor anulado</p>
-                            <input class="contData contDataDisabled" disabled value="{{rp.valorAnulado}}">
+                            <input class="contData contDataDisabled" disabled value="{{rp.valorAnulado | currency:'COP':'symbol-narrow' :'1.0-0'}}">
                         </div>
                         <div class="contTxt label1">
                             <p class="tltData">Valor a distribuir</p>
-                            <input class="contData contDataDisabled" disabled value="{{rp.valorDistribuir}}">
+                            <input class="contData contDataDisabled" disabled value="{{rp.valorDistribuir | currency:'COP':'symbol-narrow' :'1.0-0'}}">
                         </div>
                         <div class="contTxt label1">
                             <p class="tltData">Pendiente por distribuir</p>
-                            <input class="contData contDataDisabled" disabled value="{{rp.pendienteDistribuir}}">
+                            <input class="contData contDataDisabled" disabled value="{{rp.pendienteDistribuir | currency:'COP':'symbol-narrow' :'1.0-0'}}">
                         </div>
                     </div>
                 </div>
