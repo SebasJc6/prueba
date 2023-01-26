@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
-import { getProjectReportsI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
+import { getProjectReportsI, iDsProjectsReportPAAI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { dataReportsAllI } from 'src/app/Models/ModelsPAA/Reports/reports-interface';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
 import { ReportsDetailsService } from 'src/app/Services/ServicesPAA/Reports/reports-details.service';
@@ -11,6 +11,7 @@ export interface AlertDataPopUp {
   type: string;
   title: string;
   message: string;
+  arrayData: number[];
   message2?: string;
   dataType?: string;
 }
@@ -31,15 +32,20 @@ export class AlertsPopUpComponent implements OnInit {
   Comentarios: string = '';
 
 
-  //Select con checks
-  PROJECTS = new FormControl('');
+  //Select con checks para los proyectos
+  PROJECTS = new FormControl();
   PROJECTS_LIST: getProjectReportsI[] = [];
 
   //Lista de reportes
   REPORTS_LIST: dataReportsAllI[] = [];
 
+  //Numero de reporte seleccionado
   selectedValueValidity: number = 0;
-  
+
+  //Select con checks para los años de vigencias
+  VALIDITYS= new FormControl();
+  VALIDITYS_LIST: number[] = [];
+
   ngOnInit(): void {
     if (this.data.dataType === 'proyectos') {
       this.getProjectsInfo();
@@ -61,11 +67,45 @@ export class AlertsPopUpComponent implements OnInit {
       this.dialogRef.close(Revisiones);
     }
     else if (action === 5) {
-      console.log(this.PROJECTS.value);
-      
+      if (this.selectedValueValidity === 1) {
+        let PROJECT_IDS : iDsProjectsReportPAAI = {
+          'iDs': this.data.arrayData
+        }
+
+        this.getReportPAA(PROJECT_IDS);
+      }
     }
-    console.log(this.selectedValueValidity);
+    // console.log(this.selectedValueValidity);
     
+  }
+
+
+  //Obtener reporte PAA
+  getReportPAA(project_ids:any){
+    let fileName = 'Reporte';
+    this.reportServices.postReportPAA(project_ids).subscribe(Response => {
+      // console.log(Response);
+      this.manageExcelFile(Response, fileName);
+      // this.dialogRef.close(Response);
+    }, error => {
+
+    });
+  }
+
+
+  //Función que recibe y descarga el reporte excel
+  manageExcelFile(response: any, fileName: string): void {
+    const dataType = response.type;
+    const binaryData = [];
+    binaryData.push(response);
+    
+    const filePath = window.URL.createObjectURL(new Blob(binaryData, { type: dataType }));
+    const downloadLink = document.createElement('a');
+    downloadLink.href = filePath;
+    downloadLink.setAttribute('download', fileName);
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    // this.openSnackBar('Exportado Exitosamente', `${fileName}. Descargado correctamente.`, 'success');
   }
 
 
@@ -90,5 +130,19 @@ export class AlertsPopUpComponent implements OnInit {
     }, error => {
       
     });
+  }
+
+
+  //Obtener los años de las vigencias
+  getListValidity() {
+    if (this.selectedValueValidity === 2) {
+      this.projectServices.postProjectValidity(this.data.arrayData).subscribe(Response => {
+        if (Response.status === 200) {
+          this.VALIDITYS_LIST = Response.data;
+        }
+      }, error => {
+        
+      });
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { filterProjectI, getAllProjectReportsI, getProjectByIdI, getProjectI, statusI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
+import { filterProjectI, getAllProjectReportsI, getProjectByIdI, getProjectI, postProjectValidityI, statusI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { environment } from 'src/environments/environment';
 import { AuthenticationService } from '../../Authentication/authentication.service';
 
@@ -52,5 +52,11 @@ export class ProjectService {
   getProjectsMini(): Observable<getAllProjectReportsI> {
     let dir = `${this.url}/ProyectoMini`;
     return this.http.get<getAllProjectReportsI>(dir);
+  }
+
+  //Endpoint para obtener los años de las vigencias
+  postProjectValidity(list_validitys:number[]): Observable<postProjectValidityI> {
+    let dir = `${this.url}/Vigencias`;
+    return this.http.post<postProjectValidityI> (dir, list_validitys);
   }
 }

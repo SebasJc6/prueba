@@ -165,3 +165,18 @@ export interface getProjectReportsI{
     codigoProyecto: number,
     nombre: string
 }
+
+
+//Interfaces para el endpoint que obtiene las Vigencias 
+export interface postProjectValidityI {
+    status: number,
+    message: string,
+    title: string,
+    data: number[]
+}
+
+
+//Interfaz para los IDs de los proyectos, endpiont de generar reporte PAA
+export interface iDsProjectsReportPAAI { 
+    'iDs': number[]
+}

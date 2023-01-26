@@ -53,7 +53,7 @@
         <div class="" mat-dialog-content>
             <div class="contTxt label1">
                 <mat-select class="contDataSelect" [(ngModel)]="selectedValueValidity">
-                    <mat-option *ngFor="let reports of REPORTS_LIST" [value]="reports.numeroReporte">{{reports.nombre}}</mat-option>
+                    <mat-option (click)="getListValidity()" *ngFor="let reports of REPORTS_LIST" [value]="reports.numeroReporte">{{reports.nombre}}</mat-option>
                 </mat-select>
             </div>
         </div>
@@ -61,20 +61,20 @@
         <div class="" mat-dialog-content *ngIf="selectedValueValidity === 2">
             <div class="contTxt label1">
                 <label class="label1">Año</label>
-                <mat-select class="contDataSelect" [formControl]="PROJECTS" multiple>
+                <mat-select class="contDataSelect" [formControl]="VALIDITYS" multiple>
                     <mat-select-trigger>
-                        {{PROJECTS.value?.[0] || ''}}
-                        <span *ngIf="(PROJECTS.value?.length || 0) > 1" class="example-additional-selection">
-                        (+{{(PROJECTS.value?.length || 0) - 1}} {{PROJECTS.value?.length === 2 ? 'other' : 'others'}})
+                        {{VALIDITYS.value?.[0] || ''}}
+                        <span *ngIf="(VALIDITYS.value?.length || 0) > 1" class="example-additional-selection">
+                        ( y {{(VALIDITYS.value?.length || 0) - 1}} {{VALIDITYS.value?.length === 2 ? 'año más' : 'años más'}})
                         </span>
                     </mat-select-trigger>
-                    <mat-option *ngFor="let projects of PROJECTS_LIST" [value]="projects.codigoProyecto">{{projects.codigoProyecto}}</mat-option>
+                    <mat-option *ngFor="let validity of VALIDITYS_LIST" [value]="validity">{{validity}}</mat-option>
                 </mat-select>
             </div>
         </div>
 
         <div class="buttons" style="margin-top: 3%;" mat-dialog-actions>
-            <button mat-button class="butonWarningInput btn" (click)="closeDialog(6)" cdkFocusInitial>EXPORTAR</button>
+            <button mat-button class="butonWarningInput btn" (click)="closeDialog(5)" cdkFocusInitial>EXPORTAR</button>
         </div>
     </div>
 </div>
@@ -102,7 +102,7 @@
                     <mat-select-trigger>
                         {{PROJECTS.value?.[0] || ''}}
                         <span *ngIf="(PROJECTS.value?.length || 0) > 1" class="example-additional-selection">
-                        (+{{(PROJECTS.value?.length || 0) - 1}} {{PROJECTS.value?.length === 2 ? 'other' : 'others'}})
+                        ( y {{(PROJECTS.value?.length || 0) - 1}} {{PROJECTS.value?.length === 2 ? 'proyecto más' : 'proyectos más'}})
                         </span>
                     </mat-select-trigger>
                     <mat-option *ngFor="let projects of PROJECTS_LIST" [value]="projects.codigoProyecto">{{projects.codigoProyecto}}</mat-option>
@@ -111,7 +111,7 @@
         </div>
 
         <div class="buttons" style="margin-top: 5%;" mat-dialog-actions>
-            <button mat-button class="butonWarningInput btn" (click)="closeDialog(5)" cdkFocusInitial>EXPORTAR</button>
+            <button mat-button class="butonWarningInput btn" (click)="closeDialog(6)" cdkFocusInitial>EXPORTAR</button>
         </div>
     </div>
 </div>

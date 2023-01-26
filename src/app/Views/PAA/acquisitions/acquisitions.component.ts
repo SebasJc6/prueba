@@ -14,6 +14,8 @@ import { CDPService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/cdp.ser
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 import { StockOrdersService } from 'src/app/Services/ServicesPAA/Requeriment/Stock-Orders/stock-orders.service';
+import { AlertsPopUpComponent } from 'src/app/Templates/alerts-pop-up/alerts-pop-up.component';
+import { MatDialog } from '@angular/material/dialog';
 
 export interface ChipColor {
   name: string;
@@ -54,7 +56,6 @@ export class AcquisitionsComponent implements OnInit {
 
   // dataSource = new MatTableDataSource<dataTableProjectI>(ELEMENT_DATA);
   dataSource!: MatTableDataSource<dataTableProjectI>;
-  selection = new SelectionModel<dataTableProjectI>(true, []);
   pageSizeOptions: number[] = [5, 10, 15, 20];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -69,7 +70,8 @@ export class AcquisitionsComponent implements OnInit {
     public router: Router, private authService: AuthenticationService,
     private serviceCdps: CDPService,
     private serviceStockOrders: StockOrdersService,
-    private snackBar: MatSnackBar,) {
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog) {
 
   }
   filterProjects = {} as filterProjectI;
@@ -93,7 +95,14 @@ export class AcquisitionsComponent implements OnInit {
   //Propiedad para reiniciar el input Importar CDPs/RPs y cargar el mismo archivo varias veces
   fileCDPsRPs: string = '';
 
-  fileStockOrders: string = '';
+  //Propiedad para reiniciar el input de archivos
+  inputFile: string = '';
+
+
+  //Checks
+  projectsChecked: dataTableProjectI[] = [];
+  selection = new SelectionModel<dataTableProjectI>(true, []);
+
   
   ngOnInit(): void {
     this.ngAfterViewInit();
@@ -146,6 +155,27 @@ export class AcquisitionsComponent implements OnInit {
 
     }, error => {
     });
+  }
+
+
+  //CHECKs
+   isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  checkboxLabel(row?: dataTableProjectI): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row}`;
   }
 
 
@@ -202,13 +232,24 @@ export class AcquisitionsComponent implements OnInit {
   onFileStockOrders(event: any) {
     const file: FileList = event.target.files;
     let fil : File = file[0];
-    this.fileStockOrders = '';
+    this.inputFile = '';
     if (file != null) {
       let FILE = new FormData();
       FILE.append('file', fil);
 
       this.importFileStockOrders(FILE);
     }
+  }
+
+
+  //Exportar excel proyectos
+  exportExcelProjects() {
+    this.projectsChecked = this.selection.selected;
+    let arrayProjects: number[] = this.projectsChecked.map(element => {
+      return element.proyectoID;
+    });
+
+    this.openDialog('Advertencia', 'Seleccione el reporte que desea exportar', 'warningSelectReports', '', 'reportes', arrayProjects);
   }
 
 
@@ -235,18 +276,6 @@ export class AcquisitionsComponent implements OnInit {
       console.log('Error: ', error);
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     });
-  }
-
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
   getPagination() {
@@ -358,5 +387,21 @@ export class AcquisitionsComponent implements OnInit {
        }
      }
     }
+
+
+
+  //Alerta PopUp
+  openDialog(title: string, message: string, type: string, message2: string, dataType: string, arrayData?: number[]): void {
+    const dialogRef = this.dialog.open(AlertsPopUpComponent, {
+      width: '450px',
+      height: '500px',
+      data: { title: title, message: message, type: type, message2: message2, dataType: dataType, arrayData: arrayData },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      
+    });
+  }
 
 }

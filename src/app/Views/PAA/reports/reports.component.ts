@@ -39,21 +39,18 @@ export class ReportsComponent implements OnInit {
     else if (numero_reporte === 4) {
       this.openSnackBar('Advertencia', `Para generar el reporte seleccione una solicitud de modificación`, 'warning', 'BandejaDeSolicitudes');
     }
-    else if (numero_reporte === 3 || numero_reporte === 5 || numero_reporte === 6 || numero_reporte === 7 || numero_reporte === 8 || numero_reporte === 9 ) {
+    else if (numero_reporte === 3 || numero_reporte === 5 || numero_reporte === 6 || numero_reporte === 7 || numero_reporte === 8 || numero_reporte === 9 || numero_reporte === 10) {
       this.openDialog('Advertencia', 'Seleccione uno o varios proyectos', 'warningSelectProjects', '', 'proyectos');
-    }
-    else if (numero_reporte === 10) {
-      this.openDialog('Advertencia', 'Seleccione el reporte que desea exportar', 'warningSelectReports', '', 'reportes');
     }
   }
 
 
   //Alerta PopUp
-  openDialog(title: string, message: string, type: string, message2: string, dataType: string): void {
+  openDialog(title: string, message: string, type: string, message2: string, dataType: string, arrayData?: number[]): void {
     const dialogRef = this.dialog.open(AlertsPopUpComponent, {
       width: '450px',
       height: '500px',
-      data: { title: title, message: message, type: type, message2: message2, dataType: dataType },
+      data: { title: title, message: message, type: type, message2: message2, dataType: dataType, arrayData: arrayData },
     });
   }
 
