@@ -1,21 +1,105 @@
+<!--MIGA PAN-->
+<!-- desde requerimiento -->
+<div class="mgp" *ngIf="mgp === 'requerimiento'">
+
+    <ul class="breadcrumb">
+        <li>Plan Anual de Adquisiciones</li>
+
+        <li> <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
+                <span>{{codProject}} </span>
+                <span class="nomProject">- {{nomProject}} </span>
+            </a>
+        </li>
+        <li>
+            <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
+                <span>Requerimientos</span>
+            </a>
+        </li>
+        <li>
+            <a class="href selected">
+                <span>Requerimiento {{dataRequirementNum}}</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<!-- desde solicitud -->
+<div class="mgp" *ngIf="mgp === 'solicitud'">
+    <ul class="breadcrumb">
+        <li>Plan Anual de Adquisiciones</li>
+
+        <li> <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
+                <span>{{codProject}} </span>
+                <span class="nomProject">- {{nomProject}} </span>
+            </a>
+        </li>
+        <li>
+            <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
+                <span>Requerimientos</span>
+            </a>
+        </li>
+        <li>
+            <a class="href" *ngIf="+dataSolicitudID === 0"
+                [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + 0]">
+                <span>Solicitud modificación</span>
+            </a>
+            <a class="href" *ngIf="+dataSolicitudID !== 0"
+                [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
+                <span>Solicitud modificación</span>
+            </a>
+        </li>
+        <li>
+            <a class="href selected">
+                >Requerimiento {{dataRequirementNum}}
+            </a>
+        </li>
+    </ul>
+
+</div>
+<!-- desde modificaciones solicitadas -->
+<div class="mgp" *ngIf="mgp === 'request-tray'">
+
+    <ul class="breadcrumb">
+        <li>Plan Anual de Adquisiciones</li>
+
+        <li> <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeSolicitudes']">
+                <span>Modificaciones solicitadas</span>
+            </a>
+        </li>
+        <li>
+            <a class="href" [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudID]">
+                <span>Solicitud modificación</span>
+            </a>
+        </li>
+        <li>
+            <a class="href selected">
+                <span>Requerimiento {{dataRequirementNum}}</span>
+            </a>
+        </li>
+    </ul>
+
+</div>
+<!-- desde bandeja de tareas -->
+<div class="mgp" *ngIf="mgp === 'taskTray'">
+    <ul class="breadcrumb">
+        <li>Plan Anual de Adquisiciones</li>
+
+        <li> <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeTareas']">
+                <span>Bandeja de tareas</span>
+            </a>
+        </li>
+        <li>
+            <a class="href selected">
+                <span>Requerimiento {{dataRequirementNum}}</span>
+            </a>
+        </li>
+    </ul>
+
+</div>
+
 <!--CONTENEDOR TOTAL COMPONENTE PROPIEDADES DEL REQUERIMIENTO-->
-<app-spinner></app-spinner>
+
 <div class="container center-h center-v">
 
-    <!--MIGA PAN-->
-    <div class="mgp">
-        Plan Anual de Adquisiciones
-        <a class="href" [routerLink]="['/WAPI/PAA/Adquisiciones']">
-            &nbsp;>&nbsp;{{codProject}}
-            -&nbsp;{{nomProject}}
-        </a>
-        <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos',dataProjectID]">
-            &nbsp;>&nbsp;Requerimientos
-        </a>
-        <a class="href selected">
-            &nbsp;>&nbsp;Requerimiento {{dataRequirementNum}}
-        </a>
-    </div>
 
     <!--BOTON QUE CARGA VERSION ACTUAL-->
     <div *ngIf="viewBtnVersion">
@@ -33,7 +117,7 @@
         <!-- #enddocregion slow-animation-duration -->
         <mat-tab *ngIf="viewVersionMod">
             <ng-template mat-tab-label>
-                Version modificada
+                Versión modificada
                 <mat-icon class="example-tab-icon">insert_drive_file</mat-icon>
             </ng-template>
             <form [formGroup]="proRequirementeForm">
@@ -41,7 +125,7 @@
                 <mat-accordion multi>
 
                     <!-- SECCION INFORMACION BASICA DEL PROYECTO -->
-                    <mat-expansion-panel class="menu-panel">
+                    <mat-expansion-panel class="menu-panel" [expanded]="true">
                         <mat-expansion-panel-header>
 
                             <!-- TITULO DE LA SECCION -->
@@ -64,7 +148,10 @@
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Número de requerimiento</p>
-                                        <input class="contData" formControlName="numeroReq">
+                                        <input class="contData" formControlName="numeroReq" [ngClass]="{
+                                                'contDataDisabled' : numReqDisabled == true,
+                                                'contDataError' : genericNumReq == true }" type="number"
+                                            onKeyPress="if(this.value.length==5) return false;">
                                         <mat-error *ngIf="errorNumReq">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
@@ -75,6 +162,8 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Dependencia destino de los recursos</p>
                                         <input type="text" class="contDataAutocomplete" [matAutocomplete]="auto"
+                                            [ngClass]="{
+                                            'contDataError' : genericDependenciaDes == true }"
                                             formControlName="dependenciaDes">
                                         <mat-error *ngIf="errorDependencia">
                                             Campo <strong>Obligatorio</strong>
@@ -82,15 +171,17 @@
                                         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
                                             (optionSelected)="onSelectionChange($event, 'dependenciaDes')">
                                             <mat-option [value]="option" *ngFor="let option of listDependencies">
-                                                {{option.codigo}}
+                                                {{option.codigo+ ' - ' + option.detalle}}
                                             </mat-option>
                                         </mat-autocomplete>
                                     </div>
                                 </div>
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
-                                        <p class="tltData">Mes estimado inicio de proceso de seleccion</p>
-                                        <mat-select formControlName="mesSeleccion" class="contDataAutocomplete">
+                                        <p class="tltData">Mes estimado inicio de proceso de selección</p>
+                                        <mat-select formControlName="mesSeleccion" class="contDataAutocomplete"
+                                            [ngClass]="{
+                                            'contDataError' : genericMesSeleccion == true }">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
                                                 selected="item.codigo">
                                                 {{item.idMes}} {{item.nameMes}}</mat-option>
@@ -101,7 +192,8 @@
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Mes estimado presentacion de ofertas</p>
-                                        <mat-select formControlName="mesOfertas" class="contDataAutocomplete">
+                                        <mat-select formControlName="mesOfertas" class="contDataAutocomplete" [ngClass]="{
+                                            'contDataError' : genericMesOfertas == true }">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
                                                 selected="item.codigo">
                                                 {{item.idMes}} {{item.nameMes}}</mat-option>
@@ -111,8 +203,10 @@
                                         </mat-error>
                                     </div>
                                     <div class="contTxt label1">
-                                        <p class="tltData">Mes de incio de ejecucion del contrato</p>
-                                        <mat-select formControlName="mesContrato" class="contDataAutocomplete">
+                                        <p class="tltData">Mes de inicio de ejecución del contrato</p>
+                                        <mat-select formControlName="mesContrato" class="contDataAutocomplete"
+                                            [ngClass]="{
+                                            'contDataError' : genericMesContrato == true }">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
                                                 selected="item.codigo">
                                                 {{item.idMes}} {{item.nameMes}}</mat-option>
@@ -121,23 +215,23 @@
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
                                     </div>
-                                    <div class="contTxt label3 ">
-                                        <p class="tltData">Duracion estimada del contrato</p>
-                                        <input type="number" class="contData" style="width: 20%;"
-                                            formControlName="duracionMes">
-                                        
-                                        meses&nbsp;&nbsp;
+                                    <div class="contTxt label3 arrContDias">
+                                        <p class="tltData">Duración estimada del contrato</p>
+                                        <input type="number" class="contData" style="width: 15%;" [ngClass]="{
+                                            'contDataError' : genericDuracionMes == true }"
+                                            formControlName="duracionMes"
+                                            onKeyPress="if(this.value.length==2) return false;">
 
-                                        <input type="number" class="contData" style="width: 20%;"
-                                            formControlName="duracionDias" maxlength="2" min="1" max="29">
+                                        <span>Meses</span>
 
-                                        Dias
+                                        <input type="number" class="contData arregCont2" style="width: 15%;" [ngClass]="{
+                                            'contDataError' : genericDuracionDias == true }"
+                                            formControlName="duracionDias"
+                                            onKeyPress="if(this.value.length==2) return false;">
+
+                                        <span>Días</span>
                                         <br>
                                         <mat-error *ngIf="errorDuratioMes">
-                                            Campo <strong>Obligatorio</strong>
-                                        </mat-error>
-                                        &nbsp;
-                                        <mat-error *ngIf="errorDurationDia">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
                                         <mat-error *ngIf="viewErrorDiaMax">
@@ -149,25 +243,20 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label2">
                                         <p class="tltData">Modalidad de selección</p>
-                                        <!-- <select formControlName="modalidadSel" class="contDataSelect">
-                                        <option [value]="item.modalidad_Sel_ID" *ngFor="let item of allSelectionMode">
-                                            {{item.codigo}}</option>
-                                    </select> -->
-                                        <input type="text" class="contDataAutocomplete" [matAutocomplete]="auto2"
-                                            formControlName="modalidadSel">
+                                        <mat-select formControlName="modalidadSel" class="contDataMod" [ngClass]="{
+                                            'contDataError' : genericModalidadSel == true }">
+                                            <mat-option [value]="item.modalidad_Sel_ID"
+                                                *ngFor="let item of allSelectionMode">
+                                                {{item.codigo}}</mat-option>
+                                        </mat-select>
                                         <mat-error *ngIf="errorModalidad">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
-                                        <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn"
-                                            (optionSelected)="onSelectionChange($event, 'modalidadSel')">
-                                            <mat-option [value]="item" *ngFor="let item of listSelcMode">
-                                                {{item.codigo}}
-                                            </mat-option>
-                                        </mat-autocomplete>
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Actuación Contractual</p>
                                         <mat-select formControlName="actuacionCont" class="contDataAutocomplete"
+                                            [ngClass]="{'contDataError' : genericActuacionCont == true }"
                                             (valueChange)="onSelectionChange($event , 'actContractual')">
                                             <mat-option [value]="item.actuacion_ID"
                                                 *ngFor="let item of allContractualAction">
@@ -177,19 +266,28 @@
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
                                     </div>
-                                    <div class="contTxt label1">
+                                    <div class="contTxt label5">
                                         <p class="tltData">Número de contrato</p>
-                                        <input class="contData" formControlName="numeroCont"
-                                            [ngClass]="{'contDataDisabled' : disabledInicial == true }">
-
+                                        <input class="contData1" formControlName="numeroCont" [ngClass]="{'contDataDisabled' : disabledInicial == true 
+                                        , 'contDataError' : genericNumeroCont == true }"
+                                            onKeyPress="if(this.value.length==15) return false;">
                                     </div>
+                                    <div class="contTxt label5">
+                                        <p class="tltData">Año</p>
+                                        <mat-select formControlName="anioContrato" class="contDataSelect2"
+                                            [ngClass]="{'contDataDisabled' : disabledInicial == true }">
+                                            <mat-option [value]="item" *ngFor="let item of years">
+                                                {{item}}</mat-option>
+                                        </mat-select>
+                                    </div>
+
                                 </div>
 
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Tipo de contrato</p>
-                                        <mat-select formControlName="tipoCont" class="contDataAutocomplete"
-                                            [ngClass]="{'contDataDisabled' : disabledAdicion == true }">
+                                        <mat-select formControlName="tipoCont" class="contDataAutocomplete" [ngClass]="{'contDataDisabled' : disabledAdicion == true,
+                                        'contDataError' : genericTipoCont == true}">
                                             <mat-option [value]="item.tipoContrato_ID"
                                                 *ngFor="let item of listContacType">
                                                 {{item.nombre}}</mat-option>
@@ -197,8 +295,8 @@
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Perfil</p>
-                                        <mat-select formControlName="perfil" class="contDataAutocomplete"
-                                            [ngClass]="{'contDataDisabled' : disabledAdicion == true }">
+                                        <mat-select formControlName="perfil" class="contDataAutocomplete" [ngClass]="{'contDataDisabled' : disabledAdicion == true ,
+                                        'contDataError' : genericPerfil == true}">
                                             <mat-option [value]="item.perfil_ID" *ngFor="let item of allProfile">
                                                 {{item.nombre_Perfil}}</mat-option>
                                         </mat-select>
@@ -206,15 +304,18 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Valor Honorarios / mes</p>
                                         <input class="contData" formControlName="valorHonMes"
-                                            value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}"
-                                            [ngClass]="{'contDataDisabled' : disabledAdicion == true }">
+                                            value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}" [ngClass]="{'contDataDisabled' : disabledAdicion == true,
+                                            'contDataError' : genericValorHonMes == true }"
+                                            onKeyPress="if(this.value.length==17) return false;">
                                         <mat-error *ngIf="errorRangeSararial">
                                             <strong>{{msjVerifyRangeSararial}}</strong>
                                         </mat-error>
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Cantidad de contratos</p>
-                                        <input class="contData" formControlName="cantidadCont">
+                                        <input class="contData" formControlName="cantidadCont" [ngClass]="{
+                                            'contDataError' : genericCantidadCont == true }" type="number"
+                                            onKeyPress="if(this.value.length==1) return false;">
                                         <mat-error *ngIf="errorCantContrato">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
@@ -224,7 +325,8 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Descripción (Objeto del contrato)</p>
-                                        <textarea class="contDataArea" #input maxlength="3000"
+                                        <textarea class="contDataArea" #input maxlength="3000" rows="6" [ngClass]="{
+                                            'contDataError' : genericDescripcion == true }"
                                             formControlName="descripcion"></textarea>
                                         <mat-hint align="end">{{input.value.length || 0}}/3000</mat-hint>
                                         <mat-error *ngIf="errorDescripcionCont">
@@ -259,7 +361,7 @@
                             <div class="formCont" formGroupName="clasPresFinaForm">
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
-                                        <p class="tltData">Número de modificacion</p>
+                                        <p class="tltData">Número de modificación</p>
                                         <input class="contData contDataDisabled" value="06"
                                             formControlName="numModificacion">
                                     </div>
@@ -334,7 +436,7 @@
                                         </mat-error>
                                     </div>
                                     <div class="contTxt label1">
-                                        <p class="tltData">fuente MSPS</p>
+                                        <p class="tltData">Fuente MSPS</p>
                                         <input class="contData contDataDisabled" formControlName="ftnMSPS">
                                     </div>
                                 </div>
@@ -360,7 +462,8 @@
 
                                     <div class="contTxt label1">
                                         <p class="tltData">MGA</p>
-                                        <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoMGA"
+                                        <input class="contData contDataDisabled" formControlName="mga">
+                                        <!-- <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoMGA"
                                             formControlName="mga">
                                         <mat-error *ngIf="errorMGA">
                                             Campo <strong>Obligatorio</strong>
@@ -370,11 +473,13 @@
                                             <mat-option [value]="option" *ngFor="let option of listMGA">
                                                 {{option.codigoMGA}}
                                             </mat-option>
-                                        </mat-autocomplete>
+                                        </mat-autocomplete>-->
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">POSPRE</p>
-                                        <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoPOSPRE"
+                                        <input class="contData contDataDisabled" formControlName="pospre">
+
+                                        <!-- <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoPOSPRE"
                                             formControlName="pospre">
                                         <mat-error *ngIf="errorPOSPRE">
                                             Campo <strong>Obligatorio</strong>
@@ -384,7 +489,7 @@
                                             <mat-option [value]="option" *ngFor="let option of listPOSPRE">
                                                 {{option.codigo}}
                                             </mat-option>
-                                        </mat-autocomplete>
+                                        </mat-autocomplete> -->
                                     </div>
 
                                 </div>
@@ -524,7 +629,7 @@
                                             <td mat-cell *matCellDef="let element">
                                                 <div class="Actions">
                                                     <mat-icon mat-icon-button class="btnActions" matTooltip="Editar"
-                                                        (click)="openBudgetModification(element)">
+                                                        (click)="openBudgetModification('editar',element)">
                                                         edit
                                                     </mat-icon>
                                                     <mat-icon mat-icon-button style="margin-left: 5px;"
@@ -598,7 +703,6 @@
                                                         Código UNSPSC
                                                     <td mat-cell *matCellDef="let element">{{
                                                         element.codigoUNSPSC||element.unspsc.codigoUNSPSC}}</td>
-
                                                 </ng-container>
 
                                                 <ng-container matColumnDef="descripcion">
@@ -648,40 +752,49 @@
                                 <mat-card class="colorCard2">
 
                                     <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
-                                    <div class="formCont" formGroupName="initialAppro">
+                                    <div class="formCont" [formGroup]="initialAppro">
                                         <div class="tablaCont">
-                                            <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 0</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia0">
-                                            </div>
 
                                             <div class="contTxt label1">
-                                                <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor0">
-                                            </div>
+                                                <p class="tltTitleData">Apropiación inicial</p>
 
-                                            <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 1</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia1">
-                                            </div>
-                                            <div class="contTxt label1">
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor1">
+                                                <input class="contData contDataDisabled"
+                                                    formControlName="valorApropiacion_Incial">
                                             </div>
                                         </div>
-
                                         <div class="tablaCont">
+
                                             <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 2</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia2">
+                                                <p class="tltTitleData">Apropiación disponible</p>
+
+                                                <p class="tltData">Año vigencia </p>
+                                                <!-- <input class="contData contDataDisabled" formControlName="vigencia2"> -->
+                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect"
+                                                    (selectionChange)="changeInitilYears($event)">
+                                                    <mat-option [value]="item" *ngFor="let item of initialAppYaers">
+                                                        {{item}}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="errInitialAppYaers">
+                                                    <strong>{{msjInitialAppYaers}}</strong>
+                                                </mat-error>
                                             </div>
                                             <div class="contTxt label1">
+                                                <p class="tltTitleData arreg"> </p>
+
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor2">
+                                                <input class="contData contDataDisabled"
+                                                    formControlName="valorApropiacionAnio">
                                             </div>
-                                            <div class="contTxt label2">
-                                                <p class="tltData">Valor total</p>
-                                                <input class="contData contDataDisabled" formControlName="valorTotal">
+                                        </div>
+                                        <div class="tablaCont">
+
+                                            <div class="contTxt label1">
+                                                <p class="tltTitleData">Apropiación final</p>
+
+                                                <p class="tltData">Valor</p>
+                                                <input class="contData contDataDisabled"
+                                                    formControlName="valorApropiacion_Final">
                                             </div>
                                         </div>
                                     </div>
@@ -689,7 +802,6 @@
                             </mat-expansion-panel>
                         </mat-accordion>
                     </mat-expansion-panel>
-
                     <!-- SECCION REVISIONES -->
                     <mat-expansion-panel class="menu-panel" *ngIf="viewsSeccionReviews">
                         <mat-expansion-panel-header>
@@ -708,7 +820,7 @@
                                         <div class="tablaCont">
                                             <div class="contTxt label2">
                                                 <p class="tltData">Área</p>
-                                                <mat-select formControlName="area" class="contDataSelect"
+                                                <mat-select formControlName="area" class="contDataSelectRev"
                                                     (valueChange)="onSelectionChange($event , 'areaRevicion')"
                                                     [displayWith]="displayFnArea">
                                                     <mat-option [value]="item" *ngFor="let item of allReviewsArea">
@@ -720,7 +832,7 @@
                                             </div>
                                             <div class="contTxt label2">
                                                 <p class="tltData">Concepto</p>
-                                                <mat-select class="contDataSelect" formControlName="concepto"
+                                                <mat-select class="contDataSelectRev" formControlName="concepto"
                                                     (valueChange)="onSelectionChange($event , 'conceptoRevicion')">
                                                     <mat-option *ngFor="let item of allConcepts" [value]="item">{{item}}
                                                     </mat-option>
@@ -885,7 +997,7 @@
         </mat-tab>
         <mat-tab *ngIf="viewsReviews">
             <ng-template mat-tab-label>
-                Versión Revision
+                Versión Revisión
                 <mat-icon class="example-tab-icon">insert_drive_file</mat-icon>
             </ng-template>
             <form [formGroup]="versionReviewForm">
@@ -916,25 +1028,28 @@
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Número de requerimiento</p>
-                                        <input class="contData contDataDisabled" formControlName="numeroReqRew">
+                                        <input class="contData contDataDisabled" formControlName="numeroReqRew"
+                                            [ngClass]="{'contDataModified' : numeroRequerimientoModified == true }">
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Dependencia destino de los recursos</p>
                                         <input type="text" class="contDataAutocomplete contDataDisabled"
+                                            [ngClass]="{'contDataModified' : dependenciaDestinoModified == true }"
                                             [matAutocomplete]="auto" formControlName="dependenciaDesRew">
-
                                         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
                                             (optionSelected)="onSelectionChange($event, 'dependenciaDes')">
                                             <mat-option [value]="option" *ngFor="let option of listDependencies">
                                                 {{option.codigo}}
                                             </mat-option>
                                         </mat-autocomplete>
+
                                     </div>
                                 </div>
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
-                                        <p class="tltData">Mes estimado inicio de proceso de seleccion</p>
+                                        <p class="tltData">Mes estimado inicio de proceso de selección</p>
                                         <mat-select formControlName="mesSeleccionRew"
+                                            [ngClass]="{'contDataModified' : mesEstimadoInicioSeleccionModified == true }"
                                             class="contDataAutocomplete contDataDisabled">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
                                                 selected="item.codigo">
@@ -945,6 +1060,7 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Mes estimado presentacion de ofertas</p>
                                         <mat-select formControlName="mesOfertasRew"
+                                            [ngClass]="{'contDataModified' : mesEstimadoPresentacionModified == true }"
                                             class="contDataAutocomplete contDataDisabled">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
                                                 selected="item.codigo">
@@ -953,8 +1069,9 @@
 
                                     </div>
                                     <div class="contTxt label1">
-                                        <p class="tltData">Mes de incio de ejecucion del contrato</p>
+                                        <p class="tltData">Mes de inicio de ejecución del contrato</p>
                                         <mat-select formControlName="mesContratoRew"
+                                            [ngClass]="{'contDataModified' : mesEstmadoInicioEjecucionModified == true }"
                                             class="contDataAutocomplete contDataDisabled">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
                                                 selected="item.codigo">
@@ -962,27 +1079,35 @@
                                         </mat-select>
 
                                     </div>
-                                    <div class="contTxt label3 ">
-                                        <p class="tltData">Duracion estimada del contrato</p>
+                                    <div class="contTxt label3 arrContDias ">
+                                        <p class="tltData">Duración estimada del contrato</p>
                                         <input type="number" class="contData contDataDisabled" style="width: 20%;"
+                                            [ngClass]="{'contDataModified' : duracionMesModified == true }"
                                             formControlName="duracionMesRew">
+                                        <span>Meses</span>
 
-                                        meses&nbsp;&nbsp;
 
                                         <input type="number" class="contData contDataDisabled" style="width: 20%;"
+                                            [ngClass]="{'contDataModified' : duracionDiasModified == true }"
                                             formControlName="duracionDiasRew" maxlength="2" min="1" max="29">
+                                        <span>Días</span>
 
-                                        Dias
                                     </div>
                                 </div>
 
                                 <div class="tablaCont">
                                     <div class="contTxt label2">
                                         <p class="tltData">Modalidad de selección</p>
-                                        <!-- <select formControlName="modalidadSel" class="contDataSelect">
-                                            <option [value]="item.modalidad_Sel_ID" *ngFor="let item of allSelectionMode">
-                                                {{item.codigo}}</option>
-                                        </select> -->
+                                        <mat-select formControlName="modalidadSelRew"
+                                            [ngClass]="{'contDataModified' : modalidadSeleccionModified == true }"
+                                            class="contDataMod contDataDisabled">
+                                            <mat-option [value]="item.modalidad_Sel_ID"
+                                                *ngFor="let item of allSelectionMode">
+                                                {{item.codigo}}</mat-option>
+                                        </mat-select>
+                                        <!-- <mat-error *ngIf="errorModalidad">
+                                            Campo <strong>Obligatorio</strong>
+                                        </mat-error>
                                         <input type="text" class="contDataAutocomplete contDataDisabled"
                                             [matAutocomplete]="auto2" formControlName="modalidadSelRew">
 
@@ -991,11 +1116,12 @@
                                             <mat-option [value]="item" *ngFor="let item of listSelcMode">
                                                 {{item.codigo}}
                                             </mat-option>
-                                        </mat-autocomplete>
+                                        </mat-autocomplete> -->
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Actuación Contractual</p>
                                         <mat-select formControlName="actuacionContRew"
+                                            [ngClass]="{'contDataModified' : actuacionModified == true }"
                                             class="contDataAutocomplete contDataDisabled"
                                             (valueChange)="onSelectionChange($event , 'actContractual')">
                                             <mat-option [value]="item.actuacion_ID"
@@ -1004,10 +1130,20 @@
                                         </mat-select>
 
                                     </div>
-                                    <div class="contTxt label1">
+                                    <div class="contTxt label5">
                                         <p class="tltData">Número de contrato</p>
-                                        <input class="contData contDataDisabled" formControlName="numeroContRew">
+                                        <input class="contData contDataDisabled" formControlName="numeroContRew"
+                                            [ngClass]="{'contDataModified' : numeroDeContratoModified == true }">
 
+                                    </div>
+                                    <div class="contTxt label5">
+                                        <p class="tltData">Año</p>
+                                        <mat-select formControlName="anioContratoRew"
+                                            class="contDataSelect2 contDataDisabled"
+                                            [ngClass]="{'contDataModified' : anioContratoModified == true }">
+                                            <mat-option [value]="item" *ngFor="let item of years">
+                                                {{item}}</mat-option>
+                                        </mat-select>
                                     </div>
                                 </div>
 
@@ -1015,6 +1151,7 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Tipo de contrato</p>
                                         <mat-select formControlName="tipoContRew"
+                                            [ngClass]="{'contDataModified' : tipoContratoModified == true }"
                                             class="contDataAutocomplete contDataDisabled">
                                             <mat-option [value]="item.tipoContrato_ID"
                                                 *ngFor="let item of listContacType">
@@ -1024,6 +1161,7 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Perfil</p>
                                         <mat-select formControlName="perfilRew"
+                                            [ngClass]="{'contDataModified' : perfilModified == true }"
                                             class="contDataAutocomplete contDataDisabled">
                                             <mat-option [value]="item.perfil_ID" *ngFor="let item of allProfile">
                                                 {{item.nombre_Perfil}}</mat-option>
@@ -1032,6 +1170,7 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Valor Honorarios / mes</p>
                                         <input class="contData contDataDisabled" formControlName="valorHonMesRew"
+                                            [ngClass]="{'contDataModified' : honorariosModified == true }"
                                             value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}">
                                         <mat-error *ngIf="errorRangeSararial">
                                             <strong>{{msjVerifyRangeSararial}}</strong>
@@ -1039,7 +1178,8 @@
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Cantidad de contratos</p>
-                                        <input class="contData contDataDisabled" formControlName="cantidadContRew">
+                                        <input class="contData contDataDisabled" formControlName="cantidadContRew"
+                                            [ngClass]="{'contDataModified' : cantidadDeContratosModified == true }">
                                         <mat-error *ngIf="errorCantContrato">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
@@ -1049,7 +1189,8 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Descripción (Objeto del contrato)</p>
-                                        <textarea class="contDataArea contDataDisabled"
+                                        <textarea class="contDataArea contDataDisabled" rows="6"
+                                            [ngClass]="{'contDataModified' : descripcionModified == true }"
                                             formControlName="descripcionRew"></textarea>
                                         <mat-error *ngIf="errorDescripcionCont">
                                             Campo <strong>Obligatorio</strong>
@@ -1083,75 +1224,89 @@
                                     <ng-container matColumnDef="mes">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="mes">
                                             Mes
-                                        <td mat-cell *matCellDef="let element">{{ element.mes}}</td>
+                                        <td mat-cell *matCellDef="let element">{{ element.cadenaPresupuestalDto.mes}}
+                                        </td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="anioVigRecursos">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="vig">
                                             Vigencia de los Recursos
-                                        <td mat-cell *matCellDef="let element">{{ element.anioVigRecursos}}</td>
+                                        <td mat-cell *matCellDef="let element">{{
+                                            element.cadenaPresupuestalDto.anioVigRecursos}}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="auxiliar">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="aux">
                                             Auxiliar
-                                        <td mat-cell *matCellDef="let element">{{ element.auxiliar.codigoAuxiliar}}</td>
+                                        <td mat-cell *matCellDef="let element">{{
+                                            element.cadenaPresupuestalDto.auxiliar.codigoAuxiliar}}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="detalleFuente">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="det">
                                             Detalle Fuente
-                                        <td mat-cell *matCellDef="let element">{{ element.fuente.descripcion}}</td>
+                                        <td mat-cell *matCellDef="let element">{{
+                                            element.cadenaPresupuestalDto.fuente.descripcion}}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="actividad">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="Rew">
                                             Actividad
-                                        <td mat-cell *matCellDef="let element">{{ element.actividad.codigo}}</td>
+                                        <td mat-cell *matCellDef="let element">{{
+                                            element.cadenaPresupuestalDto.actividad.codigo}}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="meta">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="met">
                                             Meta
-                                        <td mat-cell *matCellDef="let element">{{ element.actividad.metaODS}}</td>
+                                        <td mat-cell *matCellDef="let element">{{
+                                            element.cadenaPresupuestalDto.actividad.metaODS}}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="fuente">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="fue">
                                             Fuente
-                                        <td mat-cell *matCellDef="let element">{{ element.fuente.codigoFuente}}</td>
+                                        <td mat-cell *matCellDef="let element">{{
+                                            element.cadenaPresupuestalDto.fuente.codigoFuente}}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="fuenteMSPS">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="msp">
                                             Fuente MSPS
-                                        <td mat-cell *matCellDef="let element">{{ element.fuente.fuenteMSPS}}</td>
+                                        <td mat-cell *matCellDef="let element">{{
+                                            element.cadenaPresupuestalDto.fuente.fuenteMSPS}}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="MGA">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="mga">
                                             MGA
-                                        <td mat-cell *matCellDef="let element">{{ element.mga.codigoMGA}}</td>
+                                        <td mat-cell *matCellDef="let element">{{
+                                            element.cadenaPresupuestalDto.mga.codigoMGA}}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="pospre">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="pos">
                                             POSPRE
-                                        <td mat-cell *matCellDef="let element">{{ element.pospre.codigo}}</td>
+                                        <td mat-cell *matCellDef="let element">{{
+                                            element.cadenaPresupuestalDto.pospre.codigo}}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="apropiacionDisponible">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="apr">
                                             Apropiación Disponible
                                         <td mat-cell *matCellDef="let element">
-                                            {{ element.apropiacionDisponible | currency:'USD' : 'symbol' : '1.0-0'}}
+                                            {{ element.cadenaPresupuestalDto.apropiacionDisponible | currency:'USD' :
+                                            'symbol' : '1.0-0'}}
                                         </td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="aumento">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="aum">
                                             Aumento
-                                        <td mat-cell *matCellDef="let element">{{ element.aumento| currency: 'USD' :
+                                        <td mat-cell *matCellDef="let element"
+                                            [ngClass]="{'contDataModified' : element.cadenaPresupuestalDto.aumentoModified == true }">
+                                            {{ element.cadenaPresupuestalDto.aumento|
+                                            currency: 'USD' :
                                             'symbol'
                                             :'1.0-0'}}</td>
                                     </ng-container>
@@ -1159,14 +1314,17 @@
                                     <ng-container matColumnDef="disminucion">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="dis">
                                             Disminución
-                                        <td mat-cell *matCellDef="let element">{{ element.disminucion| currency: 'USD' :
+                                        <td mat-cell *matCellDef="let element"
+                                            [ngClass]="{'contDataModified' : element.cadenaPresupuestalDto.disminucionModified == true }">
+                                            {{ element.cadenaPresupuestalDto.disminucion| currency: 'USD' :
                                             'symbol' : '1.0-0'}}</td>
                                     </ng-container>
 
                                     <ng-container matColumnDef="apropiacionDefinitiva">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="aproDef">
                                             Apropiación Definitiva
-                                        <td mat-cell *matCellDef="let element">{{ element.apropiacionDefinitiva |
+                                        <td mat-cell *matCellDef="let element">{{
+                                            element.cadenaPresupuestalDto.apropiacionDefinitiva |
                                             currency:'USD'
                                             : 'symbol' : '1.0-0'}}
                                         </td>
@@ -1175,7 +1333,8 @@
                                     <ng-container matColumnDef="compromisos">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="Com">
                                             Compromisos
-                                        <td mat-cell *matCellDef="let element">{{ element.compromisos | currency: 'USD'
+                                        <td mat-cell *matCellDef="let element">{{
+                                            element.cadenaPresupuestalDto.compromisos | currency: 'USD'
                                             :
                                             'symbol' : '1.0-0'}}
                                         </td>
@@ -1184,14 +1343,31 @@
                                     <ng-container matColumnDef="giros">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="Gir">
                                             Giros
-                                        <td mat-cell *matCellDef="let element">{{ element.giros | currency: 'USD' :
+                                        <td mat-cell *matCellDef="let element">{{ element.cadenaPresupuestalDto.giros |
+                                            currency: 'USD' :
                                             'symbol' :
                                             '1.0-0'}}
                                         </td>
                                     </ng-container>
+                                    <ng-container matColumnDef="acciones">
+                                        <tr>
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="acc"> Acciones
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td mat-cell *matCellDef="let element">
+                                                <div class="Actions">
+                                                    <mat-icon mat-icon-button class="btnActions" matTooltip="Ver"
+                                                        (click)="openBudgetModification('ver',element.cadenaPresupuestalDto)">
+                                                        remove_red_eye
+                                                    </mat-icon>
+                                                </div>
+                                            </td>
+                                        <tr>
+                                    </ng-container>
 
                                     <tr mat-header-row *matHeaderRowDef="displayedColumnsRew"></tr>
-                                    <tr mat-row *matRowDef="let row; columns: displayedColumnsRew"></tr>S
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumnsRew"></tr>
                                 </table>
                             </div>
                             <!-- FIN TABLA -->
@@ -1217,14 +1393,20 @@
                                                 <ng-container matColumnDef="codigoUNSPSC">
                                                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="Cod">
                                                         Código UNSPSC
-                                                    <td mat-cell *matCellDef="let element">{{ element.codigoUNSPSC}}
+                                                    <td mat-cell *matCellDef="let element"
+                                                        [ngClass]="{'contDataModified' : element.unspscNew == true }">
+                                                        {{ element.codigoUNSPSC ||
+                                                        element.unspsc.codigoUNSPSC}}
                                                     </td>
                                                 </ng-container>
 
                                                 <ng-container matColumnDef="descripcion">
                                                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="Des">
                                                         Descripción de categoría
-                                                    <td mat-cell *matCellDef="let element">{{ element.descripcion}}</td>
+                                                    <td mat-cell *matCellDef="let element"
+                                                        [ngClass]="{'contDataModified' : element.unspscNew == true }">
+                                                        {{ element.descripcion ||
+                                                        element.unspsc.descripcion }}</td>
                                                 </ng-container>
 
 
@@ -1247,43 +1429,50 @@
 
                                 <!-- FORMULARIO APROPIACION INICIAL -->
                                 <mat-card class="colorCard2">
-
                                     <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
-                                    <div class="formCont">
+                                    <div class="formCont" [formGroup]="initialAppro">
                                         <div class="tablaCont">
-                                            <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 0</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia0Rew">
-                                            </div>
 
                                             <div class="contTxt label1">
-                                                <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor0Rew">
-                                            </div>
+                                                <p class="tltTitleData">Apropiación inicial</p>
 
-                                            <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 1</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia1Rew">
-                                            </div>
-                                            <div class="contTxt label1">
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor1Rew">
+                                                <input class="contData contDataDisabled"
+                                                    formControlName="valorApropiacion_Incial">
                                             </div>
                                         </div>
-
                                         <div class="tablaCont">
+
                                             <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 2</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia2Rew">
+                                                <p class="tltTitleData">Apropiación disponible</p>
+
+                                                <p class="tltData">Año vigencia </p>
+                                                <!-- <input class="contData contDataDisabled" formControlName="vigencia2"> -->
+                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect"
+                                                    (selectionChange)="changeInitilYears($event)">
+                                                    <mat-option [value]="item" *ngFor="let item of initialAppYaers">
+                                                        {{item}}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="errInitialAppYaers">
+                                                    <strong>{{msjInitialAppYaers}}</strong>
+                                                </mat-error>
                                             </div>
                                             <div class="contTxt label1">
+                                                <p class="tltTitleData arreg"> </p>
+
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor2Rew">
-                                            </div>
-                                            <div class="contTxt label2">
-                                                <p class="tltData">Valor total</p>
                                                 <input class="contData contDataDisabled"
-                                                    formControlName="valorTotalRew">
+                                                    formControlName="valorApropiacionAnio">
+                                            </div>
+                                        </div>
+                                        <div class="tablaCont">
+
+                                            <div class="contTxt label1">
+                                                <p class="tltTitleData">Apropiación final</p>
+
+                                                <p class="tltData">Valor</p>
+                                                <input class="contData contDataDisabled"
+                                                    formControlName="valorApropiacion_Final">
                                             </div>
                                         </div>
                                     </div>
@@ -1311,7 +1500,7 @@
                                         <div class="tablaCont">
                                             <div class="contTxt label2">
                                                 <p class="tltData">Área</p>
-                                                <mat-select formControlName="area" class="contDataSelect"
+                                                <mat-select formControlName="area" class="contDataSelectRev"
                                                     (valueChange)="onSelectionChange($event , 'areaRevicion')"
                                                     [displayWith]="displayFnArea">
                                                     <mat-option [value]="item" *ngFor="let item of allReviewsArea">
@@ -1323,7 +1512,7 @@
                                             </div>
                                             <div class="contTxt label2">
                                                 <p class="tltData">Concepto</p>
-                                                <mat-select class="contDataSelect" formControlName="concepto"
+                                                <mat-select class="contDataSelectRev" formControlName="concepto"
                                                     (valueChange)="onSelectionChange($event , 'conceptoRevicion')">
                                                     <mat-option *ngFor="let item of allConcepts" [value]="item">{{item}}
                                                     </mat-option>
@@ -1347,7 +1536,7 @@
                                         <mat-card-actions class="btnCard">
                                             <!-- <button class="buton2 btn" mat-button mat-icon-button   (click)="addDataTbl('revisiones')"> -->
                                             <button class="buton2 btn" mat-button mat-icon-button
-                                                (click)="btnReviews(0,'Agregar')">
+                                                (click)="btnReviews(0,'add')">
                                                 AÑADIR
                                             </button>
                                         </mat-card-actions>
@@ -1358,7 +1547,7 @@
 
                                 <!-- TABLA REVISIONES -->
                                 <div [ngClass]="{'tableReviews' : statusReq != 'En Modificación'|| 'En Revisión' ,
-                                'tbleRew' : statusReq == 'En Revisión' }">
+                                'tbleRew' : statusReq == 'En Revisión' }" *ngIf="!viewTableReviews">
                                     <table mat-table [dataSource]="dataSourceRevisiones" class="mat-elevation-z8"
                                         matSort>
 
@@ -1378,8 +1567,7 @@
                                         <ng-container matColumnDef="area">
                                             <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
                                                 Área
-                                            <td mat-cell *matCellDef="let element">{{ element.area.nombre ||
-                                                element.area}}</td>
+                                            <td mat-cell *matCellDef="let element">{{ element.area.nombre}}</td>
                                         </ng-container>
 
                                         <ng-container matColumnDef="concepto">
@@ -1424,6 +1612,48 @@
 
                                         <tr mat-header-row *matHeaderRowDef="revisionesColumns"></tr>
                                         <tr mat-row *matRowDef="let row; columns: revisionesColumns"></tr>
+                                    </table>
+                                </div>
+                                <!-- FIN TABLA -->
+                                <!-- TABLA REVISIONES -->
+                                <div class="tableReviews" *ngIf="viewTableReviews">
+                                    <table mat-table [dataSource]="dataSourceRevisionesView" class="mat-elevation-z8"
+                                        matSort>
+
+                                        <ng-container matColumnDef="fecha">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Fecha
+                                            <td mat-cell *matCellDef="let element">{{ element.fecha ||
+                                                element.fechaRevision}}</td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="usuario">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Usuario
+                                            <td mat-cell *matCellDef="let element">{{ element.usuario}}</td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="area">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Área
+                                            <td mat-cell *matCellDef="let element">{{ element.area.nombre ||
+                                                element.area}}</td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="concepto">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Concepto
+                                            <td mat-cell *matCellDef="let element">{{ element.concepto}}</td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="observacion">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="">
+                                                Observación
+                                            <td mat-cell *matCellDef="let element">{{ element.observacion}}</td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="revisionesColumnsView"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: revisionesColumnsView"></tr>
                                     </table>
                                 </div>
                                 <!-- FIN TABLA -->
@@ -1494,7 +1724,7 @@
                                 </div>
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
-                                        <p class="tltData">Mes estimado inicio de proceso de seleccion</p>
+                                        <p class="tltData">Mes estimado inicio de proceso de selección</p>
                                         <mat-select formControlName="mesSeleccionAct"
                                             class="contDataAutocomplete contDataDisabled">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
@@ -1514,7 +1744,7 @@
 
                                     </div>
                                     <div class="contTxt label1">
-                                        <p class="tltData">Mes de incio de ejecucion del contrato</p>
+                                        <p class="tltData">Mes de inicio de ejecución del contrato</p>
                                         <mat-select formControlName="mesContratoAct"
                                             class="contDataAutocomplete contDataDisabled">
                                             <mat-option [value]="item.idMes" *ngFor="let item of cantMeses"
@@ -1523,28 +1753,30 @@
                                         </mat-select>
 
                                     </div>
-                                    <div class="contTxt label3 ">
-                                        <p class="tltData">Duracion estimada del contrato</p>
+                                    <div class="contTxt label3 arrContDias">
+                                        <p class="tltData">Duración estimada del contrato</p>
                                         <input type="number" class="contData contDataDisabled" style="width: 20%;"
                                             formControlName="duracionMesAct">
 
-                                        meses&nbsp;&nbsp;
+                                        <span>Meses</span>
 
                                         <input type="number" class="contData contDataDisabled" style="width: 20%;"
                                             formControlName="duracionDiasAct" maxlength="2" min="1" max="29">
 
-                                        Dias
+                                        <span>Días</span>
                                     </div>
                                 </div>
 
                                 <div class="tablaCont">
                                     <div class="contTxt label2">
                                         <p class="tltData">Modalidad de selección</p>
-                                        <!-- <select formControlName="modalidadSel" class="contDataSelect">
-                                            <option [value]="item.modalidad_Sel_ID" *ngFor="let item of allSelectionMode">
-                                                {{item.codigo}}</option>
-                                        </select> -->
-                                        <input type="text" class="contDataAutocomplete contDataDisabled"
+                                        <mat-select formControlName="modalidadSelAct"
+                                            class="contDataMod contDataDisabled">
+                                            <mat-option [value]="item.modalidad_Sel_ID"
+                                                *ngFor="let item of allSelectionMode">
+                                                {{item.codigo}}</mat-option>
+                                        </mat-select>
+                                        <!-- <input type="text" class="contDataAutocomplete contDataDisabled"
                                             [matAutocomplete]="auto2" formControlName="modalidadSelAct">
 
                                         <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn"
@@ -1552,7 +1784,7 @@
                                             <mat-option [value]="item" *ngFor="let item of listSelcMode">
                                                 {{item.codigo}}
                                             </mat-option>
-                                        </mat-autocomplete>
+                                        </mat-autocomplete> -->
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Actuación Contractual</p>
@@ -1565,10 +1797,19 @@
                                         </mat-select>
 
                                     </div>
-                                    <div class="contTxt label1">
+                                    <div class="contTxt label5">
                                         <p class="tltData">Número de contrato</p>
                                         <input class="contData contDataDisabled" formControlName="numeroContAct">
 
+                                    </div>
+                                    <div class="contTxt label5">
+                                        <p class="tltData">Año</p>
+                                        <mat-select formControlName="anioContratoAct"
+                                            class="contDataSelect2 contDataDisabled"
+                                            [ngClass]="{'contDataModified' : anioContratoModified == true }">
+                                            <mat-option [value]="item" *ngFor="let item of years">
+                                                {{item}}</mat-option>
+                                        </mat-select>
                                     </div>
                                 </div>
 
@@ -1594,9 +1835,7 @@
                                         <p class="tltData">Valor Honorarios / mes</p>
                                         <input class="contData contDataDisabled" formControlName="valorHonMesAct"
                                             value="{{0 | currency: 'USD' : 'symbol' : '1.0-0'}}">
-                                        <mat-error *ngIf="errorRangeSararial">
-                                            <strong>{{msjVerifyRangeSararial}}</strong>
-                                        </mat-error>
+
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">Cantidad de contratos</p>
@@ -1610,7 +1849,7 @@
                                 <div class="tablaCont">
                                     <div class="contTxt label1">
                                         <p class="tltData">Descripción (Objeto del contrato)</p>
-                                        <textarea class="contDataArea contDataDisabled"
+                                        <textarea class="contDataArea contDataDisabled" rows="6"
                                             formControlName="descripcionAct"></textarea>
                                         <mat-error *ngIf="errorDescripcionCont">
                                             Campo <strong>Obligatorio</strong>
@@ -1750,6 +1989,22 @@
                                             '1.0-0'}}
                                         </td>
                                     </ng-container>
+                                    <ng-container matColumnDef="acciones">
+                                        <tr>
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="acc"> Acciones
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td mat-cell *matCellDef="let element">
+                                                <div class="Actions">
+                                                    <mat-icon mat-icon-button class="btnActions" matTooltip="Ver"
+                                                        (click)="openBudgetModification('ver',element)">
+                                                        remove_red_eye
+                                                    </mat-icon>
+                                                </div>
+                                            </td>
+                                        <tr>
+                                    </ng-container>
 
                                     <tr mat-header-row *matHeaderRowDef="displayedColumnsAct"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumnsAct"></tr>S
@@ -1810,41 +2065,49 @@
                                 <mat-card class="colorCard2">
 
                                     <!-- FORMULARIO CON LOS CAMPOS DE LA SECCION -->
-                                    <div class="formCont">
+                                    <div class="formCont" [formGroup]="initialAppro">
                                         <div class="tablaCont">
-                                            <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 0</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia0Act">
-                                            </div>
 
                                             <div class="contTxt label1">
-                                                <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor0Act">
-                                            </div>
+                                                <p class="tltTitleData">Apropiación inicial</p>
 
-                                            <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 1</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia1Act">
-                                            </div>
-                                            <div class="contTxt label1">
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor1Act">
+                                                <input class="contData contDataDisabled"
+                                                    formControlName="valorApropiacion_Incial">
                                             </div>
                                         </div>
-
                                         <div class="tablaCont">
+
                                             <div class="contTxt label1">
-                                                <p class="tltData">Año vigencia 2</p>
-                                                <input class="contData contDataDisabled" formControlName="vigencia2Act">
+                                                <p class="tltTitleData">Apropiación disponible</p>
+
+                                                <p class="tltData">Año vigencia </p>
+                                                <!-- <input class="contData contDataDisabled" formControlName="vigencia2"> -->
+                                                <mat-select formControlName="anio_Vigencia" class="contDataSelect"
+                                                    (selectionChange)="changeInitilYears($event)">
+                                                    <mat-option [value]="item" *ngFor="let item of initialAppYaers">
+                                                        {{item}}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="errInitialAppYaers">
+                                                    <strong>{{msjInitialAppYaers}}</strong>
+                                                </mat-error>
                                             </div>
                                             <div class="contTxt label1">
+                                                <p class="tltTitleData arreg"> </p>
+
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled" formControlName="valor2Act">
-                                            </div>
-                                            <div class="contTxt label2">
-                                                <p class="tltData">Valor total</p>
                                                 <input class="contData contDataDisabled"
-                                                    formControlName="valorTotalAct">
+                                                    formControlName="valorApropiacionAnio">
+                                            </div>
+                                        </div>
+                                        <div class="tablaCont">
+
+                                            <div class="contTxt label1">
+                                                <p class="tltTitleData">Apropiación final</p>
+
+                                                <p class="tltData">Valor</p>
+                                                <input class="contData contDataDisabled"
+                                                    formControlName="valorApropiacion_Final">
                                             </div>
                                         </div>
                                     </div>

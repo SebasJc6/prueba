@@ -1,11 +1,18 @@
 import { calculadosI } from "../modificatioRequest/ModificationRequest.interface"
 
 export interface dataTableRequerimentI {
-    requerimientoId: number,
-    numeroRequerimiento: number,
+    apropiacionDisponible: number,
     dependenciaDestino: string,
     descripcion: string,
     estado: string
+    existCDPS: boolean,
+    existSaldoPorDistribuirRP: boolean,
+    mesEstimadoInicioEjec: number,
+    numeroRequerimiento: number,
+    requerimientoId: number,
+    saldoRequerimiento: number,
+    valorCDP: number,
+    valorRP: number
 }
 
 
@@ -13,7 +20,7 @@ export interface filterRequerimentI {
     NumeroRequerimiento: number,
     DependenciaDestino: string,
     Descripcion: string,
-    Estado: string
+    Estado: string,
     page: string,
     take: number,
     columna: string,

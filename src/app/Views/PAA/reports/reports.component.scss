@@ -1,0 +1,112 @@
+.container {
+    margin-left: 3%;
+    position: block;
+    margin-right: 3%;
+    text-align: center;
+}
+
+.center-h {
+    justify-content: center;
+  }
+  
+.center-v {
+    align-items: center;
+}
+
+.div__title {
+    margin-bottom: 2.5em;
+
+    .title {
+        margin-left: 2%;
+        margin-top: 2em;
+        display: flex;
+        color: #185564
+      }
+}
+
+.container__cards {
+    width: auto;
+    margin-left: 3.2em;
+    margin-right: 3.2em;
+    margin-bottom: 5rem;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 10px;
+    place-items: center;
+
+    .mat__card {
+        width: 200px;
+        height: 200px;
+        margin-bottom: 8px;
+
+        .card__title {
+            align-items: center;
+            margin: auto;
+            color: #185564;
+
+            .strong__title{
+                display: flex;
+                width: 100%;
+                font-size: 15px;
+            }
+        }
+
+        .hr__separator {
+            margin-left: -6%;
+            width: 112%;
+            height: 2px;
+            color: #185564;
+            background-color: #185564;
+        }
+
+        .text__content {
+            margin-top: 5px;
+            font-size: 12px;
+        }
+    }
+}
+
+
+//RESPONSIVE
+@media only screen and (max-width: 1650px) {
+    .container__cards {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+
+@media only screen and (max-width: 1380px) {
+    .container__cards {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+
+@media only screen and (max-width: 1110px) {
+    .container__cards {
+        margin-left: 2em;
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+
+@media only screen and (max-width: 850px) {
+    .container__cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+@media only screen and (max-width: 590px) {
+    .container__cards {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+
+@media only screen and (max-width: 330px) {
+    .container__cards {
+        margin-left: 0.5em;
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

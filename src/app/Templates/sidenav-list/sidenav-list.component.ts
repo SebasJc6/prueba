@@ -27,8 +27,9 @@ export class SidenavListComponent implements OnInit {
 
   ngOnInit(): void {
     const Token: string = this.authService.getCookie('token');
-    const tokenInfo: any  =  this.decodeToken(Token);
-    this.UserName = tokenInfo.name;
+    const tokenInfo: any = this.decodeToken(Token);
+    //console.log(tokenInfo);
+    this.UserName = tokenInfo.name + ' ' + tokenInfo.surname;
 
     //Obtener token para manejar los roles
     const TokenAccess = JSON.parse(tokenInfo.access);
@@ -41,20 +42,25 @@ export class SidenavListComponent implements OnInit {
   }
 
   logOut() {
+    localStorage.clear();
     this.authService.rmCookie();
     this.spinner.show();
     setTimeout(() => {
       this.router.navigate([`/`]);
       this.spinner.hide();
+      //limpiar local y sesion storege 
+      localStorage.clear();
+      sessionStorage.clear();
+
     }, 1700);
   }
-  
+
 
   /**decodifica el token */
   decodeToken(token: string) {
-    try{
+    try {
       return jwt_decode(token)
-    }catch(Error){
+    } catch (Error) {
       return null;
     }
   }

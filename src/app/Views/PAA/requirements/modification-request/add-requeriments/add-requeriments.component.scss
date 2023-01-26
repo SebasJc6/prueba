@@ -43,6 +43,8 @@
 
     .FilSear {
       margin-top: 1%;
+      margin-left: 1.5%;
+      margin-right: 1.5%;
       border: 2px solid #185564;
       border-radius: 0.5rem;
       border-color: #185564;
@@ -56,6 +58,14 @@
 
   mat-radio-button {
     margin: 1%;
+  }
+
+  .text__opacity {
+    opacity: .6;
+  }
+
+  .mat-form-field {
+    display: block;
   }
 }
 
@@ -91,6 +101,7 @@ table {
     text-align: center;
     font-size: 12px;
     font-weight: bold;
+    border-left: 1px solid #7497a0;
 
     mat-form-field,
     mat-label,
@@ -112,6 +123,7 @@ table {
   td {
     text-align: center;
     font-size: 11px;
+    border-left: 1px solid #e0e0e0;
 
     button {
       margin-right: 35%;
@@ -131,8 +143,6 @@ table {
       }
     }
   }
-
-
 }
 
 
@@ -152,7 +162,6 @@ table {
     float: left;
 
   }
-
 }
 
 
@@ -169,7 +178,6 @@ table {
   color: #185564;
   border-radius: 0.5rem;
   border: 2px solid #185564;
-
 }
 
 .pagination a:hover:not(.active) {

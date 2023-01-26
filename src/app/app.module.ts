@@ -65,6 +65,12 @@ import { BudgetModificationComponent } from './Views/PAA/requirements/properties
 import { AuthInterceptorService } from './Services/Authentication/Interceptor/auth-interceptor.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { PopUpImportComponent } from './Views/PAA/requirements/modification-request/pop-up-import/pop-up-import.component';
+import { RpComponent } from './Views/PAA/requirements/cdp/rp/rp.component';
+import { StockOrdersComponent } from './Views/PAA/requirements/stock-orders/stock-orders.component';
+import { SpinnerInterceptorService } from './Services/Authentication/Interceptor/spinner-interceptor.service';
+import { OrdersComponent } from './Views/PAA/requirements/stock-orders/orders/orders.component';
+import { PageNotFoundComponent } from './Views/page-not-found/page-not-found.component';
+import { ReportsComponent } from './Views/PAA/reports/reports.component';
 
 
 const materialModules = [
@@ -126,7 +132,12 @@ const materialModules = [
     SpinnerComponent,
     CDPComponent,
     BudgetModificationComponent,
-    PopUpImportComponent
+    PopUpImportComponent,
+    RpComponent,
+    StockOrdersComponent,
+    OrdersComponent,
+    PageNotFoundComponent,
+    ReportsComponent
 
   ],
   imports: [
@@ -148,6 +159,7 @@ const materialModules = [
       CurrencyPipe,
       { provide: LocationStrategy, useClass: HashLocationStrategy},
       {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true},
+      {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptorService, multi: true},
     ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

@@ -85,6 +85,7 @@ export interface proyectoI {
 }
 
 export interface requerimientoI {
+    anioContrato: number,
     req_ID: number,
     numeroRequerimiento: number,
     numeroModificacion: number,
@@ -140,7 +141,12 @@ export interface cadenasPresupuestalesI {
     disminucion: number,
     compromisos: number,
     apropiacionDefinitiva: number,
-    giros: number
+    giros: number,
+    cadena_Presupuestal_ID: number,
+    iva: number,
+    arl: number,
+    subAumento: number,
+    subDisminucion: number,
 }
 
 export interface codsUNSPSCI {

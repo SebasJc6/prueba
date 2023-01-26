@@ -1,10 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { getRequerimentsByProjectI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { filterDataRequerimentI, filterRequerimentI, getDataRequerimentI } from 'src/app/Models/ModelsPAA/Requeriment/Requeriment.interface';
 import { environment } from 'src/environments/environment';
-import { AuthenticationService } from '../../Authentication/authentication.service';
 
 @Injectable({
   providedIn: 'root'

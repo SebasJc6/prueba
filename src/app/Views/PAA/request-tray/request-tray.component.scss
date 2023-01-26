@@ -51,7 +51,6 @@
     border: 2px solid #185564;
     border-radius: 0.5rem;
     border-color: #185564;
-    width: 6%;
     color: #185564;
     margin-top: -2%;
   }
@@ -72,10 +71,11 @@
   
       .FilSear {
         margin-top: 1%;
+        margin-left: 1.5%;
+        margin-right: 1.5%;
         border: 2px solid #185564;
         border-radius: 0.5rem;
         border-color: #185564;
-        width: 6%;
         color: #185564;
       }
     }
@@ -86,6 +86,10 @@
     
       mat-radio-button {
         margin: 1%;
+      }
+
+      .text__opacity {
+        opacity: .6;
       }
 }
 
@@ -102,11 +106,13 @@ table {
         text-align: center;
         font-size: 12px;
         font-weight: bold;
+        border-left: 1px solid #7497a0;
     }
 
     td {
         text-align: center;
         font-size: 11px;
+        border-left: 1px solid #e0e0e0;
     }
     mat-table {
       overflow: auto;
@@ -147,7 +153,7 @@ table {
     }
 
     .acc {
-        width: 2%;
+        width: 5%;
     }
 }
 
@@ -163,8 +169,8 @@ table {
 //PAGINACION
 .pagination {
     display: inline-table;
-    margin-top: 2%;
-    margin-bottom: 8%;
+    margin-top: 2rem;
+    margin-bottom: 6rem;
   
     .take {
       width: 40px;
@@ -197,4 +203,34 @@ table {
   
   .pagination a:hover:not(.active) {
     background-color: #ddd;
+  }
+
+
+  /* RESPONSIVE*/
+  @media only screen and (max-width: 800px) {
+   .div__buttons__actions {
+     display: inline-table;
+     margin-top: 1rem;
+     margin-bottom: 0.5rem;
+   }
+  
+   .table {
+     overflow-x: scroll;
+   }
+  
+   .pagination{
+     margin-left: -10px;
+   }
+  
+   .top {
+     display: grid;
+     position: relative;
+     margin-bottom: 1rem;
+   }
+  }
+
+  @media only screen and (max-width: 374px) {
+    .pagination{
+      margin-left: -25px;
+    }
   }

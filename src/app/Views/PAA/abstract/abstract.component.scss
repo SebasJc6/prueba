@@ -4,31 +4,45 @@
   margin-right: 3%;
   text-align: center;
 
-  //MIGA PAN
-  .mgp {
-    float: start;
-    display: flex;
-    color: #185564;
-    align-items: center;
-
-    button {
-      margin-left: -0.5%;
-
-      mat-icon {
-        margin-top: -2%;
-      }
-    }
-
-    .href {
-      text-decoration: none;
-      color: #185564;
-    }
-
-    .selected {
-      font-weight: bold;
-    }
-  }
 }
+
+//miga de pan
+//MIGA DE PAN
+.mpg{
+  display: flex;
+  position: fixed;
+}
+ul.breadcrumb {
+  padding: 10px 16px;
+  list-style: none;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 14px;
+}
+ul.breadcrumb li+li:before {
+  padding: 4px;
+  color: #185564;
+  font-weight: bold;
+  content: ">";
+}
+ul.breadcrumb li a {
+  color: #185564;
+  text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+  color: #185564;
+  text-decoration: underline;
+}
+
+.href {
+  color: #185564;
+}
+
+.selected {
+  font-weight: bold;
+}
+
 
 //POSICIONAMIENTO DEL CONTENIDO DEL COMPONENTE
 .center-h {
@@ -45,7 +59,7 @@
   margin-top: 1%;
   color: black;
   text-align: left;
-
+  display: flex;
 }
 
 .export {
@@ -108,6 +122,14 @@ input {
   width: 100%;
 }
 
+.label__year {
+  margin-bottom: 4%;
+}
+
+.div__year {
+  margin-top: -3.6%;
+}
+
 .contDataDisabled {
   border-color: gray;
   background-color: white;
@@ -116,21 +138,20 @@ input {
 
 mat-card-actions {
   display: block;
-  margin-top: 5%;
-  margin-bottom: 5%;
+  margin-top: 2rem;
+  margin-bottom: 5rem;
 
   .buton {
     border-color: #185564;
-    // margin: 2%;
+    margin: 1%;
+    margin: 2%;
     border: 2px solid #185564;
     color: #185564;
-    width: 15%;
+    width: 15rem;
     border-radius: 1.5rem;
     font-weight: bold;
-    font-size: 100%;
     align-items: center;
     line-height: 0px;
-    margin-bottom: 8%;
   }
   
   .btn:hover{
@@ -138,5 +159,61 @@ mat-card-actions {
     transition-duration: 0.3s;
     color: white;
     background-color:#185564;
+  }
+}
+
+
+/* RESPONSIVE*/
+@media only screen and (max-width: 850px) {
+  ul.breadcrumb li {
+    font-size: 13px !important;
+    .nomProject{
+        visibility: inherit;
+    }
+  }
+  .tablaCont {
+    display: grid;
+    grid-template-columns: auto;
+  }
+
+
+  .label1 {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .label2 {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .label3 {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  
+  input {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .sltData {
+    margin-top: 1%;
+    margin-bottom: -1%;
+    margin-left: 5px;
+    width: 95%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .sltData {
+    margin-top: 2.5%;
+    margin-bottom: -2.5%;
+    margin-left: 5px;
+    width: 95%;
   }
 }

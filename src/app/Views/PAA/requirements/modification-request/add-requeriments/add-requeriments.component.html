@@ -24,13 +24,13 @@
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="form">
-                  <mat-form-field style="width: 20%;"  appearance="outline">
-                    <mat-label>Número de requerimiento</mat-label>
+                  <mat-form-field  appearance="outline">
+                    <mat-label class="text__opacity">Número de requerimiento</mat-label>
                     <input matInput formControlName="NumeroRequerimiento" type="number">
                   </mat-form-field>
                   &nbsp;&nbsp;
-                  <mat-form-field style="width: 70%;" appearance="outline">
-                    <mat-label>Descripción</mat-label>
+                  <mat-form-field appearance="outline">
+                    <mat-label class="text__opacity">Descripción</mat-label>
                     <input matInput formControlName="Descripcion">
                   </mat-form-field>
                   
@@ -41,48 +41,52 @@
             <button class="FilSear" mat-button (click)="getFilter()">
               Filtrar
             </button>
+            <button class="FilSear" mat-button (click)="clearFilter()">
+              Limpiar
+            </button>
           </div>
     
     
         </mat-card>
       </div>
     
-
-    <table mat-table [dataSource]="dataSource">
-
-        <ng-container matColumnDef="select">
-            <th mat-header-cell *matHeaderCellDef class="selc">
-                <mat-checkbox (change)="$event ? masterToggle() : null"
-                    [checked]="selection.hasValue() && isAllSelected()"
-                    [indeterminate]="selection.hasValue() && !isAllSelected()">
-                </mat-checkbox>
-            </th>
-            <td mat-cell *matCellDef="let element">
-                <mat-checkbox (click)="$event.stopPropagation()" 
-                              (change)="$event ? selection.toggle(element) : null"
-                              [checked]="selection.isSelected(element)">                              <!-- (click)="addElement(element)" -->
-                            </mat-checkbox>
-            </td>
-        </ng-container>
-
-        <ng-container matColumnDef="numero">
-            <th mat-header-cell *matHeaderCellDef class="numReq">
-                Numero del Requerimiento
-            </th>
-            <td mat-cell *matCellDef="let element"> {{element.numeroRequerimiento}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="descripcion" class="desc">
-            <th mat-header-cell *matHeaderCellDef>
-                Descripción de Categoría
-            </th>
-            <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
-        </tr>
-    </table>
+    <div class="table">
+      <table mat-table class="tablePrin mat-elevation-z8" [dataSource]="dataSource">
+          <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef class="selc">
+                  <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+                  </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                  <mat-checkbox (click)="$event.stopPropagation()" 
+                                (change)="$event ? selection.toggle(element) : null"
+                                [checked]="selection.isSelected(element)">                              <!-- (click)="addElement(element)" -->
+                              </mat-checkbox>
+              </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="numero">
+              <th mat-header-cell *matHeaderCellDef class="numReq">
+                  Número del Requerimiento
+              </th>
+              <td mat-cell *matCellDef="let element"> {{element.numeroRequerimiento}} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="descripcion" class="desc">
+              <th mat-header-cell *matHeaderCellDef>
+                  Descripción de Categoría
+              </th>
+              <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+          </tr>
+      </table>
+    </div>
+    
     <div class="pagination " [formGroup]="paginationForm">
         <mat-form-field class="take" appearance="legacy" matTooltip="Items por página">
           <mat-select formControlName="take" (selectionChange)="getPagination()">
@@ -97,7 +101,7 @@
         </a>
         <mat-form-field class="page" appearance="legacy">
           <mat-label>página</mat-label>
-          <input matInput value="{{numberPage}}" formControlName="page">
+          <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page">
           <button matSuffix (click)="getPagination()" mat-icon-button>
             <mat-icon matTooltip="Buscar Página">youtube_searched_for</mat-icon>
           </button>

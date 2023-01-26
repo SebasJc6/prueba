@@ -4,9 +4,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { dateTableModificationI } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
-import { addRequirementEdit, dataTableDataRequerimentI, filterDataRequerimentI } from 'src/app/Models/ModelsPAA/Requeriment/Requeriment.interface';
+import { dataTableDataRequerimentI, filterDataRequerimentI } from 'src/app/Models/ModelsPAA/Requeriment/Requeriment.interface';
 import { RequerimentService } from 'src/app/Services/ServicesPAA/Requeriment/requeriment.service';
 
 
@@ -15,11 +13,6 @@ export interface Transaction {
   descripcion: string;
 }
 
-const ELEMENT_DATA: Transaction[] = [
-  { numero: 100, descripcion: 'Prestar Servicios de transporte' },
-  { numero: 200, descripcion: 'Prestar Servicios de transporte' },
-  { numero: 300, descripcion: 'Prestar Servicios de transporte' },
-]
 @Component({
   selector: 'app-add-requeriments',
   templateUrl: './add-requeriments.component.html',
@@ -31,8 +24,7 @@ export class AddrequirementsComponent implements OnInit {
   constructor(
     public serviceRequeriment: RequerimentService,
     public dialogRef: MatDialogRef<AddrequirementsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string,
-    private spinner: NgxSpinnerService,) { dialogRef.disableClose = true; }
+    @Inject(MAT_DIALOG_DATA) public data: string,) { dialogRef.disableClose = true; }
     
   pageSizeOptions: number[] = [3, 6, 12];
   paginationForm = new FormGroup({
@@ -68,7 +60,6 @@ export class AddrequirementsComponent implements OnInit {
   getDataRequeriment(projectId: number, filterDataRequertiments: filterDataRequerimentI) {
     this.filterDataRequertiments.NumeroRequerimiento = this.filterForm.get('NumeroRequerimiento')?.value || '';
     this.filterDataRequertiments.Descripcion = this.filterForm.get('Descripcion')?.value || '';
-    this.spinner.show();
     this.serviceRequeriment.getDataRequeriment(projectId, filterDataRequertiments).subscribe((data) => {
       this.viewDataRequeriment = data;
       this.numberPages = this.viewDataRequeriment.data.pages;
@@ -79,14 +70,10 @@ export class AddrequirementsComponent implements OnInit {
         page: filterDataRequertiments.page
       });
       this.dataSource = new MatTableDataSource(this.viewDataRequeriment.data.items);
-      // console.log(data.data)
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
   }
   getPagination() {
-    //console.log(this.paginationForm.value);
     this.filterDataRequertiments.page = this.paginationForm.get('page')?.value;
     this.filterDataRequertiments.take = this.paginationForm.get('take')?.value;
     this.getDataRequeriment(+this.dataProjectID, this.filterDataRequertiments);
@@ -101,12 +88,19 @@ export class AddrequirementsComponent implements OnInit {
   }
 
   getFilter() {
-    //console.log(this.filterForm.value)
     this.filterDataRequertiments.NumeroRequerimiento = this.filterForm.value.NumeroRequerimiento || '';
     this.filterDataRequertiments.Descripcion = this.filterForm.get('Descripcion')?.value || '';
 
     this.getDataRequeriment(+this.dataProjectID, this.filterDataRequertiments);
 
+    this.closeFilter();
+  }
+
+  //Limpiar el Filtro
+  clearFilter() {
+    this.filterForm.reset();
+    
+    this.getDataRequeriment(+this.dataProjectID, this.filterDataRequertiments);
     this.closeFilter();
   }
 
@@ -166,4 +160,22 @@ export class AddrequirementsComponent implements OnInit {
     this.dialogRef.close(this.requerimentsAdd);
   }
 
+
+  //Expresion regular para validar que solo se ingresen numeros en la paginación
+  validateFormat(event: any) {
+    let key;
+    if (event.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      key = event.keyCode;
+      key = String.fromCharCode(key);
+    }
+    const regex = /[0-9]|\./;
+     if (!regex.test(key)) {
+      event.returnValue = false;
+       if (event.preventDefault) {
+        event.preventDefault();
+       }
+     }
+    }
 }

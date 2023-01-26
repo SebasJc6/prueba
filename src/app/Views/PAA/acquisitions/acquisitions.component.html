@@ -1,97 +1,126 @@
-<app-spinner></app-spinner>
+<ul class="breadcrumb">
+  <li>Plan Anual de Adquisiciones</li>
+
+  <li> <a class="hrefselected" >
+          <span>Plan Anual de Adquisiciones </span>
+         
+      </a>
+  </li>
+</ul>
 
 <div class="container center-h center-v">
 
-  <div class="mgp">
-    Plan Anual de Adquisiciones
-    <a class="href selected" [routerLink]="['/WAPI/PAA/Adquisiciones']">
-      &nbsp;>&nbsp;Plan Anual de Adquisiciones
-    </a>
-  </div>
 
-  <div style="overflow: auto;">
-    <div class="opciones">
-      <mat-card-title class="export">
-        <strong> PLAN ANUAL DE ADQUISICIONES </strong>
-      </mat-card-title>
 
+  <div class="opciones">
+    <mat-card-title class="export">
+      <strong> PLAN ANUAL DE ADQUISICIONES </strong>
+    </mat-card-title>
+
+    <div class="div__buttons__actions">
       <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">Filtrar</button>
-      <button class="btnExcel" mat-button>Exportar<img class="imgExcel" src="../../../../assets/img/excel.jpg"></button>
-    </div>
     
-    <div>
-      <div class="top">
-        <mat-card *ngIf="!viewFilter">
-          <div class="close">
-            <button mat-icon-button (click)="closeFilter()" color="warn">
-              <mat-icon [inline]='true'>close</mat-icon>
-            </button>
-          </div>
-          <div [formGroup]="filterForm">
-            <mat-accordion multi>
-              <mat-expansion-panel class="menu-panel">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    <span class="title">Ordernar Por:</span>
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <div class="filter">
-                  <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
-                    <mat-radio-button value="DependenciaOrigen">Subsecretaria</mat-radio-button>
-                    <mat-radio-button value="CodigoProyecto">Código Proyecto</mat-radio-button>
-                    <mat-radio-button value="Nombre">Nombre Proyecto</mat-radio-button>
-                    <mat-radio-button value="EstadoDesc">Estado</mat-radio-button>
-                  </mat-radio-group>
-                </div>
-                <mat-divider></mat-divider>
-                <div class="Order" *ngIf="viewOrder">
-                  Decendente<mat-slide-toggle formControlName="ascending"> Acendente</mat-slide-toggle>
-                </div>
-
-              </mat-expansion-panel>
-
-              <mat-expansion-panel class="menu-panel">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    <span class="title">Buscar Por:</span>
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <div class="form">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Subsecretaria</mat-label>
-                    <input matInput formControlName="DependenciaOrigen" type="text">
-                  </mat-form-field>
-                  &nbsp;
-                  <mat-form-field style="width: 15%;" appearance="outline">
-                    <mat-label>Código Proyecto</mat-label>
-                    <input matInput formControlName="CodigoProyecto" type="text">
-                  </mat-form-field>
-                  &nbsp;
-                  <mat-form-field style="width: 30%;" appearance="outline">
-                    <mat-label>Nombre Proyecto</mat-label>
-                    <input matInput formControlName="Nombre">
-                  </mat-form-field>
-                  &nbsp;
-                  <mat-form-field appearance="outline">
-                    <mat-label>Estado</mat-label>
-                    <mat-select formControlName="EstadoDesc">
-                      <mat-option [value]="Item" *ngFor="let Item of estadoFilter">{{Item}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </mat-expansion-panel>
-            </mat-accordion>
-
-            <button class="FilSear" mat-button (click)="getFilter()">
-              Filtrar
-            </button>
-          </div>
-        </mat-card>
+      <div class="sections__buttons__icons">
+        <button class="btn" style="float: right;" mat-button>
+          <mat-icon class="imgExcel mat-icon" matTooltip="Exportar Excel">
+            <img class="imgExcel" src="../../../../assets/img/excel.jpg">
+          </mat-icon>
+        </button>
+        
+        <button class="btn" style="float: right;" mat-button  *ngIf="AccessUser == 'Referente_Planeacion'">
+          <mat-icon class="btnActions mat-icon" (click)="importGiros.click()" matTooltip="Importar Giros">
+            autorenew
+          </mat-icon>
+          <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          class="file-input" (change)="onFileStockOrders($event)" [(ngModel)]="fileStockOrders" #importGiros/>
+        </button>
+        
+        <button class="btn" style="float: right;" mat-button  *ngIf="AccessUser == 'Referente_Planeacion'">
+          <mat-icon class="btnActions mat-icon" (click)="importCDPsRPs.click()" matTooltip="Importar CDP/RP">
+            attach_money
+          </mat-icon>
+          <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          class="file-input" (change)="onFileSelected($event)" [(ngModel)]="fileCDPsRPs" #importCDPsRPs />
+        </button>
       </div>
     </div>
 
+  </div>
+  
+  <div class="top">
+    <mat-card *ngIf="!viewFilter">
+      <div class="close">
+        <button mat-icon-button (click)="closeFilter()" color="warn">
+          <mat-icon [inline]='true'>close</mat-icon>
+        </button>
+      </div>
+      <div [formGroup]="filterForm">
+        <mat-accordion multi>
+          <mat-expansion-panel class="menu-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span class="title">Ordernar Por:</span>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="filter">
+              <mat-radio-group formControlName="columna" [(ngModel)]="viewOrder">
+                <mat-radio-button value="DependenciaOrigen">Subsecretaria</mat-radio-button>
+                <mat-radio-button value="CodigoProyecto">Código Proyecto</mat-radio-button>
+                <mat-radio-button value="Nombre">Nombre Proyecto</mat-radio-button>
+                <mat-radio-button value="EstadoDesc">Estado</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="Order" *ngIf="viewOrder">
+              Descendente<mat-slide-toggle formControlName="ascending"> Ascendente</mat-slide-toggle>
+            </div>
+
+          </mat-expansion-panel>
+
+          <mat-expansion-panel class="menu-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span class="title">Buscar Por:</span>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="form">
+              <mat-form-field appearance="outline">
+                <mat-label class="text__opacity">Subsecretaria</mat-label>
+                <input matInput formControlName="DependenciaOrigen" type="text">
+              </mat-form-field>
+              &nbsp;
+              <mat-form-field appearance="outline">
+                <mat-label class="text__opacity">Código Proyecto</mat-label>
+                <input matInput formControlName="CodigoProyecto" type="number">
+              </mat-form-field>
+              &nbsp;
+              <mat-form-field appearance="outline">
+                <mat-label class="text__opacity">Nombre Proyecto</mat-label>
+                <input matInput formControlName="Nombre">
+              </mat-form-field>
+              &nbsp;
+              <mat-form-field appearance="outline">
+                <mat-label class="text__opacity">Estado</mat-label>
+                <mat-select formControlName="EstadoDesc">
+                  <mat-option [value]="Item" *ngFor="let Item of estadoFilter">{{Item}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <button class="FilSear" mat-button (click)="getFilter()">
+          Filtrar
+        </button>
+        <button class="FilSear" mat-button (click)="clearFilter()">
+          Limpiar
+        </button>
+      </div>
+    </mat-card>
+  </div>
 
 
+  <div class="table">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
       <ng-container matColumnDef="select">
@@ -145,17 +174,17 @@
       </ng-container>
 
       <ng-container matColumnDef="estadoDesc">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="estd ">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="estd">
           Estado
         </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-icon-button style="color: black;" disabled>
+          <button mat-icon-button style="color: black;  font-size: 11px; width: auto;" disabled>
             <mat-icon [ngClass]="{
             'mat-passedChips' : element.estadoDesc == 'Aprobado',
             'mat-closeChips' : element.estadoDesc == 'Cerrado',
             'mat-actionChips' : element.estadoDesc == 'En Ejecución',
             'mat-beforeChips' : element.estadoDesc == 'Anteproyecto'}">fiber_manual_record</mat-icon>
-            {{ element.estadoDesc }}
+            <span class="span__states">{{ element.estadoDesc }}</span>
           </button>
         </td>
       </ng-container>
@@ -174,7 +203,7 @@
               <mat-icon mat-icon-button class="btnActions" (click)="openAbstract(element.proyectoID)"
                 matTooltip="Resumen Ejecución">insert_drive_file
               </mat-icon>&nbsp;
-              <mat-icon *ngIf="AccessUser == 'Referente_Planeacion'" mat-icon-button [matTooltip]="(element.estadoDesc === 'En Ejecución') ? 'Aprobado' : 'En Ejecución'" [disabled]="!disabledExecute ? true : null" [ngClass]="{
+              <mat-icon *ngIf="AccessUser == 'Referente_Planeacion'" mat-icon-button [matTooltip]="(element.estadoDesc === 'En Ejecución') ? 'Aprobar' : 'Ejecutar'" [disabled]="!disabledExecute ? true : null" [ngClass]="{
               'btnExecution': element.estadoDesc == 'En Ejecución',
               'btnActions' : element.estadoDesc == 'Aprobado' || 'Cerrado' || 'Anteproyecto'}"
                 (click)="changeExecution(element.proyectoID)">
@@ -182,17 +211,17 @@
               <mat-icon *ngIf="AccessUser == 'Referente_Planeacion'" mat-icon-button [ngClass]="{
               'btnExecution': element.estadoDesc == 'Cerrado',
               'btnActions' : element.estadoDesc == 'En Ejecución'|| 'Aprobado' || 'Cerrado' || 'Anteproyecto'}"
-              [matTooltip]="(element.estadoDesc === 'Cerrado') ? 'En Ejecución' : 'Cerrado'" (click)="changeStatus(element.proyectoID)">close</mat-icon>
+              [matTooltip]="(element.estadoDesc === 'Cerrado') ? 'Ejecutar' : 'Cerrar'" (click)="changeStatus(element.proyectoID)">close</mat-icon>
             </div>
           </td>
         <tr>
       </ng-container>
 
-
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   </div>
+
 
   <div class="pagination " [formGroup]="paginationForm">
 
@@ -209,7 +238,7 @@
     </a>
     <mat-form-field class="page" appearance="legacy">
       <mat-label>página</mat-label>
-      <input matInput value="{{numberPage}}" formControlName="page">
+      <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page">
       <button matSuffix (click)="getPagination()" mat-icon-button>
         <mat-icon matTooltip="Buscar Página">youtube_searched_for</mat-icon>
       </button>
@@ -221,15 +250,6 @@
     <a (click)="latestPage()">
       <mat-icon matTooltip="Ultima página">last_page</mat-icon>
     </a>
-
+  
   </div>
-
 </div>
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>

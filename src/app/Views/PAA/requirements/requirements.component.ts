@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { dataTableRequerimentI, filterRequerimentI } from 'src/app/Models/ModelsPAA/Requeriment/Requeriment.interface';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
@@ -30,8 +28,7 @@ export class RequirementsComponent implements OnInit {
     public router: Router,
     private activeRoute: ActivatedRoute,
     private authService: AuthenticationService,
-    private serviceModRequest: ModificationRequestService,
-    private spinner: NgxSpinnerService,) { }
+    private serviceModRequest: ModificationRequestService,) { }
 
   //Objeto con la informacion de acceso del Usuario
   AccessUser: string = '';
@@ -66,6 +63,11 @@ export class RequirementsComponent implements OnInit {
     'numrequired',
     'dependenci',
     'description',
+    'mesinicio',
+    'apropiacion',
+    'valorcdp',
+    'valorrp',
+    'saldorequerimiento',
     'estado',
     'accion',
   ];
@@ -78,35 +80,50 @@ export class RequirementsComponent implements OnInit {
   ngOnInit(): void {
     this.filterRequertiments.page = "1";
     this.filterRequertiments.take = 20;
-    // this.getPagination();
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('data') || '';
 
     //Se obtiene el estado del Proyecto
     this.getStatusProject(Number(this.dataProjectID));
 
-    // console.log(+this.dataProjectID)
-    this.getRequerimentsByProject(+this.dataProjectID, this.filterRequertiments);
+    this.getRequerimentsByProject(Number(this.dataProjectID), this.filterRequertiments);
 
     this.AccessUser = this.authService.getRolUser();
   }
 
   getStatusProject(projectId: number) {
-    this.spinner.show();
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
       this.ProjectState = data.data.proyecto_Estado;
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
   }
 
-  getPagination() {
-    //console.log(this.paginationForm.value);
-    this.filterRequertiments.page = this.paginationForm.get('page')?.value;
-    this.filterRequertiments.take = this.paginationForm.get('take')?.value;
-    this.getRequerimentsByProject(+this.dataProjectID, this.filterRequertiments);
-
+  openFilter() {
+    this.viewFilter = false
   }
+  closeFilter() {
+    this.viewFilter = true
+  }
+
+  getFilter() {
+    this.filterRequertiments.NumeroRequerimiento = this.filterForm.value.NumeroRequerimiento || '';
+    this.filterRequertiments.DependenciaDestino = this.filterForm.get('DependenciaDestino')?.value || '';
+    this.filterRequertiments.Descripcion = this.filterForm.get('Descripcion')?.value || '';
+    this.filterRequertiments.columna = this.filterForm.get('columna')?.value || '';
+    this.filterRequertiments.ascending = this.filterForm.get('ascending')?.value || false;
+
+    this.getRequerimentsByProject(Number(this.dataProjectID), this.filterRequertiments);
+
+    this.closeFilter();
+  }
+
+  //Limpiar el Filtro
+  clearFilter() {
+    this.filterForm.reset();
+    
+    this.getRequerimentsByProject(Number(this.dataProjectID), this.filterRequertiments);
+    this.closeFilter();
+  }
+
 
   getRequerimentsByProject(projectId: number, filterRequertiments: filterRequerimentI) {
     this.projectId = projectId;
@@ -121,15 +138,11 @@ export class RequirementsComponent implements OnInit {
     this.filterRequertiments.Descripcion = this.filterForm.get('Descripcion')?.value || '';
     this.filterRequertiments.columna = this.filterForm.get('columna')?.value || '';
     this.filterRequertiments.ascending = this.filterForm.get('ascending')?.value || false;
-    this.spinner.show();
     this.serviceRequeriment.getRequerimentsByProject(projectId, filterRequertiments).subscribe((data) => {
       this.viewRequeriments = data;
       this.dataSource = new MatTableDataSource(this.viewRequeriments.data.requerimientos.items);
-     // console.log(this.viewRequeriments.data.requerimientos.items);
-      // this.requeriments = this.viewRequeriments.data.requerimientos.items;
       this.codProject = this.viewRequeriments.data.codigoProyecto;
       this.nomProject = this.viewRequeriments.data.nombre;
-      //console.log(this.viewRequeriments.data.proyectoId)
       this.numberPages = this.viewRequeriments.data.requerimientos.pages;
       this.numberPage = this.viewRequeriments.data.requerimientos.page;
       this.numberTake = filterRequertiments.take
@@ -138,17 +151,21 @@ export class RequirementsComponent implements OnInit {
         page: filterRequertiments.page
       });
       this.numberPagination = this.viewRequeriments.data.requerimientos.pages
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
+  }
+
+  getPagination() {
+    this.filterRequertiments.page = this.paginationForm.get('page')?.value;
+    this.filterRequertiments.take = this.paginationForm.get('take')?.value;
+    this.getRequerimentsByProject(Number(this.dataProjectID), this.filterRequertiments);
   }
 
   nextPage() {
     if (this.numberPage < this.numberPages) {
       this.numberPage++;
       this.filterRequertiments.page = this.numberPage.toString();
-      this.getRequerimentsByProject(+this.dataProjectID, this.filterRequertiments);
+      this.getRequerimentsByProject(Number(this.dataProjectID), this.filterRequertiments);
     }
   }
 
@@ -156,39 +173,19 @@ export class RequirementsComponent implements OnInit {
     if (this.numberPage > 1) {
       this.numberPage--;
       this.filterRequertiments.page = this.numberPage.toString();
-      this.getRequerimentsByProject(+this.dataProjectID, this.filterRequertiments);
+      this.getRequerimentsByProject(Number(this.dataProjectID), this.filterRequertiments);
     }
   }
 
   firstPage() {
     this.numberPage = 1;
     this.filterRequertiments.page = this.numberPage.toString();
-    this.getRequerimentsByProject(+this.dataProjectID, this.filterRequertiments);
+    this.getRequerimentsByProject(Number(this.dataProjectID), this.filterRequertiments);
   }
   latestPage() {
     this.numberPage = this.numberPages;
     this.filterRequertiments.page = this.numberPage.toString();
-    this.getRequerimentsByProject(+this.dataProjectID, this.filterRequertiments);
-  }
-
-  openFilter() {
-    this.viewFilter = false
-  }
-  closeFilter() {
-    this.viewFilter = true
-  }
-
-  getFilter() {
-    //console.log(this.filterForm.value)
-    this.filterRequertiments.NumeroRequerimiento = this.filterForm.value.NumeroRequerimiento || '';
-    this.filterRequertiments.DependenciaDestino = this.filterForm.get('DependenciaDestino')?.value || '';
-    this.filterRequertiments.Descripcion = this.filterForm.get('Descripcion')?.value || '';
-    this.filterRequertiments.columna = this.filterForm.get('columna')?.value || '';
-    this.filterRequertiments.ascending = this.filterForm.get('ascending')?.value || false;
-
-    this.getRequerimentsByProject(+this.dataProjectID, this.filterRequertiments);
-
-    this.closeFilter();
+    this.getRequerimentsByProject(Number(this.dataProjectID), this.filterRequertiments);
   }
 
 
@@ -199,19 +196,43 @@ export class RequirementsComponent implements OnInit {
 
 
   regresar() {
-    this.router.navigate(['/WAPI/PAA/Adquisiciones'])
+    this.router.navigate(['/WAPI/PAA/Adquisiciones']);
   }
   
   propertiesRequirement(requirementId: number) {
-    this.router.navigate(['/WAPI/PAA/PropiedadesRequerimiento/' + this.dataProjectID + '/0/' + requirementId+ '/Vista'])
+    this.router.navigate(['/WAPI/PAA/PropiedadesRequerimiento/' + this.dataProjectID + '/0/' + requirementId+ '/Vista']);
+    sessionStorage.setItem('mgp', 'requerimiento');
   }
 
   CDP(requirementId: number) {
-    //this.router.navigate([`/WAPI/PAA/CDP/${this.dataProjectID}/${requirementId}`])
+    this.router.navigate([`/WAPI/PAA/CDP/${this.dataProjectID}/${requirementId}`]);
+  }
+
+  StockOrders(requirementId: number) {
+    this.router.navigate([`/WAPI/PAA/StockOrders/${this.dataProjectID}/${requirementId}`]);
   }
 
   modificatioRequest() {
-    this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/0' ])
+    this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/0' ]);
+    sessionStorage.setItem('mgp', 'solicitud');
   }
 
+
+  //Expresion regular para validar que solo se ingresen numeros en la paginación
+  validateFormat(event: any) {
+    let key;
+    if (event.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      key = event.keyCode;
+      key = String.fromCharCode(key);
+    }
+    const regex = /[0-9]|\./;
+     if (!regex.test(key)) {
+      event.returnValue = false;
+       if (event.preventDefault) {
+        event.preventDefault();
+       }
+     }
+    }
 }

@@ -32,6 +32,7 @@
     .colorCard1 {
         background-color: #dcf8ff;
     }
+
     .colorCard2 {
         background-color: white;
     }
@@ -43,11 +44,20 @@
             margin-right: 2%;
             color: black;
 
+            .arrContDias {
+             
+
+                .arregCont2 {
+                    margin-left: 4%;
+                }
+            }
+
             .contTxt {
                 text-align: left;
                 margin: 1%;
                 margin-top: 0.8%;
                 margin-bottom: 0.8%;
+
                 .tltData {
                     font-size: 14px;
                     margin-bottom: -1.5%;
@@ -55,10 +65,24 @@
                     mat-select {
                         margin-top: 2%;
                     }
-                    .colorSelect{
+
+                    .colorSelect {
                         background-color: white;
                     }
                 }
+
+                .tltTitleData {
+                    font-size: 16px;
+                    margin-bottom: -1.5%;
+                    color: #3ebee3;
+                    margin-bottom: 2%;
+                }
+
+                .arreg {
+                    margin-top: 7%;
+                }
+
+
 
                 .contData {
                     border: 2px solid #185564;
@@ -67,53 +91,122 @@
                     width: 100%;
                     margin-top: 1.5%;
                 }
-                .contDataArea{
+
+                .contData1 {
+                    border: 2px solid #185564;
+                    border-radius: 0.3rem;
+                    height: 30px;
+                    width: 100%;
+                    margin-top: 1.5%;
+                }
+
+                .contDataSelect2 {
+                    border: 2px solid #185564;
+                    border-radius: 0.3rem;
+                    height: 33px;
+                    width: 100%;
+                    margin-top: 1.5%;
+                    background-color: white;
+
+                    ::ng-deep .mat-select-trigger {
+                        margin-top: 5%;
+                    }
+                }
+
+
+
+                .contDataArea {
                     border: 2px solid #185564;
                     border-radius: 0.3rem;
                     margin-top: 1.5%;
                     width: 392%;
                     font-family: "Montserrat", sans-serif;
                 }
-                .contDataSelect{
+
+                .contDataSelect {
                     border: 2px solid #185564;
                     border-radius: 0.3rem;
                     height: 33px;
                     width: 100%;
                     margin-top: 1.5%;
                     background-color: white;
+
                     ::ng-deep .mat-select-trigger {
                         margin-top: 2%;
-                      //  vertical-align: center;
+                        //  vertical-align: center;
                     }
                 }
-                .arreglo{
+
+                .contDataSelectRev {
+                    border: 2px solid #185564;
+                    border-radius: 0.3rem;
+                    height: 33px;
+                    width: 97%;
+                    margin-top: 1.5%;
+                    background-color: white;
+
+                    ::ng-deep .mat-select-trigger {
+                        margin-top: 1.5%;
+                        //  vertical-align: center;
+                    }
+                }
+
+                .arreglo {
                     border: 2px solid #185564;
                     border-radius: 0.3rem;
                     height: 33px;
                     width: 100%;
                     margin-top: 1.5%;
                     background-color: white;
+
                     ::ng-deep .mat-select-trigger {
                         margin-top: 1%;
-                      //  vertical-align: center;
+                        //  vertical-align: center;
                     }
-                }	
-                .contDataAutocomplete{
+                }
+
+                .contDataAutocomplete {
                     border: 2px solid #185564;
                     border-radius: 0.3rem;
                     height: 30px;
                     width: 100%;
                     margin-top: 1.5%;
                     background-color: white;
+
                     ::ng-deep .mat-select-trigger {
                         margin-top: 2%;
+                    }
+                }
+
+                .contDataMod {
+                    border: 2px solid #185564;
+                    border-radius: 0.3rem;
+                    height: 30px;
+                    width: 100%;
+                    margin-top: 1.5%;
+                    background-color: white;
+
+                    ::ng-deep .mat-select-trigger {
+                        margin-top: 1%;
                     }
                 }
 
                 .contDataDisabled {
                     border-color: gray;
                     background-color: white;
-                    color:  gray;
+                    color: gray;
+                }
+
+                .contDataModified {
+                    border: 2px solid orange;
+                    background-color: white;
+                    color: gray;
+                }
+
+                .contDataError {
+                    border: 2px solid red;
+                    background-color: white;
+                    color: gray;
                 }
 
                 ::ng-deep .mat-form-field-flex>.mat-form-field-infix {
@@ -124,9 +217,10 @@
                 }
             }
 
-            .dis{
+            .dis {
                 display: inline;
             }
+
             .label1 {
                 width: 25%;
             }
@@ -134,40 +228,88 @@
             .label2 {
                 width: 52%;
             }
+
             .label3 {
                 width: 25%;
             }
+
             .label4 {
                 width: 82%;
+            }
+
+            .label5 {
+                width: 11.5%;
             }
         }
     }
 }
 
 //MIGA PAN
-.mgp {
-    float: start;
+//MIGA PAN
+.mpg {
     display: flex;
-    color: #185564;
-    align-items: center;
-
-    button {
-      margin-left: -0.5%;
-
-      mat-icon {
-        margin-top: -2%;
-      }
-    }
-
-    .href {
-      text-decoration: none;
-      color: #185564;
-    }
-
-    .selected {
-      font-weight: bold;
-    }
+    position: fixed;
 }
+
+ul.breadcrumb {
+    padding: 10px 16px;
+    list-style: none;
+}
+
+ul.breadcrumb li {
+    display: inline;
+    font-size: 14px;
+}
+
+ul.breadcrumb li+li:before {
+    padding: 4px;
+    color: #185564;
+    font-weight: bold;
+    content: ">";
+}
+
+ul.breadcrumb li a {
+    color: #185564;
+    text-decoration: none;
+}
+
+ul.breadcrumb li a:hover {
+    color: #185564;
+    text-decoration: underline;
+}
+
+.href {
+    color: #185564;
+}
+
+.selected {
+    font-weight: bold;
+}
+
+// .mgp {
+//     float: start;
+//     display: flex;
+//     color: #185564;
+
+//     button {
+//         margin-left: -0.5%;
+
+//         mat-icon {
+//             margin-top: -2%;
+//         }
+//     }
+
+//     .href {
+//         text-decoration: none;
+//         color: #185564;
+//         display: flex;
+
+//     }
+
+//     .selected {
+//         font-weight: bold;
+//     }
+// }
 
 
 .center-h {
@@ -185,22 +327,23 @@
     color: #185564;
 }
 
-.btnCard{
+.btnCard {
     text-align: start;
     margin-left: 3.5%;
     margin-top: 0.5%;
+
     .buton2 {
         background-color: white;
-         margin-top: -8%;
-         border-color: #185564;
-         border: 2px solid #185564;
-         color: #185564;
-         width: 15rem;
-         border-radius: 1.5rem;
-         font-weight: bold;
-         align-items: center;
-         line-height: 0px;
-     }
+        margin-top: -8%;
+        border-color: #185564;
+        border: 2px solid #185564;
+        color: #185564;
+        width: 15rem;
+        border-radius: 1.5rem;
+        font-weight: bold;
+        align-items: center;
+        line-height: 0px;
+    }
 }
 
 mat-card-actions {
@@ -241,117 +384,235 @@ table {
     width: 93.5%;
     margin-left: 3%;
     margin-right: 3%;
-    
+
     th {
         background-color: #185564;
         color: white;
         text-align: center;
         font-size: 12px;
         font-weight: bold;
+        border-left: 1px solid #7497a0;
     }
 
     td {
         text-align: center;
         font-size: 11px;
+        border-left: 1px solid #e0e0e0;
     }
+
+    .contDataModified {
+        border: 2px solid orange;
+        background-color: white;
+    }
+
     mat-table {
-      max-height: 500px;
+        max-height: 500px;
     }
 
     //ESTILOS TABLA CLASIFICACION PRESUPUESTAL
-    .mes{
+    th.mat-header-cell:first-of-type,
+    td.mat-cell:first-of-type,
+    td.mat-footer-cell:first-of-type {
+        padding-left: 0px;
+    }
+
+    th.mat-header-cell:last-of-type,
+    td.mat-cell:last-of-type,
+    td.mat-footer-cell:last-of-type {
+        padding-right: 0px;
+    }
+
+    .mes {
         width: 3%;
     }
-    
-    .vig{
-        width: 8%;
+
+    .vig {
+        width: 4%;
     }
-    
-    .aux{
+
+    .aux {
         width: 3%;
     }
-    
-    .det{
+
+    .det {
         width: 20%;
     }
-    
+
     .act {
-        width: 6%;
+        width: 3%;
     }
-    
-    .met{
-        width: 6%;
+
+    .met {
+        width: 3%;
     }
-    
-    .fue{
-        width: 6%;
+
+    .fue {
+        width: 3%;
     }
-    
-    .msp{
-        width: 6%;
+
+    .msp {
+        width: 3%;
     }
-    
-    .mga{
-        width: 8%;
+
+    .mga {
+        width: 4%;
     }
-    
-    .pos{
-        width: 10%;
+
+    .pos {
+        width: 7%;
     }
-    
-    .apr{
-        width: 18%;
+
+    .apr {
+        width: 7%;
     }
-    
-    .aum{
-        width: 13%;
+
+    .aum {
+        width: 7%;
     }
-    
-    .dis{
-        width: 10%;
+
+    .dis {
+        width: 7%;
     }
-    
+
+    .aproDef {
+        width: 7%;
+    }
+
+    .Com {
+        width: 7%;
+    }
+
+    .Gir {
+        width: 7%;
+    }
+
     .acc {
-        width: 17%;
+        width: 5%;
     }
 
     //ESTILOS TABLA CLASIFICACION CODIGOS UNSPSC
 
-    .Cod{
+    .Cod {
         width: 20%;
     }
-    
-    .Des{
+
+    .Des {
         width: 70%;
     }
 }
-.tableReviews{
+
+.tableReviews {
     margin-top: 0%;
 }
-.tbleRew{
-    overflow: auto;  
+
+.tbleRew {
+    overflow: auto;
     margin-top: -4%;
 }
+
 //AJUSTES A LOS ICONOS DE LAS TABLAS Y VERSION ACTUAL
-    .btnActions {
-        border-color: #185564;
-        border: 2px solid #185564;
-        color: #185564;
-        border-radius: 0.5rem;
-        margin: 1%;
-    }
-    .Actions{
-        display: flex;
-        margin-left: 10px;
-    }
+.btnActions {
+    border-color: #185564;
+    border: 2px solid #185564;
+    color: #185564;
+    border-radius: 0.5rem;
+    margin: 1%;
+}
+
+.Actions {
+    display: flex;
+    margin-left: 10px;
+}
 
 
 //quitar felchas input tipo number
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
+
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+
+/* RESPONSIVE*/
+@media only screen and (max-width: 1470px) {
+    .arrContDias {
+        font-size: 13px !important;        
+       
+    }
+    .tltData {
+        font-size: 13px !important;
+    }
+}
+@media only screen and (max-width: 820px) {
+    .mgp {
+        ul.breadcrumb li {
+            font-size: 13px !important;
+
+            .nomProject {
+                visibility: inherit;
+            }
+        }
+
+    }
+
+
+    .tablaCont {
+        flex-direction: column;
+        align-items: center;
+        .arrContDias {
+            font-size: 12px !important;
+             
+            .arregCont2 {
+                margin-left: 0 !important;
+            }
+        }
+        .contTxt {
+            margin: 0;
+
+
+            .tltData {
+                font-size: 12px !important;
+            }
+
+            .contData {
+                width: 100% !important;
+            }
+
+            .contDataArea {
+                width: 100% !important;
+            }
+
+            .contDataSelect2 {
+                ::ng-deep .mat-select-trigger {
+                    margin-top: 1.5% !important;
+                    //  vertical-align: center;
+                }
+            }
+        }
+
+        .label1 {
+            width: 100% !important;
+        }
+
+        .label2 {
+            width: 100% !important;
+        }
+
+        .label3 {
+            width: 100% !important;
+        }
+
+        .label4 {
+            width: 100% !important;
+        }
+
+        .label5 {
+            width: 100% !important;
+        }
+    }
+
 }

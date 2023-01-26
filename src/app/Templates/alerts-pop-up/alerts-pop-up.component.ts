@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
-import { AlertData } from 'src/app/Views/PAA/task-tray/task-tray.component';
+import { AlertData } from '../alerts/alerts.component';
+
 
 @Component({
   selector: 'app-alerts-pop-up',

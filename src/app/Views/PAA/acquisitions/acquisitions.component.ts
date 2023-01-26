@@ -4,17 +4,16 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { merge, Observable, of as observableOf } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { dataTableProjectI, filterProjectI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
+import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
+import { CDPService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/cdp.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
-import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { StockOrdersService } from 'src/app/Services/ServicesPAA/Requeriment/Stock-Orders/stock-orders.service';
 
 export interface ChipColor {
   name: string;
@@ -68,7 +67,9 @@ export class AcquisitionsComponent implements OnInit {
   constructor(
     private serviceProject: ProjectService, 
     public router: Router, private authService: AuthenticationService,
-    private spinner: NgxSpinnerService,) {
+    private serviceCdps: CDPService,
+    private serviceStockOrders: StockOrdersService,
+    private snackBar: MatSnackBar,) {
 
   }
   filterProjects = {} as filterProjectI;
@@ -89,6 +90,22 @@ export class AcquisitionsComponent implements OnInit {
   //Objeto con la informacion de acceso del Usuario
   AccessUser: string = '';
 
+  //Propiedad para reiniciar el input Importar CDPs/RPs y cargar el mismo archivo varias veces
+  fileCDPsRPs: string = '';
+
+  fileStockOrders: string = '';
+  
+  ngOnInit(): void {
+    this.ngAfterViewInit();
+    
+    this.filterProjects.page = "1";
+    this.filterProjects.take = 20;
+    this.getAllProjects(this.filterProjects);
+    
+    this.AccessUser = this.authService.getRolUser();
+  }
+  
+
   ngAfterViewInit() {
     if (this.isApproved === true) {
       this.tooltip = 'Ejecutar'
@@ -97,16 +114,7 @@ export class AcquisitionsComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-    this.ngAfterViewInit();
-
-    this.filterProjects.page = "1";
-    this.filterProjects.take = 20;
-    this.getAllProjects(this.filterProjects);
-
-    this.AccessUser = this.authService.getRolUser();
-  }
-
+  
   getAllProjects(filterProjects: filterProjectI) {
     if (this.filterForm.value.EstadoDesc == 'Todos') {
       this.filterProjects.EstadoDesc =  ' ';
@@ -117,15 +125,11 @@ export class AcquisitionsComponent implements OnInit {
     this.filterProjects.DependenciaOrigen = this.filterForm.get('DependenciaOrigen')?.value || '';
     this.filterProjects.CodigoProyecto = this.filterForm.value.CodigoProyecto || '';
     this.filterProjects.Nombre = this.filterForm.get('Nombre')?.value || '';
-    // this.filterProjects.EstadoDesc = this.filterForm.get('EstadoDesc')?.value || '';
     this.filterProjects.columna = this.filterForm.get('columna')?.value || '';
     this.filterProjects.ascending = this.filterForm.get('ascending')?.value || false;
 
-    //console.log(filterProjects)
-    this.spinner.show();
     this.serviceProject.getAllProjectsFilter(filterProjects).subscribe(data => {
       this.viewProjects = data
-      // console.log(this.viewProjects.data.items)
       this.dataSource = new MatTableDataSource(this.viewProjects.data.items);
       this.numberPage = this.viewProjects.data.page;
       this.numberPages = this.viewProjects.data.pages;
@@ -140,11 +144,97 @@ export class AcquisitionsComponent implements OnInit {
         this.colorChip = 'closeChips'
       }
 
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
+  }
 
+
+  //Obtener archivo CDPs/RPs
+  onFileSelected(event: any) {
+    const file: FileList = event.target.files;
+    let fil : File = file[0];
+    this.fileCDPsRPs = '';
+    if (file != null) {
+      let FILE = new FormData();
+      FILE.append('file', fil);
+
+      this.importFile(FILE);
+    }
+  }
+
+  //Convertir archivo de Base64 a .xlsx y descargarlo
+  convertBase64ToFileDownload(base64String: string, fileName: string) {
+    const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64String}`;
+    const link = document.createElement("a");
+    link.href = source;
+    link.download = `${fileName}`;
+    link.click();
+  }
+
+
+  //Importar Documento de CDPs/RPs
+  importFile(file : any) {
+    this.serviceCdps.postCDPs(file).subscribe(response => {
+      console.log('Res: ', response);
+      
+      if (response.status === 200) {
+        if (response.data.hasWarnings) {
+          this.openSnackBar('Advertencia', `Se guardaron los registros y surgieron advertencias. Descargando archivo de advertencias ${response.data.warnings.fileName}`, 'warning');
+          this.convertBase64ToFileDownload(response.data.warnings.fileAsBase64, response.data.warnings.fileName);
+        } else {
+          this.openSnackBar('Guardado Exitosamente', `CDPs/RPs importados con éxito.`, 'success');
+        }
+      } else if(response.status === 422) {
+        this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
+        this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
+      } else if (response.status === 423) {
+        this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
+        this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
+      }
+    }, error => {
+      // console.log('Error: ', error);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+    });
+  }
+
+
+  //Obtener archivo Giros
+  onFileStockOrders(event: any) {
+    const file: FileList = event.target.files;
+    let fil : File = file[0];
+    this.fileStockOrders = '';
+    if (file != null) {
+      let FILE = new FormData();
+      FILE.append('file', fil);
+
+      this.importFileStockOrders(FILE);
+    }
+  }
+
+
+  //Importar Documento de CDPs/RPs
+  importFileStockOrders(file : any) {
+    this.serviceStockOrders.postStockOrders(file).subscribe(response => {
+      console.log('Res: ', response);
+      
+      if (response.status === 200) {
+        if (response.data.hasWarnings) {
+          this.openSnackBar('Advertencia', `Se guardaron los registros y surgieron advertencias. Descargando archivo de advertencias ${response.data.warnings.fileName}`, 'warning');
+          this.convertBase64ToFileDownload(response.data.warnings.fileAsBase64, response.data.warnings.fileName);
+        } else {
+          this.openSnackBar('Guardado Exitosamente', `Giros importados con éxito.`, 'success');
+        }
+      } else if(response.status === 422) {
+        this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
+        this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
+      } else if (response.status === 423) {
+        this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
+        this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
+      }
+    }, error => {
+      console.log('Error: ', error);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+    });
   }
 
   isAllSelected() {
@@ -160,10 +250,8 @@ export class AcquisitionsComponent implements OnInit {
   }
 
   getPagination() {
-    //  console.log('form', this.paginationForm.value)
     this.filterProjects.page = this.paginationForm.get('page')?.value;;
     this.filterProjects.take = this.paginationForm.get('take')?.value;
-    // console.log('get', this.filterProjects);
     this.getAllProjects(this.filterProjects);
   }
 
@@ -204,16 +292,22 @@ export class AcquisitionsComponent implements OnInit {
   }
 
   getFilter() {
-    console.log(this.filterForm.value)
     this.filterProjects.DependenciaOrigen = this.filterForm.get('DependenciaOrigen')?.value || '';
     this.filterProjects.CodigoProyecto = this.filterForm.value.CodigoProyecto || '';
     this.filterProjects.Nombre = this.filterForm.get('Nombre')?.value || '';
-    // this.filterProjects.EstadoDesc = this.filterForm.get('EstadoDesc')?.value || '';
     this.filterProjects.columna = this.filterForm.get('columna')?.value || '';
     this.filterProjects.ascending = this.filterForm.get('ascending')?.value || false;
 
     this.getAllProjects(this.filterProjects);
 
+    this.closeFilter();
+  }
+
+  //Limpiar el Filtro
+  clearFilter() {
+    this.filterForm.reset();
+    
+    this.getAllProjects(this.filterProjects);
     this.closeFilter();
   }
 
@@ -227,15 +321,42 @@ export class AcquisitionsComponent implements OnInit {
     this.serviceProject.patchExecutionProject(proyectoID).subscribe(data => {
       this.getAllProjects(this.filterProjects);
       this.isApproved = true;
-      // console.log(data)
     })
   }
   changeStatus(proyectoID: number) {   
     this.serviceProject.patchStatusProject(proyectoID).subscribe(data => {
       this.getAllProjects(this.filterProjects);
       this.isApproved = true;
-      // console.log(data)
     })
   }
+
+
+  //Metodo para llamar alertas
+  openSnackBar(title: string, message: string, type: string, message2?: string) {
+    this.snackBar.openFromComponent(AlertsComponent, {
+      data: { title, message, message2, type },
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: [type],
+    });
+  }
+
+  //Expresion regular para validar que solo se ingresen numeros en la paginación
+  validateFormat(event: any) {
+    let key;
+    if (event.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      key = event.keyCode;
+      key = String.fromCharCode(key);
+    }
+    const regex = /[0-9]|\./;
+     if (!regex.test(key)) {
+      event.returnValue = false;
+       if (event.preventDefault) {
+        event.preventDefault();
+       }
+     }
+    }
 
 }

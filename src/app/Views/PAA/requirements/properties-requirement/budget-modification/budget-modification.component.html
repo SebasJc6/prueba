@@ -1,55 +1,65 @@
 <div class="container center-h center-v">
 
     <mat-card-title class="title">
-        <strong> Modificacíon valor cadena presupuestal</strong>
+        <strong> Modificación valor cadena presupuestal</strong>
     </mat-card-title>
 
     <div class="contForm">
-        <form>
+        <form [formGroup]="valueFormSubmit">
             <div class="tablaCont" style="display: flex;">
                 <div class="contTxt label1">
                     <p class="tltData"> <strong> Valor que aumenta (antes de IVA) </strong> </p>
-                    <input class="contData ">
+                    <input class="contData " maxlength="20" [ngClass]="{'contDataDisabled' : viewDisabledAum== true }"
+                    (keyup)="onPressValueIncreases()"
+                        type="text" formControlName="subAumenta">
                 </div>
 
                 <div class="contTxt label1">
                     <p class="tltData"><strong> Valor que disminuye (antes de IVA) </strong></p>
-                    <input class="contData ">
+                    <input class="contData " [ngClass]="{'contDataDisabled' : viewDisabledDis== true }" type="text"
+                    maxlength="20"
+                    (keyup)="onPressValueDecreases()"
+                        formControlName="SubDisminuye">
                 </div>
             </div>
             <div class="tablaCont" style="display: flex;">
                 <div class="contTxt label1">
-                    <mat-checkbox class="example-margin"(change)="isDisableds($event)">
-                        <strong> Aplica IVA / ARL </strong></mat-checkbox>
+                    <mat-checkbox class="example-margin" [ngClass]="{'contDataDisabled' : isDisabledView== true }"
+                        [disabled]="viewDisabledDis" formControlName="disabled">
+                        <strong> Aplica IVA / ARL </strong>
+                    </mat-checkbox>
                 </div>
             </div>
             <div class="tablaCont" style="display: flex;">
                 <div class="contTxt label1">
                     <p class="tltData"> <strong> IVA </strong> </p>
-                    <input class="contData "[ngClass]="{'contDataDisabled' : isDisabled== true }" [disabled]="isDisabled">
+                    <input class="contData " [ngClass]="{'contDataDisabled' : isDisabled== true }" type="text"
+                        [attr.disabled]="isDisabledView ? '' : null" formControlName="iva">
                 </div>
 
                 <div class="contTxt label1">
                     <p class="tltData"><strong> ARL</strong></p>
-                    <input class="contData " [ngClass]="{'contDataDisabled' : isDisabled== true }" [disabled]="isDisabled">
+                    <input class="contData " [ngClass]="{'contDataDisabled' : isDisabled== true }" type="text"
+                        [attr.disabled]="isDisabledView ? '' : null" formControlName="arl">
                 </div>
             </div>
             <div class="tablaCont" style="display: flex;">
                 <div class="contTxt label2">
                     <p class="tltData"> <strong> Valor (incluye de IVA) </strong> </p>
-                    <input class="contData contDataDisabled" disabled>
+                    <input class="contData contDataDisabled" type="text" formControlName="total">
                 </div>
             </div>
 
             <mat-card-actions>
-                <button class="buton btn" mat-button mat-icon-button mat-dialog-close>
-                    Cancelar
-                  </button>
-                <button class="buton btn" mat-button mat-icon-button >
-                  ACEPTAR
+                <button class="buton btn" mat-button mat-icon-button (click)="onClick()">
+                    ACEPTAR
                 </button>
-                
-              </mat-card-actions>
+                <button class="buton btn" mat-button mat-icon-button (click)="onNoClick()">
+                    Cancelar
+                </button>
+                <!-- <button class="buton btn" mat-button mat-icon-button [mat-dialog-close]="formSubmit" cdkFocusInitial> -->
+
+            </mat-card-actions>
         </form>
     </div>
 </div>

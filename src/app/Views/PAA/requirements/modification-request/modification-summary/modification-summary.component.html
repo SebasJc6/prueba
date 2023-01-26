@@ -3,18 +3,14 @@
         <!--Miga de Pan-->
         <div class="mgp">
           Plan Anual de Adquisiciones
-          <a class="href "  [routerLink]="['/WAPI/PAA/Adquisiciones']">
-            &nbsp;>&nbsp;{{codProject}}
-            -&nbsp;{{nomProject}}
-          </a>
-          <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
-            &nbsp;>&nbsp;Requerimientos
+          <a class="href" [routerLink]="['/WAPI/PAA/BandejaDeSolicitudes']">
+            &nbsp;>&nbsp;Modificaciones solicitadas
           </a>
           <a class="href" [routerLink]="['/WAPI/PAA/SolicitudModificacion/' + dataProjectID + '/' + dataSolicitudModID]">
-          &nbsp;>&nbsp;Solicitud de modificación
+            &nbsp;>&nbsp;Solicitud de modificación
           </a>
           <a class="href selected" [routerLink]="['/WAPI/PAA/ResumenModificacion/', dataProjectID]">
-            &nbsp;>&nbsp; Resumen
+            &nbsp;>&nbsp; Resumen de modificación
           </a>
         </div>
 
@@ -35,48 +31,48 @@
        </div>
 
         <!--TABLA GRANDE CON FOOTER-->
-        <div style="overflow: auto;">
+        <div class="table">
           <table mat-table class="tablePrin mat-elevation-z8" [dataSource]="dataSource">
             <ng-container matColumnDef="pospre">
               <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>POSPRE</p>  </th>
               <td mat-cell *matCellDef="let element"> <p>{{element.pospre}} </p> </td>
-              <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
+              <td mat-footer-cell *matFooterCellDef class="footerTable"></td>
             </ng-container>
 
             <ng-container matColumnDef="mga">
               <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header><p>MGA</p></th>
               <td mat-cell *matCellDef="let element"> <p>{{element.mga}}</p></td>
-              <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
+              <td mat-footer-cell *matFooterCellDef class="footerTable"></td>
             </ng-container>
 
             <ng-container matColumnDef="auxiliar">
               <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>Auxiliar</p></th>
               <td mat-cell *matCellDef="let element"> <p>{{element.auxiliar}}</p>  </td>
-              <td mat-footer-cell *matFooterCellDef class="encabesado"></td>
+              <td mat-footer-cell *matFooterCellDef class="footerTable"></td>
             </ng-container>
 
             <ng-container matColumnDef="actividad">
               <th mat-header-cell *matHeaderCellDef class="encabesado"><p>Actividad</p></th>
               <td mat-cell *matCellDef="let element"> <p>{{element.actividad}} </p></td>
-              <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 8%;">TOTAL GENERAL</p></td>
+              <td mat-footer-cell *matFooterCellDef class="footerTable total"><p style="margin-top: 8%;">TOTAL GENERAL</p></td>
             </ng-container>
 
             <ng-container matColumnDef="sumaAumenta">
               <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p>Suma valor que aumenta</p> </th>
               <td mat-cell *matCellDef="let element"> <p>{{element.sumaValorAumenta | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
-              <td mat-footer-cell *matFooterCellDef class="encabesado"> <p style="margin-top: 5%;">{{Increases | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
+              <td mat-footer-cell *matFooterCellDef class="footerTable total"> <p style="margin-top: 5%;">{{Increases | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
             </ng-container>
 
             <ng-container matColumnDef="sumaDisminuye">
               <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p> Suma valor que disminuye</p> </th>
               <td mat-cell *matCellDef="let element">  <p>{{element.sumaValorDisminuye | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
-              <td mat-footer-cell *matFooterCellDef class="encabesado"> <p style="margin-top: 5%;">{{Decreases | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
+              <td mat-footer-cell *matFooterCellDef class="footerTable total"> <p style="margin-top: 5%;">{{Decreases | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
             </ng-container>
 
             <ng-container matColumnDef="diferencia">
               <th mat-header-cell *matHeaderCellDef class="encabesado" mat-sort-header ><p> Diferencia</p> </th>
               <td mat-cell *matCellDef="let element"> <p>{{element.diferencia | currency:"COP":'symbol-narrow': '1.0-0'}}</p></td>
-              <td mat-footer-cell *matFooterCellDef class="encabesado"><p style="margin-top: 9.5%;">{{Gap | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
+              <td mat-footer-cell *matFooterCellDef class="footerTable total"><p style="margin-top: 9.5%;">{{Gap | currency:"COP":'symbol-narrow': '1.0-0'}} </p></td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -101,7 +97,7 @@
       </a>
       <mat-form-field class="page" appearance="legacy">
         <mat-label>página</mat-label>
-        <input matInput value="{{numberPage}}" formControlName="page">
+        <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page">
         <button matSuffix (click)="getPagination()" mat-icon-button>
           <mat-icon matTooltip="Buscar Página">youtube_searched_for</mat-icon>
         </button>
@@ -116,9 +112,7 @@
   
     </div>
 
-      <div style="margin-top: 3%;">
-        <mat-card-actions>
+        <mat-card-actions class="actions__buttons">
           <button class="buton btn" mat-button mat-icon-button (click)="regresar()">REGRESAR</button>
         </mat-card-actions>
-      </div>
 </div>

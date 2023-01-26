@@ -1,0 +1,290 @@
+.container {
+    margin-left: 3%;
+    position: block;
+    margin-right: 3%;
+    text-align: center;
+}
+
+//MIGA DE PAN
+.mpg{
+    display: flex;
+    position: fixed;
+  }
+  ul.breadcrumb {
+    padding: 10px 16px;
+    list-style: none;
+  }
+  ul.breadcrumb li {
+    display: inline;
+    font-size: 14px;
+  }
+  ul.breadcrumb li+li:before {
+    padding: 4px;
+    color: #185564;
+    font-weight: bold;
+    content: ">";
+  }
+  ul.breadcrumb li a {
+    color: #185564;
+    text-decoration: none;
+  }
+  ul.breadcrumb li a:hover {
+    color: #185564;
+    text-decoration: underline;
+  }
+  
+  .href {
+    color: #185564;
+  }
+  
+  .selected {
+    font-weight: bold;
+  }
+.center-h {
+    justify-content: center;
+}
+
+.center-v {
+    align-items: center;
+}
+
+//TITULO Y BOTON FILTRAR
+.opciones {
+    margin-right: 6%;
+    margin-bottom: 2%;
+
+    .export {
+        margin-left: 2%;
+        margin-top: 3%;
+        display: flex;
+        color: #185564;
+    }
+
+    .Fil {
+        margin-bottom: 1%;
+        float: right;
+        border: 2px solid #185564;
+        border-radius: 0.5rem;
+        border-color: #185564;
+        width: 6%;
+        color: #185564;
+        margin-top: -2%;
+    }
+}
+
+.colorCard1 {
+    background-color: #dcf8ff;
+}
+
+.colorCard2 {
+    background-color: white;
+}
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #185564;
+}
+.formCont {
+    .tablaCont {
+        display: flex;
+        margin-left: 2%;
+        margin-right: 2%;
+        color: black;
+
+        .contTxt {
+            text-align: left;
+            margin: 1%;
+            margin-top: 0.8%;
+            margin-bottom: 0.8%;
+            .tltData {
+                font-size: 14px;
+                margin-bottom: -1.5%;
+
+                mat-select {
+                    margin-top: 2%;
+                }
+                .colorSelect{
+                    background-color: white;
+                }
+            }
+
+            .contData {
+                border: 2px solid #185564;
+                border-radius: 0.3rem;
+                height: 30px;
+                width: 100%;
+                margin-top: 1.5%;
+            }
+         
+            .contDataDisabled {
+                border-color: gray;
+                background-color: white;
+                color:  gray;
+            }
+
+            ::ng-deep .mat-form-field-flex>.mat-form-field-infix {
+                padding: 0.2em 0px !important;
+                height: 35px;
+                border: 2px solid #185564;
+                border-radius: 0.3rem;
+            }
+        }
+
+        .dis{
+            display: inline;
+        }
+        .label1 {
+            width: 23%;
+        }
+
+        .label2 {
+            width: 74%;
+        }
+    }
+}
+table {
+    width: 93.5%;
+    margin-left: 3%;
+    margin-right: 3%;
+    
+    th {
+        background-color: #185564;
+        color: white;
+        text-align: center;
+        font-size: 12px;
+        font-weight: bold;
+        border-left: 1px solid #7497a0;
+    }
+
+    td {
+        text-align: center;
+        font-size: 11px;
+        border-left: 1px solid #e0e0e0;
+    }
+    mat-table {
+      max-height: 500px;
+    }
+
+    //ESTILOS TABLA CLASIFICACION PRESUPUESTAL
+    .codAct{
+        width: 10%;
+    }
+    .pos{
+        width: 17%;
+    }
+    .mga{
+        width: 10%;
+    }
+    .aux{
+        width: 10%;
+    }
+     .fue {
+        width: 25%;
+    }        
+    .aprDis{
+        width: 14%;
+    }
+    .valDis{
+        width: 14%;
+    }
+    .contDataTabla{
+        border: 2px solid #ffffff;
+        border-radius: 0.3rem;
+        height: 30px;
+        width: 60%;
+        margin-top: 1.5%;
+        width: 6em;
+        text-align: center;
+        margin: 5px;
+        // margin-top: 1.5%;
+    }
+    .tam{
+        font-size: 12px;
+    }
+       
+}
+
+mat-card-actions {
+    display: block;
+    margin-top: 2%;
+    margin-bottom: 5%;
+    .buton {
+        margin-left: 5%;
+        margin-right: 5%;
+        text-transform: uppercase;
+        border-color: #185564;
+        // margin: 2%;
+        margin: 1%;
+        margin: 2%;
+        border: 2px solid #185564;
+        text-transform: uppercase;
+        color: #185564;
+        width: 15%;
+        width: 15rem;
+        border-radius: 1.5rem;
+        font-weight: bold;
+        font-size: 100%;
+        align-items: center;
+        line-height: 0px;
+    }
+
+    .btn:hover {
+        cursor: pointer;
+        transition-duration: 0.3s;
+        color: white;
+        background-color: #185564;
+    }
+}
+
+//quitar felchas input tipo number
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+
+.actions__buttons{
+    margin-bottom: 5rem;
+}
+/* RESPONSIVE*/
+@media only screen and (max-width: 825px) {
+    ul.breadcrumb li {
+        font-size: 13px !important;
+        .nomProject{
+            visibility: inherit;
+        }
+      }
+
+    .formCont {
+        .tablaCont {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 10px;
+        }
+        .label1 {
+            width: 90% !important;
+        }
+        .label2 {
+            width: 90% !important;
+        }
+    }
+}
+@media only screen and (max-width: 410px) {
+    .mgp{
+        overflow-x: scroll;
+    }
+}
+@media only screen and (max-width: 500px) {
+    .formCont {
+        .tablaCont {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            grid-gap: 10px;
+        }
+    }
+}

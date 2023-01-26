@@ -6,11 +6,11 @@
         <div class="navbar">
             <div class="top">
                 <!-- <mat-icon class="iconRol" matTooltip="Cambiar rol">group</mat-icon> -->
-                <mat-icon [inline]='true' (click)="logOut()" matTooltip="Cerrar Sesion">exit_to_app</mat-icon>
+                <mat-icon [inline]='true' (click)="logOut()" matTooltip="Cerrar Sesión">exit_to_app</mat-icon>
             </div>
 
             <div class="user">
-                <mat-icon style="color: white;">person</mat-icon>
+                <mat-icon style="color: #185564;">person</mat-icon>
 
                 <h3 class="name"><strong>{{UserName}}</strong> </h3>
 
@@ -18,7 +18,6 @@
                 <!-- <h4 class="mail"> <strong>admin</strong> </h4> -->
             </div>
             <div class="rol">
-                <mat-icon style="color: white;">person</mat-icon>
 
                 <h3 class="rolName"><strong>{{AccessUser}}</strong> </h3>
             </div>
@@ -32,7 +31,7 @@
                         <mat-expansion-panel class="menu-panel">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
-                                    <img src="assets/img/PDD.png" alt="PDD">
+                                    <img class="logo" src="assets/img/PDD.png" alt="PDD">
                                     <span class="title">Plan de desarrollo (PDD)</span>
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
@@ -41,7 +40,7 @@
                             </button>
                         </mat-expansion-panel>
 
-                        <mat-expansion-panel class="menu-panel">
+                        <!-- <mat-expansion-panel class="menu-panel">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     <img src="assets/img/PROYECTO.png" alt="PROYECTO">
@@ -51,32 +50,38 @@
                             <button mat-button class="menu-button" [routerLink]="['']">
                                 <span>Empy</span>
                             </button>
-                        </mat-expansion-panel>
+                        </mat-expansion-panel> -->
 
 
                         <mat-expansion-panel class="menu-panel">
                             <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    <img src="assets/img/PAA.png" alt="PAA">
-                                    <span class="title">Plan anual de adquisisiones (PAA)</span>
+                                <mat-panel-title style="margin-left: -2%;">
+                                    <img class="logo" src="assets/img/PAA.png" alt="PAA">&nbsp;
+                                    <span class="title">Plan anual de adquisiciones (PAA)</span>
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div>
                                 <button mat-button class="menu-button" [routerLink]="['PAA/Adquisiciones']"
                                     (click)="sidebar.toggle()">
-                                    <span>PAA</span>
+                                    &nbsp;<span>- PAA</span>
                                 </button>
                             </div>
                             <div *ngIf="AccessUser === 'Referente_PAA'">
                                 <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeTareas']"
                                     (click)="sidebar.toggle()">
-                                    <span>Bandeja de tareas</span>
+                                    &nbsp;<span>- Bandeja de tareas</span>
                                 </button>
                             </div>
                             <div>
                                 <button mat-button class="menu-button" [routerLink]="['PAA/BandejaDeSolicitudes']"
                                     (click)="sidebar.toggle()">
-                                    <span>Modificaciones solicitadas</span>
+                                    &nbsp;<span>- Modificaciones solicitadas</span>
+                                </button>
+                            </div>
+                            <div>
+                                <button mat-button class="menu-button" disabled="true" [routerLink]="['PAA/Reportes']"
+                                    (click)="sidebar.toggle()">
+                                    &nbsp;<span>- Reportes</span>
                                 </button>
                             </div>
                         </mat-expansion-panel>
@@ -85,7 +90,7 @@
                         <mat-expansion-panel class="menu-panel">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
-                                    <img src="assets/img/POAI.png" alt="POAI">
+                                    <img class="logo" src="assets/img/POAI.png" alt="POAI">
                                     <span class="title">Plan operativo de inversiones (POAI)</span>
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
@@ -98,7 +103,7 @@
                         <mat-expansion-panel class="menu-panel">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
-                                    <img src="assets/img/SEGAPLAN.png" alt="SEGAPLAN">
+                                    <img class="logo" src="assets/img/SEGAPLAN.png" alt="SEGAPLAN">
                                     <span class="title">Seguimiento plan de desarrolo (SEGPLAN)</span>
                                 </mat-panel-title>
                             </mat-expansion-panel-header>

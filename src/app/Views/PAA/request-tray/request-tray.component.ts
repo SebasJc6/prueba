@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { filterRequestTrayI, itemsRequestTrayI } from 'src/app/Models/ModelsPAA/request-tray/request-tray';
 import { RequestTrayService } from 'src/app/Services/ServicesPAA/request-tray/request-tray.service';
 
@@ -14,7 +13,7 @@ import { RequestTrayService } from 'src/app/Services/ServicesPAA/request-tray/re
 export class RequestTrayComponent implements OnInit {
 
   constructor(private requestTrayService: RequestTrayService,
-    public router: Router, private spinner: NgxSpinnerService,) { }
+    public router: Router,) { }
 
   //INFORMACION PARA LA TABLA CLASIFICACION PRESUPUESTAL
   displayedColumns: string[] = ['solicitud', 'vigencia', 'fPresentacion', 'codigoP', 'proyecto', 'version', 'solicitante', 'estado', 'fAprobacion', 'accion'];
@@ -49,7 +48,7 @@ export class RequestTrayComponent implements OnInit {
   numberPage: number = 0;
   dataProjectID: number = 0;
 
-  estadoFilter: string[] = ['Todos', 'Aprobada', 'En Revisión', 'Rechazada', 'En Ajuste', 'En Modificación']
+  estadoFilter: string[] = ['Todos', 'Aprobada', 'En Revisión', 'Rechazada', 'En Ajuste', 'En Creación']
   viewFilter: boolean = true;
   viewOrder = false;
 
@@ -79,10 +78,7 @@ export class RequestTrayComponent implements OnInit {
     this.filterRequestTray.columna = this.filterForm.get('columna')?.value || '';
     this.filterRequestTray.ascending = this.filterForm.get('ascending')?.value || false;
 
-    //console.log(filterRequestTray);
-    this.spinner.show();
     this.requestTrayService.getRequestTray(filterRequestTray).subscribe(request => {
-      //console.log('solicitud',request)
       this.dataSource = request.data.items;
       this.numberPage = request.data.page;
       this.numberPages = request.data.pages;
@@ -92,15 +88,14 @@ export class RequestTrayComponent implements OnInit {
         page: filterRequestTray.page
       });
       
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
   }
 
   modificatioRequest(ProjectId : number, requestId: number){
     this.dataProjectID = ProjectId;
     this.router.navigate(['/WAPI/PAA/SolicitudModificacion/' + this.dataProjectID + '/' + requestId ])
+    sessionStorage.setItem('mgp', 'request-tray');
   }
 
   //FILTRO
@@ -119,13 +114,20 @@ export class RequestTrayComponent implements OnInit {
     this.filterRequestTray.NombreProyecto = this.filterForm.get('NombreProyecto')?.value || '';
     this.filterRequestTray.Version = this.filterForm.value.Version || '';
     this.filterRequestTray.Solicitante = this.filterForm.get('Solicitante')?.value || '';
-    // this.filterRequestTray.Estado = this.filterForm.get('Estado')?.value || '';
     this.filterRequestTray.FechaAprobacion_rechazo = this.filterForm.get('FechaAprobacion_rechazo')?.value || '';
     this.filterRequestTray.columna = this.filterForm.get('columna')?.value || '';
     this.filterRequestTray.ascending = this.filterForm.get('ascending')?.value || false;
 
     this.getRequestTray(this.filterRequestTray);
 
+    this.closeFilter();
+  }
+
+  //Limpiar el Filtro
+  clearFilter() {
+    this.filterForm.reset();
+    
+    this.getRequestTray(this.filterRequestTray);
     this.closeFilter();
   }
 
@@ -164,6 +166,24 @@ export class RequestTrayComponent implements OnInit {
       this.getRequestTray(this.filterRequestTray);
     }
 
+    //Expresion regular para validar que solo se ingresen numeros en la paginación
+  validateFormat(event: any) {
+    let key;
+    if (event.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      key = event.keyCode;
+      key = String.fromCharCode(key);
+    }
+    const regex = /[0-9]|\./;
+     if (!regex.test(key)) {
+      event.returnValue = false;
+       if (event.preventDefault) {
+        event.preventDefault();
+       }
+     }
+    }
+
 }
 
 var ProChartStorage = {
@@ -171,7 +191,6 @@ var ProChartStorage = {
     return localStorage.getItem(key);
   },
   setItem: function (key: any, value: any) {
-    // console.log("prochart setItem")
     localStorage.setItem(key, value);
   },
   removeItem: function (key: any) {

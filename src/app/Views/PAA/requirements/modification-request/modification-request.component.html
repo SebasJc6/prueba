@@ -2,16 +2,23 @@
 <div class="container center-h center-v">
     <div class="mgp">
         Plan Anual de Adquisiciones
-        <a class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
+        <a *ngIf="dataSolicitudModID === '0'" class="href " [routerLink]="['/WAPI/PAA/Adquisiciones']">
             &nbsp;>&nbsp;{{codProject}}
             -&nbsp;{{nomProject}}
         </a>
-        <a class="href" [routerLink]="['/WAPI/PAA/Requerimientos/',dataProjectID]">
+        <a *ngIf="dataSolicitudModID === '0'" class="href" [routerLink]="['/WAPI/PAA/Requerimientos/',dataProjectID]">
             &nbsp;>&nbsp;Requerimientos
+        </a>
+        <a *ngIf="dataSolicitudModID !== '0'" class="href" [routerLink]="['/WAPI/PAA/BandejaDeSolicitudes']">
+            &nbsp;>&nbsp;Modificaciones solicitadas
         </a>
         <a class="href selected">
             &nbsp;>&nbsp;Solicitud modificación
         </a>
+    </div>
+
+    <div class="mgp">
+
     </div>
 
     <div class="tltPrin">
@@ -20,70 +27,86 @@
         </mat-card-title>
     </div>
 
-    <div class="ActionsUp">
-        <div class="btnUpAction">
-            <button *ngIf="AccessUser === 'Referente_PAA'" class="buton btn" mat-button mat-icon-button
-                [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true"
-                (click)="newRequeriment()">
-                Nuevo
-            </button>
-            <button *ngIf="AccessUser === 'Referente_PAA'" class="buton btn" mat-button mat-icon-button
-                [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true"
-                (click)="Addrequirement()">
-                Modificar
-            </button>
-            <button *ngIf="AccessUser === 'Referente_PAA'" class="buton btn" mat-button mat-icon-button
-                [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true"
-                (click)="Addcounterpart()">
-                Contrapartida
-            </button>
-            <button class="buton btn" mat-button mat-icon-button
-                [disabled]="(dataSolicitudModID !== '0') ? false : true" (click)="ResumenModificacion()">
-                Resumen
-            </button>
-            <button class="Fil" #btnFiltrar mat-button (click)="openFilter()" *ngIf="viewFilter">
-                Filtrar
-            </button>
-            <span class="btnExcel">
-                <button mat-button [disabled]="(dataSolicitudModID !== '0') ? false : true" (click)="exportFile()">
-                    Exportar
-                    <img class="imgExcel" src="../../../../assets/img/excel.jpg">
-                </button>
-            </span>
-            <span *ngIf="AccessUser === 'Referente_Planeacion'" class="btngImport">
-                <button type="button" mat-raised-button class="btngImport" (click)="openChargeFile()"
-                    [disabled]="(dataSolicitudModID == '0') ? false : true">
-                    Importar
-                    <img class="imgImport" src="../../../../assets/img/import.png">
-                </button>
-            </span>
-        </div>
-    </div>
 
-    <div class="top">
+    <div class="actions__form">
+        <div class="ActionsUp">
+            <div class="btnUpAction">
+                <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false"  class="buton btn" mat-button mat-icon-button
+                    style="cursor: pointer;"
+                    matTooltip="Nuevo Requerimiento"
+                    (click)="newRequeriment()">
+                    Nuevo
+                </button>
+                <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="buton btn" mat-button mat-icon-button
+                    style="cursor: pointer;"
+                    matTooltip="Modificar Requerimiento"
+                    (click)="Addrequirement()">
+                    Modificar
+                </button>
+                <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="buton btn" mat-button mat-icon-button
+                    style="cursor: pointer;"
+                    matTooltip="Incluir Contrapartida"
+                    (click)="Addcounterpart()">
+                    Contrapartida
+                </button>
+                <button *ngIf="(dataSolicitudModID !== '0') ? true : false" class="buton btn" mat-button mat-icon-button
+                    style="cursor: pointer;"
+                    (click)="ResumenModificacion()">
+                    Resumen
+                </button>
+    
+                <div class="div__buttons__actions">
+    
+                    <button class="Fil" #btnFiltrar mat-button (click)="openFilter()" *ngIf="viewFilter">
+                        Filtrar
+                    </button>
+        
+                    <span class="btnExcel" *ngIf="(dataSolicitudModID !== '0') ? true : false">
+                        <button mat-button (click)="exportFile()">
+                            <mat-icon class="imgExcel mat-icon" matTooltip="Exportar Excel">
+                                <img class="imgExcel" src="../../../../assets/img/excel.jpg">
+                            </mat-icon>
+                        </button>
+                    </span>
+    
+                    <span *ngIf="(AccessUser === 'Referente_Planeacion'  && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" class="btngImport">
+                        <button mat-button class="btn" (click)="openChargeFile()">
+                            <mat-icon class="imgImport mat-icon" matTooltip="Importar Excel">
+                                <img class="imgImport" src="../../../../assets/img/import.png">
+                            </mat-icon>
+                        </button>
+                    </span>
+                </div>
+            </div>
+    
+        </div>
+    
         <form action="">
             <div class="tablaCont">
                 <div class="contTxt label1">
                     <p class="tltData">Código del proyecto</p>
                     <input class="contData" value="{{codProject}}" disabled>
                 </div>
-
+    
                 <div class="contTxt label1">
                     <p class="tltData">Número Modificación</p>
                     <input class="contData" value="{{numModification}}" disabled>
                 </div>
-
-                <!-- <div class="contTxt label1">
-                    <p class="tltData">Vigencia a afectar</p>
-                    <mat-select class="contDataSelect" formControlName="">
-                        <mat-option *ngFor="" [value]="">2022</mat-option>
-                        <mat-option value="2023">2023</mat-option>
-                        <mat-option value="2024">2024</mat-option>
+    
+                <div class="contTxt div__select" *ngIf="dataSolicitudModID != '0'">
+                    <p class="tltData label__select">Vigencia a afectar</p>
+                    <mat-select class="contDataSelect"
+                        [(ngModel)]="dataValidity" name="validity"
+                        (selectionChange)="selectValidity()">
+                        <mat-option *ngFor="let validity of ArrayValidity" [value]="validity">{{validity}}</mat-option>
                     </mat-select>
-                </div> -->
+                </div>
             </div>
         </form>
+    </div>
 
+
+    <div class="top">
         <!-- Opción filtrar -->
         <mat-card *ngIf="!viewFilter">
             <div class="close">
@@ -126,36 +149,36 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div class="form">
-                            <mat-form-field style="width: 10%;" appearance="outline">
-                                <mat-label>Número de requerimiento</mat-label>
+                            <mat-form-field appearance="outline">
+                                <mat-label class="text__opacity">Número de requerimiento</mat-label>
                                 <input matInput formControlName="NumeroRequerimiento" type="number">
                             </mat-form-field>
-                            <mat-form-field style="width: 10%;" appearance="outline">
-                                <mat-label>Dependencia destino de recursos</mat-label>
+                            <mat-form-field appearance="outline">
+                                <mat-label class="text__opacity">Dependencia destino de recursos</mat-label>
                                 <input matInput formControlName="DependenciaDestino" type="number">
                             </mat-form-field>
-                            <mat-form-field style="width: 25%;" appearance="outline">
-                                <mat-label>Descripción</mat-label>
+                            <mat-form-field appearance="outline">
+                                <mat-label class="text__opacity">Descripción</mat-label>
                                 <input matInput formControlName="Descripcion">
                             </mat-form-field>
-                            <mat-form-field style="width: 20%;" appearance="outline">
-                                <mat-label>Modalidad de Selección</mat-label>
+                            <mat-form-field appearance="outline">
+                                <mat-label class="text__opacity">Modalidad de Selección</mat-label>
                                 <input matInput formControlName="ModalidadSeleccion">
                             </mat-form-field>
-                            <mat-form-field style="width: 15%;" appearance="outline">
-                                <mat-label>Actuacion Contractual</mat-label>
+                            <mat-form-field appearance="outline">
+                                <mat-label class="text__opacity">Actuacion Contractual</mat-label>
                                 <input matInput formControlName="ActuacionContractual">
                             </mat-form-field>
-                            <mat-form-field style="width: 10%;" appearance="outline">
-                                <mat-label>Numero Contrato</mat-label>
+                            <mat-form-field appearance="outline">
+                                <mat-label class="text__opacity">Numero Contrato</mat-label>
                                 <input matInput formControlName="NumeroContrato">
                             </mat-form-field>
-                            <mat-form-field style="width: 20%;" appearance="outline">
-                                <mat-label>Tipo Contrato</mat-label>
+                            <mat-form-field appearance="outline">
+                                <mat-label class="text__opacity">Tipo Contrato</mat-label>
                                 <input matInput formControlName="TipoContrato">
                             </mat-form-field>
-                            <mat-form-field style="width: 15%;" appearance="outline">
-                                <mat-label>Perfil</mat-label>
+                            <mat-form-field appearance="outline">
+                                <mat-label class="text__opacity">Perfil</mat-label>
                                 <input matInput formControlName="Perfil">
                             </mat-form-field>
 
@@ -166,18 +189,21 @@
                 <button class="FilSear" mat-button (click)="getFilter()">
                     Filtrar
                 </button>
+                <button class="FilSear" mat-button (click)="clearFilter()">
+                    Limpiar
+                </button>
             </div>
         </mat-card>
         <!-- /Opción Filtrar -->
 
     </div>
 
-    <div style="overflow: auto;">
+    <div class="table">
         <table class="tablePrin mat-elevation-z8" mat-table [dataSource]="dataSourcePrin">
 
             <ng-container matColumnDef="numeroRequerimiento">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="numReq">Número requerimiento</th>
-                <td mat-cell *matCellDef="let element">{{element.numeroRequerimiento}}</td>
+                <td mat-cell *matCellDef="let element">{{element.isContrapartida ? '' : element.numeroRequerimiento}}</td>
                 <td class="footerTable" mat-footer-cell *matFooterCellDef></td>
             </ng-container>
 
@@ -193,7 +219,7 @@
 
             <ng-container matColumnDef="descripcion">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="desc">
-                    Descripción (objeto del contrato)
+                    Descripción (Objeto del contrato)
                 </th>
                 <td mat-cell *matCellDef="let element">
                     {{element.descripcion}}
@@ -258,7 +284,7 @@
                 <td mat-cell *matCellDef="let element">
                     {{element.honorarios | currency:"COP":'symbol-narrow': '1.0-0'}}
                 </td>
-                <td class="footerTable" mat-footer-cell *matFooterCellDef>TOTAL</td>
+                <td class="footerTable total" mat-footer-cell *matFooterCellDef>TOTAL</td>
             </ng-container>
 
             <ng-container matColumnDef="saldoRequerimiento">
@@ -268,7 +294,7 @@
                 <td mat-cell *matCellDef="let element">
                     {{element.saldoRequerimiento | currency:"COP":'symbol-narrow': '1.0-0'}}
                 </td>
-                <td class="footerTable" mat-footer-cell *matFooterCellDef>
+                <td class="footerTable total" mat-footer-cell *matFooterCellDef>
                     {{viewsCalReq | currency:"COP":'symbol-narrow': '1.0-0'}}
                 </td>
             </ng-container>
@@ -280,7 +306,7 @@
                 <td mat-cell *matCellDef="let element">
                     {{element.valorAumenta | currency:"COP":'symbol-narrow': '1.0-0'}}
                 </td>
-                <td class="footerTable" mat-footer-cell *matFooterCellDef>
+                <td class="footerTable total" mat-footer-cell *matFooterCellDef>
                     {{viewsCalAum | currency:"COP":'symbol-narrow': '1.0-0'}}
                 </td>
             </ng-container>
@@ -292,7 +318,7 @@
                 <td mat-cell *matCellDef="let element">
                     {{element.valorDisminuye | currency:"COP":'symbol-narrow': '1.0-0'}}
                 </td>
-                <td class="footerTable" mat-footer-cell *matFooterCellDef>
+                <td class="footerTable total" mat-footer-cell *matFooterCellDef>
                     {{viewsCalDis | currency:"COP":'symbol-narrow': '1.0-0'}}
                 </td>
             </ng-container>
@@ -304,7 +330,7 @@
                 <td mat-cell *matCellDef="let element">
                     {{element.nuevoSaldoApropiacion | currency:"COP":'symbol-narrow': '1.0-0'}}
                 </td>
-                <td class="footerTable" mat-footer-cell *matFooterCellDef>
+                <td class="footerTable total" mat-footer-cell *matFooterCellDef>
                     {{viewsCalApr| currency:"COP":'symbol-narrow': '1.0-0'}}
                 </td>
             </ng-container>
@@ -325,15 +351,14 @@
                                     (click)="editRecord(element)">edit</mat-icon>
                             </button>
 
-                            <button *ngIf="AccessUser === 'Referente_PAA'" mat-icon-button
-                                (click)="removeDataTbl(element)"
-                                [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true">
+                            <button *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" mat-icon-button
+                                (click)="removeDataTbl(element)">
                                 <mat-icon mat-icon-button class="btnActions" matTooltip="Eliminar">delete</mat-icon>
                             </button>
                         </div>
                     </td>
                 <tr>
-                    <td class="footerTable" mat-footer-cell *matFooterCellDef></td>
+                    <td class="footerTable total" mat-footer-cell *matFooterCellDef></td>
             </ng-container>
 
 
@@ -358,7 +383,7 @@
         </a>
         <mat-form-field class="page" appearance="legacy">
             <mat-label>página</mat-label>
-            <input matInput value="{{numberPage}}" formControlName="page">
+            <input matInput value="{{numberPage}}" maxlength="3" (keypress)="validateFormat($event)" formControlName="page" type="number">
             <button matSuffix (click)="getPagination()" mat-icon-button>
                 <mat-icon matTooltip="Buscar Página">youtube_searched_for</mat-icon>
             </button>
@@ -379,7 +404,7 @@
         <mat-form-field hintLabel="Máximo 3000 caracteres" appearance="outline">
             <textarea matInput #input maxlength="3000" [(ngModel)]="JustificationText" rows="8"
                 placeholder="Se requiere modificar"
-                [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') && AccessUser === 'Referente_PAA' ? false : true"></textarea>
+                [disabled]="(StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '') && AccessUser === 'Referente_PAA' ? false : true"></textarea>
             <mat-hint align="end">{{input.value.length || 0}}/3000</mat-hint>
         </mat-form-field>
 
@@ -388,13 +413,12 @@
     <div class="attachedFiles">
         <p>Archivos adjuntos</p>
 
-        <div class="btnAttachedFiles">
+        <div class="btnAttachedFiles" *ngIf="(StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? true : false">
 
             <mat-icon *ngIf="AccessUser == 'Referente_PAA'" mat-icon-button class="btnActions"
                 matTooltip="Adjunta los archivos" (click)="fileUpload.click()">attach_file</mat-icon>
             &nbsp;<strong>{{ blockSave }}</strong>
-            <input type="file" accept="application/pdf"
-                [disabled]="((StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? false : true"
+            <input type="file" accept="application/pdf"  [(ngModel)]="filterFileName"
                 class="file-input" (change)="onFileSelected($event)" #fileUpload />
         </div>
 
@@ -410,9 +434,8 @@
                 </th>
                 <td mat-cell *matCellDef="let element">
                     <div>
-                        <mat-icon mat-icon-button *ngIf="AccessUser == 'Referente_PAA'" mat-icon-button
+                        <mat-icon mat-icon-button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false" mat-icon-button
                             class="btnActions"
-                            [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true"
                             matTooltip="Elimina el archivo adjunto" (click)="deleteFile(element)">delete
                         </mat-icon>
                         &nbsp;&nbsp;
@@ -439,24 +462,26 @@
 
     </div>
 
-    <mat-card-actions>
-        <button *ngIf="AccessUser == 'Referente_PAA'" class="buton btn" mat-button mat-icon-button
-            [disabled]="(StatusRequest == 'En Modificación' || StatusRequest == 'En Ajuste' || StatusRequest == '') ? false : true"
-            (click)="guardar()">
-            Guardar
-        </button>
-        <button *ngIf="AccessUser == 'Referente_PAA'" class="buton btn" mat-button mat-icon-button (click)="enviar()">
-            Enviar
-        </button>
-        <!-- <div> -->
-        <button *ngIf="AccessUser == 'Referente_Planeacion'" class="buton btn" mat-button mat-icon-button
-            (click)="enviarRecisiones()">
-            Enviar Revisiones
-        </button>
-        <!--</div> -->
-        <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
-            Cancelar
-        </button>
-    </mat-card-actions>
+    <div class="actions__buttons">
+        <mat-card-actions>
+            <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false"  class="buton btn" 
+                style="margin-left: 2%; margin-right: 2%;" mat-button mat-icon-button
+                (click)="guardar()">
+                Guardar
+            </button>
+            <button *ngIf="(AccessUser == 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste')) ? true : false" class="buton btn" mat-button mat-icon-button (click)="enviar()">
+                Enviar
+            </button>
+            <!-- <div> -->
+            <button *ngIf="AccessUser == 'Referente_Planeacion' && StatusRequest == 'En Revisión'" class="buton btn" mat-button mat-icon-button
+                (click)="enviarRecisiones()">
+                Enviar Revisiones
+            </button>
+            <!--</div> -->
+            <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
+                Cancelar
+            </button>
+        </mat-card-actions>
+    </div>
 
 </div>

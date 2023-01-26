@@ -1,9 +1,14 @@
+import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { filterCDPsI, itemsCDPsI } from 'src/app/Models/ModelsPAA/Requeriment/cdp';
+import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
+import { CDPService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/cdp.service';
+import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 
 @Component({
   selector: 'app-cdp',
@@ -15,9 +20,12 @@ export class CDPComponent implements OnInit {
   constructor( private activeRoute: ActivatedRoute,
     public router: Router,
     private serviceModRequest: ModificationRequestService,
-    private spinner: NgxSpinnerService,) { }
+    private serviceCdps: CDPService,
+    private snackBar: MatSnackBar,
+    private authService: AuthenticationService) { }
 
   displayedColumns: string[] = [
+    'select',
     'Vigencia',
     'CDP',
     'FECHA CDP',
@@ -25,23 +33,59 @@ export class CDPComponent implements OnInit {
     'VALOR ANULACIÓN',
     'FECHA ANULACIÓN',
     'VALOR FINAL',
-    'No. RP',
+    'CANTIDAD RP',
     'VALOR RP',
-    'VALOR DISTRIBUIDO'
+    'VALOR DISTRIBUIDO',
+    'DIFERENCIA'
   ];
 
-  dataSource: any[] = []; //TODO: Crear interfaces similares a Modification Sumary
+  //Propiedad con el Rol del Usuario
+  AccessUser: string = '';
+
+  //Información que se muestra en la tabla
+  dataSource: itemsCDPsI[] = [];
+  //Valor Inicial
+  initialValue: number = 0;
+  //Valor Anulación
+  cancellationValue: number = 0;
+  //Valor Final
+  finalvalue: number = 0;
+  //Valor RP
+  valueRP: number = 0;
+  //Valor Distribuido
+  distributedValue: number = 0;
+  //Diferencia
+  diference: number = 0;
 
   dataProjectID: string = '';
   requerimentId: string = '';
 
   //Valores para guardar la informacion del proyecto para mostrar en la miga de pan
   codProject: number = 0;
-  nomProject: string = ''; 
+  nomProject: string = '';
+  
+  //FILTRO
+  viewFilter: boolean = true;
+  viewOrder: boolean = false;
+  
+  
+  CDPsChecked: itemsCDPsI[] = [];
+  selection = new SelectionModel<itemsCDPsI>(true, []);
 
+  enableHabilit: boolean = false;
+  
+  
+  //CAMPOS PARA EL FILTRO
+  filterCDPs = {} as filterCDPsI;
+  filterForm = new FormGroup({
+    vigencia: new FormControl(),
+    numeroCDP: new FormControl(),
+    fechaCDP: new FormControl(),
+    columna: new FormControl(''),
+    ascending: new FormControl(false)
+  });
+  
   //Paginación
-  pageSummary = {} as any; //TODO: Crear interfaces similares a Modification Sumary
-
   paginationForm = new FormGroup({
     page: new FormControl(),
     take: new FormControl()
@@ -52,37 +96,187 @@ export class CDPComponent implements OnInit {
   numberPages: number = 0;
   numberPage: number = 0;
 
+
   ngOnInit(): void {
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
     this.requerimentId = this.activeRoute.snapshot.paramMap.get('idReq') || '';
+    this.filterCDPs.page = "1";
+    this.filterCDPs.take = 20;
     this.getModificationRequet(Number(this.dataProjectID));
+    this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
+    
+    //Obtener token para manejar los roles
+    this.AccessUser = this.authService.getRolUser();
   }
 
   //Obtener la información del proyecto para mostrar en miga de pan
   getModificationRequet(projectId: number) {
-    this.spinner.show();
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
       this.codProject = data.data.proyecto_COD;
       this.nomProject = data.data.nombreProyecto;
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     });
+  }
+
+
+  getAllCDPsByRequerimentId(id_requeriment: number, filterForm: filterCDPsI) {
+    this.filterCDPs.Vigencia = this.filterForm.value.vigencia || '';
+    this.filterCDPs.CDP = this.filterForm.value.numeroCDP || '';
+    this.filterCDPs.Fecha_CDP = this.filterForm.get('fechaCDP')?.value || '';
+    this.filterCDPs.columna = this.filterForm.get('columna')?.value || '';
+    this.filterCDPs.ascending = this.filterForm.get('ascending')?.value || false;
+
+    this.serviceCdps.getCDPsByRequerimentId(id_requeriment, filterForm).subscribe(request => {
+      if (request.data.hasItems) {
+        this.dataSource = request.data.items;
+        this.initialValue = request.data.calculados[0].valor;
+        this.cancellationValue = request.data.calculados[1].valor;
+        this.finalvalue = request.data.calculados[2].valor;
+        this.valueRP = request.data.calculados[3].valor;
+        this.distributedValue = request.data.calculados[4].valor;
+        this.diference = request.data.calculados[5].valor;
+        this.numberPages = request.data.pages;
+        this.numberPage = request.data.page;
+        this.paginationForm.setValue({
+          take: filterForm.take,
+          page: filterForm.page
+        });
+      } else {
+        this.openSnackBar('Lo sentimos', `No hay CDPs asociados a este requerimiento.`, 'error');
+      }
+    }, error => {
+    });
+  }
+
+
+  //Notificar CDPs
+  notifyCDP() {
+    this.serviceCdps.patchLockCDPs(Number(this.requerimentId)).subscribe(response => {
+      if (response.status === 200) {
+        if (response.data.hasBlockedAnyCDP) {
+          this.openSnackBar('CDPs Notificados Exitosamente', `Los CDPs "${response.data.cdPs}" han sido bloqueados y notificados con éxito.`, 'success');
+        } else {
+          this.openSnackBar('Lo sentimos', `No fue posible notificar los CDPs.`, 'error');
+        }
+      } else {
+        this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
+      }
+    }, error => {
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+    });
+  }
+
+  
+  //Habilitar CDPs
+  enableCDP(){
+    this.CDPsChecked = this.selection.selected;
+    
+    if (this.CDPsChecked.length > 0) {
+      let ARRAY_CDPS: number[] = [];
+      this.CDPsChecked.forEach(element => {
+        ARRAY_CDPS.push(element.cdP_ID);
+      });
+
+      let BODY_CDPS_ENABLE: any = {
+        cdPs: ARRAY_CDPS
+      }
+      this.serviceCdps.patchEnableCDPs(Number(this.requerimentId), BODY_CDPS_ENABLE).subscribe(response => {
+        
+        if (response.status === 200) {
+          if (response.data.hasEnableAnyCDP) {
+            this.openSnackBar('CDPs Habilitados Exitosamente', `Los CDPs "${response.data.cdPs}" fueron habilitados con éxito.`, 'success');
+          } else {
+            this.openSnackBar('Lo sentimos', `No fue posible habilitar los CDPs.`, 'error');
+          }
+        } else {
+          this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
+        }
+      }, error => {
+
+        if (error.error.status == 422) {
+          let Data: string[] = [];
+          let erorsMessages = '';
+          if (error.error.data != null) {   
+            Data = Object.values(error.error.data);
+            Data.map(item => {
+              erorsMessages += item + '. ';
+            });
+          }
+          this.openSnackBar('Lo sentimos', error.error.message, 'error', erorsMessages);
+        }
+      });
+    } else {
+      this.openSnackBar('Lo sentimos', 'Seleccione al menos un CDP bloqueado para ser habilitado.', 'error');
+    }
+  }
+
+
+  //FILTRO
+  openFilter() {
+    this.viewFilter = false
+  }
+  closeFilter() {
+    this.viewFilter = true
+  }
+
+  getFilter() {
+    this.filterCDPs.Vigencia = this.filterForm.value.vigencia || '';
+    this.filterCDPs.CDP = this.filterForm.value.numeroCDP || '';
+    this.filterCDPs.Fecha_CDP = this.filterForm.get('fechaCDP')?.value || '';
+    this.filterCDPs.columna = this.filterForm.get('columna')?.value || '';
+    this.filterCDPs.ascending = this.filterForm.get('ascending')?.value || false;
+
+    this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
+    this.closeFilter();
+  }
+
+  //Limpiar el Filtro
+  clearFilter() {
+    this.filterForm.reset();
+    
+    this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
+    this.closeFilter();
+  }
+
+
+  //CHECKs
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.length;
+
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+    this.dataSource.forEach(row => this.selection.select(row));
+  }
+
+  checkboxLabel(row?: itemsCDPsI): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row}`;
   }
 
 
   //PAGINACIÓN
   getPagination() {
-    this.pageSummary.page = this.paginationForm.get('page')?.value;
-    this.pageSummary.take = this.paginationForm.get('take')?.value;
-    // this.getSummary(Number(this.dataSolicitudModID),this.selectedValueSource, this.pageSummary);
+    this.filterCDPs.page = this.paginationForm.get('page')?.value;
+    this.filterCDPs.take = this.paginationForm.get('take')?.value;
+
+    this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
   }
+
 
   nextPage() {
     if (this.numberPage < this.numberPages) {
       this.numberPage++;
-      this.pageSummary.page = this.numberPage.toString();
-      // this.getSummary(31,this.selectedValueSource, this.pageSummary);
+      this.filterCDPs.page = this.numberPage.toString();
+      this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
     }
   }
 
@@ -90,25 +284,57 @@ export class CDPComponent implements OnInit {
   prevPage() {
     if (this.numberPage > 1) {
       this.numberPage--;
-      this.pageSummary.page = this.numberPage.toString();
-      // this.getSummary(31,this.selectedValueSource, this.pageSummary);
+      this.filterCDPs.page = this.numberPage.toString();
+      this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
     }
   }
 
+
   firstPage() {
     this.numberPage = 1;
-    this.pageSummary.page = this.numberPage.toString();
-    // this.getSummary(31,this.selectedValueSource, this.pageSummary);
+    this.filterCDPs.page = this.numberPage.toString();
+    this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
   }
+
 
   latestPage() {
     this.numberPage = this.numberPages;
-    this.pageSummary.page = this.numberPage.toString();
-    // this.getSummary(31,this.selectedValueSource, this.pageSummary);
+    this.filterCDPs.page = this.numberPage.toString();
+    this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
   }
 
 
   regresar() {
     this.router.navigate([`/WAPI/PAA/Requerimientos/${this.dataProjectID}`]);
   }
+
+
+  //Metodo para llamar alertas
+  openSnackBar(title: string, message: string, type: string, message2?: string) {
+    this.snackBar.openFromComponent(AlertsComponent, {
+      data: { title, message, message2, type },
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: [type],
+    });
+  }
+
+
+  //Expresion regular para validar que solo se ingresen numeros en la paginación
+  validateFormat(event: any) {
+    let key;
+    if (event.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      key = event.keyCode;
+      key = String.fromCharCode(key);
+    }
+    const regex = /[0-9]|\./;
+     if (!regex.test(key)) {
+      event.returnValue = false;
+       if (event.preventDefault) {
+        event.preventDefault();
+       }
+     }
+    }
 }

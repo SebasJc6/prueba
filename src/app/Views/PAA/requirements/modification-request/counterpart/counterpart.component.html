@@ -13,7 +13,9 @@
     <!--ENTRADA FUENTE DE LOS RECURSOS-->
     <div class="contTxt">
       <p class="tltData">Fuente de los recursos</p>
-      <mat-select class="contDataSelect" formControlName="fuentes">
+      <mat-select class="contDataSelect"
+        [disabled]="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? false : true"
+        formControlName="fuentes">
           <mat-option *ngFor="let state of states" [value]="state.fuente_ID">{{state.descripcion}}</mat-option>
       </mat-select>
     </div>
@@ -21,7 +23,12 @@
     <!--ENTRADA TEXTO DESCRIPCION-->
       <div class="contTxt">
           <p class="tltData">Descripción</p>
-          <textarea #input maxlength="300" formControlName="Descripcion" placeholder="Se requiere modificar" class="contDataArea" rows="8"></textarea>
+          <textarea #input maxlength="300" 
+              [readonly]="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? false : true"
+              formControlName="Descripcion"
+              placeholder="Se requiere modificar" 
+              class="contDataArea" rows="8">
+          </textarea>
           <mat-hint align="end">{{input.value.length || 0}}/300</mat-hint>
       </div>
 
@@ -31,17 +38,40 @@
       <div style="display: flex; margin-top: -2%;">
         <div class="contTxt input">
             <p class="tltData">Valor que aumenta</p>
-            <input class="contData" formControlName="ValorAumenta">
+            <input type="text" 
+                maxlength="20"
+                (keypress)="validateFormat($event)"
+                (keyup)="onPressValueIncreases()"
+                [attr.disabled]="dissabledIncreases ? '' : null"
+                [readonly]="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? false : true"
+                class="contData"
+                [ngClass]="{'contDataDisabled' : dissabledIncreases == true }"
+                formControlName="ValorAumenta">
+                <!-- [value]="counterpartForm.value.ValorAumenta | currency:'COP':'symbol-narrow': '1.0-0'" -->
         </div>
         <div class="contTxt input2">
             <p class="tltData">Valor que disminuye</p>
-            <input class="contData" formControlName="ValorDisminuye">
+            <input type="text"
+                maxlength="20"
+                (keypress)="validateFormat($event)"
+                (keyup)="onPressValueDecreases()"
+                class="contData"
+                [ngClass]="{'contDataDisabled' : dissabledDecreases == true }"
+                [attr.disabled]="dissabledDecreases ? '' : null"
+                [readonly]="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? false : true"
+                formControlName="ValorDisminuye">
+                <!-- [value]="counterpartForm.value.ValorDisminuye| currency:'COP':'symbol-narrow': '1.0-0'" -->
         </div>
       </div>
 
     <!--BOTONES CANCELAR AÑADIR-->
     <div class="buttons">
-      <button class="buton btn" mat-button (click)="closedDialog()">Añadir</button>
+      <button 
+          class="buton btn" mat-button 
+          *ngIf="(AccessUser === 'Referente_PAA' && (StatusRequest == 'En Creación' || StatusRequest == 'En Ajuste' || StatusRequest == '')) ? true : false"
+          (click)="closedDialog()">
+          Añadir
+      </button>
       <button class="buton btn" mat-button mat-dialog-close>Cancelar</button>
     </div>
 

@@ -146,6 +146,10 @@ $custom-typography: mat-typography-config($font-family: '"Montserrat", sans-seri
   color: #F3561F !important;
 }
 
+.mat-creacionChips {
+  color: #336eee !important;
+}
+
 .mat-modificationChips[disabled] {
   background-color: rgba(0, 0, 0, 0.12) !important;
 }
@@ -192,4 +196,58 @@ $custom-typography: mat-typography-config($font-family: '"Montserrat", sans-seri
   background: #ffffff;
   color: #000;
   border: 2px solid #185564;
+}
+
+//SweetAlert Buttons
+.swal2-styled.swal2-confirm.swalBtnColor {
+  border-color: #185564;
+  border: 2px solid #185564;
+  color: #185564;
+  width: 8rem;
+  height: 2.5rem;
+  background-color: #ffff;
+  border-radius: 1.5rem;
+  font-weight: bold;
+  line-height: 0px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.swal2-styled.swal2-confirm.swalBtnColor:hover {
+  cursor: pointer;
+  transition-duration: 0.3s;
+  background-color: #185564;
+  color: #ffff;
+}
+
+.swal2-styled.swal2-deny.swalBtnColor {
+  border-color: #185564;
+  border: 2px solid #185564;
+  color: #185564;
+  width: 8rem;
+  height: 2.5rem;
+  background-color: #ffff;
+  border-radius: 1.5rem;
+  font-weight: bold;
+  line-height: 0px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.swal2-styled.swal2-deny.swalBtnColor:hover {
+  cursor: pointer;
+  transition-duration: 0.3s;
+  background-color: #185564;
+  color: #ffff;
+}
+
+//Centrar la primera y ultima columna de las mat-table modificando el padding
+th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+  padding-right: 10px !important;
+  padding-left: 10px !important;
 }
