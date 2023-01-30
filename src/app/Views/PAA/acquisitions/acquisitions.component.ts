@@ -205,7 +205,6 @@ export class AcquisitionsComponent implements OnInit {
   //Importar Documento de CDPs/RPs
   importFile(file : any) {
     this.serviceCdps.postCDPs(file).subscribe(response => {
-      console.log('Res: ', response);
       
       if (response.status === 200) {
         if (response.data.hasWarnings) {
@@ -256,7 +255,6 @@ export class AcquisitionsComponent implements OnInit {
   //Importar Documento de CDPs/RPs
   importFileStockOrders(file : any) {
     this.serviceStockOrders.postStockOrders(file).subscribe(response => {
-      console.log('Res: ', response);
       
       if (response.status === 200) {
         if (response.data.hasWarnings) {
@@ -273,7 +271,7 @@ export class AcquisitionsComponent implements OnInit {
         this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
       }
     }, error => {
-      console.log('Error: ', error);
+      // console.log('Error: ', error);
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     });
   }
@@ -399,8 +397,18 @@ export class AcquisitionsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      
+      // console.log(result.reportType);
+      if (result.reportType ==='PAA') {
+        if (result.data.status === 200) {
+          this.openSnackBar('Exportado Exitosamente', `El archivo "${result.data.data.fileName}" se descargó con éxito.`, 'success');
+          this.convertBase64ToFileDownload(result.data.data.fileAsBase64, result.data.data.fileName);
+        } else if (result.data.status === 423) {
+          this.openSnackBar('Lo sentimos', result.data.message, 'error', `Descargando archivo de errores "${result.data.data.FileName}".`);
+          this.convertBase64ToFileDownload(result.data.data.FileAsBase64, result.data.data.FileName);
+        }
+        // TODO: Hacer else para algún caso diferente
+      }
+
     });
   }
 

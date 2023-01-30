@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { iDsProjectsReportPAAI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
-import { getReportsAllI, getReportsNameI } from 'src/app/Models/ModelsPAA/Reports/reports-interface';
+import { getReportBase64I, getReportsAllI, getReportsNameI } from 'src/app/Models/ModelsPAA/Reports/reports-interface';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -24,8 +24,8 @@ export class ReportsDetailsService {
     return this.http.get<getReportsNameI>(dir);
   }
 
-  postReportPAA(ids_projects: iDsProjectsReportPAAI): Observable<any>{
+  postReportPAA(ids_projects: iDsProjectsReportPAAI): Observable<getReportBase64I>{
     let dir = `${this.Url}Reporte/PAA`;
-    return this.http.post<any>(dir, ids_projects);
+    return this.http.post<getReportBase64I>(dir, ids_projects);
   }
 }

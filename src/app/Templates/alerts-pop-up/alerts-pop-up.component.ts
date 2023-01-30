@@ -82,30 +82,18 @@ export class AlertsPopUpComponent implements OnInit {
 
   //Obtener reporte PAA
   getReportPAA(project_ids:any){
-    let fileName = 'Reporte';
+    
+
     this.reportServices.postReportPAA(project_ids).subscribe(Response => {
-      // console.log(Response);
-      this.manageExcelFile(Response, fileName);
-      // this.dialogRef.close(Response);
+      const REPORT_PAA = {
+        reportType: 'PAA',
+        data: Response
+      }
+
+      this.dialogRef.close(REPORT_PAA);
     }, error => {
 
     });
-  }
-
-
-  //Función que recibe y descarga el reporte excel
-  manageExcelFile(response: any, fileName: string): void {
-    const dataType = response.type;
-    const binaryData = [];
-    binaryData.push(response);
-    
-    const filePath = window.URL.createObjectURL(new Blob(binaryData, { type: dataType }));
-    const downloadLink = document.createElement('a');
-    downloadLink.href = filePath;
-    downloadLink.setAttribute('download', fileName);
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    // this.openSnackBar('Exportado Exitosamente', `${fileName}. Descargado correctamente.`, 'success');
   }
 
 

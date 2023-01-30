@@ -19,3 +19,14 @@ export interface getReportsNameI {
     title: number,
     data: string[]
 }
+
+
+export interface getReportBase64I{
+    status: number,
+    message: number,
+    title: number,
+    data: {
+        fileAsBase64: string,
+        fileName: string
+    }
+}

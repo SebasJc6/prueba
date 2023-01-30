@@ -32,7 +32,7 @@ export class ReportsComponent implements OnInit {
 
 
   onClickCard(numero_reporte : number) {
-    console.log(numero_reporte);
+    // console.log(numero_reporte);
     if (numero_reporte === 1 || numero_reporte === 2) {
       this.openSnackBar('Advertencia', `Para generar el reporte dirijase a la pantalla de gestión de PAA`, 'warning', 'Adquisiciones');
     } 
