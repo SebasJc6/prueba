@@ -1484,7 +1484,7 @@ export class PropertiesRequirementComponent implements OnInit {
   //funcion para obtener el id del autocomplete
   onSelectionChange(event: any, tipo: string) {
     if (tipo == 'actContractual') {
-      if (event == 2) {
+      if (event == 3) {
         //diable campos formulario
         this.disabledAdicion = true
         this.disabledInicial = false
@@ -1496,7 +1496,7 @@ export class PropertiesRequirementComponent implements OnInit {
         this.proRequirementeForm.controls.infoBasicaForm.controls['tipoCont'].setValue('');
         this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].setValue('');
         this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].setValue('');
-      } else {
+      } else   if (event == 3) {
         this.disabledAdicion = false
         this.disabledInicial = true
         this.proRequirementeForm.controls.infoBasicaForm.controls['numeroCont'].disable();
