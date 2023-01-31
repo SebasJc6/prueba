@@ -1496,7 +1496,7 @@ export class PropertiesRequirementComponent implements OnInit {
         this.proRequirementeForm.controls.infoBasicaForm.controls['tipoCont'].setValue('');
         this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].setValue('');
         this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].setValue('');
-      } else   if (event == 3) {
+      } else   if (event == 2) {
         this.disabledAdicion = false
         this.disabledInicial = true
         this.proRequirementeForm.controls.infoBasicaForm.controls['numeroCont'].disable();
