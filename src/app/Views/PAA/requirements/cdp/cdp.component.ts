@@ -156,7 +156,7 @@ export class CDPComponent implements OnInit {
         if (response.data.hasBlockedAnyCDP) {
           this.openSnackBar('CDPs Notificados Exitosamente', `Los CDPs "${response.data.cdPs}" han sido bloqueados y notificados con éxito.`, 'success');
         } else {
-          this.openSnackBar('Lo sentimos', `No fue posible notificar los CDPs.`, 'error');
+          this.openSnackBar('Lo sentimos', `No fue posible notificar los CDPs, RPs no han sido totalmente distribuidos aún.`, 'error');
         }
       } else {
         this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
@@ -202,7 +202,7 @@ export class CDPComponent implements OnInit {
               erorsMessages += item + '. ';
             });
           }
-          this.openSnackBar('Lo sentimos', error.error.message, 'error', erorsMessages);
+          this.openSnackBar('Lo sentimos', '', 'error', erorsMessages);
         }
       });
     } else {
