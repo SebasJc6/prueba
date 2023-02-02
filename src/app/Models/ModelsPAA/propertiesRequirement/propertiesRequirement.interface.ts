@@ -12,8 +12,8 @@ export interface getInfoToCreateReqDataI {
     nombreProyecto: string,
     numeroModificacion: number,
     dependenciaOrigen: {
-        codigo:string,
-        detalle:string
+        codigo: string,
+        detalle: string
     }
 }
 
@@ -63,7 +63,21 @@ export interface getAllAnioI {
     title: string,
     data: []
 }
-
+//anio contrato
+export interface getAllAutoI {
+    status: number,
+    message: string,
+    title: string,
+    data: {
+        contrato_ID : number,
+        numero_Contrato : number,
+        anio_Contrato : number,
+        tipoContrato_ID : number,
+        perfil_ID : number,
+        valorHonorarios : number,
+        beneficiario : string,
+    }
+}
 //tipo de contrato
 export interface getAllContacTypeI {
     status: number,
@@ -485,7 +499,7 @@ export interface cadenaPresupuestalI {
 
 export interface getDataTemporalModifiedI {
     proyecto: getInfoToCreateReqDataI,
-    aniosVigencia:number[],
+    aniosVigencia: number[],
     requerimiento: {
         project_ID: number,
         req_ID: number,
@@ -500,7 +514,7 @@ export interface getDataTemporalModifiedI {
             detalle: string
         },
         dependenciaDestinoModified: boolean,
-        
+
         mesEstimadoInicioSeleccion: number,
         mesEstimadoInicioSeleccionModified: boolean,
 
@@ -558,7 +572,7 @@ export interface getDataTemporalModifiedI {
         version: number,
         estado: string,
     },
-  
+
     cadenasPresupuestales: cadenasPresupuestalesModifiedI[],
 
     apropiacionInicial: {
@@ -628,6 +642,6 @@ export interface cadenasPresupuestalesModifiedI {
         apropiacionDefinitiva: number,
         giros: number,
     },
-   
+
 
 }
