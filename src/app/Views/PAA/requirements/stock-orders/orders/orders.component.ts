@@ -127,9 +127,14 @@ export class OrdersComponent implements OnInit {
   }
   saveGiro() {
     if(!this.giros){
+
       this.postGiros();
-  
+      
+    }else if(this.giros != null){
+      this.postGiros();
+    
     }else{
+
       this.openSnackBar('Giro', 'No se han realizado cambios', 'success');
       this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
     }
