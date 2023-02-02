@@ -238,9 +238,9 @@ export class PropertiesRequirementComponent implements OnInit {
 
   initialAppro = new FormGroup({
     anio_Vigencia: new FormControl(),
-    valorApropiacionAnio: new FormControl({ value: 0, disabled: true }),
-    valorApropiacion_Final: new FormControl({ value: 0, disabled: true }),
-    valorApropiacion_Incial: new FormControl({ value: 0, disabled: true }),
+    valorApropiacionAnio: new FormControl({ value: '$0', disabled: true }),
+    valorApropiacion_Final: new FormControl({ value: '$0', disabled: true }),
+    valorApropiacion_Incial: new FormControl({ value: '$0', disabled: true }),
   })
   reviews = new FormGroup({
     area: new FormControl(),
@@ -385,9 +385,35 @@ export class PropertiesRequirementComponent implements OnInit {
 
   }
 
+  currencyInputAppro() {
+    //use pipe to display currency
+    this.initialAppro.valueChanges.subscribe(form => {
+      if (form.valorApropiacion_Incial) {
+        this.initialAppro.patchValue({
+          valorApropiacion_Incial: this.assignCurrencyPipe(form.valorApropiacion_Incial)
+        }, { emitEvent: false })
+      }
+      if (form.anio_Vigencia) {
+        this.initialAppro.patchValue({
+          anio_Vigencia: this.assignCurrencyPipe(form.anio_Vigencia)
+        }, { emitEvent: false })
+      }
+      if (form.valorApropiacion_Final) {
+        this.initialAppro.patchValue({
+          valorApropiacion_Final: this.assignCurrencyPipe(form.valorApropiacion_Final)
+        }, { emitEvent: false })
+      }
+    });
+  }
+
+  //Función para asignar formato de moneda a un numero y retorna el numero formatrado
+  assignCurrencyPipe(number: string) {
+    const NUMBER_ASSIGN = this.currencyPipe.transform(number.replace(/\D/g, '').replace(/^-1+/, ''), 'COP', 'symbol-narrow', '1.0-0');
+    return NUMBER_ASSIGN;
+  }
 
   ngOnInit(): void {
-
+    this.currencyInputAppro();
     ProChartStorage.removeItem('dataTableClacificaciones')
     ProChartStorage.removeItem('dataTableCodigos')
     ProChartStorage.removeItem('dataTableRevisiones')
@@ -599,18 +625,32 @@ export class PropertiesRequirementComponent implements OnInit {
     this.proRequirementeForm.controls.infoBasicaForm.controls.numeroCont.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
+      this.proRequirementeForm.controls.infoBasicaForm.controls.anioContrato.setValue('');
       this.genericNumeroCont = false
-      if (value == null) { } else
-        if (value != '') {
-          this.serviceProRequirement.getAniosBycontrato(value).subscribe(res => {
-            this.years = res.data
-          })
-        }
+      if (value != '') {
+        this.serviceProRequirement.getAniosBycontrato(value).subscribe(res => {
+          this.years = res.data
+
+        })
+      } else {
+
+      }
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.anioContrato.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
+      let numCont = this.proRequirementeForm.controls.infoBasicaForm.controls.numeroCont.value
 
+      if (value != null && value != '') {
+        this.serviceProRequirement.getDataAuto(numCont, value).subscribe(res => {
+          this.tipoContratoTmp = res.data.tipoContrato_ID
+          this.perfilTmp = res.data.perfil_ID
+          this.honorariosTmp = res.data.valorHonorarios
+          this.proRequirementeForm.controls.infoBasicaForm.controls.tipoCont.setValue(this.tipoContratoTmp)
+          this.proRequirementeForm.controls.infoBasicaForm.controls.perfil.setValue(this.perfilTmp)
+          this.proRequirementeForm.controls.infoBasicaForm.controls.valorHonMes.setValue(this.honorariosTmp)
+        })
+      }
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.tipoCont.valueChanges.pipe(
       distinctUntilChanged(),
@@ -882,16 +922,18 @@ export class PropertiesRequirementComponent implements OnInit {
         this.codigosVerRew = dataReviews.codsUNSPSC
         this.dataSourceCodigosRew = new MatTableDataSource(this.codigosVerRew);
 
-       
-        
+
+
         this.servicesinitialApp.getAllInitialApropriationTemp(reqTempId, dataReviews.aniosVigencia[0], requestId).subscribe(data => {
           console.log(data)
           this.initialAppro.setValue({
-            valorApropiacion_Incial: data.data.valorApropiacion_Incial,
-            anio_Vigencia: data.data.anio_Vigencia,
-            valorApropiacionAnio: data.data.valorApropiacionAnio,
-            valorApropiacion_Final: data.data.valorApropiacion_Final,
+            valorApropiacion_Incial: data.data.valorApropiacion_Incial.toString(),
+            anio_Vigencia: data.data.anio_Vigencia.toString(),
+            valorApropiacionAnio: data.data.valorApropiacionAnio.toString(),
+            valorApropiacion_Final: data.data.valorApropiacion_Final.toString(),
           })
+          this.currencyInputAppro();
+
         })
       } else {
         // this.openSnackBar('Error', dataReviews.Message, 'error')
@@ -969,11 +1011,12 @@ export class PropertiesRequirementComponent implements OnInit {
         this.servicesinitialApp.getAllInitialApropriationTemp(+this.dataRequirementID, dataTemp.aniosVigencia[0], +this.dataSolicitudID).subscribe(data => {
           console.log(data)
           this.initialAppro.setValue({
-            valorApropiacion_Incial: data.data.valorApropiacion_Incial,
-            anio_Vigencia: data.data.anio_Vigencia,
-            valorApropiacionAnio: data.data.valorApropiacionAnio,
-            valorApropiacion_Final: data.data.valorApropiacion_Final,
+            valorApropiacion_Incial: data.data.valorApropiacion_Incial.toString(),
+            anio_Vigencia: data.data.anio_Vigencia.toString(),
+            valorApropiacionAnio: data.data.valorApropiacionAnio.toString(),
+            valorApropiacion_Final: data.data.valorApropiacion_Final.toString(),
           })
+          this.currencyInputAppro();
         })
 
         // this.initialAppro.setValue({
@@ -1034,11 +1077,12 @@ export class PropertiesRequirementComponent implements OnInit {
           console.log(data)
           if (data.status == 200) {
             this.initialAppro.setValue({
-              valorApropiacion_Incial: data.data.valorApropiacion_Incial,
-              anio_Vigencia: data.data.anio_Vigencia,
-              valorApropiacionAnio: data.data.valorApropiacionAnio,
-              valorApropiacion_Final: data.data.valorApropiacion_Final,
+              valorApropiacion_Incial: data.data.valorApropiacion_Incial.toString(),
+              anio_Vigencia: data.data.anio_Vigencia.toString(),
+              valorApropiacionAnio: data.data.valorApropiacionAnio.toString(),
+              valorApropiacion_Final: data.data.valorApropiacion_Final.toString(),
             })
+            this.currencyInputAppro();
           } else if (data.status == 404) {
             let Data: string[] = [];
             Data = Object.values(data.data);
@@ -1772,21 +1816,23 @@ export class PropertiesRequirementComponent implements OnInit {
     if (this.isDataTemporal = true) {
       this.servicesinitialApp.getAllInitialApropriationTemp(+this.dataRequirementID, event.value, +this.dataSolicitudID).subscribe(data => {
         this.initialAppro.setValue({
-          valorApropiacion_Incial: data.data.valorApropiacion_Incial,
-          anio_Vigencia: data.data.anio_Vigencia,
-          valorApropiacionAnio: data.data.valorApropiacionAnio,
-          valorApropiacion_Final: data.data.valorApropiacion_Final,
+          valorApropiacion_Incial: data.data.valorApropiacion_Incial.toString(),
+          anio_Vigencia: data.data.anio_Vigencia.toString(),
+          valorApropiacionAnio: data.data.valorApropiacionAnio.toString(),
+          valorApropiacion_Final: data.data.valorApropiacion_Final.toString(),
         })
+        this.currencyInputAppro();
       })
     } else {
       this.servicesinitialApp.getAllInitialApropriation(+this.dataRequirementID, event.value).subscribe(data => {
         if (data.status == 200) {
           this.initialAppro.setValue({
-            valorApropiacion_Incial: data.data.valorApropiacion_Incial,
-            anio_Vigencia: data.data.anio_Vigencia,
-            valorApropiacionAnio: data.data.valorApropiacionAnio,
-            valorApropiacion_Final: data.data.valorApropiacion_Final,
+            valorApropiacion_Incial: data.data.valorApropiacion_Incial.toString(),
+            anio_Vigencia: data.data.anio_Vigencia.toString(),
+            valorApropiacionAnio: data.data.valorApropiacionAnio.toString(),
+            valorApropiacion_Final: data.data.valorApropiacion_Final.toString(),
           })
+          this.currencyInputAppro();
         } else if (data.status == 404) {
           let Data: string[] = [];
           Data = Object.values(data.data);
