@@ -258,16 +258,16 @@ export class AcquisitionsComponent implements OnInit {
       
       if (response.status === 200) {
         if (response.data.hasWarnings) {
-          this.openSnackBar('Advertencia', `Se guardaron los registros y surgieron advertencias. Descargando archivo de advertencias ${response.data.warnings.fileName}`, 'warning');
+          this.openSnackBar('Advertencia', `Se guardaron los registros y surgieron advertencias. Generando archivo de advertencias ${response.data.warnings.fileName}`, 'warning');
           this.convertBase64ToFileDownload(response.data.warnings.fileAsBase64, response.data.warnings.fileName);
         } else {
           this.openSnackBar('Guardado Exitosamente', `Giros importados con éxito.`, 'success');
         }
       } else if(response.status === 422) {
-        this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
+        this.openSnackBar('Lo sentimos', response.message, 'error', `Generando archivo de errores "${response.data.FileName}".`);
         this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
       } else if (response.status === 423) {
-        this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
+        this.openSnackBar('Lo sentimos', response.message, 'error', `Generando archivo de errores "${response.data.FileName}".`);
         this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
       }
     }, error => {
@@ -388,7 +388,7 @@ export class AcquisitionsComponent implements OnInit {
 
 
 
-  //Alerta PopUp
+  //Alerta PopUp Reportes
   openDialog(title: string, message: string, type: string, message2: string, dataType: string, arrayData?: number[]): void {
     const dialogRef = this.dialog.open(AlertsPopUpComponent, {
       width: '450px',
@@ -398,17 +398,21 @@ export class AcquisitionsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       // console.log(result.reportType);
-      if (result.reportType ==='PAA') {
+      if (result.reportType ==='1_PAA' || result.reportType ==='2_REP') {
         if (result.data.status === 200) {
-          this.openSnackBar('Exportado Exitosamente', `El archivo "${result.data.data.fileName}" se descargó con éxito.`, 'success');
+          this.openSnackBar('Exportado Exitosamente', `El archivo "${result.data.data.fileName}" fué generado correctamente.`, 'success');
           this.convertBase64ToFileDownload(result.data.data.fileAsBase64, result.data.data.fileName);
         } else if (result.data.status === 423) {
-          this.openSnackBar('Lo sentimos', result.data.message, 'error', `Descargando archivo de errores "${result.data.data.FileName}".`);
+          this.openSnackBar('Lo sentimos', result.data.message, 'error', `Generando archivo de errores "${result.data.data.FileName}".`);
           this.convertBase64ToFileDownload(result.data.data.FileAsBase64, result.data.data.FileName);
         }
-        // TODO: Hacer else para algún caso diferente
+        else {
+          this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+        }
       }
 
+    }, error => {
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     });
   }
 

@@ -52,13 +52,13 @@
 
         <div class="" mat-dialog-content>
             <div class="contTxt label1">
-                <mat-select class="contDataSelect" [(ngModel)]="selectedValueValidity">
+                <mat-select class="contDataSelect" [(ngModel)]="selectedValueReport" cdkFocusInitial>
                     <mat-option (click)="getListValidity()" *ngFor="let reports of REPORTS_LIST" [value]="reports.numeroReporte">{{reports.nombre}}</mat-option>
                 </mat-select>
             </div>
         </div>
 
-        <div class="" mat-dialog-content *ngIf="selectedValueValidity === 2">
+        <div class="" mat-dialog-content *ngIf="selectedValueReport === 2">
             <div class="contTxt label1">
                 <label class="label1">Año</label>
                 <mat-select class="contDataSelect" [formControl]="VALIDITYS" multiple>
@@ -74,7 +74,11 @@
         </div>
 
         <div class="buttons" style="margin-top: 3%;" mat-dialog-actions>
-            <button mat-button class="butonWarningInput btn" (click)="closeDialog(5)" cdkFocusInitial>EXPORTAR</button>
+            <button mat-button class="butonWarningInput btn"
+            [disabled]="selectedValueReport !== 2 || selectedValueReport === 2 && (VALIDITYS.value?.length > 0) ? false:true"
+            (click)="closeDialog(5)" cdkFocusInitial>
+                EXPORTAR
+            </button>
         </div>
     </div>
 </div>

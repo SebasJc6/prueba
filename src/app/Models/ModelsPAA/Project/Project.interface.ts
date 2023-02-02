@@ -180,3 +180,10 @@ export interface postProjectValidityI {
 export interface iDsProjectsReportPAAI { 
     'iDs': number[]
 }
+
+
+//Interfaz para el endpiont de generar Reporte Ejecución Presupuestal
+export interface iDsAndAniosProjectsReportPAAI { 
+    'iDs': number[],
+    'anios': number[]
+}

@@ -22,6 +22,7 @@ import { MatButton } from '@angular/material/button';
 import { PopUpImportComponent } from './pop-up-import/pop-up-import.component';
 import { v4 as uuid } from 'uuid';
 import Swal from 'sweetalert2';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -162,7 +163,8 @@ export class ModificationRequestComponent implements OnInit {
     public serviceModRequest: ModificationRequestService,
     private snackBar: MatSnackBar,
     private authService: AuthenticationService,
-    private spinner: NgxSpinnerService,) { }
+    private spinner: NgxSpinnerService,
+    private datePipe: DatePipe,) { }
 
 
   ngOnInit(): void {
@@ -868,7 +870,8 @@ export class ModificationRequestComponent implements OnInit {
 
   exportFile() {
     let fecha = new Date();
-    const fileName = `Reporte Solicitud Modificación_${this.codProject} (${fecha.toLocaleDateString()}).xlsx`;
+    const date = this.datePipe.transform(fecha,"dd-MM-yyyy");
+    const fileName = `REPORTE MODIFICACIONES ${date}.xlsx`;
     this.serviceModRequest.exportFile(this.dataProjectID, this.dataSolicitudModID).subscribe(res => {
       this.manageExcelFile(res, fileName);
     }, error => {
@@ -889,7 +892,7 @@ export class ModificationRequestComponent implements OnInit {
     document.body.appendChild(downloadLink);
     this.spinner.hide();
     downloadLink.click();
-    this.openSnackBar('Exportado Exitosamente', `${fileName}. Descargado correctamente.`, 'success');
+    this.openSnackBar('Exportado Exitosamente', `El archivo "${fileName}" fué generado correctamente.`, 'success');
   }
 
   extraerBase64 = async ($event: any) => new Promise((resolve) => {

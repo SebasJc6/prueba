@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
-import { getProjectReportsI, iDsProjectsReportPAAI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
+import { getProjectReportsI, iDsAndAniosProjectsReportPAAI, iDsProjectsReportPAAI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { dataReportsAllI } from 'src/app/Models/ModelsPAA/Reports/reports-interface';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
 import { ReportsDetailsService } from 'src/app/Services/ServicesPAA/Reports/reports-details.service';
@@ -40,7 +40,7 @@ export class AlertsPopUpComponent implements OnInit {
   REPORTS_LIST: dataReportsAllI[] = [];
 
   //Numero de reporte seleccionado
-  selectedValueValidity: number = 0;
+  selectedValueReport: number = 0;
 
   //Select con checks para los años de vigencias
   VALIDITYS= new FormControl();
@@ -67,33 +67,53 @@ export class AlertsPopUpComponent implements OnInit {
       this.dialogRef.close(Revisiones);
     }
     else if (action === 5) {
-      if (this.selectedValueValidity === 1) {
+      if (this.selectedValueReport === 1) {
         let PROJECT_IDS : iDsProjectsReportPAAI = {
           'iDs': this.data.arrayData
         }
 
         this.getReportPAA(PROJECT_IDS);
+      } else if (this.selectedValueReport === 2) {
+        let REPORT_INFO : iDsAndAniosProjectsReportPAAI = {
+          'iDs' : this.data.arrayData,
+          'anios' : this.VALIDITYS.value
+        }
+        
+        this.getReportREP(REPORT_INFO);
       }
     }
-    // console.log(this.selectedValueValidity);
+    // console.log(this.selectedValueReport);
     
   }
 
 
   //Obtener reporte PAA
-  getReportPAA(project_ids:any){
-    
-
+  getReportPAA(project_ids : iDsProjectsReportPAAI){
     this.reportServices.postReportPAA(project_ids).subscribe(Response => {
       const REPORT_PAA = {
-        reportType: 'PAA',
+        reportType: '1_PAA',
         data: Response
       }
 
       this.dialogRef.close(REPORT_PAA);
     }, error => {
-
+      
     });
+  }
+
+
+  //Obtener reporte Resumen de Ejecución Presupuestal (REP)
+  getReportREP(report_info : iDsAndAniosProjectsReportPAAI) {
+    this.reportServices.postReportREP(report_info).subscribe(Response => {
+      const REPORT_REP = {
+        reportType: '2_REP',
+        data: Response
+      }
+
+      this.dialogRef.close(REPORT_REP);
+    }, error => {
+
+    })
   }
 
 
@@ -121,9 +141,9 @@ export class AlertsPopUpComponent implements OnInit {
   }
 
 
-  //Obtener los años de las vigencias
+  //Obtener los años para las Vigencias
   getListValidity() {
-    if (this.selectedValueValidity === 2) {
+    if (this.selectedValueReport === 2) {
       this.projectServices.postProjectValidity(this.data.arrayData).subscribe(Response => {
         if (Response.status === 200) {
           this.VALIDITYS_LIST = Response.data;
