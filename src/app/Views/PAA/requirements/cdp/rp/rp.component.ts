@@ -99,7 +99,7 @@ export class RpComponent implements OnInit {
           Data.map(item => {
             errorMessages += item + '. ';
           });
-          this.openSnackBar('Error', res.message, 'error', errorMessages);
+          this.openSnackBar('Error', '', 'error', errorMessages);
           this.spinner.hide();
         }
       } ,(err:any) => {
@@ -109,7 +109,7 @@ export class RpComponent implements OnInit {
           Data.map(item => {
             errorMessages += item + '. ';
           });
-          this.openSnackBar('Error', err.error.message, 'error', errorMessages);
+          this.openSnackBar('Error', '', 'error', errorMessages);
       })
   }
 
