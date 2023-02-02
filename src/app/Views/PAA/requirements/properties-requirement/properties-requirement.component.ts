@@ -172,6 +172,13 @@ export class PropertiesRequirementComponent implements OnInit {
 
   isDataTemporal: boolean = false;
 
+  //variables actuacion
+  numContratoTmp: string = '';
+  anioContratoTmp: number = 0;
+  tipoContratoTmp: number = 0;
+  perfilTmp: number = 0;
+  honorariosTmp: number = 0;
+
   cantMeses: any[] = [
     //  { idMes: '0', nameMes: ' ' },
     { idMes: '1', nameMes: 'Enero' },
@@ -874,6 +881,9 @@ export class PropertiesRequirementComponent implements OnInit {
 
         this.codigosVerRew = dataReviews.codsUNSPSC
         this.dataSourceCodigosRew = new MatTableDataSource(this.codigosVerRew);
+
+       
+        
         this.servicesinitialApp.getAllInitialApropriationTemp(reqTempId, dataReviews.aniosVigencia[0], requestId).subscribe(data => {
           console.log(data)
           this.initialAppro.setValue({
@@ -924,6 +934,11 @@ export class PropertiesRequirementComponent implements OnInit {
         })
         this.initialAppYaers = dataTemp.aniosVigencia
         this.proRequirementeForm.controls.infoBasicaForm.controls.numeroReq.disable()
+        this.numContratoTmp = dataTemp.requerimiento.numeroDeContrato;
+        this.anioContratoTmp = dataTemp.requerimiento.anioContrato;
+        this.tipoContratoTmp = dataTemp.requerimiento.tipoContrato.tipoContrato_ID;
+        this.perfilTmp = dataTemp.requerimiento.perfil.perfil_ID;
+        this.honorariosTmp = dataTemp.requerimiento.honorarios;
         this.onSelectionChange(dataTemp.requerimiento.actuacion.actuacion_ID, 'actContractual')
         this.errorNumReq = false
         this.errorVerifyNumReq = false
@@ -1221,17 +1236,17 @@ export class PropertiesRequirementComponent implements OnInit {
       requerimientoForm.modalidadSeleccion_Id = this.proRequirementeForm.controls.infoBasicaForm.value.modalidadSel
 
       requerimientoForm.actuacion_Id = this.proRequirementeForm.controls.infoBasicaForm.value.actuacionCont
-      if (requerimientoForm.actuacion_Id == 1) {
-        requerimientoForm.numeroDeContrato = '0'
+      if (requerimientoForm.actuacion_Id == 2) {
+        requerimientoForm.numeroDeContrato = this.numContratoTmp
         requerimientoForm.tipoContrato_Id = this.proRequirementeForm.controls.infoBasicaForm.value.tipoCont
         requerimientoForm.perfil_Id = this.proRequirementeForm.controls.infoBasicaForm.value.perfil
         requerimientoForm.honorarios = +this.proRequirementeForm.controls.infoBasicaForm.value.valorHonMes
-      } else {
+      } else if (requerimientoForm.actuacion_Id == 3) {
         requerimientoForm.numeroDeContrato = this.proRequirementeForm.controls.infoBasicaForm.value.numeroCont
         requerimientoForm.anioContrato = this.proRequirementeForm.controls.infoBasicaForm.value.anioContrato
-        requerimientoForm.tipoContrato_Id = 0
-        requerimientoForm.perfil_Id = 0
-        requerimientoForm.honorarios = 0
+        requerimientoForm.tipoContrato_Id = this.tipoContratoTmp
+        requerimientoForm.perfil_Id = this.perfilTmp
+        requerimientoForm.honorarios = this.honorariosTmp
       }
       requerimientoForm.cantidadDeContratos = this.proRequirementeForm.controls.infoBasicaForm.value.cantidadCont
       requerimientoForm.descripcion = this.proRequirementeForm.controls.infoBasicaForm.value.descripcion
@@ -1493,10 +1508,13 @@ export class PropertiesRequirementComponent implements OnInit {
         this.proRequirementeForm.controls.infoBasicaForm.controls['tipoCont'].disable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].disable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].disable();
-        this.proRequirementeForm.controls.infoBasicaForm.controls['tipoCont'].setValue('');
-        this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].setValue('');
-        this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].setValue('');
-      } else   if (event == 2) {
+        if (this.typePage == 'Nuevo') {
+          this.proRequirementeForm.controls.infoBasicaForm.controls['tipoCont'].setValue('');
+          this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].setValue('');
+          this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].setValue('');
+        }
+
+      } else if (event == 2) {
         this.disabledAdicion = false
         this.disabledInicial = true
         this.proRequirementeForm.controls.infoBasicaForm.controls['numeroCont'].disable();
@@ -1504,8 +1522,10 @@ export class PropertiesRequirementComponent implements OnInit {
         this.proRequirementeForm.controls.infoBasicaForm.controls['tipoCont'].enable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].enable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].enable();
-        this.proRequirementeForm.controls.infoBasicaForm.controls['numeroCont'].setValue('');
-        this.proRequirementeForm.controls.infoBasicaForm.controls['anioContrato'].setValue('');
+        if (this.typePage == 'Nuevo') {
+          this.proRequirementeForm.controls.infoBasicaForm.controls['numeroCont'].setValue('');
+          this.proRequirementeForm.controls.infoBasicaForm.controls['anioContrato'].setValue('');
+        }
 
       }
     }
