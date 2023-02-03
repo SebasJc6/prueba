@@ -462,7 +462,7 @@
 
                                     <div class="contTxt label1">
                                         <p class="tltData">MGA</p>
-                                        <input class="contData contDataDisabled" formControlName="mga">
+                                        <input class="contData contDataDisabled" formControlName="mga" [attr.disabled]="true">
                                         <!-- <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoMGA"
                                             formControlName="mga">
                                         <mat-error *ngIf="errorMGA">
@@ -477,7 +477,7 @@
                                     </div>
                                     <div class="contTxt label1">
                                         <p class="tltData">POSPRE</p>
-                                        <input class="contData contDataDisabled" formControlName="pospre">
+                                        <input class="contData contDataDisabled" formControlName="pospre" [attr.disabled]="true">
 
                                         <!-- <input type="text" class="contDataAutocomplete" [matAutocomplete]="autoPOSPRE"
                                             formControlName="pospre">
@@ -1461,7 +1461,7 @@
                                                 <p class="tltTitleData arreg"> </p>
 
                                                 <p class="tltData">Valor</p>
-                                                <input class="contData contDataDisabled"
+                                                <input class="contData contDataDisabled" 
                                                     formControlName="valorApropiacionAnio">
                                             </div>
                                         </div>
