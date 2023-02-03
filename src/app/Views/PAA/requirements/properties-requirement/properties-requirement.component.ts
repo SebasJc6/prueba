@@ -172,6 +172,13 @@ export class PropertiesRequirementComponent implements OnInit {
 
   isDataTemporal: boolean = false;
 
+  //variables actuacion
+  numContratoTmp: string = '';
+  anioContratoTmp: number = 0;
+  tipoContratoTmp: number = 0;
+  perfilTmp: number = 0;
+  honorariosTmp: number = 0;
+
   cantMeses: any[] = [
     //  { idMes: '0', nameMes: ' ' },
     { idMes: '1', nameMes: 'Enero' },
@@ -231,9 +238,9 @@ export class PropertiesRequirementComponent implements OnInit {
 
   initialAppro = new FormGroup({
     anio_Vigencia: new FormControl(),
-    valorApropiacionAnio: new FormControl({ value: 0, disabled: true }),
-    valorApropiacion_Final: new FormControl({ value: 0, disabled: true }),
-    valorApropiacion_Incial: new FormControl({ value: 0, disabled: true }),
+    valorApropiacionAnio: new FormControl({ value: '$0', disabled: true }),
+    valorApropiacion_Final: new FormControl({ value: '$0', disabled: true }),
+    valorApropiacion_Incial: new FormControl({ value: '$0', disabled: true }),
   })
   reviews = new FormGroup({
     area: new FormControl(),
@@ -378,9 +385,35 @@ export class PropertiesRequirementComponent implements OnInit {
 
   }
 
+  currencyInputAppro() {
+    //use pipe to display currency
+    this.initialAppro.valueChanges.subscribe(form => {
+      if (form.valorApropiacion_Incial) {
+        this.initialAppro.patchValue({
+          valorApropiacion_Incial: this.assignCurrencyPipe(form.valorApropiacion_Incial)
+        }, { emitEvent: false })
+      }
+      if (form.valorApropiacionAnio) {
+        this.initialAppro.patchValue({
+          valorApropiacionAnio: this.assignCurrencyPipe(form.valorApropiacionAnio)
+        }, { emitEvent: false })
+      }
+      if (form.valorApropiacion_Final) {
+        this.initialAppro.patchValue({
+          valorApropiacion_Final: this.assignCurrencyPipe(form.valorApropiacion_Final)
+        }, { emitEvent: false })
+      }
+    });
+  }
+
+  //Función para asignar formato de moneda a un numero y retorna el numero formatrado
+  assignCurrencyPipe(number: string) {
+    const NUMBER_ASSIGN = this.currencyPipe.transform(number.replace(/\D/g, '').replace(/^-1+/, ''), 'COP', 'symbol-narrow', '1.0-0');
+    return NUMBER_ASSIGN;
+  }
 
   ngOnInit(): void {
-
+    this.currencyInputAppro();
     ProChartStorage.removeItem('dataTableClacificaciones')
     ProChartStorage.removeItem('dataTableCodigos')
     ProChartStorage.removeItem('dataTableRevisiones')
@@ -592,18 +625,32 @@ export class PropertiesRequirementComponent implements OnInit {
     this.proRequirementeForm.controls.infoBasicaForm.controls.numeroCont.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
+      this.proRequirementeForm.controls.infoBasicaForm.controls.anioContrato.setValue('');
       this.genericNumeroCont = false
-      if (value == null) { } else
-        if (value != '') {
-          this.serviceProRequirement.getAniosBycontrato(value).subscribe(res => {
-            this.years = res.data
-          })
-        }
+      if (value != '') {
+        this.serviceProRequirement.getAniosBycontrato(value).subscribe(res => {
+          this.years = res.data
+
+        })
+      } else {
+
+      }
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.anioContrato.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
+      let numCont = this.proRequirementeForm.controls.infoBasicaForm.controls.numeroCont.value
 
+      if (value != null && value != '') {
+        this.serviceProRequirement.getDataAuto(numCont, value).subscribe(res => {
+          this.tipoContratoTmp = res.data.tipoContrato_ID
+          this.perfilTmp = res.data.perfil_ID
+          this.honorariosTmp = res.data.valorHonorarios
+          this.proRequirementeForm.controls.infoBasicaForm.controls.tipoCont.setValue(this.tipoContratoTmp)
+          this.proRequirementeForm.controls.infoBasicaForm.controls.perfil.setValue(this.perfilTmp)
+          this.proRequirementeForm.controls.infoBasicaForm.controls.valorHonMes.setValue(this.honorariosTmp)
+        })
+      }
     })
     this.proRequirementeForm.controls.infoBasicaForm.controls.tipoCont.valueChanges.pipe(
       distinctUntilChanged(),
@@ -817,16 +864,17 @@ export class PropertiesRequirementComponent implements OnInit {
   }
   getDataConsulta(projectId: number, requestId: number, reqTempId: number) {
     this.isDataTemporal = true
-
     this.serviceProRequirement.getAllDataTemporalModified(projectId, requestId, reqTempId).subscribe(dataTemp => {
-      console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
       this.reqID = dataTemp.requerimiento.requerimiento_ID
       let dataReviews = dataTemp
-      if (dataReviews != null) {
-        this.serviceProRequirement.getAniosBycontrato(+dataReviews.requerimiento.numeroDeContrato).subscribe(res => {
-          this.years = res.data
-        })
+      if (dataReviews != null ) {
+        if(dataReviews.requerimiento.numeroDeContrato != '' && dataReviews.requerimiento.numeroDeContrato != '0'){
+          this.serviceProRequirement.getAniosBycontrato(+dataReviews.requerimiento.numeroDeContrato).subscribe(res => {
+            this.years = res.data
+          })
+        }
+       
 
         this.versionReviewForm.setValue({
           codigoProRew: dataReviews.proyecto.codigoProyecto,
@@ -874,14 +922,26 @@ export class PropertiesRequirementComponent implements OnInit {
 
         this.codigosVerRew = dataReviews.codsUNSPSC
         this.dataSourceCodigosRew = new MatTableDataSource(this.codigosVerRew);
+
+
+
         this.servicesinitialApp.getAllInitialApropriationTemp(reqTempId, dataReviews.aniosVigencia[0], requestId).subscribe(data => {
-          console.log(data)
+
+          const ValAppIni = String(data.data.valorApropiacion_Incial)
+          const VAL_APP_INI = this.assignCurrencyPipe(ValAppIni)
+          const ValAppAnio = String(data.data.valorApropiacionAnio)
+          const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
+          const ValAppFin = String(data.data.valorApropiacion_Final)
+          const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
+          
           this.initialAppro.setValue({
-            valorApropiacion_Incial: data.data.valorApropiacion_Incial,
+            valorApropiacion_Incial: VAL_APP_INI,
             anio_Vigencia: data.data.anio_Vigencia,
-            valorApropiacionAnio: data.data.valorApropiacionAnio,
-            valorApropiacion_Final: data.data.valorApropiacion_Final,
+            valorApropiacionAnio: VAL_APP_ANIO,
+            valorApropiacion_Final: VAL_APP_FIN,
           })
+          this.currencyInputAppro();
+
         })
       } else {
         // this.openSnackBar('Error', dataReviews.Message, 'error')
@@ -924,6 +984,11 @@ export class PropertiesRequirementComponent implements OnInit {
         })
         this.initialAppYaers = dataTemp.aniosVigencia
         this.proRequirementeForm.controls.infoBasicaForm.controls.numeroReq.disable()
+        this.numContratoTmp = dataTemp.requerimiento.numeroDeContrato;
+        this.anioContratoTmp = dataTemp.requerimiento.anioContrato;
+        this.tipoContratoTmp = dataTemp.requerimiento.tipoContrato.tipoContrato_ID;
+        this.perfilTmp = dataTemp.requerimiento.perfil.perfil_ID;
+        this.honorariosTmp = dataTemp.requerimiento.honorarios;
         this.onSelectionChange(dataTemp.requerimiento.actuacion.actuacion_ID, 'actContractual')
         this.errorNumReq = false
         this.errorVerifyNumReq = false
@@ -952,13 +1017,20 @@ export class PropertiesRequirementComponent implements OnInit {
         this.reloadDataTbl(fromStorageCod, 'codigos');
 
         this.servicesinitialApp.getAllInitialApropriationTemp(+this.dataRequirementID, dataTemp.aniosVigencia[0], +this.dataSolicitudID).subscribe(data => {
-          console.log(data)
+          const ValAppIni = String(data.data.valorApropiacion_Incial)
+          const VAL_APP_INI = this.assignCurrencyPipe(ValAppIni)
+          const ValAppAnio = String(data.data.valorApropiacionAnio)
+          const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
+          const ValAppFin = String(data.data.valorApropiacion_Final)
+          const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
+          
           this.initialAppro.setValue({
-            valorApropiacion_Incial: data.data.valorApropiacion_Incial,
+            valorApropiacion_Incial: VAL_APP_INI,
             anio_Vigencia: data.data.anio_Vigencia,
-            valorApropiacionAnio: data.data.valorApropiacionAnio,
-            valorApropiacion_Final: data.data.valorApropiacion_Final,
+            valorApropiacionAnio: VAL_APP_ANIO,
+            valorApropiacion_Final: VAL_APP_FIN,
           })
+          this.currencyInputAppro();
         })
 
         // this.initialAppro.setValue({
@@ -1018,12 +1090,20 @@ export class PropertiesRequirementComponent implements OnInit {
         this.servicesinitialApp.getAllInitialApropriation(requerimetId, dataApro.aniosVigencia[0]).subscribe(data => {
           console.log(data)
           if (data.status == 200) {
+            const ValAppIni = String(data.data.valorApropiacion_Incial)
+            const VAL_APP_INI = this.assignCurrencyPipe(ValAppIni)
+            const ValAppAnio = String(data.data.valorApropiacionAnio)
+            const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
+            const ValAppFin = String(data.data.valorApropiacion_Final)
+            const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
+            
             this.initialAppro.setValue({
-              valorApropiacion_Incial: data.data.valorApropiacion_Incial,
+              valorApropiacion_Incial: VAL_APP_INI,
               anio_Vigencia: data.data.anio_Vigencia,
-              valorApropiacionAnio: data.data.valorApropiacionAnio,
-              valorApropiacion_Final: data.data.valorApropiacion_Final,
+              valorApropiacionAnio: VAL_APP_ANIO,
+              valorApropiacion_Final: VAL_APP_FIN,
             })
+            this.currencyInputAppro();
           } else if (data.status == 404) {
             let Data: string[] = [];
             Data = Object.values(data.data);
@@ -1221,17 +1301,17 @@ export class PropertiesRequirementComponent implements OnInit {
       requerimientoForm.modalidadSeleccion_Id = this.proRequirementeForm.controls.infoBasicaForm.value.modalidadSel
 
       requerimientoForm.actuacion_Id = this.proRequirementeForm.controls.infoBasicaForm.value.actuacionCont
-      if (requerimientoForm.actuacion_Id == 1) {
-        requerimientoForm.numeroDeContrato = '0'
+      if (requerimientoForm.actuacion_Id == 2) {
+        requerimientoForm.numeroDeContrato = this.numContratoTmp
         requerimientoForm.tipoContrato_Id = this.proRequirementeForm.controls.infoBasicaForm.value.tipoCont
         requerimientoForm.perfil_Id = this.proRequirementeForm.controls.infoBasicaForm.value.perfil
         requerimientoForm.honorarios = +this.proRequirementeForm.controls.infoBasicaForm.value.valorHonMes
-      } else {
+      } else if (requerimientoForm.actuacion_Id == 3) {
         requerimientoForm.numeroDeContrato = this.proRequirementeForm.controls.infoBasicaForm.value.numeroCont
         requerimientoForm.anioContrato = this.proRequirementeForm.controls.infoBasicaForm.value.anioContrato
-        requerimientoForm.tipoContrato_Id = 0
-        requerimientoForm.perfil_Id = 0
-        requerimientoForm.honorarios = 0
+        requerimientoForm.tipoContrato_Id = this.tipoContratoTmp
+        requerimientoForm.perfil_Id = this.perfilTmp
+        requerimientoForm.honorarios = this.honorariosTmp
       }
       requerimientoForm.cantidadDeContratos = this.proRequirementeForm.controls.infoBasicaForm.value.cantidadCont
       requerimientoForm.descripcion = this.proRequirementeForm.controls.infoBasicaForm.value.descripcion
@@ -1455,7 +1535,10 @@ export class PropertiesRequirementComponent implements OnInit {
   displayFn(value: any) {
     if (value == null) {
       return value ? value.codigo.concat(' ', value.detalle) : value
-    } else if (value != null) {
+    } else if (value != null ) {
+      if(value.detalle == null || value.detalle == undefined || value.detalle == ''){
+        return value.codigo
+      }
       return value ? value.codigo.concat(' ', value.detalle) : value && value.codigo ? value.codigo.concat(' ', value.descripcion) : ''
     } else
       return value.codigo ? value.codigo.concat(' ', value.descripcion) : ''
@@ -1484,7 +1567,7 @@ export class PropertiesRequirementComponent implements OnInit {
   //funcion para obtener el id del autocomplete
   onSelectionChange(event: any, tipo: string) {
     if (tipo == 'actContractual') {
-      if (event == 2) {
+      if (event == 3) {
         //diable campos formulario
         this.disabledAdicion = true
         this.disabledInicial = false
@@ -1493,10 +1576,13 @@ export class PropertiesRequirementComponent implements OnInit {
         this.proRequirementeForm.controls.infoBasicaForm.controls['tipoCont'].disable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].disable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].disable();
-        this.proRequirementeForm.controls.infoBasicaForm.controls['tipoCont'].setValue('');
-        this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].setValue('');
-        this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].setValue('');
-      } else {
+        if (this.typePage == 'Nuevo') {
+          this.proRequirementeForm.controls.infoBasicaForm.controls['tipoCont'].setValue('');
+          this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].setValue('');
+          this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].setValue('');
+        }
+
+      } else if (event == 2) {
         this.disabledAdicion = false
         this.disabledInicial = true
         this.proRequirementeForm.controls.infoBasicaForm.controls['numeroCont'].disable();
@@ -1504,8 +1590,10 @@ export class PropertiesRequirementComponent implements OnInit {
         this.proRequirementeForm.controls.infoBasicaForm.controls['tipoCont'].enable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].enable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].enable();
-        this.proRequirementeForm.controls.infoBasicaForm.controls['numeroCont'].setValue('');
-        this.proRequirementeForm.controls.infoBasicaForm.controls['anioContrato'].setValue('');
+        if (this.typePage == 'Nuevo') {
+          this.proRequirementeForm.controls.infoBasicaForm.controls['numeroCont'].setValue('');
+          this.proRequirementeForm.controls.infoBasicaForm.controls['anioContrato'].setValue('');
+        }
 
       }
     }
@@ -1751,22 +1839,38 @@ export class PropertiesRequirementComponent implements OnInit {
     this.errInitialAppYaers = false
     if (this.isDataTemporal = true) {
       this.servicesinitialApp.getAllInitialApropriationTemp(+this.dataRequirementID, event.value, +this.dataSolicitudID).subscribe(data => {
+        const ValAppIni = String(data.data.valorApropiacion_Incial)
+        const VAL_APP_INI = this.assignCurrencyPipe(ValAppIni)
+        const ValAppAnio = String(data.data.valorApropiacionAnio)
+        const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
+        const ValAppFin = String(data.data.valorApropiacion_Final)
+        const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
+        
         this.initialAppro.setValue({
-          valorApropiacion_Incial: data.data.valorApropiacion_Incial,
+          valorApropiacion_Incial: VAL_APP_INI,
           anio_Vigencia: data.data.anio_Vigencia,
-          valorApropiacionAnio: data.data.valorApropiacionAnio,
-          valorApropiacion_Final: data.data.valorApropiacion_Final,
+          valorApropiacionAnio: VAL_APP_ANIO,
+          valorApropiacion_Final: VAL_APP_FIN,
         })
+        this.currencyInputAppro();
       })
     } else {
       this.servicesinitialApp.getAllInitialApropriation(+this.dataRequirementID, event.value).subscribe(data => {
         if (data.status == 200) {
+          const ValAppIni = String(data.data.valorApropiacion_Incial)
+          const VAL_APP_INI = this.assignCurrencyPipe(ValAppIni)
+          const ValAppAnio = String(data.data.valorApropiacionAnio)
+          const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
+          const ValAppFin = String(data.data.valorApropiacion_Final)
+          const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
+          
           this.initialAppro.setValue({
-            valorApropiacion_Incial: data.data.valorApropiacion_Incial,
+            valorApropiacion_Incial: VAL_APP_INI,
             anio_Vigencia: data.data.anio_Vigencia,
-            valorApropiacionAnio: data.data.valorApropiacionAnio,
-            valorApropiacion_Final: data.data.valorApropiacion_Final,
+            valorApropiacionAnio: VAL_APP_ANIO,
+            valorApropiacion_Final: VAL_APP_FIN,
           })
+          this.currencyInputAppro();
         } else if (data.status == 404) {
           let Data: string[] = [];
           Data = Object.values(data.data);
