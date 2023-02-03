@@ -408,7 +408,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
   //Función para asignar formato de moneda a un numero y retorna el numero formatrado
   assignCurrencyPipe(number: string) {
-    const NUMBER_ASSIGN = this.currencyPipe.transform(number.replace(/\D/g, '').replace(/^-1+/, ''), 'COP', 'symbol-narrow', '1.0-0');
+    const NUMBER_ASSIGN = this.currencyPipe.transform(number.toString().replace(/\D/g, '').replace(/^-1+/, ''), 'COP', 'symbol-narrow', '1.0-0');
     return NUMBER_ASSIGN;
   }
 
@@ -864,16 +864,17 @@ export class PropertiesRequirementComponent implements OnInit {
   }
   getDataConsulta(projectId: number, requestId: number, reqTempId: number) {
     this.isDataTemporal = true
-
     this.serviceProRequirement.getAllDataTemporalModified(projectId, requestId, reqTempId).subscribe(dataTemp => {
-      console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
       this.reqID = dataTemp.requerimiento.requerimiento_ID
       let dataReviews = dataTemp
-      if (dataReviews != null) {
-        this.serviceProRequirement.getAniosBycontrato(+dataReviews.requerimiento.numeroDeContrato).subscribe(res => {
-          this.years = res.data
-        })
+      if (dataReviews != null ) {
+        if(dataReviews.requerimiento.numeroDeContrato != '' && dataReviews.requerimiento.numeroDeContrato != '0'){
+          this.serviceProRequirement.getAniosBycontrato(+dataReviews.requerimiento.numeroDeContrato).subscribe(res => {
+            this.years = res.data
+          })
+        }
+       
 
         this.versionReviewForm.setValue({
           codigoProRew: dataReviews.proyecto.codigoProyecto,
@@ -925,12 +926,19 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
         this.servicesinitialApp.getAllInitialApropriationTemp(reqTempId, dataReviews.aniosVigencia[0], requestId).subscribe(data => {
-          console.log(data)
+
+          const ValAppIni = String(data.data.valorApropiacion_Incial)
+          const VAL_APP_INI = this.assignCurrencyPipe(ValAppIni)
+          const ValAppAnio = String(data.data.valorApropiacionAnio)
+          const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
+          const ValAppFin = String(data.data.valorApropiacion_Final)
+          const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
+          
           this.initialAppro.setValue({
-            valorApropiacion_Incial: data.data.valorApropiacion_Incial.toString(),
-            anio_Vigencia: data.data.anio_Vigencia.toString(),
-            valorApropiacionAnio: data.data.valorApropiacionAnio.toString(),
-            valorApropiacion_Final: data.data.valorApropiacion_Final.toString(),
+            valorApropiacion_Incial: VAL_APP_INI,
+            anio_Vigencia: data.data.anio_Vigencia,
+            valorApropiacionAnio: VAL_APP_ANIO,
+            valorApropiacion_Final: VAL_APP_FIN,
           })
           this.currencyInputAppro();
 
@@ -1009,12 +1017,18 @@ export class PropertiesRequirementComponent implements OnInit {
         this.reloadDataTbl(fromStorageCod, 'codigos');
 
         this.servicesinitialApp.getAllInitialApropriationTemp(+this.dataRequirementID, dataTemp.aniosVigencia[0], +this.dataSolicitudID).subscribe(data => {
-          console.log(data)
+          const ValAppIni = String(data.data.valorApropiacion_Incial)
+          const VAL_APP_INI = this.assignCurrencyPipe(ValAppIni)
+          const ValAppAnio = String(data.data.valorApropiacionAnio)
+          const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
+          const ValAppFin = String(data.data.valorApropiacion_Final)
+          const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
+          
           this.initialAppro.setValue({
-            valorApropiacion_Incial: data.data.valorApropiacion_Incial.toString(),
-            anio_Vigencia: data.data.anio_Vigencia.toString(),
-            valorApropiacionAnio: data.data.valorApropiacionAnio.toString(),
-            valorApropiacion_Final: data.data.valorApropiacion_Final.toString(),
+            valorApropiacion_Incial: VAL_APP_INI,
+            anio_Vigencia: data.data.anio_Vigencia,
+            valorApropiacionAnio: VAL_APP_ANIO,
+            valorApropiacion_Final: VAL_APP_FIN,
           })
           this.currencyInputAppro();
         })
@@ -1076,11 +1090,18 @@ export class PropertiesRequirementComponent implements OnInit {
         this.servicesinitialApp.getAllInitialApropriation(requerimetId, dataApro.aniosVigencia[0]).subscribe(data => {
           console.log(data)
           if (data.status == 200) {
+            const ValAppIni = String(data.data.valorApropiacion_Incial)
+            const VAL_APP_INI = this.assignCurrencyPipe(ValAppIni)
+            const ValAppAnio = String(data.data.valorApropiacionAnio)
+            const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
+            const ValAppFin = String(data.data.valorApropiacion_Final)
+            const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
+            
             this.initialAppro.setValue({
-              valorApropiacion_Incial: data.data.valorApropiacion_Incial.toString(),
-              anio_Vigencia: data.data.anio_Vigencia.toString(),
-              valorApropiacionAnio: data.data.valorApropiacionAnio.toString(),
-              valorApropiacion_Final: data.data.valorApropiacion_Final.toString(),
+              valorApropiacion_Incial: VAL_APP_INI,
+              anio_Vigencia: data.data.anio_Vigencia,
+              valorApropiacionAnio: VAL_APP_ANIO,
+              valorApropiacion_Final: VAL_APP_FIN,
             })
             this.currencyInputAppro();
           } else if (data.status == 404) {
@@ -1514,7 +1535,10 @@ export class PropertiesRequirementComponent implements OnInit {
   displayFn(value: any) {
     if (value == null) {
       return value ? value.codigo.concat(' ', value.detalle) : value
-    } else if (value != null) {
+    } else if (value != null ) {
+      if(value.detalle == null || value.detalle == undefined || value.detalle == ''){
+        return value.codigo
+      }
       return value ? value.codigo.concat(' ', value.detalle) : value && value.codigo ? value.codigo.concat(' ', value.descripcion) : ''
     } else
       return value.codigo ? value.codigo.concat(' ', value.descripcion) : ''
@@ -1815,22 +1839,36 @@ export class PropertiesRequirementComponent implements OnInit {
     this.errInitialAppYaers = false
     if (this.isDataTemporal = true) {
       this.servicesinitialApp.getAllInitialApropriationTemp(+this.dataRequirementID, event.value, +this.dataSolicitudID).subscribe(data => {
+        const ValAppIni = String(data.data.valorApropiacion_Incial)
+        const VAL_APP_INI = this.assignCurrencyPipe(ValAppIni)
+        const ValAppAnio = String(data.data.valorApropiacionAnio)
+        const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
+        const ValAppFin = String(data.data.valorApropiacion_Final)
+        const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
+        
         this.initialAppro.setValue({
-          valorApropiacion_Incial: data.data.valorApropiacion_Incial.toString(),
-          anio_Vigencia: data.data.anio_Vigencia.toString(),
-          valorApropiacionAnio: data.data.valorApropiacionAnio.toString(),
-          valorApropiacion_Final: data.data.valorApropiacion_Final.toString(),
+          valorApropiacion_Incial: VAL_APP_INI,
+          anio_Vigencia: data.data.anio_Vigencia,
+          valorApropiacionAnio: VAL_APP_ANIO,
+          valorApropiacion_Final: VAL_APP_FIN,
         })
         this.currencyInputAppro();
       })
     } else {
       this.servicesinitialApp.getAllInitialApropriation(+this.dataRequirementID, event.value).subscribe(data => {
         if (data.status == 200) {
+          const ValAppIni = String(data.data.valorApropiacion_Incial)
+          const VAL_APP_INI = this.assignCurrencyPipe(ValAppIni)
+          const ValAppAnio = String(data.data.valorApropiacionAnio)
+          const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
+          const ValAppFin = String(data.data.valorApropiacion_Final)
+          const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
+          
           this.initialAppro.setValue({
-            valorApropiacion_Incial: data.data.valorApropiacion_Incial.toString(),
-            anio_Vigencia: data.data.anio_Vigencia.toString(),
-            valorApropiacionAnio: data.data.valorApropiacionAnio.toString(),
-            valorApropiacion_Final: data.data.valorApropiacion_Final.toString(),
+            valorApropiacion_Incial: VAL_APP_INI,
+            anio_Vigencia: data.data.anio_Vigencia,
+            valorApropiacionAnio: VAL_APP_ANIO,
+            valorApropiacion_Final: VAL_APP_FIN,
           })
           this.currencyInputAppro();
         } else if (data.status == 404) {
