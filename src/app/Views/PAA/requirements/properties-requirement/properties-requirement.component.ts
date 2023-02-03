@@ -393,9 +393,9 @@ export class PropertiesRequirementComponent implements OnInit {
           valorApropiacion_Incial: this.assignCurrencyPipe(form.valorApropiacion_Incial)
         }, { emitEvent: false })
       }
-      if (form.anio_Vigencia) {
+      if (form.valorApropiacionAnio) {
         this.initialAppro.patchValue({
-          anio_Vigencia: this.assignCurrencyPipe(form.anio_Vigencia)
+          valorApropiacionAnio: this.assignCurrencyPipe(form.valorApropiacionAnio)
         }, { emitEvent: false })
       }
       if (form.valorApropiacion_Final) {
@@ -408,7 +408,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
   //Función para asignar formato de moneda a un numero y retorna el numero formatrado
   assignCurrencyPipe(number: string) {
-    const NUMBER_ASSIGN = this.currencyPipe.transform(number.toString().replace(/\D/g, '').replace(/^-1+/, ''), 'COP', 'symbol-narrow', '1.0-0');
+    const NUMBER_ASSIGN = this.currencyPipe.transform(number.replace(/\D/g, '').replace(/^-1+/, ''), 'COP', 'symbol-narrow', '1.0-0');
     return NUMBER_ASSIGN;
   }
 
