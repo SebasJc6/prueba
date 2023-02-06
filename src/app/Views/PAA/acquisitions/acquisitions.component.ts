@@ -205,10 +205,10 @@ export class AcquisitionsComponent implements OnInit {
   //Importar Documento de CDPs/RPs
   importFile(file : any) {
     this.serviceCdps.postCDPs(file).subscribe(response => {
-      
+      // console.log('Res: ', response);
       if (response.status === 200) {
         if (response.data.hasWarnings) {
-          this.openSnackBar('Advertencia', `Se guardaron los registros y surgieron advertencias. Descargando archivo de advertencias ${response.data.warnings.fileName}`, 'warning');
+          this.openSnackBar('Advertencia', `Se guardaron los registros y surgieron advertencias. Descargando archivo de advertencias "${response.data.warnings.fileName}"`, 'warningInport');
           this.convertBase64ToFileDownload(response.data.warnings.fileAsBase64, response.data.warnings.fileName);
         } else {
           this.openSnackBar('Guardado Exitosamente', `CDPs/RPs importados con éxito.`, 'success');
@@ -219,6 +219,8 @@ export class AcquisitionsComponent implements OnInit {
       } else if (response.status === 423) {
         this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
         this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
+      } else if (response.status === 400) {
+        this.openSnackBar('Lo sentimos', '', 'error', response.message);
       }
     }, error => {
       // console.log('Error: ', error);
@@ -241,6 +243,34 @@ export class AcquisitionsComponent implements OnInit {
   }
 
 
+  //Importar Documento de CDPs/RPs
+  importFileStockOrders(file : any) {
+    this.serviceStockOrders.postStockOrders(file).subscribe(response => {
+      // console.log('Res: ', response);
+      
+      if (response.status === 200) {
+        if (response.data.hasWarnings) {
+          this.openSnackBar('Advertencia', `Se guardaron los registros y surgieron advertencias. Descargando archivo de advertencias "${response.data.warnings.fileName}"`, 'warningInport');
+          this.convertBase64ToFileDownload(response.data.warnings.fileAsBase64, response.data.warnings.fileName);
+        } else {
+          this.openSnackBar('Guardado Exitosamente', `Giros importados con éxito.`, 'success');
+        }
+      } else if(response.status === 422) {
+        this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
+        this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
+      } else if (response.status === 423) {
+        this.openSnackBar('Lo sentimos', response.message, 'error', `Descargando archivo de errores "${response.data.FileName}".`);
+        this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
+      } else if (response.status === 400) {
+        this.openSnackBar('Lo sentimos', '', 'error', response.message);
+      }
+    }, error => {
+      console.log('Error: ', error);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+    });
+  }
+
+
   //Exportar excel proyectos
   exportExcelProjects() {
     this.projectsChecked = this.selection.selected;
@@ -250,32 +280,6 @@ export class AcquisitionsComponent implements OnInit {
 
     this.openDialog('Advertencia', 'Seleccione el reporte que desea exportar', 'warningSelectReports', '', 'reportes', arrayProjects);
   }
-
-
-  //Importar Documento de CDPs/RPs
-  importFileStockOrders(file : any) {
-    this.serviceStockOrders.postStockOrders(file).subscribe(response => {
-      
-      if (response.status === 200) {
-        if (response.data.hasWarnings) {
-          this.openSnackBar('Advertencia', `Se guardaron los registros y surgieron advertencias. Generando archivo de advertencias ${response.data.warnings.fileName}`, 'warning');
-          this.convertBase64ToFileDownload(response.data.warnings.fileAsBase64, response.data.warnings.fileName);
-        } else {
-          this.openSnackBar('Guardado Exitosamente', `Giros importados con éxito.`, 'success');
-        }
-      } else if(response.status === 422) {
-        this.openSnackBar('Lo sentimos', response.message, 'error', `Generando archivo de errores "${response.data.FileName}".`);
-        this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
-      } else if (response.status === 423) {
-        this.openSnackBar('Lo sentimos', response.message, 'error', `Generando archivo de errores "${response.data.FileName}".`);
-        this.convertBase64ToFileDownload(response.data.FileAsBase64, response.data.FileName);
-      }
-    }, error => {
-      // console.log('Error: ', error);
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
-    });
-  }
-
 
 
   //Alerta PopUp Reportes
