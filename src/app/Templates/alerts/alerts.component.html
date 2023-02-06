@@ -54,3 +54,23 @@
         </div>
     </div>
 </div>
+
+
+<!-- VE 4.1: ALERT  ADVERTENCIA INPORT -->
+<div *ngIf="data.type === 'warningInport'">
+    <div mat-dialog-title class="flex-container">
+        <button mat-button class="close-icon" (click)="dismissSnackbar()"> 
+            <mat-icon style="font-weight: bold;">close</mat-icon> 
+        </button> 
+    </div>
+    <div class="card">
+        <img class="logo" src="assets/img/danger.png">
+        <h1 class="title" style="color: #fad506" mat-dialog-title>{{data.title}}</h1>
+        <div mat-dialog-content>
+          <p class="message">{{data.message}}</p>
+        </div>
+        <div class="buttons" mat-dialog-actions>
+          <button mat-button class="buton btn" (click)="dismissSnackbar()" cdkFocusInitial>ACEPTAR</button>
+        </div>
+    </div>
+</div>
