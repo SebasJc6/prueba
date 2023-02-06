@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { dataGirosI, distribuidosI, postGirosI } from 'src/app/Models/ModelsPAA/Requeriment/StockOrders/Orders/orders.interface';
+import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { OrdersService } from 'src/app/Services/ServicesPAA/Requeriment/Stock-Orders/Orders/orders.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
@@ -38,12 +39,15 @@ export class OrdersComponent implements OnInit {
     valorGirar: new FormControl(''),
   });
 
+    //Objeto con la informacion de acceso del Usuario
+  AccessUser: string = '';
+
   constructor(private activeRoute: ActivatedRoute,
     public router: Router,
     private serviceOrder: OrdersService,
     private snackBar: MatSnackBar,
     private serviceModRequest: ModificationRequestService,
-    private currencyPipe: CurrencyPipe,) { }
+    private currencyPipe: CurrencyPipe, private authService: AuthenticationService,) { }
 
   ngOnInit(): void {
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
@@ -52,7 +56,9 @@ export class OrdersComponent implements OnInit {
     this.getGiro(+this.idReq, +this.idGir);
     this.getModificationRequet(Number(this.dataProjectID));
 
+    this.AccessUser = this.authService.getRolUser();
   }
+
   ngModelChange(event: any) {
     console.log(event);
   }
