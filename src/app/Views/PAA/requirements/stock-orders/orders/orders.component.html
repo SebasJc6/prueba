@@ -137,7 +137,10 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="valGir">
                             Valor a girar
                         <td mat-cell *matCellDef="let element">
-                            <input class="contDataTabla" #valoresDistribuidos value="{{element.valorGirar}}" (change)="valueChange(dataGiros.giro_ID,element.clasificacion_ID,+valoresDistribuidos.value)">
+                            <input class="contDataTabla" #valoresDistribuidos 
+                                value="{{element.valorGirar}}" 
+                                (change)="valueChange(dataGiros.giro_ID,element.clasificacion_ID,+valoresDistribuidos.value)"
+                                [disabled]="AccessUser === 'Revisor'">
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="nuevoSaldo">
@@ -154,7 +157,7 @@
 
         <div class="actions__buttons">
             <mat-card-actions>
-                <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
+                <button class="buton btn" *ngIf="AccessUser !== 'Revisor'" mat-button mat-icon-button (click)="cancel()">
                     Regresar
                 </button>
                 <button class="buton btn" mat-button mat-icon-button (click)="saveGiro()">
