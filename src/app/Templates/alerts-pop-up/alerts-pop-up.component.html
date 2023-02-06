@@ -104,12 +104,12 @@
             <div class="contTxt label1">
                 <mat-select class="contDataSelect" [formControl]="PROJECTS" multiple>
                     <mat-select-trigger>
-                        {{PROJECTS.value?.[0] || ''}}
+                        {{PROJECTS.value?.[0].codigoProyecto || ''}}
                         <span *ngIf="(PROJECTS.value?.length || 0) > 1" class="example-additional-selection">
                         ( y {{(PROJECTS.value?.length || 0) - 1}} {{PROJECTS.value?.length === 2 ? 'proyecto más' : 'proyectos más'}})
                         </span>
                     </mat-select-trigger>
-                    <mat-option *ngFor="let projects of PROJECTS_LIST" [value]="projects.codigoProyecto">{{projects.codigoProyecto}}</mat-option>
+                    <mat-option *ngFor="let projects of PROJECTS_LIST" [value]="projects">{{projects.codigoProyecto}}</mat-option>
                 </mat-select>
             </div>
         </div>

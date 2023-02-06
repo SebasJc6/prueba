@@ -176,8 +176,8 @@ export interface postProjectValidityI {
 }
 
 
-//Interfaz para los IDs de los proyectos, endpiont de generar reporte PAA
-export interface iDsProjectsReportPAAI { 
+//Interfaz para los IDs de los proyectos, endpiont de generar reporte
+export interface iDsProjectsReportI { 
     'iDs': number[]
 }
 

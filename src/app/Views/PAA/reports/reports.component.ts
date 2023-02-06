@@ -40,7 +40,7 @@ export class ReportsComponent implements OnInit {
       this.openSnackBar('Advertencia', `Para generar el reporte seleccione una solicitud de modificación`, 'warning', 'BandejaDeSolicitudes');
     }
     else if (numero_reporte === 3 || numero_reporte === 5 || numero_reporte === 6 || numero_reporte === 7 || numero_reporte === 8 || numero_reporte === 9 || numero_reporte === 10) {
-      this.openDialog('Advertencia', 'Seleccione uno o varios proyectos', 'warningSelectProjects', '', 'proyectos');
+      this.openDialog('Advertencia', 'Seleccione uno o varios proyectos', 'warningSelectProjects', `${numero_reporte}`, 'proyectos');
     }
   }
 

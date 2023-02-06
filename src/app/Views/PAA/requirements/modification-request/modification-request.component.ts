@@ -871,7 +871,7 @@ export class ModificationRequestComponent implements OnInit {
   exportFile() {
     let fecha = new Date();
     const date = this.datePipe.transform(fecha,"dd-MM-yyyy");
-    const fileName = `REPORTE MODIFICACIONES ${date}.xlsx`;
+    const fileName = `REPORTE_SOLICITUD_MODIFICACIONES ${date}.xlsx`;
     this.serviceModRequest.exportFile(this.dataProjectID, this.dataSolicitudModID).subscribe(res => {
       this.manageExcelFile(res, fileName);
     }, error => {

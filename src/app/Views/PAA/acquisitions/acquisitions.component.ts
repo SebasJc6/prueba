@@ -276,6 +276,38 @@ export class AcquisitionsComponent implements OnInit {
     });
   }
 
+
+
+  //Alerta PopUp Reportes
+  openDialog(title: string, message: string, type: string, message2: string, dataType: string, arrayData?: number[]): void {
+    const dialogRef = this.dialog.open(AlertsPopUpComponent, {
+      width: '450px',
+      height: '500px',
+      data: { title: title, message: message, type: type, message2: message2, dataType: dataType, arrayData: arrayData },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.reportType ==='1_PAA' || result.reportType ==='2_REP') {
+          if (result.data.status === 200) {
+            this.openSnackBar('Exportado Exitosamente', `El archivo "${result.data.data.fileName}" fué generado correctamente.`, 'success');
+            this.convertBase64ToFileDownload(result.data.data.fileAsBase64, result.data.data.fileName);
+          } else if (result.data.status === 423) {
+            this.openSnackBar('Lo sentimos', result.data.message, 'error', `Generando archivo de errores "${result.data.data.FileName}".`);
+            this.convertBase64ToFileDownload(result.data.data.FileAsBase64, result.data.data.FileName);
+          }
+          else {
+            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+          }
+        }
+      }
+
+    }, error => {
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+    });
+  }
+
+
   getPagination() {
     this.filterProjects.page = this.paginationForm.get('page')?.value;;
     this.filterProjects.take = this.paginationForm.get('take')?.value;
@@ -382,38 +414,8 @@ export class AcquisitionsComponent implements OnInit {
       event.returnValue = false;
        if (event.preventDefault) {
         event.preventDefault();
-       }
-     }
-    }
-
-
-
-  //Alerta PopUp Reportes
-  openDialog(title: string, message: string, type: string, message2: string, dataType: string, arrayData?: number[]): void {
-    const dialogRef = this.dialog.open(AlertsPopUpComponent, {
-      width: '450px',
-      height: '500px',
-      data: { title: title, message: message, type: type, message2: message2, dataType: dataType, arrayData: arrayData },
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      // console.log(result.reportType);
-      if (result.reportType ==='1_PAA' || result.reportType ==='2_REP') {
-        if (result.data.status === 200) {
-          this.openSnackBar('Exportado Exitosamente', `El archivo "${result.data.data.fileName}" fué generado correctamente.`, 'success');
-          this.convertBase64ToFileDownload(result.data.data.fileAsBase64, result.data.data.fileName);
-        } else if (result.data.status === 423) {
-          this.openSnackBar('Lo sentimos', result.data.message, 'error', `Generando archivo de errores "${result.data.data.FileName}".`);
-          this.convertBase64ToFileDownload(result.data.data.FileAsBase64, result.data.data.FileName);
-        }
-        else {
-          this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
-        }
       }
-
-    }, error => {
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
-    });
+    }
   }
 
 }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { iDsAndAniosProjectsReportPAAI, iDsProjectsReportPAAI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
+import { iDsAndAniosProjectsReportPAAI, iDsProjectsReportI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { getReportBase64I, getReportsAllI, getReportsNameI } from 'src/app/Models/ModelsPAA/Reports/reports-interface';
 import { environment } from 'src/environments/environment';
 
@@ -24,14 +24,20 @@ export class ReportsDetailsService {
     return this.http.get<getReportsNameI>(dir);
   }
 
-  postReportPAA(ids_projects: iDsProjectsReportPAAI): Observable<getReportBase64I>{
+  postReportPAA(project_ids: iDsProjectsReportI): Observable<getReportBase64I>{
     let dir = `${this.Url}Reporte/PAA`;
-    return this.http.post<getReportBase64I>(dir, ids_projects);
+    return this.http.post<getReportBase64I>(dir, project_ids);
   }
 
 
   postReportREP(report_info : iDsAndAniosProjectsReportPAAI): Observable<getReportBase64I>{
     let dir = `${this.Url}Reporte/ResumenEjecucionPresupuestal`;
     return this.http.post<getReportBase64I>(dir, report_info);
+  }
+
+  //Servicio que obtiene un reporte de modificaciones
+  postReportModifications(project_ids : iDsProjectsReportI ): Observable<getReportBase64I> {
+    let dir = `${this.Url}Reporte/Modificaciones`;
+    return this.http.post<getReportBase64I>(dir, project_ids);
   }
 }
