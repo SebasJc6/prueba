@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { cadenaRPsI, dataRPsI, postRPsI, RPsI } from 'src/app/Models/ModelsPAA/Requeriment/RP/RP.interface';
+import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { RpService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/RP/rp.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
@@ -29,6 +30,9 @@ export class RpComponent implements OnInit {
   nomProject: string = '';
   //cadenasRP: Array<cadenaRPsI> = [];
 
+  //Objeto con la informacion de acceso del Usuario
+  AccessUser: string = '';
+
   isLocked: boolean = false;
   constructor(
     private activeRoute: ActivatedRoute,
@@ -37,7 +41,7 @@ export class RpComponent implements OnInit {
     private serviceModRequest: ModificationRequestService,
     private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
-    public dialog: MatDialog,
+    public dialog: MatDialog, private authService: AuthenticationService,
   ) { }
 
   ngOnInit(): void {
@@ -47,7 +51,10 @@ export class RpComponent implements OnInit {
     this.getRPs(+this.idReq, +this.idCDP);
     this.getModificationRequet(Number(this.dataProjectID));
 
+    this.AccessUser = this.authService.getRolUser();
   }
+
+
   //Obtener la información del proyecto para mostrar en miga de pan
   getModificationRequet(projectId: number) {
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
@@ -75,21 +82,17 @@ export class RpComponent implements OnInit {
   }
 
   getRPs(idReq: number, idCDP: number) {
-    this.spinner.show();
     this.serviceRP.getRPs(idReq, idCDP).subscribe(
       res => {
         this.dataRPs = res.data;
-        this.spinner.hide();
       })
   }
   postRPs(idCDP: number, formRPs: postRPsI) {
-    this.spinner.show();
     this.serviceRP.postRPs(idCDP, formRPs).subscribe(
       res => {
         // console.log(res);
         if (res.status == 200) {
           this.openSnackBar('Se ha guardado correctamente', res.message, 'success');
-          this.spinner.hide();
           this.router.navigate(['/WAPI/PAA/CDP/' + this.dataProjectID, this.idReq]);
         }
         if (res.status == 404) {
@@ -100,7 +103,6 @@ export class RpComponent implements OnInit {
             errorMessages += item + '. ';
           });
           this.openSnackBar('Error', '', 'error', errorMessages);
-          this.spinner.hide();
         }
       } ,(err:any) => {
         let Data: string[] = [];
