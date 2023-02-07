@@ -207,7 +207,7 @@ export class RequirementsComponent implements OnInit {
 
   CDP(requirementId: number) {
     this.router.navigate([`/WAPI/PAA/CDP/${this.dataProjectID}/${requirementId}`]);
-    localStorage.setItem('numReq', this.dataRequirementNum);
+
   }
 
   StockOrders(requirementId: number) {
