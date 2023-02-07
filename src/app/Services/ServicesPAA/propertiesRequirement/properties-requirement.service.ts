@@ -77,8 +77,8 @@ export class PropertiesRequirementService {
     return this.http.get<getAllAuxiliarI>(dir)
   }
 
-  getAuxiliarByProject(projectId: number): Observable<getAllAuxiliarI> {
-    let dir = this.logicUrl + 'Proyecto/' + projectId + '/Auxiliares'
+  getAuxiliarByProject(projectId: number,anio: number): Observable<getAllAuxiliarI> {
+    let dir = this.logicUrl + 'Proyecto/' + projectId +'/' +anio +'/Auxiliares'
     return this.http.get<getAllAuxiliarI>(dir)
   }
 

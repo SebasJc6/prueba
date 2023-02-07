@@ -372,7 +372,7 @@ export class PropertiesRequirementComponent implements OnInit {
     this.getAllContractualAction();
     this.getAllContacType();
     this.getAllProfile();
-    this.getAuxiliarByCod();
+    // this.getAuxiliarByCod();
     this.getFuentesBycod();
     this.getAllActivities();
     this.getMGAByCod();
@@ -755,10 +755,13 @@ export class PropertiesRequirementComponent implements OnInit {
       this.allProfile = dataProfile.data
     })
   }
-  getAuxiliarByCod() {
-    this.serviceProRequirement.getAuxiliarByProject(+this.dataProjectID).subscribe((dataAuxuliar) => {
-      this.listAuxiliar = dataAuxuliar.data
-    })
+  getAuxiliarByCod(anioAux : number) {
+    if(anioAux != null){
+      this.serviceProRequirement.getAuxiliarByProject(+this.dataProjectID, anioAux).subscribe((dataAuxuliar) => {
+        this.listAuxiliar = dataAuxuliar.data
+      })
+    }
+   
   }
   getFuentesBycod() {
     this.serviceProRequirement.getFuentesByProject(+this.dataProjectID).subscribe((dataFuentes) => {
@@ -1602,6 +1605,7 @@ export class PropertiesRequirementComponent implements OnInit {
     } event
     if (tipo == 'vigeRecursos') {
       this.errorVigRec = false;
+      this.getAuxiliarByCod(event); 
     }
     if (tipo === 'dependenciaDes') {
       this.dependencieId = event.option.value.dependencia_ID;

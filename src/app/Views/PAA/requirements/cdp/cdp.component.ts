@@ -16,6 +16,7 @@ import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
   styleUrls: ['./cdp.component.scss']
 })
 export class CDPComponent implements OnInit {
+  dataRequirementNum: string = '';
 
   constructor( private activeRoute: ActivatedRoute,
     public router: Router,
@@ -112,6 +113,7 @@ export class CDPComponent implements OnInit {
   //Obtener la información del proyecto para mostrar en miga de pan
   getModificationRequet(projectId: number) {
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
+      console.log(data);
       this.codProject = data.data.proyecto_COD;
       this.nomProject = data.data.nombreProyecto;
     }, error => {
@@ -127,6 +129,7 @@ export class CDPComponent implements OnInit {
     this.filterCDPs.ascending = this.filterForm.get('ascending')?.value || false;
 
     this.serviceCdps.getCDPsByRequerimentId(id_requeriment, filterForm).subscribe(request => {
+      console.log(request);
       if (request.data.hasItems) {
         this.dataSource = request.data.items;
         this.initialValue = request.data.calculados[0].valor;
