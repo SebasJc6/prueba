@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { filterCDPsI, itemsCDPsI } from 'src/app/Models/ModelsPAA/Requeriment/cdp';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
+import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
 import { CDPService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/cdp.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 
@@ -16,13 +17,15 @@ import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
   styleUrls: ['./cdp.component.scss']
 })
 export class CDPComponent implements OnInit {
+  dataRequirementNum: number = 0;
 
   constructor( private activeRoute: ActivatedRoute,
     public router: Router,
     private serviceModRequest: ModificationRequestService,
     private serviceCdps: CDPService,
     private snackBar: MatSnackBar,
-    private authService: AuthenticationService) { }
+    private authService: AuthenticationService,
+    private reqServices: PropertiesRequirementService) { }
 
   displayedColumns: string[] = [
     'select',
@@ -104,9 +107,16 @@ export class CDPComponent implements OnInit {
     this.filterCDPs.take = 20;
     this.getModificationRequet(Number(this.dataProjectID));
     this.getAllCDPsByRequerimentId(Number(this.requerimentId), this.filterCDPs);
+    this.getDataRequirement();
     
     //Obtener token para manejar los roles
     this.AccessUser = this.authService.getRolUser();
+  }
+
+  getDataRequirement() {
+    this.reqServices.getDataAprobad(+this.dataProjectID,+this.requerimentId).subscribe((data) => {
+      this.dataRequirementNum = data.data.requerimiento.numeroRequerimiento;
+    });
   }
 
   //Obtener la información del proyecto para mostrar en miga de pan
