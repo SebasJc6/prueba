@@ -4,7 +4,9 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { dataGirosI, distribuidosI, postGirosI } from 'src/app/Models/ModelsPAA/Requeriment/StockOrders/Orders/orders.interface';
+import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
+import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
 import { OrdersService } from 'src/app/Services/ServicesPAA/Requeriment/Stock-Orders/Orders/orders.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 
@@ -14,6 +16,7 @@ import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
   styleUrls: ['./orders.component.scss']
 })
 export class OrdersComponent implements OnInit {
+  dataRequirementNum: number = 0;
 
   codProject: number = 0;
   nomProject: string = '';
@@ -38,12 +41,17 @@ export class OrdersComponent implements OnInit {
     valorGirar: new FormControl(''),
   });
 
+  //Objeto con la informacion de acceso del Usuario
+  AccessUser: string = '';
+
   constructor(private activeRoute: ActivatedRoute,
     public router: Router,
     private serviceOrder: OrdersService,
     private snackBar: MatSnackBar,
     private serviceModRequest: ModificationRequestService,
-    private currencyPipe: CurrencyPipe,) { }
+    private currencyPipe: CurrencyPipe, private authService: AuthenticationService,
+    private reqServices: PropertiesRequirementService
+    ) { }
 
   ngOnInit(): void {
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
@@ -51,7 +59,13 @@ export class OrdersComponent implements OnInit {
     this.idGir = this.activeRoute.snapshot.paramMap.get('idGir') || '';
     this.getGiro(+this.idReq, +this.idGir);
     this.getModificationRequet(Number(this.dataProjectID));
-
+    this.getDataRequirement();
+    this.AccessUser = this.authService.getRolUser();
+  }
+  getDataRequirement() {
+    this.reqServices.getDataAprobad(+this.dataProjectID, +this.idReq).subscribe((data) => {
+      this.dataRequirementNum = data.data.requerimiento.numeroRequerimiento;
+    });
   }
   ngModelChange(event: any) {
     console.log(event);

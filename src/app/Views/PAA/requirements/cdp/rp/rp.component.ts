@@ -5,7 +5,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { cadenaRPsI, dataRPsI, postRPsI, RPsI } from 'src/app/Models/ModelsPAA/Requeriment/RP/RP.interface';
+import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
+import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
 import { RpService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/RP/rp.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 
@@ -15,6 +17,8 @@ import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
   styleUrls: ['./rp.component.scss']
 })
 export class RpComponent implements OnInit {
+  dataRequirementNum: number = 0;
+
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   dataProjectID: string = '';
   idReq: string = '';
@@ -29,6 +33,9 @@ export class RpComponent implements OnInit {
   nomProject: string = '';
   //cadenasRP: Array<cadenaRPsI> = [];
 
+  //Objeto con la informacion de acceso del Usuario
+  AccessUser: string = '';
+
   isLocked: boolean = false;
   constructor(
     private activeRoute: ActivatedRoute,
@@ -37,7 +44,8 @@ export class RpComponent implements OnInit {
     private serviceModRequest: ModificationRequestService,
     private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
-    public dialog: MatDialog,
+    public dialog: MatDialog, private authService: AuthenticationService,
+    private reqServices: PropertiesRequirementService
   ) { }
 
   ngOnInit(): void {
@@ -46,8 +54,15 @@ export class RpComponent implements OnInit {
     this.idCDP = this.activeRoute.snapshot.paramMap.get('idCDP') || '';
     this.getRPs(+this.idReq, +this.idCDP);
     this.getModificationRequet(Number(this.dataProjectID));
-
+    this.getDataRequirement();
+    this.AccessUser = this.authService.getRolUser();
   }
+  getDataRequirement() {
+    this.reqServices.getDataAprobad(+this.dataProjectID, +this.idReq).subscribe((data) => {
+      this.dataRequirementNum = data.data.requerimiento.numeroRequerimiento;
+    });
+  }
+
   //Obtener la información del proyecto para mostrar en miga de pan
   getModificationRequet(projectId: number) {
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {
@@ -61,7 +76,7 @@ export class RpComponent implements OnInit {
     cadenaRPs.clasificacion_ID = clasificacionId;
     cadenaRPs.valoresDistribuidos = value;
     let cadenas = [] as cadenaRPsI[];
-    
+
     cadenas.map((item: any) => {
       if (item.clasificacion_ID == clasificacionId) {
         item.valoresDistribuidos = value;
@@ -75,21 +90,17 @@ export class RpComponent implements OnInit {
   }
 
   getRPs(idReq: number, idCDP: number) {
-    this.spinner.show();
     this.serviceRP.getRPs(idReq, idCDP).subscribe(
       res => {
         this.dataRPs = res.data;
-        this.spinner.hide();
       })
   }
   postRPs(idCDP: number, formRPs: postRPsI) {
-    this.spinner.show();
     this.serviceRP.postRPs(idCDP, formRPs).subscribe(
       res => {
         // console.log(res);
         if (res.status == 200) {
           this.openSnackBar('Se ha guardado correctamente', res.message, 'success');
-          this.spinner.hide();
           this.router.navigate(['/WAPI/PAA/CDP/' + this.dataProjectID, this.idReq]);
         }
         if (res.status == 404) {
@@ -100,16 +111,15 @@ export class RpComponent implements OnInit {
             errorMessages += item + '. ';
           });
           this.openSnackBar('Error', '', 'error', errorMessages);
-          this.spinner.hide();
         }
-      } ,(err:any) => {
+      }, (err: any) => {
         let Data: string[] = [];
-          Data = Object.values(err.error.data);
-          let errorMessages = '';
-          Data.map(item => {
-            errorMessages += item + '. ';
-          });
-          this.openSnackBar('Error', '', 'error', errorMessages);
+        Data = Object.values(err.error.data);
+        let errorMessages = '';
+        Data.map(item => {
+          errorMessages += item + '. ';
+        });
+        this.openSnackBar('Error', '', 'error', errorMessages);
       })
   }
 

@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { filterStockOrdersI, itemsStockOrdersI } from 'src/app/Models/ModelsPAA/Requeriment/StockOrders/stock-orders-interfaces';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
+import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
 import { StockOrdersService } from 'src/app/Services/ServicesPAA/Requeriment/Stock-Orders/stock-orders.service';
 import { AlertsPopUpComponent } from 'src/app/Templates/alerts-pop-up/alerts-pop-up.component';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
@@ -18,6 +19,7 @@ import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
   styleUrls: ['./stock-orders.component.scss']
 })
 export class StockOrdersComponent implements OnInit {
+  dataRequirementNum: number = 0;
 
   constructor( private activeRoute: ActivatedRoute,
     public router: Router,
@@ -25,7 +27,9 @@ export class StockOrdersComponent implements OnInit {
     private snackBar: MatSnackBar,
     private serviceStockOrders: StockOrdersService,
     private serviceModRequest: ModificationRequestService,
-    private authService: AuthenticationService, ) { }
+    private authService: AuthenticationService,
+    private reqServices: PropertiesRequirementService
+     ) { }
 
   displayedColumns: string[] = [
     'select',
@@ -95,12 +99,17 @@ export class StockOrdersComponent implements OnInit {
     this.filterStockOrders.take = 20;
     this.getModificationRequet(Number(this.dataProjectID));
     this.getAllStockOrdersByRequerimentId(Number(this.requerimentId), this.filterStockOrders);
+    this.getDataRequirement();
 
     //Obtener token para manejar los roles
     this.AccessUser = this.authService.getRolUser();
   }
 
-
+  getDataRequirement() {
+    this.reqServices.getDataAprobad(+this.dataProjectID, +this.requerimentId).subscribe((data) => {
+      this.dataRequirementNum = data.data.requerimiento.numeroRequerimiento;
+    });
+  }
   //Obtener la información del proyecto para mostrar en miga de pan
   getModificationRequet(projectId: number) {
     this.serviceModRequest.getModificationRequest(projectId).subscribe((data) => {

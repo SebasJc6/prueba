@@ -15,6 +15,7 @@ import { RequerimentService } from 'src/app/Services/ServicesPAA/Requeriment/req
   styleUrls: ['./requirements.component.scss']
 })
 export class RequirementsComponent implements OnInit {
+  dataRequirementNum: string = '';
   resultsLength = 0;
   viewRequeriments: any;
   projectId = 0;
@@ -206,6 +207,7 @@ export class RequirementsComponent implements OnInit {
 
   CDP(requirementId: number) {
     this.router.navigate([`/WAPI/PAA/CDP/${this.dataProjectID}/${requirementId}`]);
+
   }
 
   StockOrders(requirementId: number) {
