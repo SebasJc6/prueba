@@ -41,6 +41,9 @@ export class OrdersComponent implements OnInit {
     valorGirar: new FormControl(''),
   });
 
+  //Propiedad para obtener el estado del giro (Bloqueado o no)
+  isLocked: boolean = false;
+
   //Objeto con la informacion de acceso del Usuario
   AccessUser: string = '';
 
@@ -106,6 +109,7 @@ export class OrdersComponent implements OnInit {
     this.serviceOrder.getGiro(idReq, idGiro).subscribe((data: any) => {
       this.numRP = data.data.numeroRP;
       this.dataGiros = data.data;
+      this.isLocked = data.data.isLocked;
       this.formValues.controls.valorRP.setValue(this.assignCurrencyPipe(data.data.valorRP.toString()));
       this.formValues.controls.valorGiro.setValue(this.assignCurrencyPipe(data.data.valorGiroAcumulado.toString()));
       this.formValues.controls.saldoGirar.setValue(this.assignCurrencyPipe(data.data.saldoPorGirar.toString()));
