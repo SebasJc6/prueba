@@ -102,10 +102,13 @@ export class AlertsPopUpComponent implements OnInit {
 
       if (this.data.message2 === '3') {        
         this.getReportModifications(PROJECTS_ID);
+      } 
+      else if (this.data.message2 === '6') {        
+        this.getReportCDP(PROJECTS_ID);
       }
     }
     
-    console.log(this.selectedValueReport);
+    // console.log(this.selectedValueReport);
     
   }
 
@@ -143,6 +146,28 @@ export class AlertsPopUpComponent implements OnInit {
   //Obtener reporte de Modificaciones
   getReportModifications(project_ids : iDsProjectsReportI) {
     this.reportServices.postReportModifications(project_ids).subscribe((Response:any) => {
+      // console.log(Response);
+      if (Response.status === 200) {
+        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
+        this.convertBase64ToFileDownload(Response.data.fileAsBase64, Response.data.fileName);
+      } else if (Response.status === 423) {
+        this.openSnackBar('Lo sentimos', Response.message, 'error', `Generando archivo de errores "${Response.data.FileName}".`);
+        this.convertBase64ToFileDownload(Response.data.FileAsBase64, Response.data.FileName);
+      }
+      else {
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      }
+
+      this.dialogRef.close();
+    }, error => {
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+    });
+  }
+
+
+  //Obtener reporte CDP (6)
+  getReportCDP(project_ids : iDsProjectsReportI) {
+    this.reportServices.postReportCDPs(project_ids).subscribe((Response:any) => {
       // console.log(Response);
       if (Response.status === 200) {
         this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
