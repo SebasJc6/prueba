@@ -28,12 +28,17 @@ export class SidenavListComponent implements OnInit {
   ngOnInit(): void {
     const Token: string = this.authService.getCookie('token');
     const tokenInfo: any = this.decodeToken(Token);
-    //console.log(tokenInfo);
-    this.UserName = tokenInfo.name + ' ' + tokenInfo.surname;
+    console.log('token', tokenInfo);
+    const decodedRole = tokenInfo['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+    const decodedName = tokenInfo['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']
+    console.log('decodedRole', decodedRole);
+    console.log('decodedName', decodedName);
+
+    this.UserName = decodedName
 
     //Obtener token para manejar los roles
-    const TokenAccess = JSON.parse(tokenInfo.access);
-    this.AccessUser = TokenAccess[0].RolesDto[0].Rol;
+    // const TokenAccess = JSON.parse(tokenInfo.access);
+    this.AccessUser = decodedRole
     // console.log(this.AccessUser);
   }
 

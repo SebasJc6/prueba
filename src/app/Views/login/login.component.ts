@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
 
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
-      pwd: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      Pwp: new FormControl('', [Validators.required, Validators.minLength(6)]),
     });
   }
 
@@ -45,11 +45,12 @@ export class LoginComponent implements OnInit {
 
   onLogin() {
     if (this.loginForm.valid) {
-      // console.log(this.loginForm.value);
+       console.log(this.loginForm.value);
       // let isSuccessful =
       this.spinner.show();
        this.ServicesAuth.login(this.loginForm.value).subscribe(dataToken => {
         // console.log('dataToken: ',dataToken.accessToken);
+        console.log('dataToken: ',dataToken);
         this.dataToken = dataToken;
         this.authService.setCookie('token', this.dataToken.accessToken);
         // const tokenInfo: any  =  this.decodeToken(this.dataToken.accessToken);
