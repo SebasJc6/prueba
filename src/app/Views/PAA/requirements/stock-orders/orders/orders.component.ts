@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { dataGirosI, distribuidosI, postGirosI } from 'src/app/Models/ModelsPAA/Requeriment/StockOrders/Orders/orders.interface';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
+import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
 import { OrdersService } from 'src/app/Services/ServicesPAA/Requeriment/Stock-Orders/Orders/orders.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 
@@ -15,6 +16,7 @@ import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
   styleUrls: ['./orders.component.scss']
 })
 export class OrdersComponent implements OnInit {
+  dataRequirementNum: number = 0;
 
   codProject: number = 0;
   nomProject: string = '';
@@ -39,7 +41,10 @@ export class OrdersComponent implements OnInit {
     valorGirar: new FormControl(''),
   });
 
-    //Objeto con la informacion de acceso del Usuario
+  //Propiedad para obtener el estado del giro (Bloqueado o no)
+  isLocked: boolean = false;
+
+  //Objeto con la informacion de acceso del Usuario
   AccessUser: string = '';
 
   constructor(private activeRoute: ActivatedRoute,
@@ -47,7 +52,9 @@ export class OrdersComponent implements OnInit {
     private serviceOrder: OrdersService,
     private snackBar: MatSnackBar,
     private serviceModRequest: ModificationRequestService,
-    private currencyPipe: CurrencyPipe, private authService: AuthenticationService,) { }
+    private currencyPipe: CurrencyPipe, private authService: AuthenticationService,
+    private reqServices: PropertiesRequirementService
+    ) { }
 
   ngOnInit(): void {
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
@@ -55,10 +62,14 @@ export class OrdersComponent implements OnInit {
     this.idGir = this.activeRoute.snapshot.paramMap.get('idGir') || '';
     this.getGiro(+this.idReq, +this.idGir);
     this.getModificationRequet(Number(this.dataProjectID));
-
+    this.getDataRequirement();
     this.AccessUser = this.authService.getRolUser();
   }
-
+  getDataRequirement() {
+    this.reqServices.getDataAprobad(+this.dataProjectID, +this.idReq).subscribe((data) => {
+      this.dataRequirementNum = data.data.requerimiento.numeroRequerimiento;
+    });
+  }
   ngModelChange(event: any) {
     console.log(event);
   }
@@ -98,6 +109,7 @@ export class OrdersComponent implements OnInit {
     this.serviceOrder.getGiro(idReq, idGiro).subscribe((data: any) => {
       this.numRP = data.data.numeroRP;
       this.dataGiros = data.data;
+      this.isLocked = data.data.isLocked;
       this.formValues.controls.valorRP.setValue(this.assignCurrencyPipe(data.data.valorRP.toString()));
       this.formValues.controls.valorGiro.setValue(this.assignCurrencyPipe(data.data.valorGiroAcumulado.toString()));
       this.formValues.controls.saldoGirar.setValue(this.assignCurrencyPipe(data.data.saldoPorGirar.toString()));
@@ -133,9 +145,14 @@ export class OrdersComponent implements OnInit {
   }
   saveGiro() {
     if(!this.giros){
+
       this.postGiros();
-  
+      
+    }else if(this.giros != null){
+      this.postGiros();
+    
     }else{
+
       this.openSnackBar('Giro', 'No se han realizado cambios', 'success');
       this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
     }

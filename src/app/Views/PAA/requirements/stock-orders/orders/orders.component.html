@@ -8,7 +8,7 @@
     </li>
     <li>
         <a class="href " [routerLink]="['/WAPI/PAA/Requerimientos/', dataProjectID]">
-            <span>Requerimientos</span>
+            <span>Requerimiento {{dataRequirementNum}}</span>
         </a>
     </li>
     <li>
@@ -140,7 +140,7 @@
                             <input class="contDataTabla" #valoresDistribuidos 
                                 value="{{element.valorGirar}}" 
                                 (change)="valueChange(dataGiros.giro_ID,element.clasificacion_ID,+valoresDistribuidos.value)"
-                                [disabled]="AccessUser === 'Revisor'">
+                                [disabled]="AccessUser === 'Revisor' || isLocked">
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="nuevoSaldo">

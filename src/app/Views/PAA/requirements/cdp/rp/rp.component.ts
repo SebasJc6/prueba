@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { cadenaRPsI, dataRPsI, postRPsI, RPsI } from 'src/app/Models/ModelsPAA/Requeriment/RP/RP.interface';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
+import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
 import { RpService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/RP/rp.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 
@@ -16,6 +17,8 @@ import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
   styleUrls: ['./rp.component.scss']
 })
 export class RpComponent implements OnInit {
+  dataRequirementNum: number = 0;
+
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   dataProjectID: string = '';
   idReq: string = '';
@@ -42,6 +45,7 @@ export class RpComponent implements OnInit {
     private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
     public dialog: MatDialog, private authService: AuthenticationService,
+    private reqServices: PropertiesRequirementService
   ) { }
 
   ngOnInit(): void {
@@ -50,10 +54,14 @@ export class RpComponent implements OnInit {
     this.idCDP = this.activeRoute.snapshot.paramMap.get('idCDP') || '';
     this.getRPs(+this.idReq, +this.idCDP);
     this.getModificationRequet(Number(this.dataProjectID));
-
+    this.getDataRequirement();
     this.AccessUser = this.authService.getRolUser();
   }
-
+  getDataRequirement() {
+    this.reqServices.getDataAprobad(+this.dataProjectID, +this.idReq).subscribe((data) => {
+      this.dataRequirementNum = data.data.requerimiento.numeroRequerimiento;
+    });
+  }
 
   //Obtener la información del proyecto para mostrar en miga de pan
   getModificationRequet(projectId: number) {
@@ -68,7 +76,7 @@ export class RpComponent implements OnInit {
     cadenaRPs.clasificacion_ID = clasificacionId;
     cadenaRPs.valoresDistribuidos = value;
     let cadenas = [] as cadenaRPsI[];
-    
+
     cadenas.map((item: any) => {
       if (item.clasificacion_ID == clasificacionId) {
         item.valoresDistribuidos = value;
@@ -104,14 +112,14 @@ export class RpComponent implements OnInit {
           });
           this.openSnackBar('Error', '', 'error', errorMessages);
         }
-      } ,(err:any) => {
+      }, (err: any) => {
         let Data: string[] = [];
-          Data = Object.values(err.error.data);
-          let errorMessages = '';
-          Data.map(item => {
-            errorMessages += item + '. ';
-          });
-          this.openSnackBar('Error', '', 'error', errorMessages);
+        Data = Object.values(err.error.data);
+        let errorMessages = '';
+        Data.map(item => {
+          errorMessages += item + '. ';
+        });
+        this.openSnackBar('Error', '', 'error', errorMessages);
       })
   }
 
