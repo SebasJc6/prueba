@@ -1,3 +1,4 @@
+import { ReturnStatement } from '@angular/compiler';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatAccordion } from '@angular/material/expansion';
@@ -23,6 +24,9 @@ export class RpComponent implements OnInit {
   dataProjectID: string = '';
   idReq: string = '';
   idCDP: string = '';
+  idRP: number = 0;
+  listcadenas = [] as cadenaRPsI[];
+  cadenas = [] as cadenaRPsI[];
   actividadesColumns: string[] = ['codigoActividad', 'pospre', 'mga', 'auxiliar', 'fuente', 'aproDisponible', 'valorDistribuidos'];
   dataRPs: any[] = [];
   RPs = {} as RPsI;
@@ -75,18 +79,20 @@ export class RpComponent implements OnInit {
     let cadenaRPs = {} as cadenaRPsI;
     cadenaRPs.clasificacion_ID = clasificacionId;
     cadenaRPs.valoresDistribuidos = value;
-    let cadenas = [] as cadenaRPsI[];
+     
 
-    cadenas.map((item: any) => {
+    this.cadenas.map((item: any) => {
       if (item.clasificacion_ID == clasificacionId) {
         item.valoresDistribuidos = value;
       }
     });
-    cadenas.push(cadenaRPs);
-    let RPs = {} as RPsI
-    RPs['rP_ID'] = idRP;
-    RPs['cadenas'] = cadenas;
-    this.elementsRP.push(RPs);
+
+    //eliminar elementa si es el mismo id que se va agregar
+    this.cadenas = this.cadenas.filter((item: any) => item.clasificacion_ID != clasificacionId);
+    this.cadenas.push(cadenaRPs);
+    this.idRP = idRP;
+    this.listcadenas = this.cadenas;
+
   }
 
   getRPs(idReq: number, idCDP: number) {
@@ -124,7 +130,13 @@ export class RpComponent implements OnInit {
   }
 
   saveRPs() {
+     let RPs = {} as RPsI
+    RPs['rP_ID'] = this.idRP;
+    RPs['cadenas'] = this.listcadenas;
+    this.elementsRP.push(RPs);
     this.formRP.rps = this.elementsRP;
+    console.log(this.formRP);
+    
     this.postRPs(+this.idCDP, this.formRP);
   }
   cancel() {
