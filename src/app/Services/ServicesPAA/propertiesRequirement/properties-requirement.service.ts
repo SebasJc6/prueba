@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, skipWhile, tap } from 'rxjs/operators'
 import { environment } from 'src/environments/environment';
-import { getAllActivitiesI, getAllAnioI, getAllAuxiliarI, getAllContacTypeI, getAllContractualActionI, getAllDependenciesI, getAllFuentesI, getAllMGAI, getAllPOSPREI, getAllProfileI, getAllReviewsAreaI, getAllSelectionModeDataI, getAllSelectionModeI, getAllUNSPSCI, getConceptsI, getDataAprobadaI, getDataTemporalI, getDataTemporalModifiedI, getInfoToCreateReqI, responseVerifyDataSaveI, saveDataEditI, verifyDataSaveI, verifyReqI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
+import { getAllActivitiesI, getAllAnioI, getAllAutoI, getAllAuxiliarI, getAllContacTypeI, getAllContractualActionI, getAllDependenciesI, getAllFuentesI, getAllMGAI, getAllPOSPREI, getAllProfileI, getAllReviewsAreaI, getAllSelectionModeDataI, getAllSelectionModeI, getAllUNSPSCI, getConceptsI, getDataAprobadaI, getDataTemporalI, getDataTemporalModifiedI, getInfoToCreateReqI, responseVerifyDataSaveI, saveDataEditI, verifyDataSaveI, verifyReqI } from 'src/app/Models/ModelsPAA/propertiesRequirement/propertiesRequirement.interface';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from '../../Authentication/authentication.service';
 import { skipApiKey } from '../../Authentication/Interceptor/spinner-interceptor.service';
@@ -45,13 +45,25 @@ export class PropertiesRequirementService {
     let dir = this.genericUrl + 'Actuacion'
     return this.http.get<getAllContractualActionI>(dir, { context: skipApiKey() });
   }
+   
+
   getAniosBycontrato(numCont: number): Observable<getAllAnioI> {
     let dir = this.genericUrl + 'Contrato/' + numCont + '/Anios'
     return this.http.get<getAllAnioI>(dir, { context: skipApiKey() })
   }
 
+  getDataAuto(numCont: number, anio:number): Observable<getAllAutoI> {
+    let dir = this.genericUrl + 'Contrato/' + numCont + '/' + anio
+    return this.http.get<getAllAutoI>(dir, { context: skipApiKey() })
+  }
+
   getAllContacType(): Observable<getAllContacTypeI> {
     let dir = this.genericUrl + 'TipoContrato'
+    return this.http.get<getAllContacTypeI>(dir, { context: skipApiKey() })
+  }
+
+  getContacTypeById(id:number): Observable<getAllContacTypeI> {
+    let dir = this.genericUrl + 'TipoContrato/'+ id
     return this.http.get<getAllContacTypeI>(dir, { context: skipApiKey() })
   }
 
@@ -65,8 +77,8 @@ export class PropertiesRequirementService {
     return this.http.get<getAllAuxiliarI>(dir)
   }
 
-  getAuxiliarByProject(projectId: number): Observable<getAllAuxiliarI> {
-    let dir = this.logicUrl + 'Proyecto/' + projectId + '/Auxiliares'
+  getAuxiliarByProject(projectId: number,anio: number): Observable<getAllAuxiliarI> {
+    let dir = this.logicUrl + 'Proyecto/' + projectId +'/' +anio +'/Auxiliares'
     return this.http.get<getAllAuxiliarI>(dir)
   }
 
