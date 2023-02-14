@@ -15,7 +15,7 @@ export class AuthenticationService {
   constructor(private http: HttpClient,  private cookie: CookieService) { }
 
   login(form: loginI){
-    let dir = this.urlAuth + 'auth/login';
+    let dir = this.urlAuth + 'Acces/login';
     return this.http.post<tokenI>(dir, form);
   }
 
@@ -33,8 +33,9 @@ export class AuthenticationService {
 
   getRolUser(): string {
     const tokenInfo: any  =  this.decodeToken(this.cookie.get('token'));
-    const TokenAccess = JSON.parse(tokenInfo.access);
-    return TokenAccess[0].RolesDto[0].Rol;
+    // const TokenAccess = JSON.parse(tokenInfo.access);
+    const decodedRole = tokenInfo['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+    return decodedRole;
   }
 
   /**decodifica el token */

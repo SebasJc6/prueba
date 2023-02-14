@@ -755,13 +755,13 @@ export class PropertiesRequirementComponent implements OnInit {
       this.allProfile = dataProfile.data
     })
   }
-  getAuxiliarByCod(anioAux : number) {
-    if(anioAux != null){
+  getAuxiliarByCod(anioAux: number) {
+    if (anioAux != null) {
       this.serviceProRequirement.getAuxiliarByProject(+this.dataProjectID, anioAux).subscribe((dataAuxuliar) => {
         this.listAuxiliar = dataAuxuliar.data
       })
     }
-   
+
   }
   getFuentesBycod() {
     this.serviceProRequirement.getFuentesByProject(+this.dataProjectID).subscribe((dataFuentes) => {
@@ -871,13 +871,13 @@ export class PropertiesRequirementComponent implements OnInit {
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
       this.reqID = dataTemp.requerimiento.requerimiento_ID
       let dataReviews = dataTemp
-      if (dataReviews != null ) {
-        if(dataReviews.requerimiento.numeroDeContrato != '' && dataReviews.requerimiento.numeroDeContrato != '0'){
+      if (dataReviews != null) {
+        if (dataReviews.requerimiento.numeroDeContrato != '' && dataReviews.requerimiento.numeroDeContrato != '0') {
           this.serviceProRequirement.getAniosBycontrato(+dataReviews.requerimiento.numeroDeContrato).subscribe(res => {
             this.years = res.data
           })
         }
-       
+
 
         this.versionReviewForm.setValue({
           codigoProRew: dataReviews.proyecto.codigoProyecto,
@@ -936,7 +936,7 @@ export class PropertiesRequirementComponent implements OnInit {
           const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
           const ValAppFin = String(data.data.valorApropiacion_Final)
           const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
-          
+
           this.initialAppro.setValue({
             valorApropiacion_Incial: VAL_APP_INI,
             anio_Vigencia: data.data.anio_Vigencia,
@@ -1026,7 +1026,7 @@ export class PropertiesRequirementComponent implements OnInit {
           const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
           const ValAppFin = String(data.data.valorApropiacion_Final)
           const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
-          
+
           this.initialAppro.setValue({
             valorApropiacion_Incial: VAL_APP_INI,
             anio_Vigencia: data.data.anio_Vigencia,
@@ -1054,13 +1054,14 @@ export class PropertiesRequirementComponent implements OnInit {
 
   getDataAprobad(projectId: number, requerimetId: number) {
     this.serviceProRequirement.getDataAprobad(projectId, requerimetId).subscribe(dataAprobad => {
-      console.log(dataAprobad)
       let dataApro = dataAprobad.data
       if (dataAprobad.data != null) {
         this.dataRequirementNum = dataApro.requerimiento.numeroRequerimiento.toString();
-        this.serviceProRequirement.getAniosBycontrato(+dataApro.requerimiento.numeroDeContrato).subscribe(res => {
-          this.years = res.data
-        })
+        if (dataApro.requerimiento.numeroDeContrato != "") {
+          this.serviceProRequirement.getAniosBycontrato(+dataApro.requerimiento.numeroDeContrato).subscribe(res => {
+            this.years = res.data
+          })
+        }
         this.versionActualForm.setValue({
           codigoProAct: dataApro.proyecto.codigoProyecto,
           dependenciaOriAct: dataApro.proyecto.dependenciaOrigen.codigo.concat(' ', dataApro.proyecto.dependenciaOrigen.detalle),
@@ -1084,14 +1085,12 @@ export class PropertiesRequirementComponent implements OnInit {
 
         })
         this.initialAppYaers = dataApro.aniosVigencia
-        console.log(this.initialAppYaers)
         this.cadenasPresupuestalesVerAct = dataApro.cadenasPresupuestales
         this.dataSourceClasificacionesAct = new MatTableDataSource(this.cadenasPresupuestalesVerAct)
 
         this.codigosVerAct = dataApro.codsUNSPSC
         this.dataSourceCodigosAct = new MatTableDataSource(this.codigosVerAct);
         this.servicesinitialApp.getAllInitialApropriation(requerimetId, dataApro.aniosVigencia[0]).subscribe(data => {
-          console.log(data)
           if (data.status == 200) {
             const ValAppIni = String(data.data.valorApropiacion_Incial)
             const VAL_APP_INI = this.assignCurrencyPipe(ValAppIni)
@@ -1099,7 +1098,7 @@ export class PropertiesRequirementComponent implements OnInit {
             const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
             const ValAppFin = String(data.data.valorApropiacion_Final)
             const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
-            
+
             this.initialAppro.setValue({
               valorApropiacion_Incial: VAL_APP_INI,
               anio_Vigencia: data.data.anio_Vigencia,
@@ -1538,8 +1537,8 @@ export class PropertiesRequirementComponent implements OnInit {
   displayFn(value: any) {
     if (value == null) {
       return value ? value.codigo.concat(' ', value.detalle) : value
-    } else if (value != null ) {
-      if(value.detalle == null || value.detalle == undefined || value.detalle == ''){
+    } else if (value != null) {
+      if (value.detalle == null || value.detalle == undefined || value.detalle == '') {
         return value.codigo
       }
       return value ? value.codigo.concat(' ', value.detalle) : value && value.codigo ? value.codigo.concat(' ', value.descripcion) : ''
@@ -1605,7 +1604,7 @@ export class PropertiesRequirementComponent implements OnInit {
     } event
     if (tipo == 'vigeRecursos') {
       this.errorVigRec = false;
-      this.getAuxiliarByCod(event); 
+      this.getAuxiliarByCod(event);
     }
     if (tipo === 'dependenciaDes') {
       this.dependencieId = event.option.value.dependencia_ID;
@@ -1849,7 +1848,7 @@ export class PropertiesRequirementComponent implements OnInit {
         const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
         const ValAppFin = String(data.data.valorApropiacion_Final)
         const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
-        
+
         this.initialAppro.setValue({
           valorApropiacion_Incial: VAL_APP_INI,
           anio_Vigencia: data.data.anio_Vigencia,
@@ -1867,7 +1866,7 @@ export class PropertiesRequirementComponent implements OnInit {
           const VAL_APP_ANIO = this.assignCurrencyPipe(ValAppAnio)
           const ValAppFin = String(data.data.valorApropiacion_Final)
           const VAL_APP_FIN = this.assignCurrencyPipe(ValAppFin)
-          
+
           this.initialAppro.setValue({
             valorApropiacion_Incial: VAL_APP_INI,
             anio_Vigencia: data.data.anio_Vigencia,
