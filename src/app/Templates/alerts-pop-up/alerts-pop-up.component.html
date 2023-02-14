@@ -60,7 +60,7 @@
 
         <div class="" mat-dialog-content *ngIf="selectedValueReport === 2">
             <div class="contTxt label1">
-                <label class="label1">Año</label>
+                <label class="label1">Año*</label>
                 <mat-select class="contDataSelect" [formControl]="VALIDITYS" multiple>
                     <mat-select-trigger>
                         {{VALIDITYS.value?.[0] || ''}}
@@ -85,7 +85,7 @@
 
 
 
-<!-- VE 6: ALERT  ADVERTENCIA SELECT PROYECTOS -->
+<!-- VE 7: ALERT  ADVERTENCIA SELECT PROYECTOS -->
 <div *ngIf="data.type === 'warningSelectProjects'">
     <div mat-dialog-title class="flex-container close__button">
         <button mat-button class="close-icon" [mat-dialog-close]="false"> 
@@ -102,6 +102,7 @@
 
         <div class="" mat-dialog-content>
             <div class="contTxt label1">
+                <label class="label1">Proyecto*</label>
                 <mat-select class="contDataSelect" [formControl]="PROJECTS" multiple>
                     <mat-select-trigger>
                         {{PROJECTS.value?.[0].codigoProyecto || ''}}
@@ -116,6 +117,55 @@
 
         <div class="buttons" style="margin-top: 5%;" mat-dialog-actions>
             <button mat-button class="butonWarningInput btn" (click)="closeDialog(6)" cdkFocusInitial>EXPORTAR</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- VE 8: ALERT  ADVERTENCIA SELECT DATE-->
+<div *ngIf="data.type === 'warningSelectDate'">
+    <div mat-dialog-title  class="flex-container close__button">
+        <button mat-button class="close-icon" [mat-dialog-close]="false"> 
+            <mat-icon>close</mat-icon> 
+        </button> 
+    </div>
+    <div class="card" [formGroup]="DateForm">
+        <img class="logo" src="assets/img/danger.png">
+        <h1 class="title" style="color: rgb(255, 208, 0);" mat-dialog-title>{{data.title}}</h1>
+        
+        <div class="" mat-dialog-content>
+          <p>{{data.message}}</p>
+        </div>
+
+        <div class="" mat-dialog-content>
+            <div class="contTxt label1">
+                <label class="label1">Fecha inicio*</label>
+                <mat-form-field appearance="fill">
+                    <input matInput [matDatepicker]="picker" formControlName="dateInitial">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="contTxt label1">
+            <label class="label1">Fecha fin*</label>
+            <mat-form-field appearance="fill">
+                <input matInput [matDatepicker]="picker2" formControlName="dateFinal">
+                <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+                <mat-hint>MM/DD/YYYY</mat-hint>
+            </mat-form-field>
+        </div>
+
+        <div class="buttons" style="margin-top: 3%;" mat-dialog-actions>
+            <button mat-button class="butonWarningInput btn"
+            [disabled]="selectedValueReport !== 2 || selectedValueReport === 2 && (VALIDITYS.value?.length > 0) ? false:true"
+            (click)="closeDialog(5)" cdkFocusInitial>
+                EXPORTAR
+            </button>
         </div>
     </div>
 </div>

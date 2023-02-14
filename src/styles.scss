@@ -96,6 +96,20 @@ $custom-typography: mat-typography-config($font-family: '"Montserrat", sans-seri
   color: black;
 }
 
+//Estilo para el input Mat-Date-Picker del pop-up reporte Causales Modificacion
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  border: #185564 1px solid;
+  border-radius: 5px !important;
+  padding: 0 .75em 0 .75em !important;
+}
+.mat-form-field-appearance-fill .mat-form-field-infix {
+  display: contents;
+}
+.mat-form-field-underline{
+  width: 0% !important;
+}
+
+
 //camabiar color de slide-toogle
 .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
   background-color: #49c5b6;

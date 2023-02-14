@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
@@ -48,6 +48,12 @@ export class AlertsPopUpComponent implements OnInit {
   VALIDITYS= new FormControl();
   VALIDITYS_LIST: number[] = [];
 
+  //Obtener fechas inicio y fin para el reporte Causales de Modificación
+  DateForm = new FormGroup({
+    dateInitial : new FormControl(new Date()),
+    dateFinal : new FormControl(new Date())
+  });
+
   ngOnInit(): void {
     if (this.data.dataType === 'proyectos') {
       this.getProjectsInfo();
@@ -88,23 +94,42 @@ export class AlertsPopUpComponent implements OnInit {
         this.dialogRef.close();
         this.openSnackBar('Advertencia', `Para generar el reporte seleccione una solicitud de modificación`, 'warning', 'BandejaDeSolicitudes');
       }
+      else if (this.data.message2 === '8') {
+        const FECHA_INICIO = String(this.DateForm.value.dateInitial);
+        const FECHA_FIN = String(this.DateForm.value.dateFinal);
+        if (FECHA_INICIO && FECHA_FIN) {
+          if(Date.parse(FECHA_FIN) <= Date.parse(FECHA_INICIO)){
+            this.openSnackBar('Error', `La fecha fin debe ser mayor a la fecha inicio`, 'error', '');
+          }else{
+            this.getReportCausalModification(FECHA_INICIO, FECHA_FIN);
+          }
+        } else {
+          this.openSnackBar('Error', `Debe seleccionar una fecha inicio y una fecha fin para generar el reporte`, 'error', '');
+        }
+      }
     }
     else if (action === 6) {
       const ARRAY_PROJECTS_SELECTED: any[] = this.PROJECTS.value;
 
-      let ID_PROJECTS = ARRAY_PROJECTS_SELECTED.map(element => {
-        return element.proyecto_ID;
-      });
+      if (this.PROJECTS.value) {
 
-      const PROJECTS_ID : iDsProjectsReportI = {
-        'iDs' : ID_PROJECTS
-      }
+        let ID_PROJECTS = ARRAY_PROJECTS_SELECTED.map(element => {
+          return element.proyecto_ID;
+        });
 
-      if (this.data.message2 === '3') {        
-        this.getReportModifications(PROJECTS_ID);
-      } 
-      else if (this.data.message2 === '6') {        
-        this.getReportCDP(PROJECTS_ID);
+        const PROJECTS_ID : iDsProjectsReportI = {
+          'iDs' : ID_PROJECTS
+        }
+
+        if (this.data.message2 === '3') {
+          this.getReportModifications(PROJECTS_ID);
+        }
+        else if (this.data.message2 === '5') {
+          this.getReportActionPlan(PROJECTS_ID);
+        }
+        else if (this.data.message2 === '6') {
+          this.getReportCDP(PROJECTS_ID);
+        }
       }
     }
     
@@ -154,6 +179,29 @@ export class AlertsPopUpComponent implements OnInit {
         this.openSnackBar('Lo sentimos', Response.message, 'error', `Generando archivo de errores "${Response.data.FileName}".`);
         this.convertBase64ToFileDownload(Response.data.FileAsBase64, Response.data.FileName);
       }
+      // TODO: Validar error 422
+      else {
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      }
+
+      this.dialogRef.close();
+    }, error => {
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+    });
+  }
+
+
+  //Obtener reporte Plan de Accion (5)
+  getReportActionPlan(project_ids : iDsProjectsReportI) {
+    this.reportServices.postReportActionPlan(project_ids).subscribe((Response:any) => {
+      // console.log(Response);
+      if (Response.status === 200) {
+        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
+        this.convertBase64ToFileDownload(Response.data.fileAsBase64, Response.data.fileName);
+      } else if (Response.status === 423) {
+        this.openSnackBar('Lo sentimos', Response.message, 'error', `Generando archivo de errores "${Response.data.FileName}".`);
+        this.convertBase64ToFileDownload(Response.data.FileAsBase64, Response.data.FileName);
+      }
       else {
         this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
       }
@@ -168,6 +216,29 @@ export class AlertsPopUpComponent implements OnInit {
   //Obtener reporte CDP (6)
   getReportCDP(project_ids : iDsProjectsReportI) {
     this.reportServices.postReportCDPs(project_ids).subscribe((Response:any) => {
+      // console.log(Response);
+      if (Response.status === 200) {
+        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
+        this.convertBase64ToFileDownload(Response.data.fileAsBase64, Response.data.fileName);
+      } else if (Response.status === 423) {
+        this.openSnackBar('Lo sentimos', Response.message, 'error', `Generando archivo de errores "${Response.data.FileName}".`);
+        this.convertBase64ToFileDownload(Response.data.FileAsBase64, Response.data.FileName);
+      }
+      else {
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      }
+
+      this.dialogRef.close();
+    }, error => {
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+    });
+  }
+
+
+  //Obtener reporte Causales de Modificacion (8)
+  getReportCausalModification(date_initial : string, date_final : string) {
+    // TODO: Cambiar logica del endpoint
+    this.reportServices.postReportCDPs({'iDs': []}).subscribe((Response:any) => {
       // console.log(Response);
       if (Response.status === 200) {
         this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');

@@ -71,6 +71,7 @@ import { SpinnerInterceptorService } from './Services/Authentication/Interceptor
 import { OrdersComponent } from './Views/PAA/requirements/stock-orders/orders/orders.component';
 import { PageNotFoundComponent } from './Views/page-not-found/page-not-found.component';
 import { ReportsComponent } from './Views/PAA/reports/reports.component';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 const materialModules = [
@@ -102,6 +103,7 @@ const materialModules = [
   MatSlideToggleModule,
   MatSnackBarModule,
   MatAutocompleteModule,
+  MatNativeDateModule,
 ]
 
 
