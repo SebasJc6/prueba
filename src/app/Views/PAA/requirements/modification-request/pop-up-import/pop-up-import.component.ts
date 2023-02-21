@@ -128,7 +128,10 @@ export class PopUpImportComponent implements OnInit {
             this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
           } else if (status == 200) {
             this.openSnackBar('Guardado Exitosamente', `Solicitud de modificación actualizada y guardada con éxito.`, 'success');
-          }
+          } else if (status === 423) {
+            this.openSnackBar('Lo sentimos', res.message, 'error', `Generando archivo de errores "${res.data.FileName}".`);
+            this.convertBase64ToFileDownload(res.data.FileAsBase64, res.data.FileName);
+          } 
           this.dialogRef.close();
         }, error => {
           let status = error.error.status;
@@ -176,6 +179,16 @@ export class PopUpImportComponent implements OnInit {
         this.openSnackBar('Error', `Solo puede ingresar un archivo Excel`, 'error');
       }
     }
+  }
+
+
+  //Convertir archivo de Base64 a .xlsx y descargarlo
+  convertBase64ToFileDownload(base64String: string, fileName: string) {
+    const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64String}`;
+    const link = document.createElement("a");
+    link.href = source;
+    link.download = `${fileName}`;
+    link.click();
   }
 
 
