@@ -122,7 +122,6 @@ export class OrdersComponent implements OnInit {
   }
   valueChange(idGiro: number, clasificacionId: number, value: number) {
     let valueformat = this.assignCurrencyPipe(value.toString());
-    console.log(valueformat);
     let valDistribuidos = {} as distribuidosI;
     valDistribuidos.clasificacion_ID = clasificacionId;
     valDistribuidos.valorGirar = value;
