@@ -54,7 +54,7 @@ export class OrdersComponent implements OnInit {
     private serviceModRequest: ModificationRequestService,
     private currencyPipe: CurrencyPipe, private authService: AuthenticationService,
     private reqServices: PropertiesRequirementService
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.dataProjectID = this.activeRoute.snapshot.paramMap.get('idPro') || '';
@@ -143,14 +143,14 @@ export class OrdersComponent implements OnInit {
     this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
   }
   saveGiro() {
-    if(!this.giros){
+    if (!this.giros) {
 
       this.postGiros();
-      
-    }else if(this.giros != null){
+
+    } else if (this.giros != null) {
       this.postGiros();
-    
-    }else{
+
+    } else {
 
       this.openSnackBar('Giro', 'No se han realizado cambios', 'success');
       this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
@@ -158,31 +158,41 @@ export class OrdersComponent implements OnInit {
   }
 
   postGiros() {
-    this.serviceOrder.postGiro(this.giros).subscribe((data: any) => {
-      console.log(data);
-      if (data.status == 200) {
-        this.openSnackBar('Giro', 'Se ha guardado correctamente', 'success');
-        this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
+    console.log(this.giros);
 
-      } else {
+    if (this.giros.distribuidos != null && this.giros.giro_ID != null && this.giros.requerimiento_ID != null) {
+    
+      this.serviceOrder.postGiro(this.giros).subscribe((data: any) => {
+        if (data.status == 200) {
+          this.openSnackBar('Giro', 'Se ha guardado correctamente', 'success');
+          this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
+
+        } else {
+          let Data: string[] = [];
+          Data = Object.values(data.data);
+          let errorMessages = '';
+          Data.map(item => {
+            errorMessages += item + '. ';
+          });
+          this.openSnackBar('Error', data.message, 'error', errorMessages);
+
+        }
+      }, (err: any) => {
         let Data: string[] = [];
-        Data = Object.values(data.data);
+        Data = Object.values(err.error.data);
         let errorMessages = '';
         Data.map(item => {
           errorMessages += item + '. ';
         });
-        this.openSnackBar('Error', data.message, 'error', errorMessages);
+        this.openSnackBar('Error', err.error.message, 'error', errorMessages);
+      })
+    }else{
+    
+      this.openSnackBar('Giro', 'No se realizaron cambios', 'success');
+      this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
 
-      }
-    }, (err: any) => {
-      let Data: string[] = [];
-      Data = Object.values(err.error.data);
-      let errorMessages = '';
-      Data.map(item => {
-        errorMessages += item + '. ';
-      });
-      this.openSnackBar('Error', err.error.message, 'error', errorMessages);
-    })
+    }
+
   }
   //Metodo para llamar alertas
   openSnackBar(title: string, message: string, type: string, message2?: string) {
