@@ -158,7 +158,10 @@ export class OrdersComponent implements OnInit {
   }
 
   postGiros() {
-    if (this.giros == null) {
+    console.log(this.giros);
+
+    if (this.giros.distribuidos != null && this.giros.giro_ID != null && this.giros.requerimiento_ID != null) {
+    
       this.serviceOrder.postGiro(this.giros).subscribe((data: any) => {
         if (data.status == 200) {
           this.openSnackBar('Giro', 'Se ha guardado correctamente', 'success');
@@ -184,6 +187,7 @@ export class OrdersComponent implements OnInit {
         this.openSnackBar('Error', err.error.message, 'error', errorMessages);
       })
     }else{
+    
       this.openSnackBar('Giro', 'No se realizaron cambios', 'success');
       this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
 
