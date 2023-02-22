@@ -1992,10 +1992,12 @@ export class PropertiesRequirementComponent implements OnInit {
       reviewsData.revisiones = this.reviewsAdd
       this.spinner.show();
       this.serviceReviews.postReviews(reviewsData).subscribe((data: any) => {
+        console.log(reviewsData)
         if (data.status != 200) {
           this.openSnackBar('ERROR', data.message, 'error')
           this.loading = false;
         } else {
+          this.openSnackBar('Revisiones guardadas correctamente', data.message, 'success')
           this.getAllReviews(+this.dataRequirementID)
           this.loading = false;
         }
@@ -2049,6 +2051,7 @@ export class PropertiesRequirementComponent implements OnInit {
         });
       } else {
         this.reviewsCheck.push(objectReviews)
+        console.log(this.reviewsCheck)
       }
     } else {
     }
