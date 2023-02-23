@@ -52,4 +52,16 @@ export class ReportsDetailsService {
     let dir = `${this.Url}Reporte/CDPs`;
     return this.http.post<getReportBase64I>(dir, project_ids);
   }
+
+  //Servicio que obtiene un reporte de RPs
+  postReportRPs(project_ids : iDsProjectsReportI ): Observable<getReportBase64I> {
+    let dir = `${this.Url}Reporte/RP`;
+    return this.http.post<getReportBase64I>(dir, project_ids);
+  }
+
+  //Servicio que obtiene un reporte de Giross
+  postReportOrders(project_ids : iDsProjectsReportI ): Observable<getReportBase64I> {
+    let dir = `${this.Url}Reporte/Giros`;
+    return this.http.post<getReportBase64I>(dir, project_ids);
+  }
 }
