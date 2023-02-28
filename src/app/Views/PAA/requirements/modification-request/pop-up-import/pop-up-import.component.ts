@@ -47,7 +47,6 @@ export class PopUpImportComponent implements OnInit {
     }
   }
 
-
   importFile() {
     if (this.fileTmp !== undefined) {
       let FILE = new FormData();
@@ -58,32 +57,18 @@ export class PopUpImportComponent implements OnInit {
       if (this.id_request === 0) {
         this.serviceModRequest.importFile(this.id_project, FILE).subscribe(res => {
 
-          let message = res.message;
           let status = res.status;
-          let Data: string[] = [];
 
-          if (status == 404) {
-            if (res.data != null) {
-              Data = Object.values(res.data);
-            }
-          } else if (status == 200) {
-            this.idSolicitudImport = res.data.idSolicitud;
-          }
-
-          let erorsMessages = '';
-          Data.map(item => {
-            erorsMessages += item + '. ';
-          });
-
-          if (status == 404) {
-            this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
-          } else if (status == 200) {
+          if (status == 200) {
             this.openSnackBar('Guardado Exitosamente', `Solicitud de modificación guardada con éxito.`, 'success');
             this.dialogRef.close();
             this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
+          } else if (status === 423) {
+            this.openSnackBar('Lo sentimos', res.message, 'error', `Generando archivo de errores "${res.data.FileName}".`);
+            this.convertBase64ToFileDownload(res.data.FileAsBase64, res.data.FileName);
           }
 
-            this.dialogRef.close();
+          this.dialogRef.close();
         }, error => {
           let status = error.error.status;
 
@@ -109,26 +94,14 @@ export class PopUpImportComponent implements OnInit {
         //Se ejecuta el endpoint de actualizar import
         this.serviceModRequest.importFilePut(this.id_project, this.id_request, FILE).subscribe(res => {
 
-          let message = res.message;
           let status = res.status;
-          let Data: string[] = [];
 
-          if (status == 404) {
-            if (res.data != null) {
-              Data = Object.values(res.data);
-            }
-          }
-
-          let erorsMessages = '';
-          Data.map(item => {
-            erorsMessages += item + '. ';
-          });
-
-          if (status == 404) {
-            this.openSnackBar('Lo sentimos', message, 'error', erorsMessages);
-          } else if (status == 200) {
+          if (status == 200) {
             this.openSnackBar('Guardado Exitosamente', `Solicitud de modificación actualizada y guardada con éxito.`, 'success');
-          }
+          } else if (status === 423) {
+            this.openSnackBar('Lo sentimos', res.message, 'error', `Generando archivo de errores "${res.data.FileName}".`);
+            this.convertBase64ToFileDownload(res.data.FileAsBase64, res.data.FileName);
+          } 
           this.dialogRef.close();
         }, error => {
           let status = error.error.status;
@@ -176,6 +149,16 @@ export class PopUpImportComponent implements OnInit {
         this.openSnackBar('Error', `Solo puede ingresar un archivo Excel`, 'error');
       }
     }
+  }
+
+
+  //Convertir archivo de Base64 a .xlsx y descargarlo
+  convertBase64ToFileDownload(base64String: string, fileName: string) {
+    const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64String}`;
+    const link = document.createElement("a");
+    link.href = source;
+    link.download = `${fileName}`;
+    link.click();
   }
 
 

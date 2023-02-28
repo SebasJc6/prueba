@@ -372,7 +372,7 @@ export class PropertiesRequirementComponent implements OnInit {
     this.getAllContractualAction();
     this.getAllContacType();
     this.getAllProfile();
-    // this.getAuxiliarByCod();
+    this.getAuxiliarByCod();
     this.getFuentesBycod();
     this.getAllActivities();
     this.getMGAByCod();
@@ -755,13 +755,10 @@ export class PropertiesRequirementComponent implements OnInit {
       this.allProfile = dataProfile.data
     })
   }
-  getAuxiliarByCod(anioAux: number) {
-    if (anioAux != null) {
-      this.serviceProRequirement.getAuxiliarByProject(+this.dataProjectID, anioAux).subscribe((dataAuxuliar) => {
-        this.listAuxiliar = dataAuxuliar.data
-      })
-    }
-
+  getAuxiliarByCod() {
+    this.serviceProRequirement.getAuxiliarByProject(+this.dataProjectID).subscribe((dataAuxuliar) => {
+      this.listAuxiliar = dataAuxuliar.data
+    })
   }
   getFuentesBycod() {
     this.serviceProRequirement.getFuentesByProject(+this.dataProjectID).subscribe((dataFuentes) => {
@@ -1604,7 +1601,6 @@ export class PropertiesRequirementComponent implements OnInit {
     } event
     if (tipo == 'vigeRecursos') {
       this.errorVigRec = false;
-      this.getAuxiliarByCod(event);
     }
     if (tipo === 'dependenciaDes') {
       this.dependencieId = event.option.value.dependencia_ID;
@@ -1619,6 +1615,7 @@ export class PropertiesRequirementComponent implements OnInit {
     }
     if (tipo == 'auxiliar') {
       this.errorAux = false;
+
     }
     if (tipo == 'fuente') {
       this.fuenteId = event.fuente_ID
@@ -1995,10 +1992,12 @@ export class PropertiesRequirementComponent implements OnInit {
       reviewsData.revisiones = this.reviewsAdd
       this.spinner.show();
       this.serviceReviews.postReviews(reviewsData).subscribe((data: any) => {
+        console.log(reviewsData)
         if (data.status != 200) {
           this.openSnackBar('ERROR', data.message, 'error')
           this.loading = false;
         } else {
+          this.openSnackBar('Revisiones guardadas correctamente', data.message, 'success')
           this.getAllReviews(+this.dataRequirementID)
           this.loading = false;
         }
@@ -2052,6 +2051,7 @@ export class PropertiesRequirementComponent implements OnInit {
         });
       } else {
         this.reviewsCheck.push(objectReviews)
+        console.log(this.reviewsCheck)
       }
     } else {
     }

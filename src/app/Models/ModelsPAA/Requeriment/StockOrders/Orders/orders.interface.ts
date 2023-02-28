@@ -9,6 +9,7 @@ export interface dataGirosI{
     fuente: string;
     giro_ID: number;
     numeroOrden: number;
+    numContrato: string;
     numeroRP: number;
     pendienteDistribuir : number;
     saldoPorGirar : number;
