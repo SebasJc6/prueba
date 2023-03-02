@@ -21,7 +21,7 @@
       <button class="Fil" mat-button (click)="openFilter()" *ngIf="viewFilter">Filtrar</button>
     
       <div class="sections__buttons__icons">
-        <button class="btn" style="float: right;" mat-button>
+        <button class="btn" (click)="exportExcelProjects()" style="float: right;" mat-button>
           <mat-icon class="imgExcel mat-icon" matTooltip="Exportar Excel">
             <img class="imgExcel" src="../../../../assets/img/excel.jpg">
           </mat-icon>
@@ -32,7 +32,7 @@
             autorenew
           </mat-icon>
           <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          class="file-input" (change)="onFileStockOrders($event)" [(ngModel)]="fileStockOrders" #importGiros/>
+          class="file-input" (change)="onFileStockOrders($event)" [(ngModel)]="inputFile" #importGiros/>
         </button>
         
         <button class="btn" style="float: right;" mat-button  *ngIf="AccessUser == 'Referente_Planeacion'">
@@ -125,7 +125,8 @@
 
       <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef class="selc">
-          <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+          <mat-checkbox (change)="$event ? masterToggle() : null" 
+            [checked]="selection.hasValue() && isAllSelected()"
             [indeterminate]="selection.hasValue() && !isAllSelected()">
           </mat-checkbox>
         </th>

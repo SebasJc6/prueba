@@ -13,6 +13,25 @@
     align-items: center;
 }
 
+
+//MIGA PAN
+.mgp {
+  float: start;
+  display: flex;
+  color: #185564;
+  align-items: center;
+
+  .href {
+    text-decoration: none;
+    color: #185564;
+  }
+
+  .selected {
+    font-weight: bold;
+  }
+}
+
+
 .div__title {
     margin-bottom: 2.5em;
 
@@ -36,8 +55,9 @@
 
     .mat__card {
         width: 200px;
-        height: 200px;
+        height: 180px;
         margin-bottom: 8px;
+        cursor: pointer;
 
         .card__title {
             align-items: center;

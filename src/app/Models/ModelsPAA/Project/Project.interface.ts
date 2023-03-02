@@ -151,3 +151,39 @@ export interface calculadosProjectAndRequestI {
     valor: number
 }
 
+
+//Interfaces para endpoint con información resumida de los proyectos para reportes
+export interface getAllProjectReportsI{
+    status: number,
+    message: string,
+    title: string,
+    data: getProjectReportsI[]
+}
+
+export interface getProjectReportsI{
+    proyecto_ID: number,
+    codigoProyecto: number,
+    nombre: string
+}
+
+
+//Interfaces para el endpoint que obtiene las Vigencias 
+export interface postProjectValidityI {
+    status: number,
+    message: string,
+    title: string,
+    data: number[]
+}
+
+
+//Interfaz para los IDs de los proyectos, endpiont de generar reporte
+export interface iDsProjectsReportI { 
+    'iDs': number[]
+}
+
+
+//Interfaz para el endpiont de generar Reporte Ejecución Presupuestal
+export interface iDsAndAniosProjectsReportPAAI { 
+    'iDs': number[],
+    'anios': number[]
+}

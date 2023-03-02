@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CurrencyPipe, HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { CurrencyPipe, DatePipe, HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 
 // angular material
@@ -71,6 +71,7 @@ import { SpinnerInterceptorService } from './Services/Authentication/Interceptor
 import { OrdersComponent } from './Views/PAA/requirements/stock-orders/orders/orders.component';
 import { PageNotFoundComponent } from './Views/page-not-found/page-not-found.component';
 import { ReportsComponent } from './Views/PAA/reports/reports.component';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 const materialModules = [
@@ -102,6 +103,7 @@ const materialModules = [
   MatSlideToggleModule,
   MatSnackBarModule,
   MatAutocompleteModule,
+  MatNativeDateModule,
 ]
 
 
@@ -160,6 +162,7 @@ const materialModules = [
       { provide: LocationStrategy, useClass: HashLocationStrategy},
       {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true},
       {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptorService, multi: true},
+      DatePipe
     ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 export interface AlertData {
   type: string;
@@ -16,7 +17,7 @@ export interface AlertData {
 })
 export class AlertsComponent implements OnInit {
 
-  constructor(private snackBar: MatSnackBar, 
+  constructor(private snackBar: MatSnackBar, private router: Router,
     @Inject(MAT_SNACK_BAR_DATA) public data: AlertData) { }
 
 
@@ -24,7 +25,11 @@ export class AlertsComponent implements OnInit {
     //  this.alertType();
   }
 
-   dismissSnackbar(): void {
+   dismissSnackbar( router?: string ): void {
+    if (router) {
+      this.router.navigate([`/WAPI/PAA/${router}`]);
+    }
+    
       this.snackBar.dismiss();
    }
 

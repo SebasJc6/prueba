@@ -2,6 +2,14 @@
 
 <div class="container center-h center-v">
 
+    <!--MIGA PAN-->
+    <div class="mgp">
+        Plan Anual de Adquisiciones
+        <a class="href selected" [routerLink]="['/WAPI/PAA/Reportes']">
+        &nbsp;>&nbsp;Reportes
+        </a>
+    </div>
+
     <div class="div__title">
         <mat-card-title class="title">
           <strong> REPORTES </strong>
@@ -9,99 +17,15 @@
     </div>
 
     <div class="container__cards">
-        <mat-card class="mat__card">
+        <mat-card class="mat__card" *ngFor="let report of REPORTS_DETAILS" (click)="onClickCard(report.numeroReporte)">
             <mat-card-header>
                 <mat-card-title class="card__title">
-                    <strong class="strong__title">Plan Anual de Adquisiciones (PAA)</strong> 
+                    <strong class="strong__title">{{report.nombre}}</strong> 
                 </mat-card-title>
             </mat-card-header>
             <hr class="hr__separator">
             <mat-card-content class="text__content">
-                Informe organizado por proyecto y requerimiento. Incluye las modificaciones y seguimientos realizados a los proyectos durante la vigencia.
-            </mat-card-content>
-        </mat-card>
-
-        <mat-card class="mat__card">
-            <mat-card-header>
-                <mat-card-title class="card__title">
-                    <strong class="strong__title">Plan Anual de Adquisiciones (PAA)</strong> 
-                </mat-card-title>
-            </mat-card-header>
-            <hr class="hr__separator">
-            <mat-card-content class="text__content">
-                Informe organizado por proyecto y requerimiento. Incluye las modificaciones y seguimientos realizados a los proyectos durante la vigencia.
-            </mat-card-content>
-        </mat-card>
-
-        <mat-card class="mat__card">
-            <mat-card-header>
-                <mat-card-title class="card__title">
-                    <strong class="strong__title">Plan Anual de Adquisiciones (PAA)</strong> 
-                </mat-card-title>
-            </mat-card-header>
-            <hr class="hr__separator">
-            <mat-card-content class="text__content">
-                Informe organizado por proyecto y requerimiento. Incluye las modificaciones y seguimientos realizados a los proyectos durante la vigencia.
-            </mat-card-content>
-        </mat-card>
-
-        <mat-card class="mat__card">
-            <mat-card-header>
-                <mat-card-title class="card__title">
-                    <strong class="strong__title">Plan Anual de Adquisiciones (PAA)</strong> 
-                </mat-card-title>
-            </mat-card-header>
-            <hr class="hr__separator">
-            <mat-card-content class="text__content">
-                Informe organizado por proyecto y requerimiento. Incluye las modificaciones y seguimientos realizados a los proyectos durante la vigencia.
-            </mat-card-content>
-        </mat-card>
-
-        <mat-card class="mat__card">
-            <mat-card-header>
-                <mat-card-title class="card__title">
-                    <strong class="strong__title">Plan Anual de Adquisiciones (PAA)</strong> 
-                </mat-card-title>
-            </mat-card-header>
-            <hr class="hr__separator">
-            <mat-card-content class="text__content">
-                Informe organizado por proyecto y requerimiento. Incluye las modificaciones y seguimientos realizados a los proyectos durante la vigencia.
-            </mat-card-content>
-        </mat-card>
-
-        <mat-card class="mat__card">
-            <mat-card-header>
-                <mat-card-title class="card__title">
-                    <strong class="strong__title">Plan Anual de Adquisiciones (PAA)</strong> 
-                </mat-card-title>
-            </mat-card-header>
-            <hr class="hr__separator">
-            <mat-card-content class="text__content">
-                Informe organizado por proyecto y requerimiento. Incluye las modificaciones y seguimientos realizados a los proyectos durante la vigencia.
-            </mat-card-content>
-        </mat-card>
-
-        <mat-card class="mat__card">
-            <mat-card-header>
-                <mat-card-title class="card__title">
-                    <strong class="strong__title">Plan Anual de Adquisiciones (PAA)</strong> 
-                </mat-card-title>
-            </mat-card-header>
-            <hr class="hr__separator">
-            <mat-card-content class="text__content">
-                Informe organizado por proyecto y requerimiento. Incluye las modificaciones y seguimientos realizados a los proyectos durante la vigencia.
-            </mat-card-content>
-        </mat-card>
-
-        <mat-card class="mat__card">
-            <mat-card-header>
-                <mat-card-title class="card__title">
-                    <strong class="strong__title">Plan Anual de Adquisiciones (PAA)</strong> 
-                </mat-card-title>
-            </mat-card-header>
-            <hr class="hr__separator">
-            <mat-card-content class="text__content">
-                Informe organizado por proyecto y requerimiento. Incluye las modificaciones y seguimientos realizados a los proyectos durante la vigencia.
+                {{report.descripcion}}
             </mat-card-content>
         </mat-card>
     </div>
