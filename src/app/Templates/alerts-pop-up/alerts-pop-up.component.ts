@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
-import { getProjectReportsI, iDsAndAniosProjectsReportPAAI, iDsProjectsReportI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
+import { dateTimeCausalModificationReportI, getProjectReportsI, iDsAndAniosProjectsReportPAAI, iDsProjectsReportI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { dataReportsAllI } from 'src/app/Models/ModelsPAA/Reports/reports-interface';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
 import { ReportsDetailsService } from 'src/app/Services/ServicesPAA/Reports/reports-details.service';
@@ -288,8 +288,13 @@ export class AlertsPopUpComponent implements OnInit {
 
   //Obtener reporte Causales de Modificacion (8)
   getReportCausalModification(date_initial : string, date_final : string) {
-    // TODO: Cambiar logica del endpoint
-    this.reportServices.postReportCDPs({'iDs': []}).subscribe((Response:any) => {
+    //Constante con las fechas inicial y final para enviar al endpoint
+    const DATE_TIMES : dateTimeCausalModificationReportI = {
+      rangoFechaFin : new Date(date_final),
+      rangoFechaInicio : new Date(date_initial)
+    }
+    
+    this.reportServices.postReportCausalModification(DATE_TIMES).subscribe((Response:any) => {
       // console.log(Response);
       if (Response.status === 200) {
         this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
