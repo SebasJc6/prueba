@@ -277,8 +277,11 @@ export class AcquisitionsComponent implements OnInit {
     let arrayProjects: number[] = this.projectsChecked.map(element => {
       return element.proyectoID;
     });
-
-    this.openDialog('Advertencia', 'Seleccione el reporte que desea exportar', 'warningSelectReports', '', 'reportes', arrayProjects);
+    if (arrayProjects.length > 0) {
+      this.openDialog('Advertencia', 'Seleccione el reporte que desea exportar', 'warningSelectReports', '', 'reportes', arrayProjects);
+    } else {
+      this.openSnackBar('Lo sentimos', `Para generar el reporte debe seleccionar al menos un proyecto.`, 'error');
+    }
   }
 
 
