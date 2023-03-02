@@ -104,7 +104,6 @@ export class RpComponent implements OnInit {
   postRPs(idCDP: number, formRPs: postRPsI) {
     this.serviceRP.postRPs(idCDP, formRPs).subscribe(
       res => {
-        // console.log(res);
         if (res.status == 200) {
           this.openSnackBar('Se ha guardado correctamente', res.message, 'success');
           this.router.navigate(['/WAPI/PAA/CDP/' + this.dataProjectID, this.idReq]);
@@ -135,7 +134,6 @@ export class RpComponent implements OnInit {
     RPs['cadenas'] = this.listcadenas;
     this.elementsRP.push(RPs);
     this.formRP.rps = this.elementsRP;
-    console.log(this.formRP);
     
     this.postRPs(+this.idCDP, this.formRP);
   }

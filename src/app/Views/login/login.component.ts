@@ -45,29 +45,22 @@ export class LoginComponent implements OnInit {
 
   onLogin() {
     if (this.loginForm.valid) {
-       console.log(this.loginForm.value);
       // let isSuccessful =
       this.spinner.show();
        this.ServicesAuth.login(this.loginForm.value).subscribe(dataToken => {
-        // console.log('dataToken: ',dataToken.accessToken);
-        console.log('dataToken: ',dataToken);
         this.dataToken = dataToken;
         this.authService.setCookie('token', this.dataToken.accessToken);
-        // const tokenInfo: any  =  this.decodeToken(this.dataToken.accessToken);
-        // console.log('tokenInfo',tokenInfo);
-        //let access = JSON.parse(tokenInfo.access);
-        // console.log('access',access);
-        this.router.navigate(['WAPI/Home']);      
+      
+        this.router.navigate(['WAPI/Home']);
         this.spinner.hide();
       }, error => {
-        // console.log('error', error);
         this.spinner.hide();
         this.openSnackBar('Error', 'Usuario o contraseña incorrectos', 'error');
       });
     }
   }
 
-  
+
   // /**decodifica el token */
   // decodeToken(token: string) {
   //   try{
@@ -76,7 +69,7 @@ export class LoginComponent implements OnInit {
   //     return null;
   //   }
   // }
- 
+
   //Metodo para llamar alertas
   openSnackBar(title: string, message: string, type: string) {
     this.snackBar.openFromComponent(AlertsComponent, {
