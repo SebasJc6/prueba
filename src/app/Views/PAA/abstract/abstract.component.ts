@@ -46,7 +46,6 @@ export class AbstractComponent implements OnInit {
 
   //Obtener la informacion al cargar un año
   getAbstractYear() {
-    // console.log(this.year);
     if (this.arrayYears.length > 0) {
       this.serviceAbsctract.getAbstractYear(Number(this.dataProjectID), this.year).subscribe(res => {
         this.abstractDataInfoYear = res.data;

@@ -429,7 +429,6 @@ export class PropertiesRequirementComponent implements OnInit {
 
 
     this.serviceModRequest.getModificationRequestByRequest(+this.dataProjectID, +this.dataSolicitudID).subscribe((data) => {
-      // console.log('dtaIfno', data);
       this.statusReq = data.data.solicitud_Estado || '';
 
       if (this.typePage == 'Vista') {
@@ -696,7 +695,6 @@ export class PropertiesRequirementComponent implements OnInit {
   getInfoToCreateReq(projectId: number) {
     this.spinner.show();
     this.serviceProRequirement.getInfoToCreateReq(projectId).subscribe((dataProject) => {
-      // console.log(dataProject);
       this.getInfoToProject = dataProject.data;
       this.codProject = this.getInfoToProject.codigoProyecto;
       this.nomProject = this.getInfoToProject.nombreProyecto;
@@ -949,14 +947,12 @@ export class PropertiesRequirementComponent implements OnInit {
       }
 
     }, error => {
-      console.log(error)
 
     })
   }
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number) {
     this.isDataTemporal = true
     this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
-      console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
 
       this.reqID = dataTemp.requerimiento.requerimiento_ID
@@ -1341,7 +1337,6 @@ export class PropertiesRequirementComponent implements OnInit {
 
             }
           } else {
-            // console.log('response', dataResponse)
 
 
             this.openSnackBar('Error', dataResponse.message, 'error');
@@ -1434,7 +1429,6 @@ export class PropertiesRequirementComponent implements OnInit {
         this.serviceProRequirement.putModificationRequestSend(this.formModificationRequest).subscribe(dataResponse => {
           this.spinner.hide()
 
-          // console.log('response', dataResponse)
           if (dataResponse.status == 200) {
 
             this.loading = true
@@ -1992,7 +1986,6 @@ export class PropertiesRequirementComponent implements OnInit {
       reviewsData.revisiones = this.reviewsAdd
       this.spinner.show();
       this.serviceReviews.postReviews(reviewsData).subscribe((data: any) => {
-        console.log(reviewsData)
         if (data.status != 200) {
           this.openSnackBar('ERROR', data.message, 'error')
           this.loading = false;
@@ -2051,7 +2044,6 @@ export class PropertiesRequirementComponent implements OnInit {
         });
       } else {
         this.reviewsCheck.push(objectReviews)
-        console.log(this.reviewsCheck)
       }
     } else {
     }

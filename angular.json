@@ -64,7 +64,28 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
-            }
+            },
+            "qa": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.qa.ts"
+                }
+              ],
+              "outputHashing": "all"
+            }      
           },
           "defaultConfiguration": "production"
         },
@@ -74,9 +95,13 @@
             "production": {
               "browserTarget": "frontWapi:build:production"
             },
+            "qa": {
+              "browserTarget": "frontWapi:build:qa"
+            },
             "development": {
               "browserTarget": "frontWapi:build:development"
             }
+
           },
           "defaultConfiguration": "development"
         },
