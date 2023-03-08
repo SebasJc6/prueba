@@ -135,7 +135,6 @@ export class RpComponent implements OnInit {
     RPs['cadenas'] = this.listcadenas;
     this.elementsRP.push(RPs);
     this.formRP.rps = this.elementsRP;
-    console.log(this.formRP);
     
     this.postRPs(+this.idCDP, this.formRP);
   }

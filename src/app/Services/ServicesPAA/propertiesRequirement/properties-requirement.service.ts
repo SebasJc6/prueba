@@ -92,8 +92,8 @@ export class PropertiesRequirementService {
     return this.http.get<getAllFuentesI>(dir)
   }
 
-  getAllActivities(projectId: number): Observable<getAllActivitiesI> {
-    let dir = this.logicUrl + 'proyecto/' + projectId + '/Actividades'
+  getAllActivities(projectId: number,auxId: number): Observable<getAllActivitiesI> {
+    let dir = this.logicUrl + 'proyecto/' + projectId +'/'+auxId +'/Actividades'
     return this.http.get<getAllActivitiesI>(dir)
   }
 

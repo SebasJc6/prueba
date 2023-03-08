@@ -45,7 +45,6 @@ export class LoginComponent implements OnInit {
 
   onLogin() {
     if (this.loginForm.valid) {
-       console.log(this.loginForm.value);
       // let isSuccessful =
       this.spinner.show();
        this.ServicesAuth.login(this.loginForm.value).subscribe(dataToken => {

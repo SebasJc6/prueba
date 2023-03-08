@@ -447,6 +447,7 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Actividad</p>
                                         <mat-select formControlName="actividad" class="contDataAutocomplete"
+                                        [ngClass]="{'contDataDisabled' : idDisabeldActividad == true }"
                                             (selectionChange)="onSelectionChange($event, 'actividad')"
                                             [displayWith]="displayFnAct">
                                             <mat-option [value]="item" *ngFor="let item of listActivities">
