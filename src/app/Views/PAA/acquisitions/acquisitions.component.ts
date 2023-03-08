@@ -205,7 +205,6 @@ export class AcquisitionsComponent implements OnInit {
   //Importar Documento de CDPs/RPs
   importFile(file : any) {
     this.serviceCdps.postCDPs(file).subscribe(response => {
-      // console.log('Res: ', response);
       if (response.status === 200) {
         if (response.data.hasWarnings) {
           this.openSnackBar('Advertencia', `Se guardaron los registros y surgieron advertencias. Descargando archivo de advertencias "${response.data.warnings.fileName}"`, 'warningInport');
@@ -223,7 +222,6 @@ export class AcquisitionsComponent implements OnInit {
         this.openSnackBar('Lo sentimos', '', 'error', response.message);
       }
     }, error => {
-      // console.log('Error: ', error);
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     });
   }
@@ -246,7 +244,6 @@ export class AcquisitionsComponent implements OnInit {
   //Importar Documento de CDPs/RPs
   importFileStockOrders(file : any) {
     this.serviceStockOrders.postStockOrders(file).subscribe(response => {
-      // console.log('Res: ', response);
       
       if (response.status === 200) {
         if (response.data.hasWarnings) {

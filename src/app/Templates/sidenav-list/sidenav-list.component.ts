@@ -37,7 +37,6 @@ export class SidenavListComponent implements OnInit {
     //Obtener token para manejar los roles
     // const TokenAccess = JSON.parse(tokenInfo.access);
     this.AccessUser = decodedRole
-    // console.log(this.AccessUser);
   }
 
   public onToggleSidenav = () => {
