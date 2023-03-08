@@ -71,7 +71,6 @@ export class OrdersComponent implements OnInit {
     });
   }
   ngModelChange(event: any) {
-    console.log(event);
   }
   //use pipe to display currency
   currencyFormat() {
@@ -83,7 +82,6 @@ export class OrdersComponent implements OnInit {
       }
     });
     this.assignCurrencyPipe(this.ngValorGirar);
-    console.log(this.ngValorGirar);
   }
   //Función para asignar formato de moneda a un numero y retorna el numero formatrado
   assignCurrencyPipe(number: string) {
@@ -158,7 +156,6 @@ export class OrdersComponent implements OnInit {
   }
 
   postGiros() {
-    console.log(this.giros);
 
     if (this.giros.distribuidos != null && this.giros.giro_ID != null && this.giros.requerimiento_ID != null) {
     

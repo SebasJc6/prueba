@@ -172,6 +172,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
   isDataTemporal: boolean = false;
 
+  idDisabeldActividad: boolean = true;
   //variables actuacion
   numContratoTmp: string = '';
   anioContratoTmp: number = 0;
@@ -374,7 +375,6 @@ export class PropertiesRequirementComponent implements OnInit {
     this.getAllProfile();
     this.getAuxiliarByCod();
     this.getFuentesBycod();
-    this.getAllActivities();
     this.getMGAByCod();
     this.getPOSPREByCod();
     this.getUNSPSCByCod();
@@ -690,6 +690,15 @@ export class PropertiesRequirementComponent implements OnInit {
       this.errorDescripcionCont = false
       this.genericDescripcion = false
     })
+    this.proRequirementeForm.controls.clasPresFinaForm.controls.auxiliar.valueChanges.pipe(
+      distinctUntilChanged(),
+    ).subscribe(value => {
+       this.getAllActivities(value.auxiliar_ID);
+       this.idDisabeldActividad = false;
+
+    })
+ 
+    
 
 
   }
@@ -769,8 +778,8 @@ export class PropertiesRequirementComponent implements OnInit {
       })
     }
   }
-  getAllActivities() {
-    this.serviceProRequirement.getAllActivities(+this.dataProjectID).subscribe((dataActi) => {
+  getAllActivities(auxId: number) {
+    this.serviceProRequirement.getAllActivities(+this.dataProjectID,auxId).subscribe((dataActi) => {
       this.listActivities = dataActi.data
     })
   }
@@ -949,14 +958,12 @@ export class PropertiesRequirementComponent implements OnInit {
       }
 
     }, error => {
-      console.log(error)
 
     })
   }
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number) {
     this.isDataTemporal = true
     this.serviceProRequirement.getAllDataTemporal(projectId, requestId, reqTempId).subscribe(dataTemp => {
-      console.log(dataTemp)
       this.dataRequirementNum = dataTemp.requerimiento.numeroRequerimiento.toString();
 
       this.reqID = dataTemp.requerimiento.requerimiento_ID
@@ -1992,7 +1999,6 @@ export class PropertiesRequirementComponent implements OnInit {
       reviewsData.revisiones = this.reviewsAdd
       this.spinner.show();
       this.serviceReviews.postReviews(reviewsData).subscribe((data: any) => {
-        console.log(reviewsData)
         if (data.status != 200) {
           this.openSnackBar('ERROR', data.message, 'error')
           this.loading = false;
@@ -2051,7 +2057,6 @@ export class PropertiesRequirementComponent implements OnInit {
         });
       } else {
         this.reviewsCheck.push(objectReviews)
-        console.log(this.reviewsCheck)
       }
     } else {
     }

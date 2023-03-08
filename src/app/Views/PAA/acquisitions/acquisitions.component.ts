@@ -265,7 +265,6 @@ export class AcquisitionsComponent implements OnInit {
         this.openSnackBar('Lo sentimos', '', 'error', response.message);
       }
     }, error => {
-      console.log('Error: ', error);
       this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
     });
   }
