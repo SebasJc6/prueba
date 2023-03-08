@@ -473,7 +473,7 @@
                 Enviar
             </button>
             <!-- <div> -->
-            <button *ngIf="AccessUser == 'Referente_Planeacion' && StatusRequest == 'En Revisión'" class="buton btn" mat-button mat-icon-button
+            <button *ngIf="(AccessUser == 'Referente_Planeacion' && StatusRequest == 'En Revisión') || (AccessUser == 'Revisor' && ProjectState == 'En Ejecución')" class="buton btn" mat-button mat-icon-button
                 (click)="enviarRecisiones()">
                 Enviar Revisiones
             </button>
