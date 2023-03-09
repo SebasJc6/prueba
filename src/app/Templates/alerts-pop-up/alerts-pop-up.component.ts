@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RevisionSend } from 'src/app/Models/ModelsPAA/modificatioRequest/ModificationRequest.interface';
-import { dateTimeCausalModificationReportI, getProjectReportsI, iDsAndAniosProjectsReportPAAI, iDsProjectsReportI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
+import { getProjectReportsI, iDsAndAniosProjectsReportPAAI, iDsProjectsReportI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { dataReportsAllI } from 'src/app/Models/ModelsPAA/Reports/reports-interface';
 import { ProjectService } from 'src/app/Services/ServicesPAA/Project/project.service';
 import { ReportsDetailsService } from 'src/app/Services/ServicesPAA/Reports/reports-details.service';
@@ -289,21 +289,13 @@ export class AlertsPopUpComponent implements OnInit {
   //Obtener reporte Causales de Modificacion (8)
   getReportCausalModification(date_initial : string, date_final : string) {
     //Constante con las fechas inicial y final para enviar al endpoint
-    const DATE_TIMES : dateTimeCausalModificationReportI = {
-      rangoFechaFin : new Date(date_final),
-      rangoFechaInicio : new Date(date_initial)
-    }
+    const FechaFin = new Date(date_final).toISOString().split('T')[0];
+    const FechaInicio = new Date(date_initial).toISOString().split('T')[0];
     
-    this.reportServices.postReportCausalModification(DATE_TIMES).subscribe((Response:any) => {
-      // console.log(Response);
+    this.reportServices.getReportCausalModification(FechaInicio, FechaFin).subscribe(Response => {
       if (Response.status === 200) {
-        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
-        this.convertBase64ToFileDownload(Response.data.fileAsBase64, Response.data.fileName);
-      } else if (Response.status === 423) {
-        this.openSnackBar('Lo sentimos', Response.message, 'error', `Generando archivo de errores "${Response.data.FileName}".`);
-        this.convertBase64ToFileDownload(Response.data.FileAsBase64, Response.data.FileName);
-      }
-      else {
+        this.manageExcelFile(Response);
+      } else {
         this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
       }
 
@@ -352,7 +344,6 @@ export class AlertsPopUpComponent implements OnInit {
   }
 
 
-
   //Convertir archivo de Base64 a .xlsx y descargarlo
   convertBase64ToFileDownload(base64String: string, fileName: string) {
     const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64String}`;
@@ -360,6 +351,38 @@ export class AlertsPopUpComponent implements OnInit {
     link.href = source;
     link.download = `${fileName}`;
     link.click();
+  }
+
+  //Función que recibe y descarga el reporte excel Causales de Modificacion (8)
+  manageExcelFile(response: any): void {
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    let DATE_TODAY = '';
+    if (day < 10 && month < 10) {
+      DATE_TODAY = `0${day}-0${month}-${year}`;
+    } else if (day > 10 && month < 10){
+      DATE_TODAY = `${day}-0${month}-${year}`;
+    } else if (day < 10 && month > 10){
+      DATE_TODAY = `0${day}-${month}-${year}`;
+    } else {
+      DATE_TODAY = `${day}-${month}-${year}`;
+    }
+
+    let fileName = `PLAN DE ACCIÓN POR PROYECTO ${DATE_TODAY}` 
+    const dataType = response.type;
+    const binaryData = [];
+    binaryData.push(response);
+
+    const filePath = window.URL.createObjectURL(new Blob(binaryData, { type: dataType }));
+    const downloadLink = document.createElement('a');
+    downloadLink.href = filePath;
+    downloadLink.setAttribute('download', fileName);
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    this.openSnackBar('Exportado Exitosamente', `El archivo "${fileName}" fué generado correctamente.`, 'success');
   }
 
   //Metodo para llamar alertas
@@ -371,5 +394,4 @@ export class AlertsPopUpComponent implements OnInit {
       panelClass: [type],
     });
   }
-
 }

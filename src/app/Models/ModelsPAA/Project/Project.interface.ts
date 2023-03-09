@@ -187,10 +187,3 @@ export interface iDsAndAniosProjectsReportPAAI {
     'iDs': number[],
     'anios': number[]
 }
-
-
-//Interfaz para el endpiont de generar Reporte Causales de Modificacion
-export interface dateTimeCausalModificationReportI { 
-    'rangoFechaInicio': Date,
-    'rangoFechaFin': Date
-}

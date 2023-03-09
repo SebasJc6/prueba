@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { dateTimeCausalModificationReportI, iDsAndAniosProjectsReportPAAI, iDsProjectsReportI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
+import { iDsAndAniosProjectsReportPAAI, iDsProjectsReportI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { getReportBase64I, getReportsAllI, getReportsNameI } from 'src/app/Models/ModelsPAA/Reports/reports-interface';
 import { environment } from 'src/environments/environment';
 
@@ -66,8 +66,8 @@ export class ReportsDetailsService {
   }
 
   //Servicio que obtiene un reporte Causales de Modificación
-  postReportCausalModification( date_time : dateTimeCausalModificationReportI ): Observable<getReportBase64I> {
-    let dir = `${this.Url}Reporte/CausalesModificacion`;
-    return this.http.post<getReportBase64I>(dir, date_time);
+  getReportCausalModification( fecha_inicio : string, fecha_fin : string ): Observable<any> {
+    let dir = `${this.Url}Reporte/CausalesModificacion?fechaInicio=${fecha_inicio}&fechaFin=${fecha_fin}`;
+    return this.http.get(dir, {responseType: 'blob'});
   }
 }
