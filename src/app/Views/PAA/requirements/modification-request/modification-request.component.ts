@@ -1118,28 +1118,15 @@ export class ModificationRequestComponent implements OnInit {
           }
           this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
 
-        } else if (res.status == 404) {
-          let Data: string[] = [];
-          Data = Object.values(res.data);
-          let erorsMessages = '';
-          Data.map(item => {
-            erorsMessages += item + '. ';
-          });
-          this.openSnackBar('Lo sentimos', res.message, 'error', erorsMessages);
+        } else if (res.status == 423) {
+          this.openSnackBar('Lo sentimos', res.message, 'error', `Generando archivo de errores "${res.data.FileName}".`);
+          this.convertBase64ToFileDownload(res.data.FileAsBase64, res.data.FileName);
         }
       }, error => {
 
-        if (error.status == 400) {
+        if (error.status == 422) {
           let Data: string[] = [];
           Data = Object.values(error.error.data);
-          let erorsMessages = '';
-          Data.map(item => {
-            erorsMessages += item + '. ';
-          });
-          this.openSnackBar('Lo sentimos', error.error.Message, 'error', erorsMessages);
-        } else if (error.Status == 400) {
-          let Data: string[] = [];
-          Data = Object.values(error.error.Data);
           let erorsMessages = '';
           Data.map(item => {
             erorsMessages += item + '. ';
@@ -1179,26 +1166,12 @@ export class ModificationRequestComponent implements OnInit {
             this.ArrayDataStorage = [];
           }, 1000);
 
-        } else if (res.status == 404) {
-
-          let Data: string[] = [];
-          Data = Object.values(res.data);
-          let erorsMessages = '';
-          Data.map(item => {
-            erorsMessages += item + '. ';
-          });
-          this.openSnackBar('Lo sentimos', res.data.Message, 'error', erorsMessages);
-        } else if (res.Status == 404) {
-          let Data: string[] = [];
-          Data = Object.values(res.Data);
-          let erorsMessages = '';
-          Data.map(item => {
-            erorsMessages += item + '. ';
-          });
-          this.openSnackBar('Lo sentimos', res.Data.Message, 'error', erorsMessages);
+        } else if (res.status == 423) {
+          this.openSnackBar('Lo sentimos', res.message, 'error', `Generando archivo de errores "${res.data.FileName}".`);
+          this.convertBase64ToFileDownload(res.data.FileAsBase64, res.data.FileName);
         }
       }, error => {
-        if (error.status == 400) {
+        if (error.status == 422) {
           let Data: string[] = [];
           Data = Object.values(error.error.data);
           let erorsMessages = '';
@@ -1431,6 +1404,15 @@ export class ModificationRequestComponent implements OnInit {
       verticalPosition: 'top',
       panelClass: [type],
     });
+  }
+
+  //Convertir archivo de Base64 a .xlsx y descargarlo
+  convertBase64ToFileDownload(base64String: string, fileName: string) {
+    const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64String}`;
+    const link = document.createElement("a");
+    link.href = source;
+    link.download = `${fileName}`;
+    link.click();
   }
 
 
