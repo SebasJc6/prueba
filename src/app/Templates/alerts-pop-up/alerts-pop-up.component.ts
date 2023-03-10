@@ -288,10 +288,14 @@ export class AlertsPopUpComponent implements OnInit {
 
   //Obtener reporte Causales de Modificacion (8)
   getReportCausalModification(date_initial : string, date_final : string) {
+    //Se obtienen las fechas y se les da formato para trabajarlas mejor y enviar al endpoint
+    const DATE_INI = new Date(date_initial).toISOString().split('T')[0];
+    const DATE_FIN = new Date(date_final).toISOString().split('T')[0];
+    
     //Constante con las fechas inicial y final para enviar al endpoint
     const DATE_TIMES : dateTimeCausalModificationReportI = {
-      rangoFechaFin : new Date(date_final).toISOString().split('T')[0],
-      rangoFechaInicio : new Date(date_initial).toISOString().split('T')[0]
+      rangoFechaFin : `${DATE_FIN.split('-')[0]}-${DATE_FIN.split('-')[2]}-${DATE_FIN.split('-')[1]}`,
+      rangoFechaInicio : `${DATE_INI.split('-')[0]}-${DATE_INI.split('-')[2]}-${DATE_INI.split('-')[1]}`
     }
     
     this.reportServices.postReportCausalModification(DATE_TIMES).subscribe((Response:any) => {
