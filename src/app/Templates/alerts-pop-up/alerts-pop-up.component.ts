@@ -98,7 +98,7 @@ export class AlertsPopUpComponent implements OnInit {
         const FECHA_INICIO = String(this.DateForm.value.dateInitial);
         const FECHA_FIN = String(this.DateForm.value.dateFinal);
         if (FECHA_INICIO && FECHA_FIN) {
-          if(Date.parse(FECHA_FIN) <= Date.parse(FECHA_INICIO)){
+          if(Date.parse(FECHA_FIN) < Date.parse(FECHA_INICIO)){
             this.openSnackBar('Error', `La fecha fin debe ser mayor a la fecha inicio`, 'error', '');
           }else{
             this.getReportCausalModification(FECHA_INICIO, FECHA_FIN);
@@ -263,29 +263,6 @@ export class AlertsPopUpComponent implements OnInit {
   }
 
 
-
-  //Obtener reporte Giros (9)
-  getReportOrders(project_ids : iDsProjectsReportI) {
-    this.reportServices.postReportOrders(project_ids).subscribe((Response:any) => {
-      // console.log(Response);
-      if (Response.status === 200) {
-        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
-        this.convertBase64ToFileDownload(Response.data.fileAsBase64, Response.data.fileName);
-      } else if (Response.status === 423) {
-        this.openSnackBar('Lo sentimos', Response.message, 'error', `Generando archivo de errores "${Response.data.FileName}".`);
-        this.convertBase64ToFileDownload(Response.data.FileAsBase64, Response.data.FileName);
-      }
-      else {
-        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
-      }
-
-      this.dialogRef.close();
-    }, error => {
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
-    });
-  }
-
-
   //Obtener reporte Causales de Modificacion (8)
   getReportCausalModification(date_initial : string, date_final : string) {
     //Se obtienen las fechas y se les da formato para trabajarlas mejor y enviar al endpoint
@@ -304,6 +281,28 @@ export class AlertsPopUpComponent implements OnInit {
         this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
         this.convertBase64ToFileDownload(Response.data.fileAsBase64, Response.data.fileName);
       } else {
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      }
+
+      this.dialogRef.close();
+    }, error => {
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+    });
+  }
+
+
+  //Obtener reporte Giros (9)
+  getReportOrders(project_ids : iDsProjectsReportI) {
+    this.reportServices.postReportOrders(project_ids).subscribe((Response:any) => {
+      // console.log(Response);
+      if (Response.status === 200) {
+        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
+        this.convertBase64ToFileDownload(Response.data.fileAsBase64, Response.data.fileName);
+      } else if (Response.status === 423) {
+        this.openSnackBar('Lo sentimos', Response.message, 'error', `Generando archivo de errores "${Response.data.FileName}".`);
+        this.convertBase64ToFileDownload(Response.data.FileAsBase64, Response.data.FileName);
+      }
+      else {
         this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
       }
 
