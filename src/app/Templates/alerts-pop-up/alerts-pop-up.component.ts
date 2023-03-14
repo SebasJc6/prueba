@@ -270,9 +270,10 @@ export class AlertsPopUpComponent implements OnInit {
     const DATE_FIN = new Date(date_final).toISOString().split('T')[0];
     
     //Constante con las fechas inicial y final para enviar al endpoint
+    // `${DATE_FIN.split('-')[0]}-${DATE_FIN.split('-')[2]}-${DATE_FIN.split('-')[1]}`
     const DATE_TIMES : dateTimeCausalModificationReportI = {
-      rangoFechaFin : `${DATE_FIN.split('-')[0]}-${DATE_FIN.split('-')[2]}-${DATE_FIN.split('-')[1]}`,
-      rangoFechaInicio : `${DATE_INI.split('-')[0]}-${DATE_INI.split('-')[2]}-${DATE_INI.split('-')[1]}`
+      rangoFechaFin : DATE_FIN,
+      rangoFechaInicio : DATE_INI
     }
     
     this.reportServices.postReportCausalModification(DATE_TIMES).subscribe((Response:any) => {
