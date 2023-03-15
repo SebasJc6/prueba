@@ -16,12 +16,12 @@ export class ModificationRequestService {
   constructor(private http: HttpClient) {}
 
   getModificationRequest(idProject: number): Observable<getModificationRequestI>{
-    let dir = this.Url + 'Proyecto/' + idProject + '/SolicitudMod';
+    let dir = this.Url + 'PlanAnual/' + idProject + '/SolicitudMod';
     return this.http.get<getModificationRequestI>(dir);
   }
 
   getModificationRequestByRequest(idProject:number,idRequets: number ): Observable<getModificationRequestI>{
-    let dir = this.Url + 'Proyecto/' + idProject + '/SolicitudMod/' + idRequets;
+    let dir = this.Url + 'PlanAnual/' + idProject + '/SolicitudMod/' + idRequets;
     return this.http.get<getModificationRequestI>(dir);
   }
 
@@ -79,14 +79,13 @@ export class ModificationRequestService {
     return this.http.put(dir, file);
   }
 
-
   exportFile(projectId: string, requestId: string): Observable<any> {
     let dir = `${this.Url}/SolicitudMod/ExportFile?ProyectoId=${projectId}&SolicitudId=${requestId}`;
     return this.http.get(dir, {responseType: 'blob'});
   }
 
   getRequerimentApproved(idRequest: string, idRequeriment: number): Observable<any> {
-    let dir = `${this.Url}/Proyecto/${idRequest}/Requerimiento/${idRequeriment}`;
+    let dir = `${this.Url}/PlanAnual/${idRequest}/Requerimiento/${idRequeriment}`;
     return this.http.get<any>(dir);
   }
 

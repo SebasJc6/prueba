@@ -3,14 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filterProjectI, getAllProjectReportsI, getProjectByIdI, getProjectI, postProjectValidityI, statusI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { environment } from 'src/environments/environment';
-import { AuthenticationService } from '../../Authentication/authentication.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
 
-  readonly url: string = environment.baseUrl.logic + 'Proyecto';
+  readonly url: string = environment.baseUrl.logic + 'PlanAnual';
 
   constructor(private http: HttpClient) { }
 

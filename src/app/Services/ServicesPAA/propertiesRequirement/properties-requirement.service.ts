@@ -18,7 +18,7 @@ export class PropertiesRequirementService {
   constructor(private http: HttpClient) { }
 
   getInfoToCreateReq(projectId: number): Observable<getInfoToCreateReqI> {
-    let dir = this.logicUrl + 'proyecto/' + projectId + '/GetInfoToCreateReq'
+    let dir = this.logicUrl + 'PlanAnual/' + projectId + '/GetInfoToCreateReq'
     return this.http.get<getInfoToCreateReqI>(dir);
   }
 
@@ -78,7 +78,7 @@ export class PropertiesRequirementService {
   }
 
   getAuxiliarByProject(projectId: number): Observable<getAllAuxiliarI> {
-    let dir = this.logicUrl + 'Proyecto/' + projectId +'/Auxiliares'
+    let dir = this.logicUrl + 'PlanAnual/' + projectId +'/Auxiliares'
     return this.http.get<getAllAuxiliarI>(dir)
   }
 
@@ -88,12 +88,12 @@ export class PropertiesRequirementService {
   }
 
   getFuentesByProject(projectId: number): Observable<getAllFuentesI> {
-    let dir = this.logicUrl + 'Proyecto/' + projectId + '/FuentesComplete'
+    let dir = this.logicUrl + 'PlanAnual/' + projectId + '/FuentesComplete'
     return this.http.get<getAllFuentesI>(dir)
   }
 
   getAllActivities(projectId: number,auxId: number): Observable<getAllActivitiesI> {
-    let dir = this.logicUrl + 'proyecto/' + projectId +'/'+auxId +'/Actividades'
+    let dir = this.logicUrl + 'PlanAnual/' + projectId +'/'+auxId +'/Actividades'
     return this.http.get<getAllActivitiesI>(dir)
   }
 
@@ -130,11 +130,11 @@ export class PropertiesRequirementService {
   }
 
   getAllDataTemporal(projectId: number, requestId: number, reqTempId: number): Observable<getDataTemporalI> {
-    let dir = this.logicUrl + 'Solicitud/' + requestId + '/Proyecto/' + projectId + '/Temporal/' + reqTempId
+    let dir = this.logicUrl + 'Solicitud/' + requestId + '/PlanAnual/' + projectId + '/Temporal/' + reqTempId
     return this.http.get<getDataTemporalI>(dir)
   }
   getDataAprobad(projectId: number, requerimetId: number): Observable<getDataAprobadaI> {
-    let dir = this.logicUrl + '/Proyecto/' + projectId + '/Requerimiento/' + requerimetId
+    let dir = this.logicUrl + '/PlanAnual/' + projectId + '/Requerimiento/' + requerimetId
     return this.http.get<getDataAprobadaI>(dir)
   }
 
@@ -157,7 +157,7 @@ export class PropertiesRequirementService {
     return this.http.put(dir, form);
   }
   getAllDataTemporalModified(projectId: number, requestId: number, reqTempId: number): Observable<getDataTemporalModifiedI> {
-    let dir = this.logicUrl + 'Solicitud/' + requestId + '/Proyecto/' + projectId + '/Temporal/' + reqTempId + '/Modificaciones'
+    let dir = this.logicUrl + 'Solicitud/' + requestId + '/PlanAnual/' + projectId + '/Temporal/' + reqTempId + '/Modificaciones'
     return this.http.get<getDataTemporalModifiedI>(dir)
   }
 

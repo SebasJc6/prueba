@@ -14,12 +14,12 @@ export class AbstractService {
   constructor(private http: HttpClient) { }
 
   getAbstract(projectId: string): Observable<getAbstractI> {
-    let dir = `${this.Url}Proyecto/${projectId}/Resumen`;
+    let dir = `${this.Url}PlanAnual/${projectId}/Resumen`;
     return this.http.get<getAbstractI>(dir);
   }
 
   getAbstractYear(project_id: number, year: number): Observable<getAbstractDataYear> {
-    let dir = `${this.Url}Proyecto/${project_id}/ResumenInfo/${year}`;
+    let dir = `${this.Url}PlanAnual/${project_id}/ResumenInfo/${year}`;
     return this.http.get<getAbstractDataYear>(dir);
   }
 }
