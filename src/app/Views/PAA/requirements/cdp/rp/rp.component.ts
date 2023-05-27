@@ -79,7 +79,6 @@ export class RpComponent implements OnInit {
     let cadenaRPs = {} as cadenaRPsI;
     cadenaRPs.clasificacion_ID = clasificacionId;
     cadenaRPs.valoresDistribuidos = value;
-     
 
     this.cadenas.map((item: any) => {
       if (item.clasificacion_ID == clasificacionId) {
@@ -129,13 +128,17 @@ export class RpComponent implements OnInit {
   }
 
   saveRPs() {
-     let RPs = {} as RPsI
-    RPs['rP_ID'] = this.idRP;
-    RPs['cadenas'] = this.listcadenas;
-    this.elementsRP.push(RPs);
-    this.formRP.rps = this.elementsRP;
-    
-    this.postRPs(+this.idCDP, this.formRP);
+  
+    if (this.listcadenas == undefined || this.listcadenas == null|| this.listcadenas.length==0) {
+    } else {
+      let RPs = {} as RPsI
+      RPs['rP_ID'] = this.idRP;
+      RPs['cadenas'] = this.listcadenas;
+      this.elementsRP.push(RPs);
+      this.formRP.rps = this.elementsRP;
+
+      this.postRPs(+this.idCDP, this.formRP);
+    }
   }
   cancel() {
     this.router.navigate(['/WAPI/PAA/CDP/' + this.dataProjectID, this.idReq]);

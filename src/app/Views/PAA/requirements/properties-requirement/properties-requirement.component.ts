@@ -692,12 +692,12 @@ export class PropertiesRequirementComponent implements OnInit {
     this.proRequirementeForm.controls.clasPresFinaForm.controls.auxiliar.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
-       this.getAllActivities(value.auxiliar_ID);
-       this.idDisabeldActividad = false;
+      this.getAllActivities(value.auxiliar_ID);
+      this.idDisabeldActividad = false;
 
     })
- 
-    
+
+
 
 
   }
@@ -777,7 +777,7 @@ export class PropertiesRequirementComponent implements OnInit {
     }
   }
   getAllActivities(auxId: number) {
-    this.serviceProRequirement.getAllActivities(+this.dataProjectID,auxId).subscribe((dataActi) => {
+    this.serviceProRequirement.getAllActivities(+this.dataProjectID, auxId).subscribe((dataActi) => {
       this.listActivities = dataActi.data
     })
   }
@@ -1450,7 +1450,10 @@ export class PropertiesRequirementComponent implements OnInit {
             }
             this.loading = false
 
-          } else {
+          }  else if (dataResponse.status == 423) {
+            this.openSnackBar('Lo sentimos', dataResponse.message, 'error', `Generando archivo de errores "${dataResponse.data.FileName}".`);
+            this.convertBase64ToFileDownload(dataResponse.data.FileAsBase64, dataResponse.data.FileName);
+          }else {
             this.spinner.hide()
 
             let Data: string[] = [];
@@ -1525,6 +1528,7 @@ export class PropertiesRequirementComponent implements OnInit {
             errorMessages += item + '. ';
           });
           this.openSnackBar('Error', err.error.message, 'error', errorMessages);
+
           this.spinner.hide();
         })
 
@@ -2100,6 +2104,15 @@ export class PropertiesRequirementComponent implements OnInit {
       ProChartStorage.setItem("dataTableClacificaciones", stringToStore);
     });
   }
+
+    //Convertir archivo de Base64 a .xlsx y descargarlo
+    convertBase64ToFileDownload(base64String: string, fileName: string) {
+      const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64String}`;
+      const link = document.createElement("a");
+      link.href = source;
+      link.download = `${fileName}`;
+      link.click();
+    }
 }
 
 var ProChartStorage = {
