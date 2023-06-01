@@ -149,7 +149,7 @@ export class PropertiesRequirementService {
   }
   postVerifyDataSaveI(form: verifyDataSaveI): Observable<responseVerifyDataSaveI> {
     let dir = this.logicUrl + 'Requerimiento/Verify'
-    return this.http.post<responseVerifyDataSaveI>(dir, form, { context: skipApiKey() })
+    return this.http.post<responseVerifyDataSaveI>(dir, form)
   }
 
   putModificationRequestSend(form: saveDataEditI): Observable<any> {

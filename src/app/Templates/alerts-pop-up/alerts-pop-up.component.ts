@@ -179,7 +179,7 @@ export class AlertsPopUpComponent implements OnInit {
     this.reportServices.postReportModifications(project_ids).subscribe((Response:any) => {
       // console.log(Response);
       if (Response.status === 200) {
-        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
+        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fue generado correctamente.`, 'success');
         this.convertBase64ToFileDownload(Response.data.fileAsBase64, Response.data.fileName);
       } else if (Response.status === 423) {
         this.openSnackBar('Lo sentimos', Response.message, 'error', `Generando archivo de errores "${Response.data.FileName}".`);
@@ -202,7 +202,7 @@ export class AlertsPopUpComponent implements OnInit {
     this.reportServices.postReportActionPlan(project_ids).subscribe((Response:any) => {
       // console.log(Response);
       if (Response.status === 200) {
-        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
+        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fue generado correctamente.`, 'success');
         this.convertBase64ToFileDownload(Response.data.fileAsBase64, Response.data.fileName);
       } else if (Response.status === 423) {
         this.openSnackBar('Lo sentimos', Response.message, 'error', `Generando archivo de errores "${Response.data.FileName}".`);
@@ -224,7 +224,7 @@ export class AlertsPopUpComponent implements OnInit {
     this.reportServices.postReportCDPs(project_ids).subscribe((Response:any) => {
       // console.log(Response);
       if (Response.status === 200) {
-        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
+        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fue generado correctamente.`, 'success');
         this.convertBase64ToFileDownload(Response.data.fileAsBase64, Response.data.fileName);
       } else if (Response.status === 423) {
         this.openSnackBar('Lo sentimos', Response.message, 'error', `Generando archivo de errores "${Response.data.FileName}".`);
@@ -246,7 +246,7 @@ export class AlertsPopUpComponent implements OnInit {
     this.reportServices.postReportRPs(project_ids).subscribe((Response:any) => {
       // console.log(Response);
       if (Response.status === 200) {
-        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
+        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fue generado correctamente.`, 'success');
         this.convertBase64ToFileDownload(Response.data.fileAsBase64, Response.data.fileName);
       } else if (Response.status === 423) {
         this.openSnackBar('Lo sentimos', Response.message, 'error', `Generando archivo de errores "${Response.data.FileName}".`);
@@ -279,7 +279,7 @@ export class AlertsPopUpComponent implements OnInit {
     this.reportServices.postReportCausalModification(DATE_TIMES).subscribe((Response:any) => {
       // console.log(Response);
       if (Response.status === 200) {
-        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
+        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fue generado correctamente.`, 'success');
         this.convertBase64ToFileDownload(Response.data.fileAsBase64, Response.data.fileName);
       } else {
         this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
@@ -297,7 +297,7 @@ export class AlertsPopUpComponent implements OnInit {
     this.reportServices.postReportOrders(project_ids).subscribe((Response:any) => {
       // console.log(Response);
       if (Response.status === 200) {
-        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fué generado correctamente.`, 'success');
+        this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fue generado correctamente.`, 'success');
         this.convertBase64ToFileDownload(Response.data.fileAsBase64, Response.data.fileName);
       } else if (Response.status === 423) {
         this.openSnackBar('Lo sentimos', Response.message, 'error', `Generando archivo de errores "${Response.data.FileName}".`);
