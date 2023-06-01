@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { filterRequestTrayI, itemsRequestTrayI } from 'src/app/Models/ModelsPAA/request-tray/request-tray';
 import { RequestTrayService } from 'src/app/Services/ServicesPAA/request-tray/request-tray.service';
+import { SharedService } from 'src/app/Services/ServicesPAA/shared/shared.service';
 
 @Component({
   selector: 'app-request-tray',
@@ -13,7 +14,7 @@ import { RequestTrayService } from 'src/app/Services/ServicesPAA/request-tray/re
 export class RequestTrayComponent implements OnInit {
 
   constructor(private requestTrayService: RequestTrayService,
-    public router: Router,) { }
+    public router: Router, public sharedSrv: SharedService) { }
 
   //INFORMACION PARA LA TABLA CLASIFICACION PRESUPUESTAL
   displayedColumns: string[] = ['solicitud', 'vigencia', 'fPresentacion', 'codigoP', 'proyecto', 'version', 'solicitante', 'estado', 'fAprobacion', 'accion'];

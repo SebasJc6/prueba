@@ -23,6 +23,7 @@ import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 import Swal from 'sweetalert2';
 import { v4 as uuid } from 'uuid';
 import { BudgetModificationComponent } from './budget-modification/budget-modification.component';
+import { SharedService } from 'src/app/Services/ServicesPAA/shared/shared.service';
 
 
 
@@ -358,6 +359,7 @@ export class PropertiesRequirementComponent implements OnInit {
     public dialog: MatDialog,
     private authService: AuthenticationService,
     private spinner: NgxSpinnerService,
+    public sharedSrv: SharedService
   ) { }
 
   ngAfterViewInit() {

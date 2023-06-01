@@ -152,7 +152,8 @@
                                         <p class="tltData">Número de requerimiento</p>
                                         <input class="contData" formControlName="numeroReq" [ngClass]="{
                                                 'contDataDisabled' : numReqDisabled == true,
-                                                'contDataError' : genericNumReq == true }" type="number"
+                                                'contDataError' : genericNumReq == true }" type="text" 
+                                            (keypress)="this.sharedSrv.validateFormat($event)"
                                             onKeyPress="if(this.value.length==5) return false;">
                                         <mat-error *ngIf="errorNumReq">
                                             Campo <strong>Obligatorio</strong>
@@ -219,17 +220,19 @@
                                     </div>
                                     <div class="contTxt label3 arrContDias">
                                         <p class="tltData">Duración estimada del contrato</p>
-                                        <input type="number" class="contData" style="width: 15%;" [ngClass]="{
+                                        <input type="text" class="contData" style="width: 15%;" [ngClass]="{
                                             'contDataError' : genericDuracionMes == true }"
                                             formControlName="duracionMes"
-                                            onKeyPress="if(this.value.length==2) return false;">
+                                            onKeyPress="if(this.value.length==2) return false;"
+                                            (keypress)="this.sharedSrv.validateFormat($event)">
 
                                         <span>Meses</span>
 
-                                        <input type="number" class="contData arregCont2" style="width: 15%;" [ngClass]="{
+                                        <input type="text" class="contData arregCont2" style="width: 15%;" [ngClass]="{
                                             'contDataError' : genericDuracionDias == true }"
                                             formControlName="duracionDias"
-                                            onKeyPress="if(this.value.length==2) return false;">
+                                            onKeyPress="if(this.value.length==2) return false;"
+                                            (keypress)="this.sharedSrv.validateFormat($event)">
 
                                         <span>Días</span>
                                         <br>
@@ -316,8 +319,9 @@
                                     <div class="contTxt label1">
                                         <p class="tltData">Cantidad de contratos</p>
                                         <input class="contData" formControlName="cantidadCont" [ngClass]="{
-                                            'contDataError' : genericCantidadCont == true }" type="number"
-                                            onKeyPress="if(this.value.length==1) return false;">
+                                            'contDataError' : genericCantidadCont == true }" type="text"
+                                            onKeyPress="if(this.value.length==1) return false;"
+                                            (keypress)="this.sharedSrv.validateFormat($event)">
                                         <mat-error *ngIf="errorCantContrato">
                                             Campo <strong>Obligatorio</strong>
                                         </mat-error>
@@ -1088,15 +1092,17 @@
                                     </div>
                                     <div class="contTxt label3 arrContDias ">
                                         <p class="tltData">Duración estimada del contrato</p>
-                                        <input type="number" class="contData contDataDisabled" style="width: 20%;"
+                                        <input type="text" class="contData contDataDisabled" style="width: 20%;"
                                             [ngClass]="{'contDataModified' : duracionMesModified == true }"
-                                            formControlName="duracionMesRew">
+                                            formControlName="duracionMesRew"
+                                            (keypress)="this.sharedSrv.validateFormat($event)">
                                         <span>Meses</span>
 
 
-                                        <input type="number" class="contData contDataDisabled" style="width: 20%;"
+                                        <input type="text" class="contData contDataDisabled" style="width: 20%;"
                                             [ngClass]="{'contDataModified' : duracionDiasModified == true }"
-                                            formControlName="duracionDiasRew" maxlength="2" min="1" max="29">
+                                            formControlName="duracionDiasRew" maxlength="2" min="1" max="29"
+                                            (keypress)="this.sharedSrv.validateFormat($event)">
                                         <span>Días</span>
 
                                     </div>
@@ -1764,13 +1770,15 @@
                                     </div>
                                     <div class="contTxt label3 arrContDias">
                                         <p class="tltData">Duración estimada del contrato</p>
-                                        <input type="number" class="contData contDataDisabled" style="width: 20%;"
-                                            formControlName="duracionMesAct">
+                                        <input type="text" class="contData contDataDisabled" style="width: 20%;"
+                                            formControlName="duracionMesAct"
+                                            (keypress)="this.sharedSrv.validateFormat($event)">
 
                                         <span>Meses</span>
 
-                                        <input type="number" class="contData contDataDisabled" style="width: 20%;"
-                                            formControlName="duracionDiasAct" maxlength="2" min="1" max="29">
+                                        <input type="text" class="contData contDataDisabled" style="width: 20%;"
+                                            formControlName="duracionDiasAct" maxlength="2" min="1" max="29"
+                                            (keypress)="this.sharedSrv.validateFormat($event)">
 
                                         <span>Días</span>
                                     </div>

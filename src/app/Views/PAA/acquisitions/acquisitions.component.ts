@@ -16,6 +16,7 @@ import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 import { StockOrdersService } from 'src/app/Services/ServicesPAA/Requeriment/Stock-Orders/stock-orders.service';
 import { AlertsPopUpComponent } from 'src/app/Templates/alerts-pop-up/alerts-pop-up.component';
 import { MatDialog } from '@angular/material/dialog';
+import { SharedService } from 'src/app/Services/ServicesPAA/shared/shared.service';
 
 export interface ChipColor {
   name: string;
@@ -71,7 +72,7 @@ export class AcquisitionsComponent implements OnInit {
     private serviceCdps: CDPService,
     private serviceStockOrders: StockOrdersService,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog) {
+    public dialog: MatDialog, public sharedSrv: SharedService) {
 
   }
   filterProjects = {} as filterProjectI;

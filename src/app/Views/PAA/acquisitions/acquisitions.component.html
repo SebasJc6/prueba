@@ -91,7 +91,8 @@
               &nbsp;
               <mat-form-field appearance="outline">
                 <mat-label class="text__opacity">Código Proyecto</mat-label>
-                <input matInput formControlName="CodigoProyecto" type="number">
+                <input matInput formControlName="CodigoProyecto" type="text" 
+                  (keypress)="this.sharedSrv.validateFormat($event)">
               </mat-form-field>
               &nbsp;
               <mat-form-field appearance="outline">
