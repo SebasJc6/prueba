@@ -67,11 +67,13 @@
                   </mat-form-field>
                   <mat-form-field appearance="outline">
                     <mat-label class="text__opacity">Código proyecto</mat-label>
-                    <input matInput formControlName="CodigoProyecto" type="number">
+                    <input matInput formControlName="CodigoProyecto" type="text"
+                      (keypress)="this.sharedSrv.validateFormat($event)">
                   </mat-form-field>
                   <mat-form-field appearance="outline">
                     <mat-label class="text__opacity">Número Requerimiento</mat-label>
-                    <input matInput formControlName="NumeroRequerimiento" type="number">
+                    <input matInput formControlName="NumeroRequerimiento" type="text"
+                      (keypress)="this.sharedSrv.validateFormat($event)">
                   </mat-form-field>
                   <mat-form-field appearance="outline">
                     <mat-label class="text__opacity">Cantidad de ajustes</mat-label>

@@ -73,11 +73,13 @@
                 <div class="form">
                   <mat-form-field appearance="outline">
                     <mat-label class="text__opacity">Vigencia</mat-label>
-                    <input matInput formControlName="vigencia" type="number">
+                    <input matInput formControlName="vigencia" type="text"
+                      (keypress)="this.sharedSrv.validateFormat($event)">
                   </mat-form-field>
                   <mat-form-field appearance="outline">
                     <mat-label class="text__opacity">CDP</mat-label>
-                    <input matInput formControlName="numeroCDP" type="number">
+                    <input matInput formControlName="numeroCDP" type="text"
+                      (keypress)="this.sharedSrv.validateFormat($event)">
                   </mat-form-field>
                   <mat-form-field appearance="outline">
                     <mat-label class="text__opacity">Fecha CDP</mat-label>

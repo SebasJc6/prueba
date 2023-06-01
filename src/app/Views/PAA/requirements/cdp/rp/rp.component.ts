@@ -10,6 +10,7 @@ import { AuthenticationService } from 'src/app/Services/Authentication/authentic
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
 import { RpService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/RP/rp.service';
+import { SharedService } from 'src/app/Services/ServicesPAA/shared/shared.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 
 @Component({
@@ -49,7 +50,8 @@ export class RpComponent implements OnInit {
     private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
     public dialog: MatDialog, private authService: AuthenticationService,
-    private reqServices: PropertiesRequirementService
+    private reqServices: PropertiesRequirementService,
+    public sharedSrv: SharedService
   ) { }
 
   ngOnInit(): void {

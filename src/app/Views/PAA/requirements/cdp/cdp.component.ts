@@ -9,6 +9,7 @@ import { AuthenticationService } from 'src/app/Services/Authentication/authentic
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { PropertiesRequirementService } from 'src/app/Services/ServicesPAA/propertiesRequirement/properties-requirement.service';
 import { CDPService } from 'src/app/Services/ServicesPAA/Requeriment/CDP/cdp.service';
+import { SharedService } from 'src/app/Services/ServicesPAA/shared/shared.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 
 @Component({
@@ -25,7 +26,8 @@ export class CDPComponent implements OnInit {
     private serviceCdps: CDPService,
     private snackBar: MatSnackBar,
     private authService: AuthenticationService,
-    private reqServices: PropertiesRequirementService) { }
+    private reqServices: PropertiesRequirementService,
+    public sharedSrv: SharedService ) { }
 
   displayedColumns: string[] = [
     'select',

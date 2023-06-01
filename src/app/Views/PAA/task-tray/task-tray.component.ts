@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { filterTaskTrayI, itemsTaskTrayI } from 'src/app/Models/ModelsPAA/task-tray/task-tray';
+import { SharedService } from 'src/app/Services/ServicesPAA/shared/shared.service';
 import { TaskTrayService } from 'src/app/Services/ServicesPAA/task-tray/task-tray.service';
 
 
@@ -18,7 +19,7 @@ export class TaskTrayComponent implements OnInit {
   constructor(private snackBar: MatSnackBar, 
     public dialog: MatDialog, 
     private taskTrayService: TaskTrayService,
-    public router: Router,) { }
+    public router: Router, public sharedSrv: SharedService ) { }
 
   //INFORMACION PARA LA TABLA CLASIFICACION PRESUPUESTAL
   displayedColumns: string[] = ['fecha', 'codProject', 'numRequeriment', 'cantAjust', 'requeriment'];

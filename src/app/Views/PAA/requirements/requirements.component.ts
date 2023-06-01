@@ -8,6 +8,7 @@ import { dataTableRequerimentI, filterRequerimentI } from 'src/app/Models/Models
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
 import { ModificationRequestService } from 'src/app/Services/ServicesPAA/modificationRequest/modification-request.service';
 import { RequerimentService } from 'src/app/Services/ServicesPAA/Requeriment/requeriment.service';
+import { SharedService } from 'src/app/Services/ServicesPAA/shared/shared.service';
 
 @Component({
   selector: 'app-requirements',
@@ -29,7 +30,7 @@ export class RequirementsComponent implements OnInit {
     public router: Router,
     private activeRoute: ActivatedRoute,
     private authService: AuthenticationService,
-    private serviceModRequest: ModificationRequestService,) { }
+    private serviceModRequest: ModificationRequestService, public sharedSrv: SharedService ) { }
 
   //Objeto con la informacion de acceso del Usuario
   AccessUser: string = '';

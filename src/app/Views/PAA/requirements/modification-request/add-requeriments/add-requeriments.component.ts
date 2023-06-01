@@ -6,6 +6,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { dataTableDataRequerimentI, filterDataRequerimentI } from 'src/app/Models/ModelsPAA/Requeriment/Requeriment.interface';
 import { RequerimentService } from 'src/app/Services/ServicesPAA/Requeriment/requeriment.service';
+import { SharedService } from 'src/app/Services/ServicesPAA/shared/shared.service';
 
 
 export interface Transaction {
@@ -24,7 +25,7 @@ export class AddrequirementsComponent implements OnInit {
   constructor(
     public serviceRequeriment: RequerimentService,
     public dialogRef: MatDialogRef<AddrequirementsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string,) { dialogRef.disableClose = true; }
+    @Inject(MAT_DIALOG_DATA) public data: string, public sharedSrv: SharedService ) { dialogRef.disableClose = true; }
     
   pageSizeOptions: number[] = [3, 6, 12];
   paginationForm = new FormGroup({
