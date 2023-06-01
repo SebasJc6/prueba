@@ -694,6 +694,7 @@ export class PropertiesRequirementComponent implements OnInit {
     this.proRequirementeForm.controls.clasPresFinaForm.controls.auxiliar.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
+      console.log('aux',value)
       this.getAllActivities(value.auxiliar_ID);
       this.idDisabeldActividad = false;
 
@@ -767,6 +768,7 @@ export class PropertiesRequirementComponent implements OnInit {
   getAuxiliarByCod() {
     this.serviceProRequirement.getAuxiliarByProject(+this.dataProjectID).subscribe((dataAuxuliar) => {
       this.listAuxiliar = dataAuxuliar.data
+     
     })
   }
   getFuentesBycod() {
@@ -781,6 +783,7 @@ export class PropertiesRequirementComponent implements OnInit {
   getAllActivities(auxId: number) {
     this.serviceProRequirement.getAllActivities(+this.dataProjectID, auxId).subscribe((dataActi) => {
       this.listActivities = dataActi.data
+     
     })
   }
   getMGAByCod() {
@@ -1452,10 +1455,10 @@ export class PropertiesRequirementComponent implements OnInit {
             }
             this.loading = false
 
-          }  else if (dataResponse.status == 423) {
+          } else if (dataResponse.status == 423) {
             this.openSnackBar('Lo sentimos', dataResponse.message, 'error', `Generando archivo de errores "${dataResponse.data.FileName}".`);
             this.convertBase64ToFileDownload(dataResponse.data.FileAsBase64, dataResponse.data.FileName);
-          }else {
+          } else {
             this.spinner.hide()
 
             let Data: string[] = [];
@@ -1624,6 +1627,13 @@ export class PropertiesRequirementComponent implements OnInit {
     }
     if (tipo == 'auxiliar') {
       this.errorAux = false;
+      //reset campos del formulario actividad,meta,mga y pospre
+      this.proRequirementeForm.controls.clasPresFinaForm.patchValue({
+        actividad: null,
+        meta: null,
+        mga: null,
+        pospre: null
+      })
 
     }
     if (tipo == 'fuente') {
@@ -1634,6 +1644,7 @@ export class PropertiesRequirementComponent implements OnInit {
       })
     }
     if (tipo == 'actividad') {
+      console.log(tipo,event)
       this.activityId = event.value.actividad_ID
       this.errorActi = false;
       this.spinner.show();
@@ -1743,25 +1754,40 @@ export class PropertiesRequirementComponent implements OnInit {
         ProChartStorage.setItem("dataTableClacificaciones", stringToStore);
         var fromStorage = ProChartStorage.getItem("dataTableClacificaciones");
         this.reloadDataTbl(fromStorage, 'clasificaciones');
+        //reset al formurario de clasificaciones
+        // this.proRequirementeForm.controls.clasPresFinaForm.reset();
+        console.log(this.proRequirementeForm.controls.clasPresFinaForm.value)
+        console.log(this.dataTableClasificaciones)
       }
     }
     if (type == 'codigos') {
-
-      if (this.proRequirementeForm.controls.codigosForm.controls['codCategoria'].value == '' || this.proRequirementeForm.controls.codigosForm.controls['codCategoria'].value == null) {
-        this.errorCodigos = true;
-      } else {
-        this.dataTableCodigo = this.proRequirementeForm.controls.codigosForm.controls.codCategoria.value
-        let repe = this.dataTableCodigos.filter(u => u.unspsC_ID == this.dataTableCodigo['unspsC_ID'])
-        if (repe.length != 0) {
-          this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
-          return;
+      console.log(this.proRequirementeForm.controls.codigosForm.value)
+      //validar si el campo es numero this.proRequirementeForm.controls.codigosForm.value
+      if(this.proRequirementeForm.controls.codigosForm.value && !isNaN(this.proRequirementeForm.controls.codigosForm.controls.codCategoria.value ) ){
+        console.log('es numero')
+        //reset form
+       
+      }else{
+        if (this.proRequirementeForm.controls.codigosForm.controls['codCategoria'].value == '' || this.proRequirementeForm.controls.codigosForm.controls['codCategoria'].value == null) {
+          this.errorCodigos = true;
+        } else {
+          this.dataTableCodigo = this.proRequirementeForm.controls.codigosForm.controls.codCategoria.value
+          let repe = this.dataTableCodigos.filter(u => u.unspsC_ID == this.dataTableCodigo['unspsC_ID'])
+          if (repe.length != 0) {
+            this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
+            return;
+          }
+          this.dataTableCodigos.push(this.dataTableCodigo)
+          var stringToStore = JSON.stringify(this.dataTableCodigos);
+          ProChartStorage.setItem("dataTableCodigos", stringToStore);
+          var fromStorage = ProChartStorage.getItem("dataTableCodigos");
+          this.reloadDataTbl(fromStorage, 'codigos');
         }
-        this.dataTableCodigos.push(this.dataTableCodigo)
-        var stringToStore = JSON.stringify(this.dataTableCodigos);
-        ProChartStorage.setItem("dataTableCodigos", stringToStore);
-        var fromStorage = ProChartStorage.getItem("dataTableCodigos");
-        this.reloadDataTbl(fromStorage, 'codigos');
       }
+
+      this.proRequirementeForm.controls.codigosForm.reset();
+
+      
     }
     // if (type == 'revisiones') {
     //   if (this.reviews.controls['area'].value == '' || this.reviews.controls['area'].value == null) {
@@ -2107,14 +2133,14 @@ export class PropertiesRequirementComponent implements OnInit {
     });
   }
 
-    //Convertir archivo de Base64 a .xlsx y descargarlo
-    convertBase64ToFileDownload(base64String: string, fileName: string) {
-      const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64String}`;
-      const link = document.createElement("a");
-      link.href = source;
-      link.download = `${fileName}`;
-      link.click();
-    }
+  //Convertir archivo de Base64 a .xlsx y descargarlo
+  convertBase64ToFileDownload(base64String: string, fileName: string) {
+    const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64String}`;
+    const link = document.createElement("a");
+    link.href = source;
+    link.download = `${fileName}`;
+    link.click();
+  }
 }
 
 var ProChartStorage = {
