@@ -705,7 +705,6 @@ export class PropertiesRequirementComponent implements OnInit {
 
   }
   getInfoToCreateReq(projectId: number) {
-    this.spinner.show();
     this.serviceProRequirement.getInfoToCreateReq(projectId).subscribe((dataProject) => {
       this.getInfoToProject = dataProject.data;
       this.codProject = this.getInfoToProject.codigoProyecto;
@@ -715,9 +714,7 @@ export class PropertiesRequirementComponent implements OnInit {
       this.proRequirementeForm.controls.infoBasicaForm.controls['codigoPro'].setValue(this.codProject);
       let concatDepe = this.getInfoToProject.dependenciaOrigen.codigo.concat(' ' + this.getInfoToProject.dependenciaOrigen.detalle)
       this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaOri'].setValue(concatDepe);
-      this.spinner.hide();
     }, error => {
-      this.spinner.hide();
     })
   }
 
@@ -1226,7 +1223,6 @@ export class PropertiesRequirementComponent implements OnInit {
   }
 
   saveForm() {
-    this.spinner.show();
     if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == null || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == '') {
       this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].setValue(0)
     } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == null || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == '') {
@@ -1333,7 +1329,6 @@ export class PropertiesRequirementComponent implements OnInit {
 
       if (this.typePage == 'Nuevo') {
         this.serviceProRequirement.postVerifyDataSaveI(this.formVerify).subscribe(dataResponse => {
-          this.spinner.hide()
           if (dataResponse.status == 200) {
             var stringToStoreCom = JSON.stringify(this.formVerifyComplete);
             ProChartStorage.setItem("formVerifyComplete", stringToStoreCom);
@@ -1356,7 +1351,6 @@ export class PropertiesRequirementComponent implements OnInit {
             this.openSnackBar('Error', dataResponse.message, 'error');
           }
         }, err => {
-          this.spinner.hide()
 
           let dataError = err.error.data
 
@@ -1439,9 +1433,7 @@ export class PropertiesRequirementComponent implements OnInit {
         this.formModificationRequest.solicitudModID = +this.dataSolicitudID
         this.formModificationRequest.deleteReqIDs = []
         this.formModificationRequest.deleteContraIDs = []
-        this.spinner.show();
         this.serviceProRequirement.putModificationRequestSend(this.formModificationRequest).subscribe(dataResponse => {
-          this.spinner.hide()
 
           if (dataResponse.status == 200) {
 
@@ -1459,7 +1451,6 @@ export class PropertiesRequirementComponent implements OnInit {
             this.openSnackBar('Lo sentimos', dataResponse.message, 'error', `Generando archivo de errores "${dataResponse.data.FileName}".`);
             this.convertBase64ToFileDownload(dataResponse.data.FileAsBase64, dataResponse.data.FileName);
           } else {
-            this.spinner.hide()
 
             let Data: string[] = [];
             Data = Object.values(dataResponse.data);
@@ -1469,7 +1460,6 @@ export class PropertiesRequirementComponent implements OnInit {
             });
             this.openSnackBar('Error', dataResponse.message && JSON.stringify(dataResponse.data), 'error');
           }
-          this.spinner.hide();
         }, err => {
           //valodacion de errores genericos
           let dataError = err.error.data
@@ -1525,7 +1515,6 @@ export class PropertiesRequirementComponent implements OnInit {
             this.genericCodigos = true
           }
 
-          this.spinner.hide()
           let Data: string[] = [];
           Data = Object.values(err.error.data);
           let errorMessages = '';
@@ -1534,7 +1523,6 @@ export class PropertiesRequirementComponent implements OnInit {
           });
           this.openSnackBar('Error', err.error.message, 'error', errorMessages);
 
-          this.spinner.hide();
         })
 
       }
@@ -1647,7 +1635,6 @@ export class PropertiesRequirementComponent implements OnInit {
       console.log(tipo,event)
       this.activityId = event.value.actividad_ID
       this.errorActi = false;
-      this.spinner.show();
       this.proRequirementeForm.controls.clasPresFinaForm.patchValue({
         meta: event.value.metaODS
       })
@@ -1662,7 +1649,6 @@ export class PropertiesRequirementComponent implements OnInit {
           pospre: res.data.codigo
         })
         this.pospreValue = res.data
-        this.spinner.hide();
       })
 
     }
@@ -1979,7 +1965,6 @@ export class PropertiesRequirementComponent implements OnInit {
         let reviewsDelete = {} as deleteReviewsI
         reviewsDelete.modificacion_ID = +this.dataRequirementID
         reviewsDelete.revisiones = [idReviews]
-        this.spinner.show();
         this.serviceReviews.deleteReviews(reviewsDelete).subscribe((data: any) => {
 
           if (data.status != 200) {
@@ -1989,9 +1974,7 @@ export class PropertiesRequirementComponent implements OnInit {
           this.getAllReviews(+this.dataRequirementID)
 
           this.loading = false;
-          this.spinner.hide();
         }, error => {
-          this.spinner.hide();
         });
       } else {
 
@@ -2020,12 +2003,10 @@ export class PropertiesRequirementComponent implements OnInit {
           reviews.concepto = fromStorage[i].concepto
           reviews.observacion = fromStorage[i].observacion
           reviews.area_ID = fromStorage[i].area.area_ID
-          //  this.spinner.show();
           this.reviewsAdd.push(reviews)
         }
       }
       reviewsData.revisiones = this.reviewsAdd
-      this.spinner.show();
       this.serviceReviews.postReviews(reviewsData).subscribe((data: any) => {
         if (data.status != 200) {
           this.openSnackBar('ERROR', data.message, 'error')
@@ -2035,16 +2016,13 @@ export class PropertiesRequirementComponent implements OnInit {
           this.getAllReviews(+this.dataRequirementID)
           this.loading = false;
         }
-        this.spinner.hide();
       }, error => {
-        this.spinner.hide();
       });
 
       if (this.reviewsCheck.length != 0) {
         let putUpdateReviews = {} as putUpdateReviewsI
         putUpdateReviews.modificacion_ID = +this.dataRequirementID
         putUpdateReviews.revisiones = this.reviewsCheck
-        this.spinner.show();
         this.serviceReviews.putUpdateReviews(putUpdateReviews).subscribe((data: any) => {
           if (data.status != 200) {
             this.openSnackBar('ERROR', data.message, 'error')
@@ -2054,9 +2032,7 @@ export class PropertiesRequirementComponent implements OnInit {
           }
           this.getAllReviews(+this.dataRequirementID)
           this.loading = false;
-          this.spinner.hide();
         }, error => {
-          this.spinner.hide();
         });
       } else {
       }
