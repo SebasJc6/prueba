@@ -29,6 +29,7 @@ export class OrdersComponent implements OnInit {
   dataGiros = {} as dataGirosI;
   giros = {} as postGirosI;
   ngValorGirar: string = '';
+ distribuidos = [] as distribuidosI[];
 
   actividadesColumns: string[] = ['codigoActividad', 'pospre', 'mga', 'auxiliar', 'fuente', 'valorRP', 'girosAcumulados', 'saldoGirar', 'valorGirar', 'nuevoSaldo'];
 
@@ -123,24 +124,24 @@ export class OrdersComponent implements OnInit {
     let valDistribuidos = {} as distribuidosI;
     valDistribuidos.clasificacion_ID = clasificacionId;
     valDistribuidos.valorGirar = value;
-
-    let distribuidos = [] as distribuidosI[];
-    distribuidos.map((item) => {
+    
+    this.distribuidos.map((item) => {
       if (item.clasificacion_ID == clasificacionId) {
         item.valorGirar = value;
       }
       return valueformat;
     });
-    distribuidos.push(valDistribuidos);
+    this.distribuidos.push(valDistribuidos);
     this.giros['requerimiento_ID'] = +this.idReq;
     this.giros['giro_ID'] = idGiro;
-    this.giros['distribuidos'] = distribuidos;
+    this.giros['distribuidos'] = this.distribuidos;
   }
 
   cancel() {
     this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
   }
   saveGiro() {
+   
     if (!this.giros) {
 
       this.postGiros();
