@@ -66,6 +66,8 @@ export class PopUpImportComponent implements OnInit {
           } else if (status === 423) {
             this.openSnackBar('Lo sentimos', res.message, 'error', `Generando archivo de errores "${res.data.FileName}".`);
             this.convertBase64ToFileDownload(res.data.FileAsBase64, res.data.FileName);
+          } else if (status === 404) {
+            this.openSnackBar('Lo sentimos', res.message, 'error');
           }
 
           this.dialogRef.close();
@@ -101,7 +103,9 @@ export class PopUpImportComponent implements OnInit {
           } else if (status === 423) {
             this.openSnackBar('Lo sentimos', res.message, 'error', `Generando archivo de errores "${res.data.FileName}".`);
             this.convertBase64ToFileDownload(res.data.FileAsBase64, res.data.FileName);
-          } 
+          } else if (status === 404) {
+            this.openSnackBar('Lo sentimos', res.message, 'error');
+          }
           this.dialogRef.close();
         }, error => {
           let status = error.error.status;
