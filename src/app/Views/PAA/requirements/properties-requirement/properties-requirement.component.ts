@@ -1858,7 +1858,8 @@ export class PropertiesRequirementComponent implements OnInit {
 
   changeInitilYears(event: any) {
     this.errInitialAppYaers = false
-    if (this.isDataTemporal = true) {
+    if (+this.dataSolicitudID > 0) {
+    // if (this.isDataTemporal = true) {
       this.servicesinitialApp.getAllInitialApropriationTemp(+this.dataRequirementID, event.value, +this.dataSolicitudID).subscribe(data => {
         const ValAppIni = String(data.data.valorApropiacion_Incial)
         const VAL_APP_INI = this.assignCurrencyPipe(ValAppIni)
