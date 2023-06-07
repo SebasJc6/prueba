@@ -1251,6 +1251,7 @@ export class PropertiesRequirementComponent implements OnInit {
     } if (this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == null) {
       this.errorActuacion = true;
     } if (this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == null) {
+      this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].setValue(0)
       this.errorCantContrato = true;
     } if (this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == null) {
       this.errorDescripcionCont = true;
