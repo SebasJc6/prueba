@@ -223,7 +223,7 @@ export class AcquisitionsComponent implements OnInit {
         this.openSnackBar('Lo sentimos', '', 'error', response.message);
       }
     }, error => {
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
     });
   }
 
@@ -263,7 +263,7 @@ export class AcquisitionsComponent implements OnInit {
         this.openSnackBar('Lo sentimos', '', 'error', response.message);
       }
     }, error => {
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
     });
   }
 
@@ -294,20 +294,20 @@ export class AcquisitionsComponent implements OnInit {
       if (result) {
         if (result.reportType ==='1_PAA' || result.reportType ==='2_REP') {
           if (result.data.status === 200) {
-            this.openSnackBar('Exportado Exitosamente', `El archivo "${result.data.data.fileName}" fué generado correctamente.`, 'success');
+            this.openSnackBar('Exportado Exitosamente', `El archivo "${result.data.data.fileName}" fue generado correctamente.`, 'success');
             this.convertBase64ToFileDownload(result.data.data.fileAsBase64, result.data.data.fileName);
           } else if (result.data.status === 423) {
             this.openSnackBar('Lo sentimos', result.data.message, 'error', `Generando archivo de errores "${result.data.data.FileName}".`);
             this.convertBase64ToFileDownload(result.data.data.FileAsBase64, result.data.data.FileName);
           }
           else {
-            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
           }
         }
       }
 
     }, error => {
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
     });
   }
 

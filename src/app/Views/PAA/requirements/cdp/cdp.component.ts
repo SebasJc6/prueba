@@ -174,7 +174,7 @@ export class CDPComponent implements OnInit {
         this.openSnackBar('ERROR', `Error " ${response.status} "`, 'error');
       }
     }, error => {
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
     });
   }
 

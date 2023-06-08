@@ -187,12 +187,12 @@ export class AlertsPopUpComponent implements OnInit {
       }
       // TODO: Validar error 422
       else {
-        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
       }
 
       this.dialogRef.close();
     }, error => {
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
     });
   }
 
@@ -209,12 +209,12 @@ export class AlertsPopUpComponent implements OnInit {
         this.convertBase64ToFileDownload(Response.data.FileAsBase64, Response.data.FileName);
       }
       else {
-        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
       }
 
       this.dialogRef.close();
     }, error => {
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
     });
   }
 
@@ -231,12 +231,12 @@ export class AlertsPopUpComponent implements OnInit {
         this.convertBase64ToFileDownload(Response.data.FileAsBase64, Response.data.FileName);
       }
       else {
-        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
       }
 
       this.dialogRef.close();
     }, error => {
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
     });
   }
 
@@ -253,12 +253,12 @@ export class AlertsPopUpComponent implements OnInit {
         this.convertBase64ToFileDownload(Response.data.FileAsBase64, Response.data.FileName);
       }
       else {
-        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
       }
 
       this.dialogRef.close();
     }, error => {
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
     });
   }
 
@@ -282,12 +282,12 @@ export class AlertsPopUpComponent implements OnInit {
         this.openSnackBar('Exportado Exitosamente', `El archivo "${Response.data.fileName}" fue generado correctamente.`, 'success');
         this.convertBase64ToFileDownload(Response.data.fileAsBase64, Response.data.fileName);
       } else {
-        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
       }
 
       this.dialogRef.close();
     }, error => {
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
     });
   }
 
@@ -304,12 +304,12 @@ export class AlertsPopUpComponent implements OnInit {
         this.convertBase64ToFileDownload(Response.data.FileAsBase64, Response.data.FileName);
       }
       else {
-        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
       }
 
       this.dialogRef.close();
     }, error => {
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
     });
   }
 
