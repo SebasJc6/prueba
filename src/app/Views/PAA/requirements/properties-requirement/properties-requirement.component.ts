@@ -1730,14 +1730,13 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dataTableClasificacion['subDisminucion'] = 0;
         this.dataTableClasificacion['iva'] = 0;
         this.dataTableClasificacion['arl'] = 0;
+      
         let repe = this.dataTableClasificaciones.filter(u =>
           u.mes == this.dataTableClasificacion['mes'] &&
           u.anioVigRecursos == this.dataTableClasificacion['anioVigRecursos'] &&
           u.auxiliar == this.dataTableClasificacion['auxiliar'] &&
           u.fuente == this.dataTableClasificacion['fuente'] &&
-          u.actividad == this.dataTableClasificacion['actividad'] &&
-          u.mga == this.dataTableClasificacion['mga'] &&
-          u.pospre == this.dataTableClasificacion['pospre'])
+          u.actividad == this.dataTableClasificacion['actividad'] )
         if (repe.length != 0) {
           this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
           return;
