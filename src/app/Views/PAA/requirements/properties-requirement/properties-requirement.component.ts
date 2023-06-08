@@ -1261,7 +1261,7 @@ export class PropertiesRequirementComponent implements OnInit {
     }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == null) {
       // this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].setValue(0)
       this.errorCantContrato = true;     
-      this.openSnackBar('Error', 'Cantida de contrato es obligatorio', 'error');
+      this.openSnackBar('Error', 'Cantidad de contrato es obligatorio', 'error');
       return;
 
     }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == null) {
