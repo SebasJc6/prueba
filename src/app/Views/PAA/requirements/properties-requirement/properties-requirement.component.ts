@@ -694,7 +694,7 @@ export class PropertiesRequirementComponent implements OnInit {
     this.proRequirementeForm.controls.clasPresFinaForm.controls.auxiliar.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
-      console.log('aux',value)
+      console.log('aux', value)
       this.getAllActivities(value.auxiliar_ID);
       this.idDisabeldActividad = false;
 
@@ -765,7 +765,7 @@ export class PropertiesRequirementComponent implements OnInit {
   getAuxiliarByCod() {
     this.serviceProRequirement.getAuxiliarByProject(+this.dataProjectID).subscribe((dataAuxuliar) => {
       this.listAuxiliar = dataAuxuliar.data
-     
+
     })
   }
   getFuentesBycod() {
@@ -780,7 +780,7 @@ export class PropertiesRequirementComponent implements OnInit {
   getAllActivities(auxId: number) {
     this.serviceProRequirement.getAllActivities(+this.dataProjectID, auxId).subscribe((dataActi) => {
       this.listActivities = dataActi.data
-     
+
     })
   }
   getMGAByCod() {
@@ -1633,7 +1633,7 @@ export class PropertiesRequirementComponent implements OnInit {
       })
     }
     if (tipo == 'actividad') {
-      console.log(tipo,event)
+      console.log(tipo, event)
       this.activityId = event.value.actividad_ID
       this.errorActi = false;
       this.proRequirementeForm.controls.clasPresFinaForm.patchValue({
@@ -1730,7 +1730,14 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dataTableClasificacion['subDisminucion'] = 0;
         this.dataTableClasificacion['iva'] = 0;
         this.dataTableClasificacion['arl'] = 0;
-        let repe = this.dataTableClasificaciones.filter(u => u.uuid == this.dataTableClasificacion['uuid'])
+        let repe = this.dataTableClasificaciones.filter(u =>
+          u.mes == this.dataTableClasificacion['mes'] &&
+          u.anioVigRecursos == this.dataTableClasificacion['anioVigRecursos'] &&
+          u.auxiliar == this.dataTableClasificacion['auxiliar'] &&
+          u.fuente == this.dataTableClasificacion['fuente'] &&
+          u.actividad == this.dataTableClasificacion['actividad'] &&
+          u.mga == this.dataTableClasificacion['mga'] &&
+          u.pospre == this.dataTableClasificacion['pospre'])
         if (repe.length != 0) {
           this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
           return;
@@ -1750,11 +1757,11 @@ export class PropertiesRequirementComponent implements OnInit {
     if (type == 'codigos') {
       console.log(this.proRequirementeForm.controls.codigosForm.value)
       //validar si el campo es numero this.proRequirementeForm.controls.codigosForm.value
-      if(this.proRequirementeForm.controls.codigosForm.value && !isNaN(this.proRequirementeForm.controls.codigosForm.controls.codCategoria.value ) ){
+      if (this.proRequirementeForm.controls.codigosForm.value && !isNaN(this.proRequirementeForm.controls.codigosForm.controls.codCategoria.value)) {
         console.log('es numero')
         //reset form
-       
-      }else{
+
+      } else {
         if (this.proRequirementeForm.controls.codigosForm.controls['codCategoria'].value == '' || this.proRequirementeForm.controls.codigosForm.controls['codCategoria'].value == null) {
           this.errorCodigos = true;
         } else {
@@ -1774,7 +1781,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
       this.proRequirementeForm.controls.codigosForm.reset();
 
-      
+
     }
     // if (type == 'revisiones') {
     //   if (this.reviews.controls['area'].value == '' || this.reviews.controls['area'].value == null) {
@@ -1860,7 +1867,7 @@ export class PropertiesRequirementComponent implements OnInit {
   changeInitilYears(event: any) {
     this.errInitialAppYaers = false
     if (+this.dataSolicitudID > 0) {
-    // if (this.isDataTemporal = true) {
+      // if (this.isDataTemporal = true) {
       this.servicesinitialApp.getAllInitialApropriationTemp(+this.dataRequirementID, event.value, +this.dataSolicitudID).subscribe(data => {
         const ValAppIni = String(data.data.valorApropiacion_Incial)
         const VAL_APP_INI = this.assignCurrencyPipe(ValAppIni)
