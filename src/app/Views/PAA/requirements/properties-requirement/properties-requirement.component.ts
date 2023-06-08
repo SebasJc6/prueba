@@ -1,6 +1,6 @@
 import { CurrencyPipe } from '@angular/common';
 import { ThisReceiver } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -24,6 +24,7 @@ import Swal from 'sweetalert2';
 import { v4 as uuid } from 'uuid';
 import { BudgetModificationComponent } from './budget-modification/budget-modification.component';
 import { SharedService } from 'src/app/Services/ServicesPAA/shared/shared.service';
+import { DOCUMENT } from '@angular/common';
 
 
 
@@ -351,7 +352,7 @@ export class PropertiesRequirementComponent implements OnInit {
     public serviceModRequest: ModificationRequestService,
     public servicesinitialApp: InitialApropriationService,
     public serviceReviews: ReviewsService,
-    public router: Router,
+    public router: Router, @Inject(DOCUMENT) private document: Document,
     private activeRoute: ActivatedRoute,
     private formbuilder: FormBuilder,
     private currencyPipe: CurrencyPipe,
@@ -1234,31 +1235,32 @@ export class PropertiesRequirementComponent implements OnInit {
     })
     if (this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].value == null) {
       this.errorNumReq = true;
-    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == null) {
+    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == null) {
       this.errorDependencia = true;
-    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesSeleccion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesSeleccion'].value == null) {
+    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesSeleccion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesSeleccion'].value == null) {
       this.errorMesSeleccion = true;
-    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesOfertas'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesOfertas'].value == null) {
+    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesOfertas'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesOfertas'].value == null) {
       this.errorMesOferta = true;
-    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesContrato'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesContrato'].value == null) {
+    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesContrato'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesContrato'].value == null) {
       this.errorMesContrato = true;
-    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == null) {
+    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == null) {
       this.errorDuratioMes = true;
-    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == null) {
+    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == null) {
       this.errorDurationDia = true;
-    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['modalidadSel'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['modalidadSel'].value == null) {
+    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['modalidadSel'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['modalidadSel'].value == null) {
       this.errorModalidad = true;
-    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == null) {
+    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == null) {
       this.errorActuacion = true;
-    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == null) {
-      this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].setValue(0)
+    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == null) {
+      // this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].setValue(0)
       this.errorCantContrato = true;
-    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == null) {
+      // this.router.navigate([], { fragment: 'top' });
+      // this.document.body.scrollTop = 0;
+      // this.document.documentElement.scrollTop = 0;
+    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == null) {
       this.errorDescripcionCont = true;
     } else {
       this.formVerifyComplete['infoBasica'] = this.proRequirementeForm.controls.infoBasicaForm.value
-
-
 
       let dtaCla = ProChartStorage.getItem('dataTableClacificaciones')
       this.dataClasificacion = JSON.parse(dtaCla || '[]')
@@ -1730,13 +1732,13 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dataTableClasificacion['subDisminucion'] = 0;
         this.dataTableClasificacion['iva'] = 0;
         this.dataTableClasificacion['arl'] = 0;
-      
+
         let repe = this.dataTableClasificaciones.filter(u =>
           u.mes == this.dataTableClasificacion['mes'] &&
           u.anioVigRecursos == this.dataTableClasificacion['anioVigRecursos'] &&
           u.auxiliar == this.dataTableClasificacion['auxiliar'] &&
           u.fuente == this.dataTableClasificacion['fuente'] &&
-          u.actividad == this.dataTableClasificacion['actividad'] )
+          u.actividad == this.dataTableClasificacion['actividad'])
         if (repe.length != 0) {
           this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
           return;
