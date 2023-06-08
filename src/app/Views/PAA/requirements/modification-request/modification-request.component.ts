@@ -875,7 +875,7 @@ export class ModificationRequestComponent implements OnInit {
     this.serviceModRequest.exportFile(this.dataProjectID, this.dataSolicitudModID).subscribe(res => {
       this.manageExcelFile(res, fileName);
     }, error => {
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
     });
   }
 
@@ -892,7 +892,7 @@ export class ModificationRequestComponent implements OnInit {
     document.body.appendChild(downloadLink);
     this.spinner.hide();
     downloadLink.click();
-    this.openSnackBar('Exportado Exitosamente', `El archivo "${fileName}" fué generado correctamente.`, 'success');
+    this.openSnackBar('Exportado Exitosamente', `El archivo "${fileName}" fue generado correctamente.`, 'success');
   }
 
   extraerBase64 = async ($event: any) => new Promise((resolve) => {
@@ -1013,7 +1013,7 @@ export class ModificationRequestComponent implements OnInit {
       }
     }, error => {
       // this.spinner.hide();
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema`, 'error', `Comuníquese con el administrador del sistema.`);
       this.rtnFile = false;
     });
   }
@@ -1025,7 +1025,7 @@ export class ModificationRequestComponent implements OnInit {
       this.arrayFile = [];
       this.loadTableFiles();
     }, error => {
-      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+      this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
     })
   }
 
@@ -1043,7 +1043,7 @@ export class ModificationRequestComponent implements OnInit {
         this.dataSourceAttachedFiles = new MatTableDataSource(this.arrayFile);
         this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
       }, error => {
-        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
       })
     } else {
       this.spinner.show();
@@ -1062,7 +1062,7 @@ export class ModificationRequestComponent implements OnInit {
         this.downloadPdf(this.dataFiles.fileAsBase64, this.dataFiles.fileName);
         // this.getAllFiles(+this.dataProjectID, +this.dataSolicitudModID);
       }, error => {
-        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+        this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
       })
     } else {
       this.spinner.show();
@@ -1133,7 +1133,7 @@ export class ModificationRequestComponent implements OnInit {
           });
           this.openSnackBar('Lo sentimos', error.error.Message, 'error', erorsMessages);
         } else {
-          this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+          this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
         }
       });
     } else {
@@ -1180,7 +1180,7 @@ export class ModificationRequestComponent implements OnInit {
           });
           this.openSnackBar('Lo sentimos', error.error.Message, 'error', erorsMessages);
         } else {
-          this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+          this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
         }
       });
     }
@@ -1256,7 +1256,7 @@ export class ModificationRequestComponent implements OnInit {
               this.openSnackBar('Lo sentimos', res.message, 'error', erorsMessages);
             }
           }, error => {
-            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
           });
         }
       });
@@ -1299,7 +1299,7 @@ export class ModificationRequestComponent implements OnInit {
               this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
             }
           }, error => {
-            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
           });
         }
       });
@@ -1339,7 +1339,7 @@ export class ModificationRequestComponent implements OnInit {
             this.openSnackBar('Lo sentimos', `No se puede enviar revisiones.`, 'error', `${res.message}.`);
           }
         }, error => {
-          this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+          this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
         });
       }
     });
@@ -1376,7 +1376,7 @@ export class ModificationRequestComponent implements OnInit {
               this.router.navigate([`/WAPI/PAA/BandejaDeSolicitudes`]);
             }
           }, error => {
-            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
           });
         }
       });

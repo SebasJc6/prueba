@@ -87,7 +87,7 @@ export class PopUpImportComponent implements OnInit {
           } else if (status == 500) {
             this.openSnackBar('Lo sentimos', 'El documento Importado no cumple con los criterios de aceptación.', 'error');
           } else {
-            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
           }
           this.dialogRef.close();
         });
@@ -123,7 +123,7 @@ export class PopUpImportComponent implements OnInit {
           } else if (status == 500) {
             this.openSnackBar('Lo sentimos', 'El documento Importado no cumple con los criterios de aceptación.', 'error');
           } else {
-            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuniquese con el administrador del sistema.`);
+            this.openSnackBar('Lo sentimos', `Error interno en el sistema.`, 'error', `Comuníquese con el administrador del sistema.`);
           }
           this.dialogRef.close();
         });
@@ -131,7 +131,7 @@ export class PopUpImportComponent implements OnInit {
       }
 
     } else {
-      this.openSnackBar('Error', `Debe agreagar un archivo excel para importar.`, 'error');
+      this.openSnackBar('Error', `Debe agregar un archivo excel para importar.`, 'error');
     }
   }
 
