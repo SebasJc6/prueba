@@ -81,19 +81,53 @@ export class RpComponent implements OnInit {
     let cadenaRPs = {} as cadenaRPsI;
     cadenaRPs.clasificacion_ID = clasificacionId;
     cadenaRPs.valoresDistribuidos = value;
+    //validar si this.RPs es un {} vacio
+    if (this.RPs == undefined || this.RPs == null) {
+      this.cadenas = [] as cadenaRPsI[];
 
-    this.cadenas.map((item: any) => {
-      if (item.clasificacion_ID == clasificacionId) {
-        item.valoresDistribuidos = value;
+      this.RPs = {} as RPsI;
+      this.RPs['rP_ID'] = idRP;
+      this.cadenas.push(cadenaRPs);
+      this.RPs['cadenas'] = this.cadenas;
+      this.elementsRP.push(this.RPs);
+    } else {
+      if (this.RPs['rP_ID'] == idRP) {
+        this.cadenas.push(cadenaRPs);
+        this.RPs['cadenas'] = this.cadenas;
+      } else {
+        this.cadenas = [] as cadenaRPsI[];
+
+        this.RPs = {} as RPsI;
+        this.RPs['rP_ID'] = idRP;
+        this.cadenas.push(cadenaRPs);
+        this.RPs['cadenas'] = this.cadenas;
+        this.elementsRP.push(this.RPs);
       }
-    });
+    }
 
-    //eliminar elementa si es el mismo id que se va agregar
-    this.cadenas = this.cadenas.filter((item: any) => item.clasificacion_ID != clasificacionId);
-    this.cadenas.push(cadenaRPs);
-    this.idRP = idRP;
-    this.listcadenas = this.cadenas;
+    //eliminar elementos repedidos del arreglo 
 
+    // this.cadenas.map((item: any) => {
+    //   if (item.clasificacion_ID == clasificacionId) {
+    //     item.valoresDistribuidos = value;
+    //   }
+    // });
+
+    // //eliminar elementa si es el mismo id que se va agregar
+    // this.cadenas = this.cadenas.filter((item: any) => item.clasificacion_ID != clasificacionId);
+    // this.cadenas.push(cadenaRPs);
+    // this.idRP = idRP;
+    // this.listcadenas = this.cadenas;
+
+    // if (this.listcadenas == undefined || this.listcadenas == null|| this.listcadenas.length==0) {
+    // } else {
+
+    //   this.RPs['rP_ID'] = this.idRP;
+    //   this.RPs['cadenas'] = this.listcadenas;
+    //   this.elementsRP.push(this.RPs);
+    //   this.formRP.rps = this.elementsRP;
+
+    // }
   }
 
   getRPs(idReq: number, idCDP: number) {
@@ -130,17 +164,12 @@ export class RpComponent implements OnInit {
   }
 
   saveRPs() {
-  
-    if (this.listcadenas == undefined || this.listcadenas == null|| this.listcadenas.length==0) {
-    } else {
-      let RPs = {} as RPsI
-      RPs['rP_ID'] = this.idRP;
-      RPs['cadenas'] = this.listcadenas;
-      this.elementsRP.push(RPs);
-      this.formRP.rps = this.elementsRP;
+    this.formRP.rps = this.elementsRP;
 
-      this.postRPs(+this.idCDP, this.formRP);
-    }
+
+
+    this.postRPs(+this.idCDP, this.formRP);
+
   }
   cancel() {
     this.router.navigate(['/WAPI/PAA/CDP/' + this.dataProjectID, this.idReq]);
