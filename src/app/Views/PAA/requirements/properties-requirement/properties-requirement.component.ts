@@ -1222,6 +1222,54 @@ export class PropertiesRequirementComponent implements OnInit {
           this.router.navigate(['/WAPI/PAA/Requerimientos/' + this.dataProjectID])
         }
   }
+  validationForm():  boolean  {
+    let isValid = true;
+  
+    if (this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].value == null) {
+      this.errorNumReq = true;
+      this.openSnackBar('Error', 'Numero de requerimiento es obligatorio', 'error');
+      isValid = false;
+    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == null) {
+      this.errorDependencia = true;
+      isValid = false;
+      this.openSnackBar('Error', 'Dependencia es obligatorio', 'error');
+    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesSeleccion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesSeleccion'].value == null) {
+      this.errorMesSeleccion = true;
+      this.openSnackBar('Error', 'Mes de selección es obligatorio', 'error');
+      isValid = false;
+    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesOfertas'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesOfertas'].value == null) {
+      this.errorMesOferta = true;
+      this.openSnackBar('Error', 'Mes de ofertas es obligatorio', 'error');
+      isValid = false;
+    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesContrato'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesContrato'].value == null) {
+      this.errorMesContrato = true;
+      this.openSnackBar('Error', 'Mes de contrato es obligatorio', 'error');
+      isValid = false;
+    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == null) {
+      this.errorDuratioMes = true;
+      isValid = false;
+    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == null) {
+      this.errorDurationDia = true;
+      isValid = false;
+    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['modalidadSel'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['modalidadSel'].value == null) {
+      this.errorModalidad = true;
+      isValid = false;
+      this.openSnackBar('Error', 'Modalidad de seleccion es obligatorio', 'error');
+    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == null) {
+      this.errorActuacion = true;
+      isValid = false;
+      this.openSnackBar('Error', 'Actuación contractual es obligatorio', 'error');
+    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == null) {
+      // this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].setValue(0)
+      this.errorCantContrato = true;  
+      isValid = false;   
+      this.openSnackBar('Error', 'Cantida de contrato es obligatorio', 'error');
+    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == null) {
+      this.errorDescripcionCont = true;
+      isValid = false;
+    }
+    return isValid;
+  }
 
   saveForm() {
     if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == null || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == '') {
@@ -1233,33 +1281,11 @@ export class PropertiesRequirementComponent implements OnInit {
     let idsCodigos = this.dataTableCodigos.map((item) => {
       return item.unspsC_ID = item.unspsC_ID
     })
-    if (this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].value == null) {
-      this.errorNumReq = true;
-    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == null) {
-      this.errorDependencia = true;
-    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesSeleccion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesSeleccion'].value == null) {
-      this.errorMesSeleccion = true;
-    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesOfertas'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesOfertas'].value == null) {
-      this.errorMesOferta = true;
-    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesContrato'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesContrato'].value == null) {
-      this.errorMesContrato = true;
-    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == null) {
-      this.errorDuratioMes = true;
-    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == null) {
-      this.errorDurationDia = true;
-    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['modalidadSel'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['modalidadSel'].value == null) {
-      this.errorModalidad = true;
-    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == null) {
-      this.errorActuacion = true;
-    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == null) {
-      // this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].setValue(0)
-      this.errorCantContrato = true;
-      // this.router.navigate([], { fragment: 'top' });
-      // this.document.body.scrollTop = 0;
-      // this.document.documentElement.scrollTop = 0;
-    } else if (this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == null) {
-      this.errorDescripcionCont = true;
+    let validation = this.validationForm();
+    if (validation == false){
+      return;
     } else {
+      console.log('this.proRequirementeForm.controls.infoBasicaForm.value', this.proRequirementeForm.controls.infoBasicaForm.value)
       this.formVerifyComplete['infoBasica'] = this.proRequirementeForm.controls.infoBasicaForm.value
 
       let dtaCla = ProChartStorage.getItem('dataTableClacificaciones')
