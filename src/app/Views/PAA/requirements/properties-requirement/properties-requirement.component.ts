@@ -1236,6 +1236,7 @@ export class PropertiesRequirementComponent implements OnInit {
     if (this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].value == null) {
       this.errorNumReq = true;
       this.openSnackBar('Error', 'Numero de requerimiento es obligatorio', 'error');
+      
     }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == null) {
       this.errorDependencia = true;
       this.openSnackBar('Error', 'Dependencia es obligatorio', 'error');
@@ -1254,7 +1255,7 @@ export class PropertiesRequirementComponent implements OnInit {
       this.errorDurationDia = true;
     }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['modalidadSel'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['modalidadSel'].value == null) {
       this.errorModalidad = true;
-      this.openSnackBar('Error', 'Modalidad de seleccion es obligatorio', 'error');
+      this.openSnackBar('Error', 'Modalidad de selección es obligatorio', 'error');
     }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == null) {
       this.errorActuacion = true;
       this.openSnackBar('Error', 'Actuación contractual es obligatorio', 'error');
