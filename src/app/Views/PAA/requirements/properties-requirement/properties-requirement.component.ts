@@ -1749,6 +1749,7 @@ export class PropertiesRequirementComponent implements OnInit {
           u.actividad == this.dataTableClasificacion['actividad'])
         if (repe.length != 0) {
           this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
+          this.proRequirementeForm.controls.clasPresFinaForm.reset();
           return;
 
         }
