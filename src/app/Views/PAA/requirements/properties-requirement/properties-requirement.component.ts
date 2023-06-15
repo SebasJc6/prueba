@@ -1742,7 +1742,7 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dataTableClasificacion['arl'] = 0;
 
         let repe = this.dataTableClasificaciones.filter(u =>
-          u.mes == this.dataTableClasificacion['mes'] &&
+          // u.mes == this.dataTableClasificacion['mes'] &&
           u.anioVigRecursos == this.dataTableClasificacion['anioVigRecursos'] &&
           u.auxiliar == this.dataTableClasificacion['auxiliar'] &&
           u.fuente == this.dataTableClasificacion['fuente'] &&
