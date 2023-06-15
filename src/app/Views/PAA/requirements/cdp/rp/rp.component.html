@@ -161,7 +161,7 @@
             <button class="buton btn" mat-button mat-icon-button (click)="cancel()">
                 Regresar
             </button>
-            <button *ngIf="AccessUser === 'Referente_PAA'" class="buton btn" mat-button mat-icon-button (click)="saveRPs()">
+            <button *ngIf="AccessUser === 'Referente_PAA'"  [disabled]="buttonClicked"  class="buton btn" mat-button mat-icon-button (click)="saveRPs()">
                 guardar
             </button>
         </mat-card-actions>

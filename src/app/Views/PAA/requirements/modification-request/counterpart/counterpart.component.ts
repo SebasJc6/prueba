@@ -27,7 +27,7 @@ export class CounterpartComponent implements OnInit {
     public dialogRef: MatDialogRef<CounterpartComponent>,
     private authService: AuthenticationService,
     private currencyPipe: CurrencyPipe,
-    @Inject(MAT_DIALOG_DATA) public dataCounterparts: any,) { dialogRef.disableClose = true;}
+    @Inject(MAT_DIALOG_DATA) public data: {dataCounterparts:any, idProject:any},) { dialogRef.disableClose = true;}
 
   //Arreglo que guarda la información del proyecto para mostrar en la lista desplegable
   states: CounterpartInterface[] = [];
@@ -51,6 +51,9 @@ export class CounterpartComponent implements OnInit {
   //Disabled Valor Disminuye
   dissabledDecreases: boolean = false;
 
+  dataCounterparts:any;
+  idProject:any;
+
   counterpartForm = new FormGroup({
     fuentes: new FormControl(),
     Descripcion: new FormControl(''),
@@ -63,7 +66,9 @@ export class CounterpartComponent implements OnInit {
   counterpart = {} as postModificRequestCounterpartI;
 
   ngOnInit(): void {
-    this.getCounterpartF(this.dataCounterparts.id_request);
+    this.dataCounterparts = this.data.dataCounterparts;
+    this.idProject = this.data.idProject;
+    this.getCounterpartF(this.idProject);
     this.getSourcesTemporal();
     this.cargarDataEdit();
     this.StatusRequest = this.dataCounterparts.statusRequest;
@@ -79,8 +84,8 @@ export class CounterpartComponent implements OnInit {
   }
 
   //Función que trae la información del proyecto de la Api
-  getCounterpartF(idRequest: string) {
-    this.counterpartSubscription = this.serviceCounterpar.getCounterpartFRequest(idRequest).subscribe(request => {
+  getCounterpartF(idRequest: any) {
+    this.counterpartSubscription = this.serviceCounterpar.getFuentesByProject(idRequest).subscribe(request => {
       this.states = request.data;
     }, error => {
 

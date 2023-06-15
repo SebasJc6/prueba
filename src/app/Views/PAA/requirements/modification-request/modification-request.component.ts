@@ -456,7 +456,7 @@ export class ModificationRequestComponent implements OnInit {
     const dialogRef = this.dialog.open(CounterpartComponent, {
       width: '1000px',
       height: '580px',
-      data: dataCounterparts,
+      data: {data:dataCounterparts , idProject: this.dataProjectID}
     });
 
     dialogRef.afterClosed().subscribe(result => {

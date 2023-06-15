@@ -20,7 +20,7 @@ import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
 })
 export class RpComponent implements OnInit {
   dataRequirementNum: number = 0;
-
+  buttonClicked = false;
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   dataProjectID: string = '';
   idReq: string = '';
@@ -166,9 +166,8 @@ export class RpComponent implements OnInit {
   saveRPs() {
     this.formRP.rps = this.elementsRP;
 
-
-
     this.postRPs(+this.idCDP, this.formRP);
+    this.buttonClicked = true;
 
   }
   cancel() {

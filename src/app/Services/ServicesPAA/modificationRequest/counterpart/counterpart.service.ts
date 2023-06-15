@@ -14,11 +14,14 @@ export class CounterpartService {
 
   constructor(private http: HttpClient) { }
 
-  getCounterpartFRequest(id_request: string): Observable<getCounterpartI>{
-    let dir = `${this.Url}Solicitud/${id_request}/Fuentes`;
-    return this.http.get<getCounterpartI>(dir);
+  // getCounterpartFRequest(id_request: string): Observable<getCounterpartI>{
+  //   let dir = `${this.Url}Solicitud/${id_request}/Fuentes`;
+  //   return this.http.get<getCounterpartI>(dir);
+  // }
+  getFuentesByProject(projectId: any): Observable<any> {
+    let dir = this.Url + 'PlanAnual/' + projectId + '/FuentesComplete'
+    return this.http.get<any>(dir)
   }
-
   postFuentesGetList(listSources: string[]): Observable<any>{
     let dir = `${this.Url2}Fuente/GetListOf`;
     return this.http.post(dir,listSources);
