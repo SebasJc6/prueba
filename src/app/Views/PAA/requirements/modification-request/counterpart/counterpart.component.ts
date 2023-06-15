@@ -27,7 +27,7 @@ export class CounterpartComponent implements OnInit {
     public dialogRef: MatDialogRef<CounterpartComponent>,
     private authService: AuthenticationService,
     private currencyPipe: CurrencyPipe,
-    @Inject(MAT_DIALOG_DATA) public data: {dataCounterparts:any, idProject:any},) { dialogRef.disableClose = true;}
+    @Inject(MAT_DIALOG_DATA) public data: {data:any, idProject:any},) { dialogRef.disableClose = true;}
 
   //Arreglo que guarda la información del proyecto para mostrar en la lista desplegable
   states: CounterpartInterface[] = [];
@@ -66,7 +66,7 @@ export class CounterpartComponent implements OnInit {
   counterpart = {} as postModificRequestCounterpartI;
 
   ngOnInit(): void {
-    this.dataCounterparts = this.data.dataCounterparts;
+    this.dataCounterparts = this.data.data;
     this.idProject = this.data.idProject;
     this.getCounterpartF(this.idProject);
     this.getSourcesTemporal();
