@@ -49,6 +49,7 @@ export class BudgetModificationComponent implements OnInit {
 
   ngOnInit(): void {
     this.valueForm(this.data.element);
+    console.log(this.data.element);
     this.currencyInput();
     if (this.data.type == 'editar') {
       this.viewDisabledAum = false;
@@ -173,8 +174,16 @@ export class BudgetModificationComponent implements OnInit {
       this.valueFormSubmit.controls['arl'].setValue(VALUE_ARL);
       this.valueFormSubmit.controls['total'].setValue(VALUE_TOTAL);
     } else if (this.data.type == 'editar') {
+      if( event.apropiacionDisponible == 0){
+        this.viewDisabledDis = false;
+      this.valueFormSubmit.controls.SubDisminuye.disable();
+
+      }else{
+        this.valueFormSubmit.controls['SubDisminuye'].enabled;
+
+      }
+
       this.valueFormSubmit.controls.subAumenta.enable();
-      this.valueFormSubmit.controls['SubDisminuye'].enabled;
       this.isDisabledView = false;
       this.formSubmit = event;
       this.iva = this.formSubmit.iva;

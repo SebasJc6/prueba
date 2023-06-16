@@ -1754,14 +1754,15 @@ export class PropertiesRequirementComponent implements OnInit {
           this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
           this.proRequirementeForm.controls.clasPresFinaForm.reset();
           this.dataTableClasificacion = {};
-
-        }else{
+          return;
+        }
+        
           this.dataTableClasificaciones.push(this.dataTableClasificacion)
           var stringToStore = JSON.stringify(this.dataTableClasificaciones);
           ProChartStorage.setItem("dataTableClacificaciones", stringToStore);
           var fromStorage = ProChartStorage.getItem("dataTableClacificaciones");
           this.reloadDataTbl(fromStorage, 'clasificaciones');
-        }
+        
        
        
         // console.log('VALUE FORM',this.proRequirementeForm.controls.clasPresFinaForm.value)
