@@ -695,9 +695,11 @@ export class PropertiesRequirementComponent implements OnInit {
     this.proRequirementeForm.controls.clasPresFinaForm.controls.auxiliar.valueChanges.pipe(
       distinctUntilChanged(),
     ).subscribe(value => {
-      console.log('aux', value)
-      this.getAllActivities(value.auxiliar_ID);
-      this.idDisabeldActividad = false;
+      if(value != null && value != undefined){
+        this.getAllActivities(value.auxiliar_ID);
+        this.idDisabeldActividad = false;
+      }
+      
 
     })
 
@@ -1236,36 +1238,36 @@ export class PropertiesRequirementComponent implements OnInit {
     if (this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['numeroReq'].value == null) {
       this.errorNumReq = true;
       this.openSnackBar('Error', 'Numero de requerimiento es obligatorio', 'error');
-      
-    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == null) {
+
+    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['dependenciaDes'].value == null) {
       this.errorDependencia = true;
       this.openSnackBar('Error', 'Dependencia es obligatorio', 'error');
-    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesSeleccion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesSeleccion'].value == null) {
+    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesSeleccion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesSeleccion'].value == null) {
       this.errorMesSeleccion = true;
       this.openSnackBar('Error', 'Mes de selección es obligatorio', 'error');
-    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesOfertas'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesOfertas'].value == null) {
+    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesOfertas'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesOfertas'].value == null) {
       this.errorMesOferta = true;
       this.openSnackBar('Error', 'Mes de ofertas es obligatorio', 'error');
-    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesContrato'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesContrato'].value == null) {
+    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['mesContrato'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['mesContrato'].value == null) {
       this.errorMesContrato = true;
       this.openSnackBar('Error', 'Mes de contrato es obligatorio', 'error');
-    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == null) {
+    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionMes'].value == null) {
       this.errorDuratioMes = true;
-    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == null) {
+    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['duracionDias'].value == null) {
       this.errorDurationDia = true;
-    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['modalidadSel'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['modalidadSel'].value == null) {
+    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['modalidadSel'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['modalidadSel'].value == null) {
       this.errorModalidad = true;
       this.openSnackBar('Error', 'Modalidad de selección es obligatorio', 'error');
-    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == null) {
+    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['actuacionCont'].value == null) {
       this.errorActuacion = true;
       this.openSnackBar('Error', 'Actuación contractual es obligatorio', 'error');
-    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == null) {
+    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].value == null) {
       // this.proRequirementeForm.controls.infoBasicaForm.controls['cantidadCont'].setValue(0)
-      this.errorCantContrato = true;     
+      this.errorCantContrato = true;
       this.openSnackBar('Error', 'Cantidad de contrato es obligatorio', 'error');
       return;
 
-    }  if (this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == null) {
+    } if (this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == '' || this.proRequirementeForm.controls.infoBasicaForm.controls['descripcion'].value == null) {
       this.errorDescripcionCont = true;
     } else {
       this.formVerifyComplete['infoBasica'] = this.proRequirementeForm.controls.infoBasicaForm.value
@@ -1643,7 +1645,6 @@ export class PropertiesRequirementComponent implements OnInit {
       })
     }
     if (tipo == 'actividad') {
-      console.log(tipo, event)
       this.activityId = event.value.actividad_ID
       this.errorActi = false;
       this.proRequirementeForm.controls.clasPresFinaForm.patchValue({
@@ -1740,35 +1741,36 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dataTableClasificacion['subDisminucion'] = 0;
         this.dataTableClasificacion['iva'] = 0;
         this.dataTableClasificacion['arl'] = 0;
-
+        // console.log('ARRAY',this.dataTableClasificacion)
         let repe = this.dataTableClasificaciones.filter(u =>
           // u.mes == this.dataTableClasificacion['mes'] &&
           //u.anioVigRecursos == this.dataTableClasificacion['anioVigRecursos'] &&
-          u.auxiliar == this.dataTableClasificacion['auxiliar'] &&
-          u.fuente == this.dataTableClasificacion['fuente'] &&
-          u.actividad == this.dataTableClasificacion['actividad'])
+          u.auxiliar.auxiliar_ID == this.dataTableClasificacion['auxiliar'].auxiliar_ID &&
+          u.fuente.fuente_ID == this.dataTableClasificacion['fuente'].fuente_ID &&
+          u.actividad.actividad_ID == this.dataTableClasificacion['actividad'].actividad_ID)
+
+        // console.log('repe',repe)
         if (repe.length != 0) {
           this.openSnackBar('ERROR', 'No se puede agregar el mismo registro', 'error')
           this.proRequirementeForm.controls.clasPresFinaForm.reset();
-          return;
+          this.dataTableClasificacion = {};
 
+        }else{
+          this.dataTableClasificaciones.push(this.dataTableClasificacion)
+          var stringToStore = JSON.stringify(this.dataTableClasificaciones);
+          ProChartStorage.setItem("dataTableClacificaciones", stringToStore);
+          var fromStorage = ProChartStorage.getItem("dataTableClacificaciones");
+          this.reloadDataTbl(fromStorage, 'clasificaciones');
         }
-        this.dataTableClasificaciones.push(this.dataTableClasificacion)
-        var stringToStore = JSON.stringify(this.dataTableClasificaciones);
-        ProChartStorage.setItem("dataTableClacificaciones", stringToStore);
-        var fromStorage = ProChartStorage.getItem("dataTableClacificaciones");
-        this.reloadDataTbl(fromStorage, 'clasificaciones');
-        //reset al formurario de clasificaciones
-        // this.proRequirementeForm.controls.clasPresFinaForm.reset();
-        console.log(this.proRequirementeForm.controls.clasPresFinaForm.value)
-        console.log(this.dataTableClasificaciones)
+       
+       
+        // console.log('VALUE FORM',this.proRequirementeForm.controls.clasPresFinaForm.value)
+        // console.log('ARRAYSSSSS',this.dataTableClasificaciones)
       }
     }
     if (type == 'codigos') {
-      console.log(this.proRequirementeForm.controls.codigosForm.value)
       //validar si el campo es numero this.proRequirementeForm.controls.codigosForm.value
       if (this.proRequirementeForm.controls.codigosForm.value && !isNaN(this.proRequirementeForm.controls.codigosForm.controls.codCategoria.value)) {
-        console.log('es numero')
         //reset form
 
       } else {
