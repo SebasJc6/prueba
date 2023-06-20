@@ -188,6 +188,10 @@ export class RpComponent implements OnInit {
   }
 
   saveRPs() {
+  if(this.elementsRP.length==0){
+    this.openSnackBar('Error', '', 'error', 'Debe ingresar al menos un valor');
+    return;
+  }
     this.formRP.rps = this.elementsRP;
 
     this.postRPs(+this.idCDP, this.formRP);
