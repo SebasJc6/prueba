@@ -151,6 +151,7 @@ export class RpComponent implements OnInit {
             errorMessages += item + '. ';
           });
           this.openSnackBar('Error', '', 'error', errorMessages);
+          this.buttonClicked = false;
         }
       }, (err: any) => {
         let Data: string[] = [];
@@ -160,6 +161,7 @@ export class RpComponent implements OnInit {
           errorMessages += item + '. ';
         });
         this.openSnackBar('Error', '', 'error', errorMessages);
+        this.buttonClicked = false;
       })
   }
 
