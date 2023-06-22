@@ -96,13 +96,11 @@ export class RpComponent implements OnInit {
         //validar si el elemento ya existe en el arreglo
         let index = this.RPs['cadenas'].findIndex((item: any) => item.clasificacion_ID == clasificacionId);
         if (index != -1) {
-          console.log('index', index, 'existe');
           this.RPs['cadenas'].map((item: any) => {
             if (item.clasificacion_ID == clasificacionId) { item.valoresDistribuidos = value; }
           });
         } else {
           this.RPs['cadenas'].push(cadenaRPs);
-          console.log('index', index, 'no existe',)
         }
 
         //validar si el elemento ya existe en el arreglo 

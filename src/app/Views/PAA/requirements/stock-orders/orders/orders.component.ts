@@ -124,14 +124,24 @@ export class OrdersComponent implements OnInit {
     let valDistribuidos = {} as distribuidosI;
     valDistribuidos.clasificacion_ID = clasificacionId;
     valDistribuidos.valorGirar = value;
-    
-    this.distribuidos.map((item) => {
-      if (item.clasificacion_ID == clasificacionId) {
-        item.valorGirar = value;
-      }
-      return valueformat;
-    });
-    this.distribuidos.push(valDistribuidos);
+    // if (this.giros == undefined || this.giros == null) {}
+    let index = this.distribuidos.findIndex((item: any) => item.clasificacion_ID == clasificacionId);
+    if (index != -1) {
+      this.distribuidos.map((item: any) => {
+        if (item.clasificacion_ID == clasificacionId) { item.valorGirar = value; }
+        return valueformat;
+      });
+    } else {
+      this.distribuidos.push(valDistribuidos);
+    }
+    // this.distribuidos.map((item) => {
+    //   if (item.clasificacion_ID == clasificacionId) {
+    //     item.valorGirar = value;
+    //   }
+    //   return valueformat;
+    // });
+    // this.distribuidos.push(valDistribuidos);
+    console.log('distribuidos',this.distribuidos)
     this.giros['requerimiento_ID'] = +this.idReq;
     this.giros['giro_ID'] = idGiro;
     this.giros['distribuidos'] = this.distribuidos;
