@@ -1743,8 +1743,8 @@ export class PropertiesRequirementComponent implements OnInit {
         this.dataTableClasificacion['arl'] = 0;
         // console.log('ARRAY',this.dataTableClasificacion)
         let repe = this.dataTableClasificaciones.filter(u =>
-          // u.mes == this.dataTableClasificacion['mes'] &&
-          //u.anioVigRecursos == this.dataTableClasificacion['anioVigRecursos'] &&
+          u.mes == this.dataTableClasificacion['mes'] &&
+          u.anioVigRecursos == this.dataTableClasificacion['anioVigRecursos'] &&
           u.auxiliar.auxiliar_ID == this.dataTableClasificacion['auxiliar'].auxiliar_ID &&
           u.fuente.fuente_ID == this.dataTableClasificacion['fuente'].fuente_ID &&
           u.actividad.actividad_ID == this.dataTableClasificacion['actividad'].actividad_ID)
