@@ -669,7 +669,7 @@ export class PropertiesRequirementComponent implements OnInit {
           if (value != 0) {
             //obtener ano actual
             let anioActual = new Date().getFullYear()
-            console.log('anioActual', anioActual)
+            console.log('anioActual2', anioActual)
             this.serviceProRequirement.verifyRangeSararial(value, valueHonorario, anioActual).subscribe(data => {
               if (data.data == false) {
                 this.errorRangeSararial = true;
@@ -864,7 +864,10 @@ export class PropertiesRequirementComponent implements OnInit {
       this.genericValorHonMes = false
       if (val == null) { } else
         if (val != 0) {
-          this.serviceProRequirement.verifyRangeSararial(this.idPerfil, val, 2022).subscribe(data => {
+          //obtener ano actual
+          let anioActual = new Date().getFullYear()
+          console.log('anioActual1', anioActual)
+          this.serviceProRequirement.verifyRangeSararial(this.idPerfil, val, anioActual).subscribe(data => {
             if (data.data == false) {
               this.errorRangeSararial = true;
               this.msjVerifyRangeSararial = data.message
