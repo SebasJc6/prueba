@@ -331,6 +331,8 @@ export class AlertsPopUpComponent implements OnInit {
     this.reportServices.getReportsAll().subscribe(Response => {
       if (Response.status === 200) {
         this.REPORTS_LIST = Response.data;
+        this.REPORTS_LIST = this.REPORTS_LIST.filter(x => 
+          x.numeroReporte === 1 || x.numeroReporte === 2 || x.numeroReporte === 4);
       }
     }, error => {
       
