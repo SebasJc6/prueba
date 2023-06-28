@@ -667,7 +667,10 @@ export class PropertiesRequirementComponent implements OnInit {
         let valueHonorario = this.proRequirementeForm.controls.infoBasicaForm.controls.valorHonMes.value
         if (valueHonorario == null || valueHonorario == 0) { } else
           if (value != 0) {
-            this.serviceProRequirement.verifyRangeSararial(value, valueHonorario, 2022).subscribe(data => {
+            //obtener ano actual
+            let anioActual = new Date().getFullYear()
+            console.log('anioActual', anioActual)
+            this.serviceProRequirement.verifyRangeSararial(value, valueHonorario, anioActual).subscribe(data => {
               if (data.data == false) {
                 this.errorRangeSararial = true;
                 this.msjVerifyRangeSararial = data.message
