@@ -668,13 +668,7 @@ export class PropertiesRequirementComponent implements OnInit {
         if (valueHonorario == null || valueHonorario == 0) { } else
           if (value != 0) {
             //obtener ano actual
-            let anio: number = this.proRequirementeForm.controls.infoBasicaForm.controls.anioContrato.value;
-            let anioActual = null;
-            if(!anio) {
-              anioActual = new Date().getFullYear()
-            } else {
-              anioActual = anio;
-            }
+            let anioActual = new Date().getFullYear();
             // console.log('anioActual2', anioActual)
             this.serviceProRequirement.verifyRangeSararial(value, valueHonorario, anioActual).subscribe(data => {
               if (data.data == false) {
@@ -1620,7 +1614,7 @@ export class PropertiesRequirementComponent implements OnInit {
         this.proRequirementeForm.controls.infoBasicaForm.controls['tipoCont'].enable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['perfil'].enable();
         this.proRequirementeForm.controls.infoBasicaForm.controls['valorHonMes'].enable();
-        if (this.typePage == 'Nuevo') {
+        if (this.typePage == 'Nuevo' || this.typePage == 'Editar') {
           this.proRequirementeForm.controls.infoBasicaForm.controls['numeroCont'].setValue('');
           this.proRequirementeForm.controls.infoBasicaForm.controls['anioContrato'].setValue('');
         }
