@@ -668,8 +668,14 @@ export class PropertiesRequirementComponent implements OnInit {
         if (valueHonorario == null || valueHonorario == 0) { } else
           if (value != 0) {
             //obtener ano actual
-            let anioActual = new Date().getFullYear()
-            console.log('anioActual2', anioActual)
+            let anio: number = this.proRequirementeForm.controls.infoBasicaForm.controls.anioContrato.value;
+            let anioActual = null;
+            if(!anio) {
+              anioActual = new Date().getFullYear()
+            } else {
+              anioActual = anio;
+            }
+            // console.log('anioActual2', anioActual)
             this.serviceProRequirement.verifyRangeSararial(value, valueHonorario, anioActual).subscribe(data => {
               if (data.data == false) {
                 this.errorRangeSararial = true;
@@ -865,8 +871,14 @@ export class PropertiesRequirementComponent implements OnInit {
       if (val == null) { } else
         if (val != 0) {
           //obtener ano actual
-          let anioActual = new Date().getFullYear()
-          console.log('anioActual1', anioActual)
+          let anio: number = this.proRequirementeForm.controls.infoBasicaForm.controls.anioContrato.value;
+          let anioActual = null;
+          if(!anio) {
+            anioActual = new Date().getFullYear()
+          } else {
+            anioActual = anio;
+          }
+          // console.log('anioActual1', anioActual)
           this.serviceProRequirement.verifyRangeSararial(this.idPerfil, val, anioActual).subscribe(data => {
             if (data.data == false) {
               this.errorRangeSararial = true;
