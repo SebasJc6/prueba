@@ -49,7 +49,7 @@ export class BudgetModificationComponent implements OnInit {
 
   ngOnInit(): void {
     this.valueForm(this.data.element);
-    console.log(this.data.element);
+    //console.log(this.data.element);
     this.currencyInput();
     if (this.data.type == 'editar') {
       this.viewDisabledAum = false;
