@@ -2120,7 +2120,7 @@ export class PropertiesRequirementComponent implements OnInit {
 
   openBudgetModification(type: string, element: any) {
     if (this.typePage == 'Vista') {
-      type = 'Ver'
+      type = 'ver'
     }
     const dialogRef = this.dialog.open(BudgetModificationComponent, {
       width: '800px',
