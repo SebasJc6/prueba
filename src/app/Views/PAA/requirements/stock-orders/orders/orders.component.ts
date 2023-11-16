@@ -174,7 +174,7 @@ export class OrdersComponent implements OnInit {
         if (data.status == 200) {
           this.openSnackBar('Giro', 'Se ha guardado correctamente', 'success');
           //this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
-          location.reload();
+         // location.reload();
         } else {
           let Data: string[] = [];
           Data = Object.values(data.data);
@@ -204,11 +204,15 @@ export class OrdersComponent implements OnInit {
   }
   //Metodo para llamar alertas
   openSnackBar(title: string, message: string, type: string, message2?: string) {
-    this.snackBar.openFromComponent(AlertsComponent, {
+    const snackBarRef = this.snackBar.openFromComponent(AlertsComponent, {
       data: { title, message, message2, type },
       horizontalPosition: 'center',
       verticalPosition: 'top',
       panelClass: [type],
+    });
+
+    snackBarRef.afterDismissed().subscribe(() => {
+      location.reload();
     });
   }
 }

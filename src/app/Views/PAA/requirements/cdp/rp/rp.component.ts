@@ -162,7 +162,8 @@ export class RpComponent implements OnInit {
         if (res.status == 200) {
           this.openSnackBar('Se ha guardado correctamente', res.message, 'success');
           //this.router.navigate(['/WAPI/PAA/CDP/' + this.dataProjectID, this.idReq]);
-          location.reload();
+
+          //location.reload();
         }
         if (res.status == 404) {
           let Data: string[] = [];
@@ -202,11 +203,15 @@ export class RpComponent implements OnInit {
   }
   //Metodo para llamar alertas
   openSnackBar(title: string, message: string, type: string, message2?: string) {
-    this.snackBar.openFromComponent(AlertsComponent, {
+    const snackBarRef = this.snackBar.openFromComponent(AlertsComponent, {
       data: { title, message, message2, type },
       horizontalPosition: 'center',
       verticalPosition: 'top',
       panelClass: [type],
     });
+
+    snackBarRef.afterDismissed().subscribe(() => {
+     location.reload();
+   });
   }
 }
