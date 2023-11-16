@@ -151,7 +151,7 @@ export class OrdersComponent implements OnInit {
     this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
   }
   saveGiro() {
-   
+
     if (!this.giros) {
 
       this.postGiros();
@@ -169,12 +169,12 @@ export class OrdersComponent implements OnInit {
   postGiros() {
 
     if (this.giros.distribuidos != null && this.giros.giro_ID != null && this.giros.requerimiento_ID != null) {
-    
+
       this.serviceOrder.postGiro(this.giros).subscribe((data: any) => {
         if (data.status == 200) {
           this.openSnackBar('Giro', 'Se ha guardado correctamente', 'success');
-          this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
-
+          //this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
+          location.reload();
         } else {
           let Data: string[] = [];
           Data = Object.values(data.data);
@@ -195,7 +195,7 @@ export class OrdersComponent implements OnInit {
         this.openSnackBar('Error', err.error.message, 'error', errorMessages);
       })
     }else{
-    
+
       this.openSnackBar('Giro', 'No se realizaron cambios', 'success');
       this.router.navigate(['/WAPI/PAA/StockOrders/', this.dataProjectID, this.idReq]);
 

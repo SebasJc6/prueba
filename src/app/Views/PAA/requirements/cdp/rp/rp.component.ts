@@ -103,7 +103,7 @@ export class RpComponent implements OnInit {
           this.RPs['cadenas'].push(cadenaRPs);
         }
 
-        //validar si el elemento ya existe en el arreglo 
+        //validar si el elemento ya existe en el arreglo
 
         // this.RPs['cadenas'].map((item: any) => {
         //   if (item.clasificacion_ID == clasificacionId) { item.valoresDistribuidos = value; }
@@ -125,7 +125,7 @@ export class RpComponent implements OnInit {
       }
     }
 
-    //eliminar elementos repedidos del arreglo 
+    //eliminar elementos repedidos del arreglo
 
     // this.cadenas.map((item: any) => {
     //   if (item.clasificacion_ID == clasificacionId) {
@@ -161,7 +161,8 @@ export class RpComponent implements OnInit {
       res => {
         if (res.status == 200) {
           this.openSnackBar('Se ha guardado correctamente', res.message, 'success');
-          this.router.navigate(['/WAPI/PAA/CDP/' + this.dataProjectID, this.idReq]);
+          //this.router.navigate(['/WAPI/PAA/CDP/' + this.dataProjectID, this.idReq]);
+          location.reload();
         }
         if (res.status == 404) {
           let Data: string[] = [];
