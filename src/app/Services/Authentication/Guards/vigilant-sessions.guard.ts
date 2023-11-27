@@ -23,5 +23,7 @@ export class VigilantSessionsGuard implements CanActivate {
     this.redirect(cookie);
     return cookie;
   }
-  
+
+
+
 }

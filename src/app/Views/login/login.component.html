@@ -1,41 +1,39 @@
 <app-spinner></app-spinner>
 <mat-toolbar class="header mat-elevation-z8">
-  <header class="header-content">
-    <a href=""> <img class="logoWapi" src="assets/img/logo-WAPI-Blanco.png" /></a>
+    <header class="header-content">
+        <a href=""> <img class="logoWapi" src="assets/img/logo-WAPI-Blanco.png" /></a>
 
-    <a><img class="logoAlc" src="assets/img/LOGOESCUDOSDS.png" /> </a>
-  </header>
+        <a><img class="logoAlc" src="assets/img/LOGOESCUDOSDS.png" /> </a>
+    </header>
 </mat-toolbar>
 
 <div class="container center-h center-v">
-  <!-- <img class="img" src="assets/img/Slider_jornadas_Epid.png" width="25%"> -->
+    <!-- <img class="img" src="assets/img/Slider_jornadas_Epid.png" width="25%"> -->
 
-  <mat-card-content>
-    <h1><strong>INICIAR SESIÓN</strong></h1>
-    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" novalidate fxLayout="column wrap" fxLayoutAlign="center center"
-      fxLayoutGap="10px">
-      <mat-form-field>
-        <mat-label>Usuario</mat-label>
-        <input type="text" matInput formControlName="email" />
-        <mat-error *ngIf="myError('email', 'required')">Usuario requerido</mat-error>
-        <mat-error *ngIf="myError('email', 'email')">Debe ser un correo</mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Contraseña</mat-label>
-        <input type="password" matInput formControlName="Pwp" />
-        <mat-error *ngIf="myError('Pwp', 'required')">Contraseña requerida</mat-error>
-        <mat-error *ngIf="myError('Pwp', 'minLength')">Mínimo 6 caracteres</mat-error>
-      </mat-form-field>
+    <mat-card-content>
+        <h1><strong>INICIAR SESIÓN</strong></h1>
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()" novalidate fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+            <mat-form-field>
+                <mat-label>Usuario</mat-label>
+                <input type="text" matInput formControlName="email" />
+                <mat-error *ngIf="myError('email', 'required')">Usuario requerido</mat-error>
+                <mat-error *ngIf="myError('email', 'email')">Debe ser un correo</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Contraseña</mat-label>
+                <input type="password" matInput formControlName="Pwp" />
+                <mat-error *ngIf="myError('Pwp', 'required')">Contraseña requerida</mat-error>
+                <mat-error *ngIf="myError('Pwp', 'minLength')">Mínimo 6 caracteres</mat-error>
+            </mat-form-field>
 
-      <button  class="button btn" type="submit" mat-raised-button>
-        INICIAR SESIÓN
-      </button>
-    </form>
-
-
-  </mat-card-content>
+            <button class="button btn" type="submit" mat-raised-button>
+                INICIAR SESIÓN
+            </button>
+            <button (click)="login()" class="button btn" type="button" >
+                INICIAR SESIÓN B2C
+            </button>
+        </form>
+    </mat-card-content>
 </div>
-
-
 
 <app-footer> </app-footer>

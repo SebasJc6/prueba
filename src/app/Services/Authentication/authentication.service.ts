@@ -46,4 +46,9 @@ export class AuthenticationService {
       return null;
     }
   }
+
+  b2cLogin(form: any){
+    let dir = this.urlAuth + 'Acces/SingUp';
+    return this.http.post<tokenI>(dir, form);
+  }
 }

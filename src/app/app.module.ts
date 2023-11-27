@@ -72,7 +72,27 @@ import { OrdersComponent } from './Views/PAA/requirements/stock-orders/orders/or
 import { PageNotFoundComponent } from './Views/page-not-found/page-not-found.component';
 import { ReportsComponent } from './Views/PAA/reports/reports.component';
 import { MatNativeDateModule } from '@angular/material/core';
+import {InteractionType, IPublicClientApplication, PublicClientApplication} from "@azure/msal-browser";
+import {
+  MSAL_GUARD_CONFIG,
+  MSAL_INSTANCE,
+  MsalBroadcastService,
+  MsalGuard,
+  MsalGuardConfiguration,
+  MsalModule,
+  MsalService
+} from "@azure/msal-angular";
+import { msalConfig } from './auth-config';
 
+export function MSALInstanceFactory(): IPublicClientApplication {
+  return new PublicClientApplication(msalConfig);
+}
+
+export function MSALGuardConfigFactory(): MsalGuardConfiguration {
+  return {
+    interactionType: InteractionType.Popup
+  };
+}
 
 const materialModules = [
   MatCardModule,
@@ -152,6 +172,7 @@ const materialModules = [
     // angular material
     materialModules,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
+    MsalModule
 
   ],
   providers:
@@ -162,7 +183,18 @@ const materialModules = [
       { provide: LocationStrategy, useClass: HashLocationStrategy},
       {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true},
       {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptorService, multi: true},
-      DatePipe
+      DatePipe,
+      MsalService,
+      MsalGuard,
+      MsalBroadcastService,
+      {
+        provide: MSAL_INSTANCE,
+        useFactory: MSALInstanceFactory
+      },
+      {
+        provide: MSAL_GUARD_CONFIG,
+        useFactory: MSALGuardConfigFactory
+      },
     ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

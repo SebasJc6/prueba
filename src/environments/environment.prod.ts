@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  
+
   baseUrl:{
        /** DEV */
     auth : "https://wa-aeu-sds-dev-wapi-back.azurewebsites.net/api/v1/",
@@ -10,5 +10,7 @@ export const environment = {
     // auth : "https://login-appservice-back2.azurewebsites.net/",
     // logic:"https://wa-aeu-sds-qas-wapi-back.azurewebsites.net/api/v1/",
     // generic:"https://wa-aeu-sds-qas-wapi-canonical.azurewebsites.net/api/v1/"
-  } 
+  },
+  PROCEDURE_SHARED_URI: 'https://apm-aeu-sds-dev-shared.azure-api.net/tramites-shared/api',
+  PROCEDURE_SECURITY_URI: 'https://apm-aeu-sds-dev-shared.azure-api.net/security/api/v2/Security'
 };

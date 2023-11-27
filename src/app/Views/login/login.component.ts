@@ -4,7 +4,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthenticationService } from 'src/app/Services/Authentication/authentication.service';
+import { SharedService } from 'src/app/Services/ServicesPAA/shared/shared.service';
 import { AlertsComponent } from 'src/app/Templates/alerts/alerts.component';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-login',
@@ -28,7 +30,7 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router,
     private ServicesAuth: AuthenticationService,
     private snackBar: MatSnackBar, private authService: AuthenticationService,
-    private spinner: NgxSpinnerService,) { }
+    private spinner: NgxSpinnerService, private shared: SharedService) { }
 
   ngOnInit(): void {
     sessionStorage.removeItem('token');
@@ -44,14 +46,16 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin() {
+    console.log("prueba login anterior")
     if (this.loginForm.valid) {
       // let isSuccessful =
       this.spinner.show();
        this.ServicesAuth.login(this.loginForm.value).subscribe(dataToken => {
         this.dataToken = dataToken;
         this.authService.setCookie('token', this.dataToken.accessToken);
-      
+        localStorage.setItem("b2c", "false")
         this.router.navigate(['WAPI/Home']);
+
         this.spinner.hide();
       }, error => {
         this.spinner.hide();
@@ -79,4 +83,9 @@ export class LoginComponent implements OnInit {
       panelClass: [type],
     });
   }
+
+  login(){
+    this.shared.B2CLogin();
+  }
+
 }
