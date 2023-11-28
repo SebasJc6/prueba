@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { dateTimeCausalModificationReportI, iDsAndAniosProjectsReportPAAI, iDsProjectsReportI } from 'src/app/Models/ModelsPAA/Project/Project.interface';
 import { getReportBase64I, getReportsAllI, getReportsNameI } from 'src/app/Models/ModelsPAA/Reports/reports-interface';
 import { environment } from 'src/environments/environment';
-const { REACT_APP_CLIENT_ID } = environment;
 
 @Injectable({
   providedIn: 'root'
@@ -72,8 +71,6 @@ export class ReportsDetailsService {
     return this.http.post<getReportBase64I>(dir, date_time);
   }
 
-  get(): Observable<any> {
-    return this.http.get(`${REACT_APP_CLIENT_ID}`);
-  }
+
 
 }

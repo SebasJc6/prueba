@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-
+  clientId :'32a9c775-6b60-4214-aa1b-020f435a15f0',
   baseUrl:{
        /** DEV */
     auth : "https://wa-aeu-sds-dev-wapi-back.azurewebsites.net/api/v1/",

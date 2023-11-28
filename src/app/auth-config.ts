@@ -7,7 +7,7 @@
 
 
 import { LogLevel, Configuration, BrowserCacheLocation } from '@azure/msal-browser';
-
+import { environment } from 'src/environments/environment';
 const isIE = window.navigator.userAgent.indexOf("MSIE ") > -1 || window.navigator.userAgent.indexOf("Trident/") > -1;
 
 /**
@@ -38,7 +38,7 @@ export const b2cPolicies = {
  */
 export const msalConfig: Configuration = {
     auth: {
-        clientId: '32a9c775-6b60-4214-aa1b-020f435a15f0', // This is the ONLY mandatory field that you need to supply.
+        clientId: environment.clientId, // This is the ONLY mandatory field that you need to supply.
         authority: b2cPolicies.authorities.signUpSignIn.authority, // Defaults to "https://login.microsoftonline.com/common"
         knownAuthorities: [b2cPolicies.authorityDomain], // Mark your B2C tenant's domain as trusted.
         redirectUri: '/', // Points to window.location.origin. You must register this URI on Azure portal/App Registration.

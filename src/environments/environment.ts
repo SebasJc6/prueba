@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
 
+  clientId :'6dfed1c9-50b8-49e6-8bd6-09d850f5ccba',
+
   baseUrl:{
     /** DEV */
     // auth : "https://login-appservice-back2.azurewebsites.net/",
